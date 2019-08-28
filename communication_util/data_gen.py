@@ -1,14 +1,13 @@
 import numpy as np
 
-
 class training_data():
     def __init__(self, size = (1,100)):
         self.shape = size
         self.bit_stream_matrix = None
         self.CIR_matrix = None
 
-    def setup_channel(self):
-        self.CIR_matrix = np.zeros((1, 10))
+    def setup_channel(self,shape,mu,variance):
+        self.CIR_matrix = = np.random.normal(mu,variance,shape)
         self.CIR_matrix[0, 5, 9] = [1, .4, .2]
 
     def random_bit_stream(self):
