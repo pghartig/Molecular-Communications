@@ -2,16 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pytorch_sandbox/torchsetup.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viterbi/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/viterbi/viterbi.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/molecular-communications-project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/molecular-communications-project.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/nn_utilities/train_data_generate.py" beforeDir="false" afterPath="$PROJECT_DIR$/nn_utilities/train_data_generate.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pytorch_sandbox/torchsetup.py" beforeDir="false" afterPath="$PROJECT_DIR$/pytorch_sandbox/torchsetup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_data_gen.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,24 +16,36 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/nn_utilities/train_data_generate.py">
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            <state relative-caret-position="213">
+              <caret line="52" column="8" lean-forward="true" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/pytorch_sandbox/torchsetup.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
+            <state relative-caret-position="120">
+              <caret line="8" column="35" lean-forward="true" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
               <folding>
-                <element signature="e#0#37#0" expanded="true" />
+                <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/nn_utilities/train_data_generate.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -57,17 +65,18 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/nn_utilities/train_data_generate.py" />
         <option value="$PROJECT_DIR$/viterbi/viterbi.py" />
-        <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
         <option value="$PROJECT_DIR$/pytorch_sandbox/torchsetup.py" />
+        <option value="$PROJECT_DIR$/communication_util/__init__.py" />
+        <option value="$PROJECT_DIR$/nn_utilities/train_data_generate.py" />
+        <option value="$PROJECT_DIR$/tests/test_data_gen.py" />
+        <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="y" value="173" />
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1280" />
-    <option name="height" value="740" />
+    <option name="height" value="800" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
@@ -85,7 +94,22 @@
             <path>
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="communication_util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="nn_utilities" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
               <item name="pytorch_sandbox" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -96,6 +120,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunDashboard">
@@ -110,7 +135,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Python tests.data_setup">
     <configuration name="torchsetup" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -132,6 +157,25 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="data_setup" type="tests" factoryName="py.test">
+      <module name="molecular-communications-project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_data_gen.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Python.torchsetup" />
+      <item itemvalue="Python tests.data_setup" />
+    </list>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -146,33 +190,81 @@
     </task>
     <servers />
   </component>
+  <component name="TestHistory">
+    <history-entry file="data_setup - 2019.10.16 at 07h 32m 16s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 33m 06s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 35m 21s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 38m 36s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 41m 43s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 43m 02s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 44m 08s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 44m 44s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 46m 14s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+    <history-entry file="data_setup - 2019.10.16 at 07h 50m 58s.xml">
+      <configuration name="data_setup" configurationId="tests" />
+    </history-entry>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="740" extended-state="6" />
+    <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.37671232" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.4212963" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.36301368" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3287037" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
+    <layout-to-restore>
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.37671232" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.36301368" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.3287037" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+    </layout-to-restore>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-376" />
@@ -188,26 +280,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
+    <entry file="file://$PROJECT_DIR$/pytorch_sandbox/torchsetup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="44" selection-start-line="8" selection-start-column="44" selection-end-line="8" selection-end-column="44" />
+        <state relative-caret-position="318">
+          <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nn_utilities/train_data_generate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        <state relative-caret-position="75">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pytorch_sandbox/torchsetup.py">
+    <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="120">
+          <caret line="8" column="35" lean-forward="true" selection-start-line="8" selection-start-column="35" selection-end-line="8" selection-end-column="35" />
           <folding>
-            <element signature="e#0#37#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="213">
+          <caret line="52" column="8" lean-forward="true" selection-start-line="52" selection-start-column="8" selection-end-line="52" selection-end-column="8" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
