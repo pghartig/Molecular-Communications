@@ -32,10 +32,15 @@ class training_data_generator():
 
 
     def send_through_channel(self):
+        """
+        Note that given the numpy convolution default, the impulse response should be provided with the longest delay
+        tap on the left most index.
+        :return:
+        """
         for bit_streams in range(self.bit_stream_matrix.shape[0]):
             self.channel_output.append(np.convolve(self.bit_stream_matrix[bit_streams, :], self.CIR_matrix[bit_streams, :], mode='full'))
         self.channel_output = np.asarray(self.channel_output)
-        #add noise
+        # add noise
         self.channel_output += self.noise_para[0] + self.noise_para[1]*np.random.randn(self.channel_output.shape[0],self.channel_output.shape[1])
 
 

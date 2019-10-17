@@ -1,23 +1,21 @@
 import numpy as np
 from itertools import permutations
 
-def gaussian_channel_metric(transmit_alphabet, channel_output, CIR):
+
+def gaussian_channel_metric(survivor_paths, index, transmit_alphabet, channel_output, cir):
     """
-    goal is to return a matrix with all metrics
+    returns vector of metrics for incoming state of viterbi with a gaussian channel
+    :param survivor_paths:
+    :param index:
     :param transmit_alphabet:
     :param channel_output:
-    :param CIR:
+    :param cir:
     :return:
     """
-    # first create a matrix with all possible states of previous symbols to be used in metric calculations next
-    num_states = np.power(np.size(transmit_alphabet), np.size(CIR, axis=1))
+    num_states = np.power(np.size(transmit_alphabet), np.size(cir, axis=1))
     alphabet_cardinality = np.size(transmit_alphabet)
     metric_vector = np.zeros(alphabet_cardinality * num_states)
-    sequence_states = np.zeros((CIR.shape[1],np.size(transmit_alphabet)))
-
-    for i in range(np.size(CIR, axis=1)):
-        for symbol in range(alphabet_cardinality):
-            sequence_states[i, symbol] = 1
-            metric_vector[alphabet_cardinality*i+symbol,0] = channel_output - np.dot(sequence_states,CIR)
-
+    for path in range(survivor_paths.shape[0]):
+        for symbol in transmit_alphabet:
+            metric_vector[path*alphabet_cardinality] = np.dot(np.concatenate((survivor_paths[path, :], symbol)).T, cir)
 
