@@ -1,5 +1,5 @@
 import numpy as np
-from  communication_util.data_gen import *
+from communication_util.data_gen import *
 
 
 def test_data_create():
@@ -8,6 +8,3 @@ def test_data_create():
     data_gen.random_bit_stream()
     data_gen.send_through_channel()
     data_gen.plot_setup()
-
-
-

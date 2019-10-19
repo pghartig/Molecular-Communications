@@ -1,7 +1,7 @@
 # Code in file autograd/two_layer_net_autograd.py
 import torch
 
-device = torch.device('cpu')
+device = torch.device("cpu")
 # device = torch.device('cuda') # Uncomment this to run on GPU
 
 # N is batch size; D_in is input dimension;
