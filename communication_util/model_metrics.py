@@ -18,7 +18,6 @@ def gaussian_channel_metric(
     alphabet_cardinality = np.size(transmit_alphabet)
     metric_vector = np.zeros(alphabet_cardinality * num_states)
     for path in range(survivor_paths.shape[0]):
-        for symbol in transmit_alphabet:
-            metric_vector[path * alphabet_cardinality] = np.dot(
-                np.concatenate((survivor_paths[path, :], symbol)).T, cir
-            )
+        for i in range(transmit_alphabet.size):
+            candidate = np.append(survivor_paths[path, index-cir.size:index], transmit_alphabet[i]).T
+            metric_vector[path * alphabet_cardinality+i] = np.dot(candidate, cir)

@@ -3,16 +3,16 @@ from communication_util.model_metrics import *
 
 
 def viterbi_output(transmit_alphabet, channel_output, channel_information):
-    alphabet_size = np.size(transmit_alphabet)
+    alphabet_size = transmit_alphabet.size
     num_states = np.power(alphabet_size, np.size(channel_information, axis=1))
     survivor_paths = np.zeros(
-        (num_states.shape[0], channel_output.shape[1]), dtype=np.int8
+        (num_states, channel_output.shape[1]), dtype=np.int8
     )
 
     # iterate through the metrics
     i = 0
     for detected_symbol in channel_output:
-        # This may not be the more memory efficient way to do this below task but it is implemented in this way to
+        # This may not be the most memory efficient way to do this below task but it is implemented in this way to
         # accomodate what I predict to be the output of the Neural Net
         metric_vector = gaussian_channel_metric(
             survivor_paths, i, transmit_alphabet, detected_symbol, channel_information

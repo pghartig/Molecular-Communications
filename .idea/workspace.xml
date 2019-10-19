@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/communication_util/error_rates.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/model_metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/model_metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/viterbi_basic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbi_basic.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viterbi/viterbi.py" beforeDir="false" afterPath="$PROJECT_DIR$/viterbi/viterbi.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,8 +20,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="43">
-              <caret line="36" column="35" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
+            <state relative-caret-position="144">
+              <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -27,11 +32,20 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/communication_util/model_metrics.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="12" lean-forward="true" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+            <state relative-caret-position="205">
+              <caret line="21" column="101" selection-start-line="21" selection-start-column="84" selection-end-line="21" selection-end-column="101" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/communication_util/error_rates.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="90">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
             </state>
           </provider>
         </entry>
@@ -49,7 +63,7 @@
         <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="60">
-              <caret line="5" selection-start-line="5" selection-end-line="8" selection-end-column="35" />
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -60,8 +74,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/viterbi/viterbi.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="42" selection-start-line="13" selection-start-column="42" selection-end-line="13" selection-end-column="42" />
+            <state relative-caret-position="88">
+              <caret line="16" column="38" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -72,8 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pytorch_sandbox/torchsetup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
-              <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
+            <state relative-caret-position="750">
+              <caret line="50" selection-start-line="50" selection-end-line="50" />
             </state>
           </provider>
         </entry>
@@ -81,8 +95,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" selection-start-line="12" selection-end-line="12" />
+            <state relative-caret-position="225">
+              <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -90,8 +107,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/nn_utilities/train_data_generate.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            <state relative-caret-position="15">
+              <caret line="1" selection-start-line="1" selection-end-line="1" />
             </state>
           </provider>
         </entry>
@@ -109,7 +126,11 @@
   <component name="FindInProjectRecents">
     <findStrings>
       <find>con</find>
+      <find>bit_stream_matrix</find>
     </findStrings>
+    <replaceStrings>
+      <replace>symbol_stream_matrix</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -122,9 +143,10 @@
         <option value="$PROJECT_DIR$/nn_utilities/train_data_generate.py" />
         <option value="$PROJECT_DIR$/tests/test_data_gen.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/tests/viterbi_basic.py" />
         <option value="$PROJECT_DIR$/project_summary.txt" />
         <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
+        <option value="$PROJECT_DIR$/communication_util/error_rates.py" />
+        <option value="$PROJECT_DIR$/tests/viterbi_basic.py" />
         <option value="$PROJECT_DIR$/viterbi/viterbi.py" />
         <option value="$PROJECT_DIR$/communication_util/model_metrics.py" />
       </list>
@@ -159,7 +181,7 @@
             <path>
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
-              <item name="viterbi" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -258,52 +280,53 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="data_setup - 2019.10.16 at 07h 38m 36s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 26m 06s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 41m 43s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 29m 21s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 43m 02s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 41m 28s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 44m 08s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 41m 38s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 44m 44s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 51m 22s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 46m 14s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 51m 56s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 50m 58s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 57m 23s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 51m 43s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 57m 30s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 52m 43s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 58m 50s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="data_setup - 2019.10.16 at 07h 54m 02s.xml">
-      <configuration name="data_setup" configurationId="tests" />
+    <history-entry file="viterbi_basic - 2019.10.19 at 20h 59m 25s.xml">
+      <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.2494043" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.37671232" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.49041095" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.3328767" />
+      <window_info anchor="bottom" id="Terminal" order="8" weight="0.3328767" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.3287037" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -329,6 +352,22 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout-to-restore>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/viterbi/viterbi.py</url>
+          <line>19</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/model_metrics.py</url>
+          <line>22</line>
+          <option name="timeStamp" value="14" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/__init__.py">
@@ -358,7 +397,7 @@
     <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
-          <caret line="5" selection-start-line="5" selection-end-line="8" selection-end-column="35" />
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -367,39 +406,49 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/pytorch_sandbox/torchsetup.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="49" column="23" selection-start-line="49" selection-start-column="23" selection-end-line="49" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        <state relative-caret-position="750">
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/nn_utilities/train_data_generate.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        <state relative-caret-position="15">
+          <caret line="1" selection-start-line="1" selection-end-line="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="36" column="35" selection-start-line="36" selection-start-column="35" selection-end-line="36" selection-end-column="35" />
+        <state relative-caret-position="144">
+          <caret line="26" column="32" lean-forward="true" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/error_rates.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="19" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="19" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/viterbi/viterbi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="42" selection-start-line="13" selection-start-column="42" selection-end-line="13" selection-end-column="42" />
+        <state relative-caret-position="88">
+          <caret line="16" column="38" selection-start-line="16" selection-start-column="38" selection-end-line="16" selection-end-column="38" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -408,8 +457,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/model_metrics.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="12" lean-forward="true" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+        <state relative-caret-position="205">
+          <caret line="21" column="101" selection-start-line="21" selection-start-column="84" selection-end-line="21" selection-end-column="101" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
