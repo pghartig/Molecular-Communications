@@ -13,18 +13,18 @@ def viterbi_output(transmit_alphabet, channel_output, channel_information):
     # iterate through the metrics
     for i in range(channel_output.shape[1]):
         # assume zero-padding at beginning of word so set survivor path portions to zeros automatically?
-        while i < channel_information.shape[1]-1:
+        if i < channel_information.shape[1]-1:
             for state in range(num_states):
-                survivor_paths[i, state] = 0
+                survivor_paths[state, i] = 0
             continue
-
-        #TODO don't pass entire channel_output?
-        metric_vector = gaussian_channel_metric(
-            survivor_paths, i, transmit_alphabet, channel_output, channel_information
-        )
-        for state in range(num_states):
-            symbol = np.argmin((metric_vector[state * alphabet_size: (state + 1) * alphabet_size]))
-            survivor_paths[state, i] = transmit_alphabet[symbol]
+        else:
+            #TODO don't pass entire channel_output?
+            metric_vector = gaussian_channel_metric(
+                survivor_paths, i, transmit_alphabet, channel_output, channel_information
+            )
+            for state in range(num_states):
+                symbol = np.argmin((metric_vector[state * alphabet_size: (state + 1) * alphabet_size]))
+                survivor_paths[state, i] = transmit_alphabet[symbol]
 
     final_path_ind = np.argmin(np.sum(survivor_paths, axis=1))
-    return survivor_paths[final_path_ind, :]
+    return survivor_paths[final_path_ind, channel_information.size-1:]

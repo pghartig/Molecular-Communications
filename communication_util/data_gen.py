@@ -3,10 +3,10 @@ import matplotlib.pyplot as plt
 
 
 class training_data_generator:
-    def __init__(self, amount=(1, 1000), noise_parm=[0,.1], plot=False, alphabet=np.array([1, -1])):
-        self.shape = amount
-        self.symbol_stream_matrix = None
-        self.CIR_matrix = None
+    def __init__(self, symbol_shape=np.zeros((1, 1000)), channel=None, channel_shape=None, noise_parm=[0, .01], plot=False, alphabet=np.array([1, -1])):
+        self.symbol_stream_matrix = symbol_shape
+        self.CIR_matrix = channel
+        self.channel_shape = channel_shape
         self.zero_pad = True
         self.terminated = True
         self.plot = plot
@@ -15,27 +15,27 @@ class training_data_generator:
         self.alphabet = alphabet
 
     def setup_channel(self, shape=(1, 1)):
-        if shape == None:
-            self.CIR_matrix = np.ones((1, 1))
-        else:
+        if self.channel_shape is not None:
             self.CIR_matrix = np.random.randn(shape[0], shape[1])
-
+        elif self.CIR_matrix is None:
+            self.CIR_matrix = np.ones((1, 1))
         # else:
         #     self.CIR_matrix = np.zeros((1,10))
-        #     self.CIR_matrix[0, 5, 9] = [1, .4, .2]
+        #     self.CIR_matrix[0, [0, 3, 5]] = 1, .5, .2
 
     def random_symbol_stream(self):
+        shape = self.symbol_stream_matrix.shape
         if self.zero_pad is True and self.terminated is True and self.CIR_matrix is not None:
-            self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, self.shape)
+            self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, shape)
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
             self.symbol_stream_matrix[:, -1-self.CIR_matrix.shape[1]:-1] = self.alphabet[0]
             self.symbol_stream_matrix[:, 0:self.CIR_matrix.shape[1]] = self.alphabet[0]
         if self.zero_pad is True and self.terminated is not True and self.CIR_matrix is not None:
-            self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, self.shape)
+            self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, shape)
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
             self.symbol_stream_matrix[:, -1-self.CIR_matrix.shape[1]:-1] = self.alphabet[0]
         else:
-            self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, self.shape)
+            self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, shape)
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
 
     def send_through_channel(self):
