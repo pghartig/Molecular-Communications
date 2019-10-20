@@ -14,11 +14,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="32" lean-forward="true" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
+            <state relative-caret-position="161">
+              <caret line="54" selection-start-line="54" selection-end-line="54" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -56,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/viterbi/viterbi.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="26" column="60" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="60" />
+            <state relative-caret-position="192">
+              <caret line="24" selection-start-line="24" selection-end-line="24" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -80,8 +80,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="19" lean-forward="true" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+            <state relative-caret-position="130">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -101,7 +101,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file:///usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/numpy/core/numeric.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="115">
+            <state relative-caret-position="108">
               <caret line="1514" selection-start-line="1514" selection-end-line="1514" />
             </state>
           </provider>
@@ -185,6 +185,11 @@
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
               <item name="tests" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="viterbi" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -283,40 +288,39 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 19m 37s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 18h 53m 54s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 21m 29s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 18h 55m 28s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 21m 34s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 18h 56m 32s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 30m 09s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 18h 57m 22s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 30m 27s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 19h 00m 32s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 30m 48s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 19h 02m 48s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 31m 03s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 19h 08m 26s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 33m 43s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 19h 08m 30s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 37m 46s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 19h 10m 14s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_basic - 2019.10.20 at 13h 37m 49s.xml">
+    <history-entry file="viterbi_basic - 2019.10.20 at 19h 12m 43s.xml">
       <configuration name="viterbi_basic" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -361,13 +365,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/viterbi_basic.py</url>
-          <line>21</line>
-          <option name="timeStamp" value="47" />
+          <line>20</line>
+          <option name="timeStamp" value="67" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/viterbi/viterbi.py</url>
-          <line>29</line>
-          <option name="timeStamp" value="59" />
+          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
+          <line>54</line>
+          <option name="timeStamp" value="68" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -411,13 +415,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/numpy/core/numeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="1514" selection-start-line="1514" selection-end-line="1514" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/numpy/lib/function_base.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="115">
@@ -449,10 +446,27 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/viterbi/viterbi.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="192">
+          <caret line="24" selection-start-line="24" selection-end-line="24" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/local/Cellar/python/3.7.0/Frameworks/Python.framework/Versions/3.7/lib/python3.7/site-packages/numpy/core/numeric.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="1514" selection-start-line="1514" selection-end-line="1514" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="19" lean-forward="true" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+        <state relative-caret-position="130">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -461,18 +475,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="32" lean-forward="true" selection-start-line="14" selection-start-column="32" selection-end-line="14" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/viterbi/viterbi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="26" column="60" selection-start-line="26" selection-start-column="43" selection-end-line="26" selection-end-column="60" />
+        <state relative-caret-position="161">
+          <caret line="54" selection-start-line="54" selection-end-line="54" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

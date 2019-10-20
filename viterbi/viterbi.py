@@ -6,7 +6,7 @@ def viterbi_output(transmit_alphabet, channel_output, channel_information):
     alphabet_size = transmit_alphabet.size
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
     num_states = np.power(alphabet_size, channel_information.shape[1]-1)
-    survivor_paths = np.ones(
+    survivor_paths = np.zeros(
         (num_states, channel_output.shape[1]), dtype=np.int8
     )
 
@@ -15,7 +15,7 @@ def viterbi_output(transmit_alphabet, channel_output, channel_information):
         # assume zero-padding at beginning of word so set survivor path portions to zeros automatically?
         if i < channel_information.shape[1]-1:
             for state in range(num_states):
-                survivor_paths[state, i] = 0
+                survivor_paths[state, i] = transmit_alphabet[0]
             continue
         else:
             #TODO don't pass entire channel_output?
