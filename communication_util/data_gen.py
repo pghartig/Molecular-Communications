@@ -3,17 +3,17 @@ import matplotlib.pyplot as plt
 
 
 class training_data_generator:
-    def __init__(self, amount=(1, 100), noise_parm=[0, 1], plot=False, alphabet=np.array([1, -1])):
+    def __init__(self, amount=(1, 1000), noise_parm=[0,.1], plot=False, alphabet=np.array([1, -1])):
         self.shape = amount
         self.symbol_stream_matrix = None
         self.CIR_matrix = None
         self.zero_pad = True
+        self.terminated = True
         self.plot = plot
         self.noise_para = noise_parm
         self.channel_output = []
         self.alphabet = alphabet
 
-    # depending on number of properties channel should be class?
     def setup_channel(self, shape=(1, 1)):
         if shape == None:
             self.CIR_matrix = np.ones((1, 1))
@@ -24,14 +24,16 @@ class training_data_generator:
         #     self.CIR_matrix = np.zeros((1,10))
         #     self.CIR_matrix[0, 5, 9] = [1, .4, .2]
 
-    def random_bit_stream(self):
-        if self.zero_pad is True and self.CIR_matrix is not None:
+    def random_symbol_stream(self):
+        if self.zero_pad is True and self.terminated is True and self.CIR_matrix is not None:
             self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, self.shape)
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
-            # TODO may want to have zeros loaded at beginning?
-            self.symbol_stream_matrix = np.concatenate(
-                (self.symbol_stream_matrix, np.zeros((self.CIR_matrix.shape))), 1
-            )
+            self.symbol_stream_matrix[:, -1-self.CIR_matrix.shape[1]:-1] = self.alphabet[0]
+            self.symbol_stream_matrix[:, 0:self.CIR_matrix.shape[1]] = self.alphabet[0]
+        if self.zero_pad is True and self.terminated is not True and self.CIR_matrix is not None:
+            self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, self.shape)
+            self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
+            self.symbol_stream_matrix[:, -1-self.CIR_matrix.shape[1]:-1] = self.alphabet[0]
         else:
             self.symbol_stream_matrix = np.random.random_integers(0, self.alphabet.size-1, self.shape)
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]

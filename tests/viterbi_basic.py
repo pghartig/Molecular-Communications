@@ -4,12 +4,12 @@ from communication_util.error_rates import *
 
 
 def test_viterbi_gaussian():
-    error_tolerance = np.power(10.0, -5)
+    error_tolerance = np.power(10.0, -3)
     # setup data
     # TODO make consolidate this part
     data_gen = training_data_generator(plot=True)
     data_gen.setup_channel(shape=None)
-    data_gen.random_bit_stream()
+    data_gen.random_symbol_stream()
     data_gen.send_through_channel()
 
     # detect with Viterbi
