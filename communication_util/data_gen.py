@@ -9,7 +9,7 @@ class training_data_generator:
         symbol_shape=np.zeros((1, 100)),
         channel=None,
         channel_shape=None,
-        noise_parm=[0, 0.01],
+        noise_parm=[0, 0.1],
         plot=False,
         constellation='ASK',
         size=2

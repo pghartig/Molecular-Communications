@@ -3,11 +3,11 @@ from viterbi.viterbi import *
 from communication_util.error_rates import *
 
 
-def test_viterbi_gaussian():
+def test_viterbi_QAM():
     error_tolerance = np.power(10.0, -3)
     # setup data
     channel = np.zeros((1, 5))
-    channel[0, [0, 3, 4]] = 1, 0.5, 0.1
+    channel[0, [0, 3, 4]] = 1, 0.5, 0.4
     # TODO make consolidate this part
     data_gen = training_data_generator(constellation='QAM', size=4, channel=channel, plot=True)
     # data_gen = training_data_generator(plot=True)
