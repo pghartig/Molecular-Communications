@@ -6,24 +6,26 @@ import matplotlib.pyplot as plt
 class training_data_generator:
     def __init__(
         self,
+        SNR,
         symbol_shape=np.zeros((1, 100)),
         channel=None,
         channel_shape=None,
-        noise_parm=[0, 0.1],
         plot=False,
         constellation='ASK',
-        size=2
+        constellation_size=2,
+        noise_parameter = np.array((0, 1))
 
     ):
+        self.SNR = SNR
         self.symbol_stream_matrix = symbol_shape
         self.CIR_matrix = channel
         self.channel_shape = channel_shape
         self.zero_pad = True
         self.terminated = True
         self.plot = plot
-        self.noise_para = noise_parm
+        self.noise_parameter = noise_parameter
         self.channel_output = []
-        self.alphabet = self.constellation(constellation, size)
+        self.alphabet = self.constellation(constellation, constellation_size)
 
     def setup_channel(self, shape=(1, 1)):
         if self.channel_shape is not None:
@@ -85,7 +87,9 @@ class training_data_generator:
             )
         self.channel_output = np.asarray(self.channel_output)
         # add noise
-        self.channel_output += self.noise_para[0] + self.noise_para[
+        # adjust noise power to provided SNR parameter
+        self.noise_parameter[1] *= np.var(self.alphabet)*(1/self.SNR)
+        self.channel_output += self.noise_parameter[0] + self.noise_parameter[
             1
         ] * np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
 

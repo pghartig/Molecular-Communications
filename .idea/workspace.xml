@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/pytorch_sandbox/autoencoder.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/viterbi_QAM.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/performance_plots.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/model_metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/model_metrics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pytorch_sandbox/torchsetup.py" beforeDir="false" afterPath="$PROJECT_DIR$/pytorch_sandbox/torchsetup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/viterbi_QAM.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbi_QAM.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,11 +16,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="175">
-              <caret line="99" column="40" lean-forward="true" selection-start-line="99" selection-start-column="40" selection-end-line="99" selection-end-column="40" />
+            <state relative-caret-position="135">
+              <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -33,19 +32,10 @@
         <entry file="file://$PROJECT_DIR$/communication_util/model_metrics.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="380">
-              <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+              <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/communication_util/error_rates.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
             </state>
           </provider>
         </entry>
@@ -62,8 +52,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/viterbi/viterbi.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="251">
-              <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
+            <state relative-caret-position="115">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -83,14 +73,35 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/viterbi_QAM.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+            <state relative-caret-position="270">
+              <caret line="18" column="25" lean-forward="true" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/performance_plots.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="210">
+              <caret line="14" column="28" lean-forward="true" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
+              <folding>
+                <element signature="e#0#41#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="340">
+              <caret line="109" selection-start-line="109" selection-end-line="109" />
             </state>
           </provider>
         </entry>
@@ -130,6 +141,8 @@
     <findStrings>
       <find>con</find>
       <find>bit_stream_matrix</find>
+      <find>zeros</find>
+      <find>size</find>
     </findStrings>
     <replaceStrings>
       <replace>symbol_stream_matrix</replace>
@@ -143,16 +156,17 @@
       <list>
         <option value="$PROJECT_DIR$/communication_util/__init__.py" />
         <option value="$PROJECT_DIR$/nn_utilities/train_data_generate.py" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/project_summary.txt" />
         <option value="$PROJECT_DIR$/communication_util/error_rates.py" />
         <option value="$PROJECT_DIR$/tests/test_data_gen.py" />
-        <option value="$PROJECT_DIR$/viterbi/viterbi.py" />
         <option value="$PROJECT_DIR$/communication_util/model_metrics.py" />
         <option value="$PROJECT_DIR$/pytorch_sandbox/torchsetup.py" />
         <option value="$PROJECT_DIR$/pytorch_sandbox/autoencoder.py" />
         <option value="$PROJECT_DIR$/tests/viterbi_basic.py" />
+        <option value="$PROJECT_DIR$/viterbi/viterbi.py" />
         <option value="$PROJECT_DIR$/tests/viterbi_QAM.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/tests/performance_plots.py" />
         <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
       </list>
     </option>
@@ -224,7 +238,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.viterbi_QAM">
+  <component name="RunManager" selected="Python tests.plotting_test">
     <configuration name="torchsetup" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -258,6 +272,21 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_data_gen.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="plotting_test" type="tests" factoryName="py.test">
+      <module name="molecular-communications-project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/performance_plots.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -296,6 +325,7 @@
       <item itemvalue="Python tests.data_setup" />
       <item itemvalue="Python tests.viterbi_basic" />
       <item itemvalue="Python tests.viterbi_QAM" />
+      <item itemvalue="Python tests.plotting_test" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -312,35 +342,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 30m 41s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 35m 27s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 31m 00s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 35m 51s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 35m 20s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 36m 29s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 36m 57s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 36m 58s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 39m 40s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 37m 58s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 39m 45s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 38m 31s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 41m 25s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 38m 36s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 42m 57s.xml">
+    <history-entry file="viterbi_QAM - 2019.10.22 at 09h 38m 47s.xml">
       <configuration name="viterbi_QAM" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 44m 11s.xml">
-      <configuration name="viterbi_QAM" configurationId="tests" />
+    <history-entry file="plotting_test - 2019.10.22 at 09h 51m 49s.xml">
+      <configuration name="plotting_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="viterbi_QAM - 2019.10.22 at 08h 44m 16s.xml">
-      <configuration name="viterbi_QAM" configurationId="tests" />
+    <history-entry file="plotting_test - 2019.10.22 at 09h 52m 52s.xml">
+      <configuration name="plotting_test" configurationId="tests" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
@@ -352,8 +382,8 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32876712" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.37671232" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.49041095" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.37671232" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.49041095" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -385,27 +415,6 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout-to-restore>
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/viterbi_QAM.py</url>
-          <line>16</line>
-          <option name="timeStamp" value="75" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/viterbi_QAM.py</url>
-          <line>14</line>
-          <option name="timeStamp" value="83" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
-          <line>99</line>
-          <option name="timeStamp" value="84" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/__init__.py">
       <provider selected="true" editor-type-id="text-editor" />
@@ -414,13 +423,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
           <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="104" selection-start-line="104" selection-end-line="104" />
         </state>
       </provider>
     </entry>
@@ -462,7 +464,7 @@
     <entry file="file://$PROJECT_DIR$/communication_util/model_metrics.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="380">
-          <caret line="28" column="24" lean-forward="true" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+          <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -488,18 +490,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/viterbi/viterbi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="251">
-          <caret line="19" column="45" selection-start-line="19" selection-start-column="45" selection-end-line="19" selection-end-column="45" />
+        <state relative-caret-position="115">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
@@ -513,10 +508,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbi_QAM.py">
+    <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="31" selection-start-line="11" selection-start-column="31" selection-end-line="11" selection-end-column="31" />
+        <state relative-caret-position="60">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="109" selection-start-line="109" selection-end-line="109" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/performance_plots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="210">
+          <caret line="14" column="28" lean-forward="true" selection-start-line="14" selection-start-column="28" selection-end-line="14" selection-end-column="28" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -525,10 +534,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="175">
-          <caret line="99" column="40" lean-forward="true" selection-start-line="99" selection-start-column="40" selection-end-line="99" selection-end-column="40" />
+        <state relative-caret-position="135">
+          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbi_QAM.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="25" lean-forward="true" selection-start-line="18" selection-start-column="25" selection-end-line="18" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
