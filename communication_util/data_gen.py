@@ -1,4 +1,5 @@
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 
 
@@ -10,7 +11,9 @@ class training_data_generator:
         channel_shape=None,
         noise_parm=[0, 0.01],
         plot=False,
-        alphabet=np.array([1, -1]),
+        constellation='ASK',
+        size=2
+
     ):
         self.symbol_stream_matrix = symbol_shape
         self.CIR_matrix = channel
@@ -20,7 +23,7 @@ class training_data_generator:
         self.plot = plot
         self.noise_para = noise_parm
         self.channel_output = []
-        self.alphabet = alphabet
+        self.alphabet = self.constellation(constellation, size)
 
     def setup_channel(self, shape=(1, 1)):
         if self.channel_shape is not None:
@@ -85,6 +88,24 @@ class training_data_generator:
         self.channel_output += self.noise_para[0] + self.noise_para[
             1
         ] * np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
+
+    def constellation(self, type, size):
+        #TODO for large tests may want to select dtype
+        if type is 'QAM':
+            points = np.linspace(-1, 1, np.floor(math.log(size, 2)))
+            constellation = 1j*np.zeros((points.size, points.size))
+            for i in range(points.size):
+                for k in range(points.size):
+                    constellation[i, k] = points[i] + 1j*points[k]
+            return constellation.flatten()
+        elif type is 'ASK':
+            return np.linspace(-1, +1, np.floor(size/2))
+        elif type is 'PSK':
+            return np.exp(1j*np.linspace(0, 2*np.pi, size))
+        else:
+            return np.array([1, -1])
+
+
 
     def plot_setup(self):
         figure = plt.figure()

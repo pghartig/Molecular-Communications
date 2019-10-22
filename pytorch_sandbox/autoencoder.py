@@ -1,5 +1,8 @@
 # Code in file autograd/two_layer_net_autograd.py
 import torch
+import numpy as np
+from communication_util.data_gen import *
+
 
 device = torch.device("cpu")
 # device = torch.device('cuda') # Uncomment this to run on GPU
@@ -10,8 +13,16 @@ device = torch.device("cpu")
 N, D_in, H, D_out = 64, 100, 20, 100
 
 # Create random Tensors to hold input and outputs
+channel = np.zeros((1, 8))
+channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
+data_gen = training_data_generator(channel=channel, plot=True)
+data_gen.setup_channel(shape=None)
+data_gen.random_symbol_stream()
+data_gen.send_through_channel()
 x = torch.randn(N, D_in, device=device)
-y = x # Autoencoder
+x = torch.from_numpy(data_gen.symbol_stream_matrix)
+
+y = x   # Autoencoder
 # y = torch.randn(N, D_out, device=device)
 
 # Create random Tensors for weights; setting requires_grad=True means that we
