@@ -9,7 +9,7 @@ def test_viterbi_QAM():
     channel = 1j*np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 1j*0.5, 0.4
     # TODO make consolidate this part
-    data_gen = training_data_generator(SNR=3, constellation='QAM', constellation_size=4, channel=channel, plot=True)
+    data_gen = training_data_generator(SNR=10, constellation='QAM', constellation_size=4, channel=channel, plot=True)
     # data_gen = training_data_generator(plot=True)
 
     data_gen.setup_channel(shape=None)

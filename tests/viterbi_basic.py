@@ -9,7 +9,7 @@ def test_viterbi_gaussian():
     channel = np.zeros((1, 8))
     channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
     # TODO make consolidate this part
-    data_gen = training_data_generator(channel=channel, plot=True)
+    data_gen = training_data_generator(SNR=10, channel=channel, plot=True)
     # data_gen = training_data_generator(plot=True)
 
     data_gen.setup_channel(shape=None)

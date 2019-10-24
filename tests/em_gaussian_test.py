@@ -17,6 +17,6 @@ def test_em_gaussian():
         data.append(np.random.normal(loc=(i+1), scale=1/(i+1), size=(1, 200)))
     data = np.asarray(data).flatten().T
     data = np.random.permutation(np.asarray(data).flatten().T)
-    mu, variance = em_gausian(num_sources, data, 30)
+    mu, variance, alpha = em_gausian(num_sources, data, 30)
     assert False
 

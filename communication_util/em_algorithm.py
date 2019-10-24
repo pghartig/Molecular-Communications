@@ -39,11 +39,11 @@ def em_gausian(num_gaussians, data,iterations):
         """
         Maximization step
         """
-        mu = np.dot(weights.T, data)/np.sum(weights, axis=0)
+        mu = np.dot(weights.T, data)/np.reshape(np.sum(weights, axis=0), mu.shape)
         for i in range(num_gaussians):
             sigma_square[i] = np.dot(weights[:, i].T, np.power(data-mu[i], 2))/np.sum(weights[:, i], axis=0)
 
-    return mu, sigma_square
+    return mu, sigma_square, alpha
 
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """
@@ -53,8 +53,8 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
     :param sigma_square:
     :return:
     """
-    test1 = np.zeros(sigma_square.shape)
+    probabilities = np.zeros(sigma_square.shape)
     for i in range(mu.size):
-        test1[i] = np.divide(np.exp(np.divide(-np.power(data_point - mu[i], 2), 2 * sigma_square[i])), np.sqrt(2*np.pi*sigma_square[i]))
-    return test1
+        probabilities[i] = np.divide(np.exp(np.divide(-np.power(data_point - mu[i], 2), 2 * sigma_square[i])), np.sqrt(2*np.pi*sigma_square[i]))
+    return probabilities
 

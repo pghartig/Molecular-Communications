@@ -7,7 +7,7 @@ class training_data_generator:
     def __init__(
         self,
         SNR,
-        symbol_shape=np.zeros((1, 100)),
+        symbol_stream_shape=(1, 100),
         channel=None,
         channel_shape=None,
         plot=False,
@@ -18,7 +18,7 @@ class training_data_generator:
 
     ):
         self.SNR = SNR
-        self.symbol_stream_matrix = symbol_shape
+        self.symbol_stream_matrix = np.zeros(symbol_stream_shape)
         self.CIR_matrix = channel
         self.channel_shape = channel_shape
         self.zero_pad = True
@@ -30,10 +30,13 @@ class training_data_generator:
         self.seed = seed
 
     def setup_channel(self, shape=(1, 1)):
-        if self.channel_shape is not None:
+        if self.CIR_matrix is not None:
+            self.channel_shape = self.CIR_matrix.shape
+        elif self.channel_shape is not None:
             self.CIR_matrix = np.random.randn(shape[0], shape[1])
-        elif self.CIR_matrix is None:
+        else:
             self.CIR_matrix = np.ones((1, 1))
+            self.channel_shape = self.CIR_matrix.shape
         # else:
         #     self.CIR_matrix = np.zeros((1,10))
         #     self.CIR_matrix[0, [0, 3, 5]] = 1, .5, .2
@@ -52,7 +55,7 @@ class training_data_generator:
             )
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
             self.symbol_stream_matrix[
-                :, 1 - self.CIR_matrix.shape[1] :
+                :, 1 - self.CIR_matrix.shape[1]:
             ] = self.alphabet[0]
             self.symbol_stream_matrix[
                 :, 0: self.CIR_matrix.shape[1] - 1
@@ -107,7 +110,7 @@ class training_data_generator:
                     constellation[i, k] = points[i] + 1j*points[k]
             return constellation.flatten()
         elif type is 'ASK':
-            return np.linspace(-1, +1, np.floor(size/2))
+            return np.linspace(-1, +1, size)
         elif type is 'PSK':
             return np.exp(1j*np.linspace(0, 2*np.pi, size))
         else:
