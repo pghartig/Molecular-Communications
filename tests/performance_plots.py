@@ -7,12 +7,14 @@ import matplotlib.pyplot as plt
 def test_perforamcen_plot():
     performance = []
     SNRs = np.linspace(.1, 10, 20)
+    seed_generator = 0
     for SRN in SNRs:
         # setup data
         channel = 1j*np.zeros((1, 4))
         channel[0, [0, 3]] = 1, 1j*0.5
         # TODO make consolidate this part
-        data_gen = training_data_generator(SNR=SRN, constellation='QAM', constellation_size=4, channel=channel, plot=False)
+        data_gen = training_data_generator(seed=seed_generator, SNR=SRN, constellation='QAM', constellation_size=4,
+                                           channel=channel, plot=False)
         # data_gen = training_data_generator(plot=True)
 
         data_gen.setup_channel(shape=None)

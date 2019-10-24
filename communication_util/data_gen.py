@@ -13,7 +13,8 @@ class training_data_generator:
         plot=False,
         constellation='ASK',
         constellation_size=2,
-        noise_parameter = np.array((0, 1))
+        noise_parameter = np.array((0, 1)),
+        seed = None
 
     ):
         self.SNR = SNR
@@ -26,6 +27,7 @@ class training_data_generator:
         self.noise_parameter = noise_parameter
         self.channel_output = []
         self.alphabet = self.constellation(constellation, constellation_size)
+        self.seed = seed
 
     def setup_channel(self, shape=(1, 1)):
         if self.channel_shape is not None:
@@ -38,6 +40,8 @@ class training_data_generator:
 
     def random_symbol_stream(self):
         shape = self.symbol_stream_matrix.shape
+        if self.seed is not None:
+            np.random.seed(self.seed)
         if (
             self.zero_pad is True
             and self.terminated is True
@@ -51,7 +55,7 @@ class training_data_generator:
                 :, 1 - self.CIR_matrix.shape[1] :
             ] = self.alphabet[0]
             self.symbol_stream_matrix[
-                :, 0 : self.CIR_matrix.shape[1] - 1
+                :, 0: self.CIR_matrix.shape[1] - 1
             ] = self.alphabet[0]
         if (
             self.zero_pad is True
@@ -88,7 +92,7 @@ class training_data_generator:
         self.channel_output = np.asarray(self.channel_output)
         # add noise
         # adjust noise power to provided SNR parameter
-        self.noise_parameter[1] *= np.var(self.alphabet)*(1/self.SNR)
+        self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet)*(1/self.SNR))
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[
             1
         ] * np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
