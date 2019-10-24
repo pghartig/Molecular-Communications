@@ -50,7 +50,7 @@ def test_viterbi_net():
     w3 = torch.randn(H2, D_out, device=device, requires_grad=True)
 
     learning_rate = 1e-6
-    for t in range(500):
+    for t in range(50):
         # Forward pass: compute predicted y
         h1 = x.mm(w1)
         h1_relu = h1.clamp(min=0)
@@ -68,14 +68,24 @@ def test_viterbi_net():
         # Backprop to compute gradients of w1 and w2 with respect to loss
         grad_y_pred = 2.0 * (y_pred - y)
         grad_w3 = h2_relu.t().mm(grad_y_pred)
+
         grad_h2_relu = grad_y_pred.mm(w3.t())
-        grad_h = grad_h_relu.clone()
-        grad_h[h < 0] = 0
-        grad_w1 = x.t().mm(grad_h)
+        grad_h2 =grad_h2_relu.clone()
+        grad_h2[h2 < 0] = 0
+        grad_w2 = h1_relu.t().mm(grad_h2)
+
+        grad_h1_relu = grad_h2_relu.mm(w2.t())
+        grad_h1 = grad_h1_relu.clone()
+        grad_h1[h1 < 0] = 0
+        grad_w1 = x.t().mm(grad_h1)
 
 
         # Update weights using gradient descent
         w1 -= learning_rate * grad_w1
         w2 -= learning_rate * grad_w2
+        w3 -= learning_rate * grad_w3
+
 
     # Make sure to output these trained weights so that they can be used without training again
+    torch.save([w1, w2, w3], 'weights.pt')
+assert False
