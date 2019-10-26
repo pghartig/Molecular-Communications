@@ -45,9 +45,12 @@ def test_viterbi_net():
 
     # Create random Tensors for weights; setting requires_grad=True means that we
     # want to compute gradients for these Tensors during the backward pass.
-    w1 = torch.randn(D_in, H1, device=device, requires_grad=True)
-    w2 = torch.randn(H1, H2, device=device, requires_grad=True)
-    w3 = torch.randn(H2, D_out, device=device, requires_grad=True)
+    # w1 = torch.randn(D_in, H1, device=device, requires_grad=True)
+    # w2 = torch.randn(H1, H2, device=device, requires_grad=True)
+    # w3 = torch.randn(H2, D_out, device=device, requires_grad=True)
+    w1 = torch.randn(D_in, H1, device=device, requires_grad=False)
+    w2 = torch.randn(H1, H2, device=device, requires_grad=False)
+    w3 = torch.randn(H2, D_out, device=device, requires_grad=False)
 
     learning_rate = 1e-6
     for t in range(50):
@@ -55,10 +58,10 @@ def test_viterbi_net():
         h1 = x.mm(w1)
         h1_relu = h1.clamp(min=0)
 
-        h2 = h1.mm(w1)
+        h2 = h1.mm(w2)
         h2_relu = h2.clamp(min=0)
 
-        y_pred = h2_relu.mm(w2)
+        y_pred = h2_relu.mm(w3)
 
         # Compute and print loss; loss is a scalar, and is stored in a PyTorch Tensor
         # of shape (); we can get its value as a Python number with loss.item().
@@ -88,4 +91,4 @@ def test_viterbi_net():
 
     # Make sure to output these trained weights so that they can be used without training again
     torch.save([w1, w2, w3], 'weights.pt')
-assert False
+    assert False
