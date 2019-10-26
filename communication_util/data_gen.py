@@ -45,22 +45,18 @@ class training_data_generator:
         shape = self.symbol_stream_matrix.shape
         if self.seed is not None:
             np.random.seed(self.seed)
+
         if (
             self.zero_pad is True
             and self.terminated is True
             and self.CIR_matrix is not None
         ):
-            self.symbol_stream_matrix = np.random.random_integers(
-                0, self.alphabet.size - 1, shape
-            )
+            self.symbol_stream_matrix = \
+                np.random.random_integers(0, self.alphabet.size - 1, shape)
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
-            self.symbol_stream_matrix[
-                :, 1 - self.CIR_matrix.shape[1]:
-            ] = self.alphabet[0]
-            self.symbol_stream_matrix[
-                :, 0: self.CIR_matrix.shape[1] - 1
-            ] = self.alphabet[0]
-        if (
+            self.symbol_stream_matrix[:, 1 - self.CIR_matrix.shape[1]:] = self.alphabet[0]
+            self.symbol_stream_matrix[:, 0: self.CIR_matrix.shape[1] - 1] = self.alphabet[0]
+        elif (
             self.zero_pad is True
             and self.terminated is not True
             and self.CIR_matrix is not None
@@ -116,7 +112,28 @@ class training_data_generator:
         else:
             return np.array([1, -1])
 
+    def get_labeled_data(self):
+        x_list = []
+        y_list = []
+        if self.channel_output is not None:
+            for i in range(self.channel_output.shape[1]):
+                if i >= self.CIR_matrix.shape[1] and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1]:
+                    x_list.append(self.channel_output[:, i].flatten())
+                    input = self.symbol_stream_matrix[:, i - self.CIR_matrix.shape[1]:i].flatten()
+                    probability_vec = self.get_probability(input)
+                    y_list.append(probability_vec)
+        return x_list, y_list
 
+    def get_probability(self):
+        """
+        TODO -> There would be ways of using a nice vector encoding here to make it faster
+        Describe encoding ->
+        :return:
+        """
+        num_possible_states = np.power(self.alphabet, self.CIR_matrix.shape[1])
+        metrics = np.ones(1, num_possible_states)
+
+        return None
 
     def plot_setup(self):
         figure = plt.figure()

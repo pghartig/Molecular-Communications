@@ -18,13 +18,19 @@ def test_viterbi_net():
     """
     Setup Training Data
     """
+    number_symbols = 60
 
     channel = 1j * np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-    data_gen = training_data_generator(symbol_stream_shape=(1, 60), SNR=10, plot=True, channel=channel)
+    data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols+2*channel.size),
+                                       SNR=10, plot=True, channel=channel)
     data_gen.setup_channel(shape=None)
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
+
+    x, y = data_gen.get_labeled_data()
+    x = torch.Tensor(x)
+    y = torch.Tensor(y)
 
     """
     Setup Architecture
@@ -32,15 +38,15 @@ def test_viterbi_net():
     m = data_gen.alphabet.size
     channel_length = data_gen.CIR_matrix.shape[1]
 
+
+
     # N is batch size; D_in is input dimension;
     # H is hidden dimension; D_out is output dimension.
-    N, D_in, H1, H2, D_out = 60, 1, 100, 50, np.power(m, channel_length)
+    N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
 
     # Create random Tensors to hold input and outputs
-    x = torch.randn(N, D_in, device=device)
-    # x = torch.randn(N, D_in, device=device)   # training input batch
-    y = torch.randn(N, D_out, device=device)
-    # y = torch.randn(N, D_out, device=device)  # training output batch
+    # x = torch.randn(N, D_in, device=device)
+    # y = torch.randn(N, D_out, device=device)
 
 
     # Create random Tensors for weights; setting requires_grad=True means that we
