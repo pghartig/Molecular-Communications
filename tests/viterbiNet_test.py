@@ -96,5 +96,5 @@ def test_viterbi_net():
 
 
     # Make sure to output these trained weights so that they can be used without training again
-    torch.save([w1, w2, w3], 'weights.pt')
+    torch.save([w1, w2, w3], '"/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/weights.pt')
     assert False

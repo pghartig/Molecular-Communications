@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from communication_util.data_gen import training_data_generator
 
+#TODO implement this test
 
 def nn_mm_test():
     """

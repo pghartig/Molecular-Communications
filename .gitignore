@@ -108,4 +108,5 @@ venv.bak/
 notebook.txt
 *.png
 *.pt
+Output/
 

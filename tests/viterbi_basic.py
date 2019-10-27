@@ -9,7 +9,7 @@ def test_viterbi_gaussian():
     channel = np.zeros((1, 8))
     channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
     # TODO make consolidate this part
-    data_gen = training_data_generator(SNR=10, channel=channel, plot=True)
+    data_gen = training_data_generator(SNR=1, channel=channel, plot=True)
     # data_gen = training_data_generator(plot=True)
 
     data_gen.setup_channel(shape=None)
@@ -17,6 +17,7 @@ def test_viterbi_gaussian():
     data_gen.send_through_channel()
 
     # detect with Viterbi
+    # notice that this assumes perfect CSI at receiver
     detected = viterbi_output(
         data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix
     )
