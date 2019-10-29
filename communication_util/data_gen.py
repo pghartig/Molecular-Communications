@@ -19,6 +19,7 @@ class training_data_generator:
     ):
         self.SNR = SNR
         self.symbol_stream_matrix = np.zeros(symbol_stream_shape)
+        self.transmit_signal_matrix []
         self.CIR_matrix = channel
         self.channel_shape = channel_shape
         self.zero_pad = True
@@ -42,6 +43,10 @@ class training_data_generator:
         #     self.CIR_matrix[0, [0, 3, 5]] = 1, .5, .2
 
     def random_symbol_stream(self):
+        """
+        TODO allow for loading in a signal stream
+        :return:
+        """
         shape = self.symbol_stream_matrix.shape
         if self.seed is not None:
             np.random.seed(self.seed)
@@ -73,6 +78,24 @@ class training_data_generator:
                 0, self.alphabet.size - 1, shape
             )
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
+
+    def modulate_fundemental_pulse(self, fundemental_pulse):
+        """
+        The purpose of this funcion is to take a symbol stream and use it to modulate the fundemental pulse
+        on which it will be send over the channel.
+        :return:
+        """
+        #include parameter of samples/symbol
+
+        #Look at pulse and determine where to cut off
+        # will just keep making samples until we full to some percentage of max
+
+        # will start but just given it the root nyquist
+        for symbol in self.symbol_stream_matrix.shape[1]:
+
+
+
+        return None
 
     def send_through_channel(self):
         """

@@ -2,17 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_fundamental_pulse.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/em_gaussian_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/em_gaussian_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/nn_mixture_model_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/nn_mixture_model_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/performance_plots.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/performance_plots.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_data_gen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/viterbiNet_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbiNet_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/viterbi_QAM.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbi_QAM.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/viterbi_basic.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbi_basic.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/weights.pt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,29 +17,49 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-29">
-              <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
+            <state relative-caret-position="346">
+              <caret line="87" column="55" lean-forward="true" selection-start-line="87" selection-start-column="55" selection-end-line="87" selection-end-column="55" />
               <folding>
-                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#866#1299#0" />
+                <element signature="e#1090#1178#0" />
+                <element signature="e#1187#1194#0" />
+                <element signature="e#1612#1982#0" />
+                <element signature="e#2143#2463#0" />
+                <element signature="e#2490#2688#0" />
+                <element signature="e#2734#3646#0" />
+                <element signature="e#2734#2920#1" />
+                <element signature="e#3003#3249#0" />
+                <element signature="e#3320#3331#0" />
+                <element signature="e#3697#4314#0" />
+                <element signature="e#3782#4102#0" />
+                <element signature="e#3964#4059#0" />
+                <element signature="e#4356#4926#0" />
+                <element signature="e#4444#4896#0" />
+                <element signature="e#4506#4896#0" />
+                <element signature="e#4630#4896#0" />
+                <element signature="e#4967#5270#0" />
+                <element signature="e#4967#5119#1" />
+                <element signature="e#5306#5597#0" />
+                <element signature="e#5641#5729#0" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/nn_mixture_model_test.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+            <state relative-caret-position="60">
+              <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/em_gaussian_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="24" column="58" selection-start-line="24" selection-start-column="58" selection-end-line="24" selection-end-column="58" />
+            <state relative-caret-position="315">
+              <caret line="21" column="36" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
@@ -67,7 +79,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="40">
+            <state relative-caret-position="90">
               <caret line="8" selection-start-line="8" selection-end-line="9" selection-end-column="47" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
@@ -79,7 +91,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/performance_plots.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="145">
+            <state relative-caret-position="420">
               <caret line="31" selection-start-line="31" selection-end-line="34" selection-end-column="14" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
@@ -91,7 +103,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="233">
+            <state relative-caret-position="1350">
               <caret line="92" column="37" selection-start-line="92" selection-start-column="37" selection-end-line="92" selection-end-column="37" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
@@ -121,7 +133,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbi_QAM.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10">
+            <state relative-caret-position="135">
               <caret line="11" column="44" selection-start-line="11" selection-start-column="44" selection-end-line="11" selection-end-column="44" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
@@ -173,7 +185,6 @@
         <option value="$PROJECT_DIR$/communication_util/em_algorithm.py" />
         <option value="$PROJECT_DIR$/pytorch_sandbox/viterbiNet.py" />
         <option value="$PROJECT_DIR$/tests/viterbiNet_test" />
-        <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
         <option value="$PROJECT_DIR$/tests/test_data_gen.py" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/requirements.txt" />
@@ -183,6 +194,8 @@
         <option value="$PROJECT_DIR$/tests/performance_plots.py" />
         <option value="$PROJECT_DIR$/tests/nn_mixture_model_test.py" />
         <option value="$PROJECT_DIR$/tests/em_gaussian_test.py" />
+        <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
+        <option value="$PROJECT_DIR$/tests/test_fundamental_pulse.py" />
       </list>
     </option>
   </component>
@@ -195,6 +208,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -205,13 +219,17 @@
             <path>
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="communication_util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
               <item name="tests" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -390,21 +408,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="performance_plotting_test - 2019.10.27 at 12h 59m 41s.xml">
-      <configuration name="performance_plotting_test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="performance_plotting_test - 2019.10.27 at 13h 04m 58s.xml">
-      <configuration name="performance_plotting_test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 05m 09s.xml">
-      <configuration name="em_gaussian_test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 07m 35s.xml">
-      <configuration name="em_gaussian_test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 19m 12s.xml">
-      <configuration name="em_gaussian_test" configurationId="tests" />
-    </history-entry>
     <history-entry file="em_gaussian_test - 2019.10.27 at 13h 19m 13s.xml">
       <configuration name="em_gaussian_test" configurationId="tests" />
     </history-entry>
@@ -418,6 +421,21 @@
       <configuration name="em_gaussian_test" configurationId="tests" />
     </history-entry>
     <history-entry file="em_gaussian_test - 2019.10.27 at 13h 21m 10s.xml">
+      <configuration name="em_gaussian_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 21m 27s.xml">
+      <configuration name="em_gaussian_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 21m 47s.xml">
+      <configuration name="em_gaussian_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 22m 05s.xml">
+      <configuration name="em_gaussian_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 22m 20s.xml">
+      <configuration name="em_gaussian_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="em_gaussian_test - 2019.10.27 at 13h 22m 34s.xml">
       <configuration name="em_gaussian_test" configurationId="tests" />
     </history-entry>
   </component>
@@ -434,18 +452,18 @@
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32876712" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.37671232" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.37671232" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.5109589" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32876712" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32876712" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.30547947" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.27945206" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.32739726" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -477,7 +495,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
-          <line>58</line>
+          <line>63</line>
           <option name="timeStamp" value="237" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -606,6 +624,58 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tests/Output.png" />
+    <entry file="file://$PROJECT_DIR$/notebook.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="155">
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/nn_mixture_model_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="7" column="47" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="8" selection-start-line="8" selection-end-line="9" selection-end-column="47" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/performance_plots.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="31" selection-start-line="31" selection-end-line="34" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#41#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1350">
+          <caret line="92" column="37" selection-start-line="92" selection-start-column="37" selection-end-line="92" selection-end-column="37" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/error_rates.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -622,72 +692,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/viterbi_QAM.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10">
+        <state relative-caret-position="135">
           <caret line="11" column="44" selection-start-line="11" selection-start-column="44" selection-end-line="11" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="8" selection-start-line="8" selection-end-line="9" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29">
-          <caret line="6" column="8" selection-start-line="6" selection-start-column="8" selection-end-line="6" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/Output.png">
-      <provider selected="true" editor-type-id="images" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="7" column="47" selection-start-line="7" selection-start-column="47" selection-end-line="7" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="233">
-          <caret line="92" column="37" selection-start-line="92" selection-start-column="37" selection-end-line="92" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/notebook.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/nn_mixture_model_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="5" column="25" selection-start-line="5" selection-start-column="25" selection-end-line="5" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/performance_plots.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="145">
-          <caret line="31" selection-start-line="31" selection-end-line="34" selection-end-column="14" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -696,11 +702,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/em_gaussian_test.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="24" column="58" selection-start-line="24" selection-start-column="58" selection-end-line="24" selection-end-column="58" />
+        <state relative-caret-position="315">
+          <caret line="21" column="36" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
           <folding>
             <element signature="e#0#54#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="346">
+          <caret line="87" column="55" lean-forward="true" selection-start-line="87" selection-start-column="55" selection-end-line="87" selection-end-column="55" />
+          <folding>
+            <element signature="e#866#1299#0" />
+            <element signature="e#1090#1178#0" />
+            <element signature="e#1187#1194#0" />
+            <element signature="e#1612#1982#0" />
+            <element signature="e#2143#2463#0" />
+            <element signature="e#2490#2688#0" />
+            <element signature="e#2734#3646#0" />
+            <element signature="e#2734#2920#1" />
+            <element signature="e#3003#3249#0" />
+            <element signature="e#3320#3331#0" />
+            <element signature="e#3697#4314#0" />
+            <element signature="e#3782#4102#0" />
+            <element signature="e#3964#4059#0" />
+            <element signature="e#4356#4926#0" />
+            <element signature="e#4444#4896#0" />
+            <element signature="e#4506#4896#0" />
+            <element signature="e#4630#4896#0" />
+            <element signature="e#4967#5270#0" />
+            <element signature="e#4967#5119#1" />
+            <element signature="e#5306#5597#0" />
+            <element signature="e#5641#5729#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
         </state>
       </provider>
     </entry>
