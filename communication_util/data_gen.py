@@ -19,7 +19,7 @@ class training_data_generator:
     ):
         self.SNR = SNR
         self.symbol_stream_matrix = np.zeros(symbol_stream_shape)
-        self.transmit_signal_matrix []
+        self.transmit_signal_matrix = []
         self.CIR_matrix = channel
         self.channel_shape = channel_shape
         self.zero_pad = True
@@ -79,23 +79,51 @@ class training_data_generator:
             )
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
 
-    def modulate_fundemental_pulse(self, fundemental_pulse):
+    def modulate_fundemental_pulse(self, fundamental_pulse):
         """
+        Fundamenet
         The purpose of this funcion is to take a symbol stream and use it to modulate the fundemental pulse
         on which it will be send over the channel.
         :return:
         """
         #include parameter of samples/symbol
+        t_samp = 1/1000
+        t_sym = 1/10
 
-        #Look at pulse and determine where to cut off
-        # will just keep making samples until we full to some percentage of max
+        """
+        First look at pulse and determine where to cut off
+        will just keep making samples until we full to some percentage of max.
+        Notice that assumes a symmetric pulse shape
+        """
+        sample_number = 0
+        peak_energy = energy = fundamental_pulse(sample_number * t_samp)
+        #TODO verify this threshold for where to cutoff fundamental pulse
+        while energy >= .05*peak_energy:
+            energy = fundamental_pulse(sample_number*t_samp)
+            sample_number += 1
 
-        # will start but just given it the root nyquist
-        for symbol in self.symbol_stream_matrix.shape[1]:
+        sample_vector = np.arange(-sample_number, sample_number+1)*t_samp
+        sample_vector = fundamental_pulse(sample_vector)
+        sampling_width = int(np.floor(sample_vector.size/2))
 
 
+        """
+        In order to allow for adding components from multiple symbols into a single sample, the array for the
+        sampled, modulated signal must be pre-allocated.
+        """
+        samples_per_symbol = int(np.floor(t_sym/t_samp))
+        overlap = max(sampling_width - samples_per_symbol/2,0)
+        self.transmit_signal_matrix =\
+            np.zeros((1, samples_per_symbol*self.symbol_stream_matrix.shape[1] + 2*overlap))
 
-        return None
+        for symbol_ind in range(self.symbol_stream_matrix.shape[1]):
+            center = symbol_ind*samples_per_symbol + int(np.ceil(samples_per_symbol/2))
+            test = self.transmit_signal_matrix[center - sampling_width: sampling_width+1]
+            self.transmit_signal_matrix[:, center - sampling_width: sampling_width+1] = sample_vector
+
+            self.transmit_signal_matrix.append()
+            return None
+
 
     def send_through_channel(self):
         """
