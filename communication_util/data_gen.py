@@ -114,15 +114,17 @@ class training_data_generator:
         """
         samples_per_symbol_period = int(np.floor(t_sym/t_samp))
         overlap = max(int(sampling_width - samples_per_symbol_period/2),0)
+        #TODO figure out why +1 is needed in line below for shape
         self.transmit_signal_matrix =\
-            np.zeros((1, samples_per_symbol_period*self.symbol_stream_matrix.shape[1] + 2*overlap))
-
-        for symbol_ind in range(self.symbol_stream_matrix.shape[1]):
-            center = symbol_ind*samples_per_symbol_period + sampling_width
-            #TODO test vector is too big ?
-            # test = self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number +1)]
-            self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number +1)] = sample_vector
-
+            np.zeros((1, samples_per_symbol_period*self.symbol_stream_matrix.shape[1] + 2*overlap+1))
+        try:
+            for symbol_ind in range(self.symbol_stream_matrix.shape[1]):
+                center = symbol_ind*samples_per_symbol_period + sampling_width
+                # samples = self.symbol_stream_matrix.shape[symbol_ind]*sample_vector
+                # test = self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number +1)]
+                self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number + 1)] = sample_vector
+        except:
+            print("problem")
 
     def send_through_channel(self):
         """
@@ -187,12 +189,14 @@ class training_data_generator:
 
     def plot_setup(self):
         figure = plt.figure()
-        figure.add_subplot(311)
+        figure.add_subplot(411)
         self.visualize(self.CIR_matrix, "C0-")
-        figure.add_subplot(312)
+        figure.add_subplot(412)
         self.visualize(self.symbol_stream_matrix, "C1-")
-        figure.add_subplot(313)
+        figure.add_subplot(413)
         self.visualize(self.channel_output, "C2-")
+        figure.add_subplot(414)
+        self.visualize(self.transmit_signal_matrix, "C3-")
         plt.show()
 
     def visualize(self, data, c):
