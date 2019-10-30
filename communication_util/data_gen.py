@@ -87,7 +87,7 @@ class training_data_generator:
         :return:
         """
         #include parameter of samples/symbol
-        t_samp = 1/1000
+        t_samp = 1/100
         t_sym = 1/10
 
         """
@@ -103,7 +103,8 @@ class training_data_generator:
             sample_number += 1
 
         sample_vector = np.arange(-sample_number, sample_number+1)*t_samp
-        sample_vector = fundamental_pulse(sample_vector)
+        vec_pulse = np.vectorize(fundamental_pulse)
+        sample_vector = vec_pulse(sample_vector)
         sampling_width = int(np.floor(sample_vector.size/2))
 
 
@@ -111,18 +112,16 @@ class training_data_generator:
         In order to allow for adding components from multiple symbols into a single sample, the array for the
         sampled, modulated signal must be pre-allocated.
         """
-        samples_per_symbol = int(np.floor(t_sym/t_samp))
-        overlap = max(sampling_width - samples_per_symbol/2,0)
+        samples_per_symbol_period = int(np.floor(t_sym/t_samp))
+        overlap = max(int(sampling_width - samples_per_symbol_period/2),0)
         self.transmit_signal_matrix =\
-            np.zeros((1, samples_per_symbol*self.symbol_stream_matrix.shape[1] + 2*overlap))
+            np.zeros((1, samples_per_symbol_period*self.symbol_stream_matrix.shape[1] + 2*overlap))
 
         for symbol_ind in range(self.symbol_stream_matrix.shape[1]):
-            center = symbol_ind*samples_per_symbol + int(np.ceil(samples_per_symbol/2))
-            test = self.transmit_signal_matrix[center - sampling_width: sampling_width+1]
-            self.transmit_signal_matrix[:, center - sampling_width: sampling_width+1] = sample_vector
-
-            self.transmit_signal_matrix.append()
-            return None
+            center = symbol_ind*samples_per_symbol_period + sampling_width
+            #TODO test vector is too big ?
+            # test = self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number +1)]
+            self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number +1)] = sample_vector
 
 
     def send_through_channel(self):

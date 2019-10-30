@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/communication_util/pulse_shapes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_fundamental_pulse.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_fundamental_pulse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/pulse_shapes.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/pulse_shapes.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="205">
-              <caret line="105" column="56" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="56" />
+            <state relative-caret-position="197">
+              <caret line="104" column="22" lean-forward="true" selection-start-line="104" selection-start-column="22" selection-end-line="104" selection-end-column="22" />
               <folding>
                 <element signature="e#866#1299#0" />
                 <element signature="e#1090#1178#0" />
@@ -50,8 +47,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="156">
-              <caret line="31" selection-start-line="31" selection-end-line="31" />
+            <state relative-caret-position="126">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
             </state>
           </provider>
         </entry>
@@ -65,11 +62,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="22" column="62" selection-start-line="22" selection-start-column="62" selection-end-line="22" selection-end-column="62" />
+            <state relative-caret-position="156">
+              <caret line="22" column="24" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -193,8 +190,8 @@
         <option value="$PROJECT_DIR$/tests/nn_mixture_model_test.py" />
         <option value="$PROJECT_DIR$/tests/em_gaussian_test.py" />
         <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
-        <option value="$PROJECT_DIR$/communication_util/pulse_shapes.py" />
         <option value="$PROJECT_DIR$/tests/test_fundamental_pulse.py" />
+        <option value="$PROJECT_DIR$/communication_util/pulse_shapes.py" />
       </list>
     </option>
   </component>
@@ -219,6 +216,11 @@
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
               <item name="communication_util" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="nn_utilities" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
@@ -423,34 +425,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 45m 14s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 00m 37s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 49m 37s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 02m 42s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 49m 46s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 04m 33s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 50m 10s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 08m 26s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 51m 14s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 10m 23s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 51m 22s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 11m 06s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 52m 38s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 15m 46s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 57m 38s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 15m 58s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 57m 42s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 16m 59s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 13h 58m 27s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 17m 04s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
   </component>
@@ -467,13 +469,13 @@
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32876712" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.37671232" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.4958904" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4958904" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32876712" />
@@ -539,9 +541,9 @@
           <option name="timeStamp" value="277" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/communication_util/pulse_shapes.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="278" />
+          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
+          <line>106</line>
+          <option name="timeStamp" value="281" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -735,17 +737,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
+    <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="156">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
+          <caret line="22" column="24" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="205">
-          <caret line="105" column="56" selection-start-line="105" selection-start-column="56" selection-end-line="105" selection-end-column="56" />
+        <state relative-caret-position="197">
+          <caret line="104" column="22" lean-forward="true" selection-start-line="104" selection-start-column="22" selection-end-line="104" selection-end-column="22" />
           <folding>
             <element signature="e#866#1299#0" />
             <element signature="e#1090#1178#0" />
@@ -768,16 +780,6 @@
             <element signature="e#4967#5119#1" />
             <element signature="e#5306#5597#0" />
             <element signature="e#5641#5729#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="22" column="62" selection-start-line="22" selection-start-column="62" selection-end-line="22" selection-end-column="62" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

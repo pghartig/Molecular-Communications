@@ -23,17 +23,18 @@ def root_raise_cosine(sample_point, sample_period =  1 / 1000, symbol_period = 1
     # sample = np.cos(sample_point)
     return sample
 
-def rectangle(sample_points, sample_period = 1/1000, symbol_period = 1/10, pulse_energy= 1, alpha= .5):
+def rectangle(sample_points, sample_period = 1/100, symbol_period = 1/10, pulse_energy= 1, alpha= .5):
     """
     provide samples from root raised cosine pulse
     :param sample_point:
     :param symbol_period:
     :return:
     """
-    ret = []
-    for sample in sample_points:
-        if sample < -symbol_period/2 or sample > symbol_period/2:
-            ret.append(0)
-        else:
-            ret.append(pulse_energy/symbol_period)
-    return np.asarray(ret)
+    return 0 if sample_points < -1/(symbol_period*2) or sample_points > 1/(symbol_period*2) else 1
+    # ret = []
+    # for sample in sample_points:
+    #     if sample < -symbol_period/2 or sample > symbol_period/2:
+    #         ret.append(0)
+    #     else:
+    #         ret.append(pulse_energy/symbol_period)
+    # return np.asarray(ret)
