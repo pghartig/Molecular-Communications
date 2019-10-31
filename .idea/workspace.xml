@@ -2,9 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/communication_util/general_tools.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/test_fundamental_pulse.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_fundamental_pulse.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/viterbiNet_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbiNet_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -17,8 +19,46 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="94">
-              <caret line="124" column="72" lean-forward="true" selection-start-line="124" selection-start-column="72" selection-end-line="124" selection-end-column="72" />
+            <state relative-caret-position="234">
+              <caret line="170" column="19" selection-start-line="170" selection-start-column="19" selection-end-line="170" selection-end-column="36" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+                <element signature="e#388#854#0" />
+                <element signature="e#907#1340#0" />
+                <element signature="e#1131#1219#0" />
+                <element signature="e#1228#1235#0" />
+                <element signature="e#1386#2820#0" />
+                <element signature="e#1386#1468#1" />
+                <element signature="e#1779#2278#0" />
+                <element signature="e#2371#2691#0" />
+                <element signature="e#2718#2916#0" />
+                <element signature="e#2913#5043#0" />
+                <element signature="e#2891#3101#1" />
+                <element signature="e#3200#3405#1" />
+                <element signature="e#3632#3711#0" />
+                <element signature="e#3959#4141#1" />
+                <element signature="e#4712#5223#0" />
+                <element signature="e#4789#5223#0" />
+                <element signature="e#4669#4738#0" />
+                <element signature="e#5065#5977#0" />
+                <element signature="e#5065#5251#1" />
+                <element signature="e#5334#5580#0" />
+                <element signature="e#5651#5662#0" />
+                <element signature="e#6113#6433#0" />
+                <element signature="e#6295#6390#0" />
+                <element signature="e#7717#8178#0" />
+                <element signature="e#7637#8019#0" />
+                <element signature="e#8063#8151#0" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/tests/test_combinatoric_list.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -27,10 +67,10 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
+        <entry file="file://$PROJECT_DIR$/communication_util/general_tools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="258">
-              <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
+            <state relative-caret-position="105">
+              <caret line="7" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
@@ -38,16 +78,25 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/em_algorithm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="705">
+            <state relative-caret-position="313">
               <caret line="47" column="37" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="563">
+              <caret line="39" column="28" lean-forward="true" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
+            <state relative-caret-position="241">
               <caret line="25" column="25" lean-forward="true" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
@@ -57,22 +106,13 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/em_gaussian_test.py">
+        <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="21" column="36" lean-forward="true" selection-start-line="21" selection-start-column="36" selection-end-line="21" selection-end-column="36" />
+            <state relative-caret-position="122">
+              <caret line="34" column="30" selection-start-line="34" selection-start-column="30" selection-end-line="34" selection-end-column="30" />
               <folding>
-                <element signature="e#0#54#0" expanded="true" />
+                <element signature="e#0#12#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/tests/test_data_gen.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
             </state>
           </provider>
         </entry>
@@ -85,15 +125,6 @@
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/communication_util/error_rates.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="9" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -167,13 +198,16 @@
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/tests/viterbi_basic.py" />
         <option value="$PROJECT_DIR$/tests/viterbi_QAM.py" />
-        <option value="$PROJECT_DIR$/tests/viterbiNet_test.py" />
         <option value="$PROJECT_DIR$/tests/performance_plots.py" />
         <option value="$PROJECT_DIR$/tests/nn_mixture_model_test.py" />
         <option value="$PROJECT_DIR$/tests/em_gaussian_test.py" />
         <option value="$PROJECT_DIR$/communication_util/pulse_shapes.py" />
+        <option value="$PROJECT_DIR$/tests/viterbiNet_test.py" />
         <option value="$PROJECT_DIR$/tests/test_fundamental_pulse.py" />
         <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
+        <option value="$PROJECT_DIR$/tests/.pytest_cache/test_combinatoric_list.py" />
+        <option value="$PROJECT_DIR$/communication_util/general_tools.py" />
+        <option value="$PROJECT_DIR$/tests/test_combinatoric_list.py" />
       </list>
     </option>
   </component>
@@ -202,12 +236,23 @@
             <path>
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
-              <item name="nn_utilities" type="462c0819:PsiDirectoryNode" />
+              <item name="pytorch_sandbox" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
               <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
               <item name="tests" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="tests" type="462c0819:PsiDirectoryNode" />
+              <item name=".pytest_cache" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="molecular-communications-project" type="b2602c69:ProjectViewProjectNode" />
+              <item name="molecular-communications-project" type="462c0819:PsiDirectoryNode" />
+              <item name="viterbi" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -223,6 +268,9 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/tests" />
     </key>
@@ -239,7 +287,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.pulse_modulation_test">
+  <component name="RunManager" selected="Python tests.test_combinatoric_list">
     <configuration name="torchsetup" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -336,6 +384,21 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="test_combinatoric_list" type="tests" factoryName="py.test">
+      <module name="molecular-communications-project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/test_combinatoric_list.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="viterbi_QAM" type="tests" factoryName="py.test">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -366,21 +429,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="viterbi_net_test" type="tests" factoryName="py.test">
-      <module name="molecular-communications-project" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/viterbiNet_test.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Python.torchsetup" />
       <item itemvalue="Python tests.data_setup" />
@@ -390,7 +438,7 @@
       <item itemvalue="Python tests.pulse_modulation_test" />
       <item itemvalue="Python tests.viterbi_QAM" />
       <item itemvalue="Python tests.viterbi_basic" />
-      <item itemvalue="Python tests.viterbi_net_test" />
+      <item itemvalue="Python tests.test_combinatoric_list" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -407,35 +455,35 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 30m 33s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 17m 59s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 30m 51s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 18m 11s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 33m 11s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 20m 16s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 35m 13s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 20m 23s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 35m 17s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 21m 26s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 35m 42s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 22m 10s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 36m 43s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 22m 40s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 37m 30s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 23m 16s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 45m 41s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 26m 09s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 46m 26s.xml">
-      <configuration name="pulse_modulation_test" configurationId="tests" />
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 28m 11s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
   </component>
   <component name="TodoView">
@@ -449,15 +497,14 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32876712" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.37671232" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4958904" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.37671232" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4958904" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32876712" />
@@ -494,7 +541,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/viterbiNet_test.py</url>
-          <line>56</line>
+          <line>60</line>
           <option name="timeStamp" value="245" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -511,6 +558,21 @@
           <url>file://$PROJECT_DIR$/tests/em_gaussian_test.py</url>
           <line>32</line>
           <option name="timeStamp" value="251" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
+          <line>185</line>
+          <option name="timeStamp" value="259" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
+          <line>180</line>
+          <option name="timeStamp" value="263" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_combinatoric_list.py</url>
+          <line>15</line>
+          <option name="timeStamp" value="266" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -636,23 +698,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1350">
-          <caret line="92" column="37" selection-start-line="92" selection-start-column="37" selection-end-line="92" selection-end-column="37" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/communication_util/em_algorithm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="47" column="37" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/em_gaussian_test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -696,8 +741,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="258">
-          <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
+        <state relative-caret-position="563">
+          <caret line="39" column="28" lean-forward="true" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
         </state>
       </provider>
     </entry>
@@ -711,20 +756,80 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/em_algorithm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="313">
+          <caret line="47" column="37" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="122">
+          <caret line="34" column="30" selection-start-line="34" selection-start-column="30" selection-end-line="34" selection-end-column="30" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="94">
-          <caret line="124" column="72" lean-forward="true" selection-start-line="124" selection-start-column="72" selection-end-line="124" selection-end-column="72" />
+        <state relative-caret-position="234">
+          <caret line="170" column="19" selection-start-line="170" selection-start-column="19" selection-end-line="170" selection-end-column="36" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#388#854#0" />
+            <element signature="e#907#1340#0" />
+            <element signature="e#1131#1219#0" />
+            <element signature="e#1228#1235#0" />
+            <element signature="e#1386#2820#0" />
+            <element signature="e#1386#1468#1" />
+            <element signature="e#1779#2278#0" />
+            <element signature="e#2371#2691#0" />
+            <element signature="e#2718#2916#0" />
+            <element signature="e#2913#5043#0" />
+            <element signature="e#2891#3101#1" />
+            <element signature="e#3200#3405#1" />
+            <element signature="e#3632#3711#0" />
+            <element signature="e#3959#4141#1" />
+            <element signature="e#4712#5223#0" />
+            <element signature="e#4789#5223#0" />
+            <element signature="e#4669#4738#0" />
+            <element signature="e#5065#5977#0" />
+            <element signature="e#5065#5251#1" />
+            <element signature="e#5334#5580#0" />
+            <element signature="e#5651#5662#0" />
+            <element signature="e#6113#6433#0" />
+            <element signature="e#6295#6390#0" />
+            <element signature="e#7717#8178#0" />
+            <element signature="e#7637#8019#0" />
+            <element signature="e#8063#8151#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
+        <state relative-caret-position="241">
           <caret line="25" column="25" lean-forward="true" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/general_tools.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_combinatoric_list.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>

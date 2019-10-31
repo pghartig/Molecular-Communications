@@ -2,6 +2,7 @@ import numpy as np
 import math
 import matplotlib.pyplot as plt
 import logging as log
+from communication_util.general_tools import get_combinatoric_list
 
 
 class training_data_generator:
@@ -83,7 +84,7 @@ class training_data_generator:
             )
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
 
-    def modulate_fundemental_pulse(self, fundamental_pulse):
+    def modulate_fundamental_pulse(self, fundamental_pulse):
         """
         Fundamenet
         The purpose of this funcion is to take a symbol stream and use it to modulate the fundemental pulse
@@ -172,25 +173,33 @@ class training_data_generator:
     def get_labeled_data(self):
         x_list = []
         y_list = []
+        num_possible_states = np.power(self.alphabet, self.CIR_matrix.shape[1])
+        list = []
+        item =[]
+        states = get_combinatoric_list(self.alphabet,self.CIR_matrix.shape[1],list,item) # Generate states to be used below
+
         if self.channel_output is not None:
             for i in range(self.channel_output.shape[1]):
                 if i >= self.CIR_matrix.shape[1] and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1]:
                     x_list.append(self.channel_output[:, i].flatten())
                     input = self.symbol_stream_matrix[:, i - self.CIR_matrix.shape[1]:i].flatten()
-                    probability_vec = self.get_probability(input)
+                    probability_vec = self.get_probability(input,states)
                     y_list.append(probability_vec)
         return x_list, y_list
 
-    def get_probability(self):
+    def get_probability(self,input,states):
         """
-        TODO -> There would be ways of using a nice vector encoding here to make it faster
-        Describe encoding ->
+
         :return:
         """
         num_possible_states = np.power(self.alphabet, self.CIR_matrix.shape[1])
         metrics = np.ones(1, num_possible_states)
-
-        return None
+        for state_ind in num_possible_states:
+            state = states[state_ind]   # Look up state in table based on index (should be passed from calling loop!
+            if input == state:
+                metrics[state_ind] = 1
+            else:
+                metrics[state_ind] = 0
 
     def plot_setup(self):
         figure = plt.figure()

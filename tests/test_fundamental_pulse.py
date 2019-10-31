@@ -20,7 +20,7 @@ def test_fundamental_pulse():
     # data_gen = training_data_generator(plot=True)
     data_gen.setup_channel()
     data_gen.random_symbol_stream()
-    data_gen.modulate_fundemental_pulse(pulse_shapes.rectangle)
+    data_gen.modulate_fundamental_pulse(pulse_shapes.rectangle)
     # data_gen.modulate_fundemental_pulse(pulse_shapes.root_raise_cosine)
     data_gen.send_through_channel()
     data_gen.plot_setup()

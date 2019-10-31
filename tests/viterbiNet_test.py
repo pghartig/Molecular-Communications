@@ -28,6 +28,10 @@ def test_viterbi_net():
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
 
+    """
+    After sending through channel, symbol detection should be performed using something like a matched filter
+    """
+
     x, y = data_gen.get_labeled_data()
     x = torch.Tensor(x)
     y = torch.Tensor(y)
