@@ -14,11 +14,14 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="116">
-              <caret line="119" column="12" lean-forward="true" selection-start-line="119" selection-start-column="12" selection-end-line="119" selection-end-column="12" />
+            <state relative-caret-position="94">
+              <caret line="124" column="72" lean-forward="true" selection-start-line="124" selection-start-column="72" selection-end-line="124" selection-end-column="72" />
+              <folding>
+                <element signature="e#0#18#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -26,7 +29,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="375">
+            <state relative-caret-position="258">
               <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
             </state>
           </provider>
@@ -41,11 +44,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
+            <state relative-caret-position="375">
+              <caret line="25" column="25" lean-forward="true" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -183,6 +186,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -209,7 +213,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -404,34 +407,34 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 14h 40m 34s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 30m 33s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 40m 48s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 30m 51s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 40m 58s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 33m 11s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 44m 15s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 35m 13s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 44m 59s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 35m 17s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 45m 00s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 35m 42s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 46m 26s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 36m 43s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 48m 21s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 37m 30s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 53m 10s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 45m 41s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
-    <history-entry file="pulse_modulation_test - 2019.10.30 at 17h 56m 16s.xml">
+    <history-entry file="pulse_modulation_test - 2019.10.31 at 06h 46m 26s.xml">
       <configuration name="pulse_modulation_test" configurationId="tests" />
     </history-entry>
   </component>
@@ -643,13 +646,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="375">
-          <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/em_algorithm.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="705">
@@ -671,16 +667,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" selection-start-line="8" selection-end-line="9" selection-end-column="47" />
-          <folding>
-            <element signature="e#0#41#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -708,20 +694,40 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
+    <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="21" column="29" selection-start-line="21" selection-start-column="29" selection-end-line="21" selection-end-column="29" />
+        <state relative-caret-position="258">
+          <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" selection-start-line="8" selection-end-line="9" selection-end-column="47" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="116">
-          <caret line="119" column="12" lean-forward="true" selection-start-line="119" selection-start-column="12" selection-end-line="119" selection-end-column="12" />
+        <state relative-caret-position="94">
+          <caret line="124" column="72" lean-forward="true" selection-start-line="124" selection-start-column="72" selection-end-line="124" selection-end-column="72" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="375">
+          <caret line="25" column="25" lean-forward="true" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

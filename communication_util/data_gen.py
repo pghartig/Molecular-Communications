@@ -1,6 +1,7 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
+import logging as log
 
 
 class training_data_generator:
@@ -56,6 +57,9 @@ class training_data_generator:
             and self.terminated is True
             and self.CIR_matrix is not None
         ):
+            #TODO fix zero padding
+            shape = self.symbol_stream_matrix.shape
+            test = shape[1]
             self.symbol_stream_matrix = \
                 np.random.random_integers(0, self.alphabet.size - 1, shape)
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
@@ -87,8 +91,8 @@ class training_data_generator:
         :return:
         """
         #include parameter of samples/symbol
-        t_samp = 1/100
-        t_sym = 1/10
+        t_samp = 1/10
+        t_sym = 1/1
 
         """
         First look at pulse and determine where to cut off
@@ -97,9 +101,9 @@ class training_data_generator:
         """
         sample_number = 0
         peak_energy = energy = fundamental_pulse(sample_number * t_samp)
-        #TODO verify this threshold for where to cutoff fundamental pulse
+        #TODO verify this threshold for where to cutoff fundamental pulse (asymetric case)
         while energy >= .05*peak_energy:
-            energy = fundamental_pulse(sample_number*t_samp)
+            energy = fundamental_pulse(sample_number*t_samp, sample_period = t_samp, symbol_period = t_sym)
             sample_number += 1
 
         sample_vector = np.arange(-sample_number, sample_number+1)*t_samp
@@ -122,9 +126,10 @@ class training_data_generator:
                 center = symbol_ind*samples_per_symbol_period + sampling_width
                 # samples = self.symbol_stream_matrix.shape[symbol_ind]*sample_vector
                 # test = self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number +1)]
-                self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number + 1)] = sample_vector
+                self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number + 1)] \
+                    = sample_vector*self.symbol_stream_matrix[:, symbol_ind]
         except:
-            print("problem")
+            log.log("problem")
 
     def send_through_channel(self):
         """
