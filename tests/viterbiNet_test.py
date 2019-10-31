@@ -12,7 +12,7 @@ def test_viterbi_net():
     """
     Choose platform
     """
-    device = torch.device('cpu')
+    device = torch.device("cpu")
     # device = torch.device('cuda') # Uncomment this to run on GPU
 
     """
@@ -22,8 +22,12 @@ def test_viterbi_net():
 
     channel = 1j * np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-    data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols+2*channel.size),
-                                       SNR=10, plot=True, channel=channel)
+    data_gen = training_data_generator(
+        symbol_stream_shape=(1, number_symbols + 2 * channel.size),
+        SNR=10,
+        plot=True,
+        channel=channel,
+    )
     data_gen.setup_channel(shape=None)
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
@@ -42,8 +46,6 @@ def test_viterbi_net():
     m = data_gen.alphabet.size
     channel_length = data_gen.CIR_matrix.shape[1]
 
-
-
     # N is batch size; D_in is input dimension;
     # H is hidden dimension; D_out is output dimension.
     N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
@@ -51,7 +53,6 @@ def test_viterbi_net():
     # Create random Tensors to hold input and outputs
     # x = torch.randn(N, D_in, device=device)
     # y = torch.randn(N, D_out, device=device)
-
 
     # Create random Tensors for weights; setting requires_grad=True means that we
     # want to compute gradients for these Tensors during the backward pass.
@@ -83,7 +84,7 @@ def test_viterbi_net():
         grad_w3 = h2_relu.t().mm(grad_y_pred)
 
         grad_h2_relu = grad_y_pred.mm(w3.t())
-        grad_h2 =grad_h2_relu.clone()
+        grad_h2 = grad_h2_relu.clone()
         grad_h2[h2 < 0] = 0
         grad_w2 = h1_relu.t().mm(grad_h2)
 
@@ -92,13 +93,14 @@ def test_viterbi_net():
         grad_h1[h1 < 0] = 0
         grad_w1 = x.t().mm(grad_h1)
 
-
         # Update weights using gradient descent
         w1 -= learning_rate * grad_w1
         w2 -= learning_rate * grad_w2
         w3 -= learning_rate * grad_w3
 
-
     # Make sure to output these trained weights so that they can be used without training again
-    torch.save([w1, w2, w3], '"/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/weights.pt')
+    torch.save(
+        [w1, w2, w3],
+        '"/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/weights.pt',
+    )
     assert False

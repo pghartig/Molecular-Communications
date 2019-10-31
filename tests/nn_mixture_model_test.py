@@ -3,7 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from communication_util.data_gen import training_data_generator
 
-#TODO implement this test
+# TODO implement this test
+
 
 def nn_mm_test():
     """
@@ -16,7 +17,7 @@ def nn_mm_test():
     """
     generate a set of training data using a static channel    
     """
-    channel = 1j*np.zeros((1, 5))
+    channel = 1j * np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
     data_gen = training_data_generator(SNR=10, plot=True, channel=channel)
     data_gen.setup_channel(shape=None)
@@ -53,14 +54,10 @@ def nn_mm_test():
         """
         Using the mixture model created from the training data find the probability of incoming symbol y[i]
         """
-        p_yi = alpha*probability_from_gaussian_sources(mu, variance, symbol)
-
+        p_yi = alpha * probability_from_gaussian_sources(mu, variance, symbol)
 
         """
         Perform decoding using neural network and mixture model as inputs to the viterbi algorithm
         """
 
-
-
     assert False
-

@@ -287,7 +287,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.test_combinatoric_list">
+  <component name="RunManager" selected="Python tests.nn_basic">
     <configuration name="torchsetup" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -336,6 +336,21 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/em_gaussian_test.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="nn_basic" type="tests" factoryName="py.test">
+      <module name="molecular-communications-project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/viterbiNet_test.py&quot;" />
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
@@ -439,6 +454,7 @@
       <item itemvalue="Python tests.viterbi_QAM" />
       <item itemvalue="Python tests.viterbi_basic" />
       <item itemvalue="Python tests.test_combinatoric_list" />
+      <item itemvalue="Python tests.nn_basic" />
     </list>
   </component>
   <component name="SvnConfiguration">

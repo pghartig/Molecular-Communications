@@ -1,6 +1,7 @@
 import numpy as np
 from communication_util.general_tools import get_combinatoric_list
 
+
 def test_combinatoric_list_generation():
     alphabet = np.array([1, -1])
     list = []

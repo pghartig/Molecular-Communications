@@ -11,7 +11,7 @@ N, D_in, H, D_out = 64, 100, 20, 100
 
 # Create random Tensors to hold input and outputs
 x = torch.randn(N, D_in, device=device)
-y = x # Autoencoder
+y = x  # Autoencoder
 # y = torch.randn(N, D_out, device=device)
 
 # Create random Tensors for weights; setting requires_grad=True means that we

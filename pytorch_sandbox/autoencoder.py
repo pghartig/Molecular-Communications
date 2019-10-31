@@ -22,7 +22,7 @@ data_gen.send_through_channel()
 x = torch.randn(N, D_in, device=device)
 x = torch.from_numpy(data_gen.symbol_stream_matrix)
 
-y = x   # Autoencoder
+y = x  # Autoencoder
 # y = torch.randn(N, D_out, device=device)
 
 # Create random Tensors for weights; setting requires_grad=True means that we

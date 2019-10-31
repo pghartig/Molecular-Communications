@@ -6,7 +6,7 @@ def viterbi_output(transmit_alphabet, channel_output, channel_information):
     alphabet_size = transmit_alphabet.size
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
     num_states = np.power(alphabet_size, channel_information.shape[1] - 1)
-    survivor_paths = 1j*np.zeros((num_states, channel_output.shape[1]))
+    survivor_paths = 1j * np.zeros((num_states, channel_output.shape[1]))
 
     # iterate through the metrics
     for i in range(channel_output.shape[1]):

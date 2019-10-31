@@ -15,7 +15,9 @@ def test_performance_plot():
     for SRN in SNRs:
         channel = np.zeros((1, 8))
         channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
-        data_gen = training_data_generator(seed=seed_generator, SNR=SRN, channel=channel, plot=False)
+        data_gen = training_data_generator(
+            seed=seed_generator, SNR=SRN, channel=channel, plot=False
+        )
         # data_gen = training_data_generator(plot=True)
 
         data_gen.setup_channel(shape=None)
@@ -31,6 +33,8 @@ def test_performance_plot():
         performance.append(ser)
     plt.figure
     plt.plot(SNRs, performance)
-    plt.savefig("/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/SER.png", format='png')
+    plt.savefig(
+        "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/SER.png",
+        format="png",
+    )
     plt.show()
-
