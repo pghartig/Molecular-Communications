@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/communication_util/general_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/test_fundamental_pulse.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_fundamental_pulse.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/viterbiNet_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbiNet_test.py" afterDir="false" />
-    </list>
+    <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,51 +10,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="234">
-              <caret line="170" column="19" selection-start-line="170" selection-start-column="19" selection-end-line="170" selection-end-column="36" />
+            <state relative-caret-position="280">
+              <caret line="201" column="18" lean-forward="true" selection-start-line="201" selection-start-column="18" selection-end-line="201" selection-end-column="18" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#388#854#0" />
-                <element signature="e#907#1340#0" />
-                <element signature="e#1131#1219#0" />
-                <element signature="e#1228#1235#0" />
-                <element signature="e#1386#2820#0" />
-                <element signature="e#1386#1468#1" />
-                <element signature="e#1779#2278#0" />
-                <element signature="e#2371#2691#0" />
-                <element signature="e#2718#2916#0" />
-                <element signature="e#2913#5043#0" />
-                <element signature="e#2891#3101#1" />
-                <element signature="e#3200#3405#1" />
-                <element signature="e#3632#3711#0" />
-                <element signature="e#3959#4141#1" />
-                <element signature="e#4712#5223#0" />
-                <element signature="e#4789#5223#0" />
-                <element signature="e#4669#4738#0" />
-                <element signature="e#5065#5977#0" />
-                <element signature="e#5065#5251#1" />
-                <element signature="e#5334#5580#0" />
-                <element signature="e#5651#5662#0" />
-                <element signature="e#6113#6433#0" />
-                <element signature="e#6295#6390#0" />
-                <element signature="e#7717#8178#0" />
+                <element signature="e#8325#8807#0" />
                 <element signature="e#7637#8019#0" />
                 <element signature="e#8063#8151#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/tests/test_combinatoric_list.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -69,8 +28,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/general_tools.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" selection-start-line="7" selection-end-line="7" />
+            <state relative-caret-position="120">
+              <caret line="8" selection-start-line="8" selection-end-line="8" />
             </state>
           </provider>
         </entry>
@@ -78,8 +37,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/em_algorithm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="313">
-              <caret line="47" column="37" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="37" />
+            <state relative-caret-position="358">
+              <caret line="50" column="37" selection-start-line="50" selection-start-column="37" selection-end-line="50" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -87,8 +46,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="563">
-              <caret line="39" column="28" lean-forward="true" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+            <state relative-caret-position="998">
+              <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
             </state>
           </provider>
         </entry>
@@ -96,8 +55,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="241">
-              <caret line="25" column="25" lean-forward="true" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+            <state relative-caret-position="271">
+              <caret line="27" column="25" lean-forward="true" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -108,8 +67,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="122">
-              <caret line="34" column="30" selection-start-line="34" selection-start-column="30" selection-end-line="34" selection-end-column="30" />
+            <state relative-caret-position="150">
+              <caret line="38" column="28" lean-forward="true" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="28" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -142,7 +101,7 @@
         <entry file="file://$PROJECT_DIR$/tests/viterbi_QAM.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
-              <caret line="11" column="44" selection-start-line="11" selection-start-column="44" selection-end-line="11" selection-end-column="44" />
+              <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -204,10 +163,10 @@
         <option value="$PROJECT_DIR$/communication_util/pulse_shapes.py" />
         <option value="$PROJECT_DIR$/tests/viterbiNet_test.py" />
         <option value="$PROJECT_DIR$/tests/test_fundamental_pulse.py" />
-        <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
         <option value="$PROJECT_DIR$/tests/.pytest_cache/test_combinatoric_list.py" />
         <option value="$PROJECT_DIR$/communication_util/general_tools.py" />
         <option value="$PROJECT_DIR$/tests/test_combinatoric_list.py" />
+        <option value="$PROJECT_DIR$/communication_util/data_gen.py" />
       </list>
     </option>
   </component>
@@ -471,18 +430,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 17m 59s.xml">
-      <configuration name="test_combinatoric_list" configurationId="tests" />
-    </history-entry>
-    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 18m 11s.xml">
-      <configuration name="test_combinatoric_list" configurationId="tests" />
-    </history-entry>
-    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 20m 16s.xml">
-      <configuration name="test_combinatoric_list" configurationId="tests" />
-    </history-entry>
-    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 20m 23s.xml">
-      <configuration name="test_combinatoric_list" configurationId="tests" />
-    </history-entry>
     <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 21m 26s.xml">
       <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
@@ -501,6 +448,18 @@
     <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 28m 11s.xml">
       <configuration name="test_combinatoric_list" configurationId="tests" />
     </history-entry>
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 30m 18s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
+    </history-entry>
+    <history-entry file="test_combinatoric_list - 2019.10.31 at 11h 30m 38s.xml">
+      <configuration name="test_combinatoric_list" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nn_basic - 2019.10.31 at 11h 33m 11s.xml">
+      <configuration name="nn_basic" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nn_basic - 2019.10.31 at 11h 34m 20s.xml">
+      <configuration name="nn_basic" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -513,6 +472,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -520,12 +480,12 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32876712" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.37671232" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4958904" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4958904" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32876712" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.32876712" />
-      <window_info anchor="bottom" id="Terminal" order="8" weight="0.27945206" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.27945206" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.32739726" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -557,7 +517,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/viterbiNet_test.py</url>
-          <line>60</line>
+          <line>57</line>
           <option name="timeStamp" value="245" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
@@ -567,28 +527,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/viterbi_QAM.py</url>
-          <line>24</line>
+          <line>26</line>
           <option name="timeStamp" value="249" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/em_gaussian_test.py</url>
-          <line>32</line>
+          <line>35</line>
           <option name="timeStamp" value="251" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
-          <line>185</line>
-          <option name="timeStamp" value="259" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
-          <line>180</line>
-          <option name="timeStamp" value="263" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_combinatoric_list.py</url>
-          <line>15</line>
-          <option name="timeStamp" value="266" />
+          <line>194</line>
+          <option name="timeStamp" value="285" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -748,7 +698,7 @@
     <entry file="file://$PROJECT_DIR$/tests/viterbi_QAM.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
-          <caret line="11" column="44" selection-start-line="11" selection-start-column="44" selection-end-line="11" selection-end-column="44" />
+          <caret line="11" column="39" selection-start-line="11" selection-start-column="39" selection-end-line="11" selection-end-column="39" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
@@ -757,8 +707,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/pulse_shapes.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="39" column="28" lean-forward="true" selection-start-line="39" selection-start-column="28" selection-end-line="39" selection-end-column="28" />
+        <state relative-caret-position="998">
+          <caret line="68" lean-forward="true" selection-start-line="68" selection-end-line="68" />
         </state>
       </provider>
     </entry>
@@ -774,61 +724,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/em_algorithm.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="313">
-          <caret line="47" column="37" selection-start-line="47" selection-start-column="4" selection-end-line="47" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="122">
-          <caret line="34" column="30" selection-start-line="34" selection-start-column="30" selection-end-line="34" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="170" column="19" selection-start-line="170" selection-start-column="19" selection-end-line="170" selection-end-column="36" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <element signature="e#388#854#0" />
-            <element signature="e#907#1340#0" />
-            <element signature="e#1131#1219#0" />
-            <element signature="e#1228#1235#0" />
-            <element signature="e#1386#2820#0" />
-            <element signature="e#1386#1468#1" />
-            <element signature="e#1779#2278#0" />
-            <element signature="e#2371#2691#0" />
-            <element signature="e#2718#2916#0" />
-            <element signature="e#2913#5043#0" />
-            <element signature="e#2891#3101#1" />
-            <element signature="e#3200#3405#1" />
-            <element signature="e#3632#3711#0" />
-            <element signature="e#3959#4141#1" />
-            <element signature="e#4712#5223#0" />
-            <element signature="e#4789#5223#0" />
-            <element signature="e#4669#4738#0" />
-            <element signature="e#5065#5977#0" />
-            <element signature="e#5065#5251#1" />
-            <element signature="e#5334#5580#0" />
-            <element signature="e#5651#5662#0" />
-            <element signature="e#6113#6433#0" />
-            <element signature="e#6295#6390#0" />
-            <element signature="e#7717#8178#0" />
-            <element signature="e#7637#8019#0" />
-            <element signature="e#8063#8151#0" />
-          </folding>
+        <state relative-caret-position="358">
+          <caret line="50" column="37" selection-start-line="50" selection-start-column="37" selection-end-line="50" selection-end-column="37" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_fundamental_pulse.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="241">
-          <caret line="25" column="25" lean-forward="true" selection-start-line="25" selection-start-column="25" selection-end-line="25" selection-end-column="25" />
+        <state relative-caret-position="271">
+          <caret line="27" column="25" lean-forward="true" selection-start-line="27" selection-start-column="25" selection-end-line="27" selection-end-column="25" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -837,17 +741,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/communication_util/general_tools.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
+        <state relative-caret-position="120">
+          <caret line="8" selection-start-line="8" selection-end-line="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_combinatoric_list.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        <state relative-caret-position="150">
+          <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="38" column="28" lean-forward="true" selection-start-line="38" selection-start-column="28" selection-end-line="38" selection-end-column="28" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/communication_util/data_gen.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="201" column="18" lean-forward="true" selection-start-line="201" selection-start-column="18" selection-end-line="201" selection-end-column="18" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#8325#8807#0" />
+            <element signature="e#7637#8019#0" />
+            <element signature="e#8063#8151#0" />
           </folding>
         </state>
       </provider>

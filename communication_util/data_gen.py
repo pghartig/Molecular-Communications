@@ -188,18 +188,13 @@ class training_data_generator:
         num_possible_states = np.power(self.alphabet, self.CIR_matrix.shape[1])
         states = []
         item = []
-        get_combinatoric_list(
-            self.alphabet, self.CIR_matrix.shape[1], states, item
-        )  # Generate states to be used below
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1]-1, states, item)  # Generate states used below
         states = np.asarray(states)
 
         if self.channel_output is not None:
             for i in range(self.channel_output.shape[1]):
                 if (
-                    i >= self.CIR_matrix.shape[1]
-                    and i
-                    < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1]
-                ):
+                    i >= self.CIR_matrix.shape[1] and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1]):
                     x_list.append(self.channel_output[:, i].flatten())
                     input = self.symbol_stream_matrix[
                         :, i - self.CIR_matrix.shape[1] : i
@@ -213,16 +208,15 @@ class training_data_generator:
 
         :return:
         """
-        num_possible_states = np.power(self.alphabet, self.CIR_matrix.shape[1])
-        metrics = np.ones(1, num_possible_states)
-        for state_ind in num_possible_states:
-            state = states[
-                state_ind
-            ]  # Look up state in table based on index (should be passed from calling loop!
-            if input == state:
-                metrics[state_ind] = 1
+        num_possible_states = int(np.power(self.alphabet.size, self.CIR_matrix.shape[1]))
+        metrics = []
+        for state_ind in range(num_possible_states):
+            state = states[state_ind, :]  # Look up state in table based on index (should be passed from calling loop!
+            if np.array_equal(input,state):
+                metrics.append(1)
             else:
-                metrics[state_ind] = 0
+                metrics.append(0)
+        return np.asarray(metrics)
 
     def plot_setup(self):
         figure = plt.figure()
