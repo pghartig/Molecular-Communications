@@ -69,7 +69,7 @@ def test_viterbi_net():
         h1 = x.mm(w1)
         h1_relu = h1.clamp(min=0)
 
-        h2 = h1.mm(w2)
+        h2 = h1_relu.mm(w2)
         h2_relu = h2.clamp(min=0)
 
         y_pred = h2_relu.mm(w3)
@@ -99,8 +99,6 @@ def test_viterbi_net():
         w3 -= learning_rate * grad_w3
 
     # Make sure to output these trained weights so that they can be used without training again
-    torch.save(
-        [w1, w2, w3],
-        '"/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/weights.pt',
-    )
-    assert False
+    path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/weights.pt'
+    torch.save([w1, w2, w3], path)
+    assert True
