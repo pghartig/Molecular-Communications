@@ -67,15 +67,23 @@ def test_viterbi_net():
     for t in range(50):
         # Forward pass: compute predicted y
         h1 = x.mm(w1)
-        h1_relu = h1.clamp(min=0)
+        # h1_relu = h1.clamp(min=0)
+        #change to sigmoid
+        h1_relu = h1.sigmoid()
+
+
 
         h2 = h1_relu.mm(w2)
-        h2_relu = h2.clamp(min=0)
+        # h2_relu = h2.clamp(min=0)
+        h2_relu = h2.relu()
+
 
         y_pred = h2_relu.mm(w3)
+        y_pred = y_pred.softmax(dim=1)
 
         # Compute and print loss; loss is a scalar, and is stored in a PyTorch Tensor
         # of shape (); we can get its value as a Python number with loss.item().
+        #TODO replace loss with cross entropy
         loss = (y_pred - y).pow(2).sum()
         print(t, loss.item())
 
