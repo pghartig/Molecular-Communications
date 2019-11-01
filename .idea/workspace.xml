@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/test_nn_with_load.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/viterbiNet_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/viterbiNet_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_nn_with_load.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/test_nn_with_load.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -70,8 +69,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
+            <state relative-caret-position="148">
+              <caret line="38" column="36" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="36" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -82,8 +81,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tests/test_nn_with_load.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="46" selection-start-line="46" selection-end-line="46" />
+            <state relative-caret-position="300">
+              <caret line="56" column="38" lean-forward="true" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
               <folding>
                 <element signature="e#0#12#0" expanded="true" />
               </folding>
@@ -94,7 +93,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
+            <state relative-caret-position="250">
               <caret line="23" column="15" selection-start-line="23" selection-start-column="15" selection-end-line="23" selection-end-column="15" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
@@ -472,18 +471,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="nn_load_test - 2019.10.31 at 16h 33m 02s.xml">
-      <configuration name="nn_load_test" configurationId="tests" />
-    </history-entry>
-    <history-entry file="nn_basic - 2019.10.31 at 16h 33m 14s.xml">
-      <configuration name="nn_basic" configurationId="tests" />
-    </history-entry>
-    <history-entry file="nn_basic - 2019.10.31 at 16h 33m 29s.xml">
-      <configuration name="nn_basic" configurationId="tests" />
-    </history-entry>
-    <history-entry file="nn_load_test - 2019.10.31 at 16h 35m 53s.xml">
-      <configuration name="nn_load_test" configurationId="tests" />
-    </history-entry>
     <history-entry file="nn_load_test - 2019.10.31 at 16h 37m 12s.xml">
       <configuration name="nn_load_test" configurationId="tests" />
     </history-entry>
@@ -502,6 +489,18 @@
     <history-entry file="nn_load_test - 2019.10.31 at 16h 41m 15s.xml">
       <configuration name="nn_load_test" configurationId="tests" />
     </history-entry>
+    <history-entry file="nn_load_test - 2019.11.01 at 13h 13m 55s.xml">
+      <configuration name="nn_load_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nn_load_test - 2019.11.01 at 13h 20m 44s.xml">
+      <configuration name="nn_load_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nn_load_test - 2019.11.01 at 13h 21m 12s.xml">
+      <configuration name="nn_load_test" configurationId="tests" />
+    </history-entry>
+    <history-entry file="nn_load_test - 2019.11.01 at 13h 21m 18s.xml">
+      <configuration name="nn_load_test" configurationId="tests" />
+    </history-entry>
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -514,6 +513,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2494043" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -521,7 +521,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32876712" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.37671232" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.5767123" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.46438357" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32876712" />
@@ -572,24 +572,14 @@
           <option name="timeStamp" value="251" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_nn_with_load.py</url>
-          <line>53</line>
-          <option name="timeStamp" value="303" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_nn_with_load.py</url>
-          <line>46</line>
-          <option name="timeStamp" value="306" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/test_nn_with_load.py</url>
-          <line>47</line>
-          <option name="timeStamp" value="307" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/viterbiNet_test.py</url>
           <line>69</line>
           <option name="timeStamp" value="308" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/test_nn_with_load.py</url>
+          <line>56</line>
+          <option name="timeStamp" value="313" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -809,9 +799,19 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="148">
+          <caret line="38" column="36" selection-start-line="38" selection-start-column="20" selection-end-line="38" selection-end-column="36" />
+          <folding>
+            <element signature="e#0#12#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/tests/viterbi_basic.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
+        <state relative-caret-position="250">
           <caret line="23" column="15" selection-start-line="23" selection-start-column="15" selection-end-line="23" selection-end-column="15" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
@@ -819,20 +819,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/tests/viterbiNet_test.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="64" lean-forward="true" selection-start-line="64" selection-end-line="64" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/tests/test_nn_with_load.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="46" selection-start-line="46" selection-end-line="46" />
+        <state relative-caret-position="300">
+          <caret line="56" column="38" lean-forward="true" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
           <folding>
             <element signature="e#0#12#0" expanded="true" />
           </folding>

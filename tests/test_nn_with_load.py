@@ -42,16 +42,19 @@ def test_nn_load_test():
 
     outputs = []
 
+    h1 = test_set.mm(w1)
+    h1_relu = h1.clamp(min=0)
+
+    h2 = h1_relu.mm(w2)
+    h2_relu = h2.clamp(min=0)
+
+    y_pred = h2_relu.mm(w3)
+
+
     i = 0
-    for x in test_set:
-        h1 = x.mm(w1)
-        h1_relu = h1.clamp(min=0)
-
-        h2 = h1_relu.mm(w2)
-        h2_relu = h2.clamp(min=0)
-
-        y_pred = h2_relu.mm(w3)
-        outputs.append(np.power(y_pred-test_results[i]), 2)
+    for x in y_pred:
+        error = x-test_results[i]
+        outputs.append(np.power(np.linalg.norm(error), 2))
         i+=1
 
     predictions = 0
