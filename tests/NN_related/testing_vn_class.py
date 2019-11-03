@@ -4,6 +4,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+import matplotlib.pyplot as plt
 
 
 
@@ -24,7 +25,7 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 60
+    number_symbols = 5000
 
     channel = 1j * np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -46,6 +47,11 @@ def test_viterbi_net_class():
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
     x = torch.Tensor(x)
     y = torch.Tensor(y)
+    train_size = int(.6*number_symbols)
+    x_train = x[0:train_size, :]
+    x_test = x[train_size::, :]
+    y_train = y[0:train_size]
+    y_test = y[train_size::]
 
     """
     Setup NN and optimizer
@@ -59,23 +65,34 @@ def test_viterbi_net_class():
 
 
     net = models.viterbiNet(D_in, H1, H2, D_out)
-    optimizer = optim.SGD(net.parameters(), lr=1e-6)
+    optimizer = optim.SGD(net.parameters(), lr=1e-1)
 
     """
     Train NN
     """
     criterion = nn.CrossEntropyLoss()
-    # criterion = torch.nn.MSELoss(reduction='sum')
+    # criterion = nn.NLLLoss()
+    train_cost_over_epoch = []
+    test_cost_over_epoch = []
 
-    for t in range(50):
-        output = net(x)
-        loss = criterion(output, y.long())
+    for t in range(500):
+        output = net(x_train)
+        loss = criterion(output, y_train.long())
+        train_cost_over_epoch.append(loss)
         net.zero_grad()
         print(loss)
         loss.backward()
         optimizer.step()
+        test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
 
     path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/weights.pt'
     torch.save(net, path)
 
-    assert False
+    """
+    Test NN
+    """
+    plt.plot(test_cost_over_epoch)
+    plt.plot(train_cost_over_epoch)
+    plt.show()
+
+    assert True
