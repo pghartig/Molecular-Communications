@@ -3,7 +3,7 @@ Full Test for using the mixture model and neural network to provide metrics to b
 """
 
 
-from communication_util.em_algorithm import em_gausian
+from communication_util.em_algorithm import mixture_model
 from nn_utilities import *
 from communication_util.error_rates import *
 import numpy as np
@@ -14,8 +14,6 @@ import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
 import pickle
-
-
 
 """
 Load in Trained Neural Network
@@ -30,6 +28,8 @@ Load Trained Mixture Model
 mm_pickle_in = open(
     "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "rb")
 model = pickle.load(mm_pickle_in)
+mm = mixture_model(mu=model[0], sigma_square=model[0])
+
 mm_pickle_in.close()
 
 """
@@ -60,9 +60,7 @@ y = torch.Tensor(y)
 """
 Detect symbols using Viterbi Algorithm
 """
-detected = viterbi_output(
-    data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix
-)
+detected = viterbi_NN_MM_output(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix, mm.get_probability,neural_net)
 """
 Analyze SER performance
 """

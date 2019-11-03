@@ -70,3 +70,12 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
 
 def receive_probability(symbol,mu,sigma_square):
     return np.prod(probability_from_gaussian_sources(symbol,mu,sigma_square))
+
+class mixture_model():
+    def __init__(self, mu, sigma_square):
+        self.mu = mu
+        self.sigma_square = sigma_square
+    def get_probability(self,symbol):
+        return np.prod(probability_from_gaussian_sources(symbol, self.mu, self.sigma_square))
+
+

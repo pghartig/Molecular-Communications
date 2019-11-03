@@ -30,9 +30,7 @@ def gaussian_channel_metric(
     return metric_vector
 
 
-def autoencoder_channel_metric(
-    survivor_paths, index, transmit_alphabet, channel_output, cir
-):
+def autoencoder_channel_metric(survivor_paths, mixture_model, transmit_alphabet, recieved_signal, channel_length, net):
     """
     returns vector of metrics for incoming state of viterbi with a gaussian channel
     :param survivor_paths:
@@ -42,5 +40,12 @@ def autoencoder_channel_metric(
     :param cir:
     :return:
     """
-    mixture_model_probability = em_gausian()
-    return None
+    #TODO replace without CIR since only length is used
+    num_states = np.power(np.size(transmit_alphabet), channel_length - 1)
+    alphabet_cardinality = np.size(transmit_alphabet)
+    metric_vector = np.zeros(alphabet_cardinality * num_states)
+    for path in range(survivor_paths.shape[0]):
+        for i in range(transmit_alphabet.size):
+            metric_vector[path * alphabet_cardinality + i] = \
+                net(recieved_signal)[path * alphabet_cardinality + i]*mixture_model(recieved_signal)
+    return metric_vector
