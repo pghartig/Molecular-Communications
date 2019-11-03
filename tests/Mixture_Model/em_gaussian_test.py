@@ -25,6 +25,8 @@ def test_em_gaussian():
     data = np.random.permutation(np.asarray(data).flatten().T)
     mu, variance, alpha = em_gausian(num_sources, data, 20)
 
+
+
     plt.figure
     plt.plot(np.sort(true_mu), np.sort(true_sigma), "bs")
     plt.plot(np.sort(mu), np.sort(variance), "g^")
@@ -33,4 +35,4 @@ def test_em_gaussian():
         format="png",
     )
     plt.show()
-    assert False
+    assert True

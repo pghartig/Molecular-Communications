@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 
 
 def em_gausian(num_gaussians, data, iterations):
@@ -44,6 +45,9 @@ def em_gausian(num_gaussians, data, iterations):
             sigma_square[i] = np.dot(
                 weights[:, i].T, np.power(data - mu[i], 2)
             ) / np.sum(weights[:, i], axis=0)
+    pickle_out = open("/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "wb")
+    pickle.dump([mu, sigma_square, alpha], pickle_out)
+    pickle_out.close()
 
     return mu, sigma_square, alpha
 
@@ -63,3 +67,6 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
             np.sqrt(2 * np.pi * sigma_square[i]),
         )
     return probabilities
+
+def receive_probability(symbol,mu,sigma_square):
+    return np.prod(probability_from_gaussian_sources(symbol,mu,sigma_square))
