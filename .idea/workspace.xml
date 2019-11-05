@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/general_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/general_tools.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/model_metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/model_metrics.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/viterbi/viterbi.py" beforeDir="false" afterPath="$PROJECT_DIR$/viterbi/viterbi.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -375,15 +370,15 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py</url>
-          <line>11</line>
-          <option name="timeStamp" value="293" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py</url>
-          <line>9</line>
-          <option name="timeStamp" value="294" />
+          <line>10</line>
+          <option name="timeStamp" value="302" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="tests">
+        <watch expression="list" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>
