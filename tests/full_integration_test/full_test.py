@@ -60,7 +60,8 @@ y = torch.Tensor(y)
 """
 Detect symbols using Viterbi Algorithm
 """
-detected = viterbi_NN_MM_output(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix, mm.get_probability,neural_net)
+detected = \
+    viterbi_NN_MM_output(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.size, mm.get_probability, neural_net)
 """
 Analyze SER performance
 """

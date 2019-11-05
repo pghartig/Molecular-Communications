@@ -36,9 +36,18 @@ def viterbi_output(transmit_alphabet, channel_output, channel_information):
 
 
 def viterbi_NN_MM_output(transmit_alphabet, channel_output, channel_length,mm,net):
+    """
+
+    :param transmit_alphabet:
+    :param channel_output:
+    :param channel_length:
+    :param mm:
+    :param net:
+    :return:
+    """
     alphabet_size = transmit_alphabet.size
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
-    num_states = np.power(alphabet_size, channel_length - 1)
+    num_states = alphabet_size**(channel_length)
     survivor_paths = 1j * np.zeros((num_states, channel_output.shape[1]))
 
     # iterate through the metrics
@@ -50,7 +59,8 @@ def viterbi_NN_MM_output(transmit_alphabet, channel_output, channel_length,mm,ne
             continue
         else:
             # TODO don't pass entire channel_output and survivor_paths
-            metric_vector = autoencoder_channel_metric(survivor_paths, mm, transmit_alphabet, channel_output[i],channel_length,net)
+            metric_vector =\
+                autoencoder_channel_metric(net, mm, transmit_alphabet, channel_output[0, i], channel_length)
             for state in range(num_states):
                 symbol = np.argmin(
                     (metric_vector[state * alphabet_size: (state + 1) * alphabet_size])

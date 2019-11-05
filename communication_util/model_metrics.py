@@ -1,4 +1,5 @@
 import numpy as np
+import torch
 from itertools import permutations
 from communication_util.em_algorithm import em_gausian
 
@@ -30,7 +31,7 @@ def gaussian_channel_metric(
     return metric_vector
 
 
-def autoencoder_channel_metric(survivor_paths, mixture_model, transmit_alphabet, recieved_signal, channel_length, net):
+def autoencoder_channel_metric(net, mixture_model, transmit_alphabet, received_symbol, channel_length):
     """
     returns vector of metrics for incoming state of viterbi with a gaussian channel
     :param survivor_paths:
@@ -40,12 +41,16 @@ def autoencoder_channel_metric(survivor_paths, mixture_model, transmit_alphabet,
     :param cir:
     :return:
     """
-    #TODO replace without CIR since only length is used
     num_states = np.power(np.size(transmit_alphabet), channel_length - 1)
     alphabet_cardinality = np.size(transmit_alphabet)
+    # TODO this should be intiialized to NAN?
     metric_vector = np.zeros(alphabet_cardinality * num_states)
-    for path in range(survivor_paths.shape[0]):
+    p_y = mixture_model(received_symbol)
+    # TODO deal with complex input appropriately
+    received_symbol = torch.Tensor([received_symbol])
+    p_s_y = net(received_symbol)
+    p_y = 1 #temporarily setting this to 1
+    for path in range(num_states):
         for i in range(transmit_alphabet.size):
-            metric_vector[path * alphabet_cardinality + i] = \
-                net(recieved_signal)[path * alphabet_cardinality + i]*mixture_model(recieved_signal)
+            metric_vector[path * alphabet_cardinality + i] = p_s_y[path * alphabet_cardinality + i]*p_y
     return metric_vector
