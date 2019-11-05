@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/Viterbi/viterbi_reimplemented.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viterbi/viterbi.py" beforeDir="false" afterPath="$PROJECT_DIR$/viterbi/viterbi.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,19 +47,20 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/Viterbi" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests/Viterbi" />
+      <recent name="$PROJECT_DIR$/tests" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/tests/Viterbi" />
       <recent name="$PROJECT_DIR$/tests/NN_related" />
       <recent name="$PROJECT_DIR$/tests/Data_Channel_Related" />
       <recent name="$PROJECT_DIR$/tests/Mixture_Model" />
-      <recent name="$PROJECT_DIR$/tests" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/tests" />
     </key>
   </component>
@@ -73,7 +76,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.test_combinatoric_list">
+  <component name="RunManager" selected="Python tests.viterbi_reimplemented">
     <configuration name="torchsetup" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -215,21 +218,6 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="pytest for test_nn_with_load.test_nn_load_test" type="tests" factoryName="py.test" temporary="true" nameIsGenerated="true">
-      <module name="molecular-communications-project" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/tests/NN_related" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_keywords" value="&quot;&quot;" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_nn_with_load.test_nn_load_test&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <configuration name="test_combinatoric_list" type="tests" factoryName="py.test">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -275,6 +263,21 @@
       <option name="_new_targetType" value="&quot;PATH&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="viterbi_reimplemented" type="tests" factoryName="py.test">
+      <module name="molecular-communications-project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/Viterbi/viterbi_reimplemented.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="vn_class_test" type="tests" factoryName="py.test">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -303,14 +306,9 @@
       <item itemvalue="Python tests.test_combinatoric_list" />
       <item itemvalue="Python tests.viterbi_QAM" />
       <item itemvalue="Python tests.viterbi_basic" />
+      <item itemvalue="Python tests.viterbi_reimplemented" />
       <item itemvalue="Python tests.vn_class_test" />
-      <item itemvalue="Python tests.pytest for test_nn_with_load.test_nn_load_test" />
     </list>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Python tests.pytest for test_nn_with_load.test_nn_load_test" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -370,14 +368,19 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py</url>
-          <line>10</line>
-          <option name="timeStamp" value="302" />
+          <line>11</line>
+          <option name="timeStamp" value="304" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/viterbi/viterbi.py</url>
+          <line>101</line>
+          <option name="timeStamp" value="305" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="tests">
-        <watch expression="list" />
+        <watch expression="list" language="Python" />
       </configuration>
     </watches-manager>
   </component>
