@@ -49,7 +49,6 @@ def autoencoder_channel_metric(net, mixture_model, transmit_alphabet, received_s
     # TODO deal with complex input appropriately
     received_symbol = torch.Tensor([received_symbol])
     p_s_y = net(received_symbol)
-    p_y = 1 #temporarily setting this to 1
     for path in range(num_states):
         for i in range(transmit_alphabet.size):
             metric_vector[path * alphabet_cardinality + i] = p_s_y[path * alphabet_cardinality + i]*p_y
