@@ -190,9 +190,6 @@ class training_data_generator:
         item = []
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1]-1, states, item)  # Generate states used below
         states = np.sort(np.asarray(states),1)
-
-
-
         if self.channel_output is not None:
             for i in range(self.channel_output.shape[1]):
                 if (

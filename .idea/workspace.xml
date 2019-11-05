@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/Viterbi/viterbi_reimplemented.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/model_metrics.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/model_metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Viterbi/viterbi_reimplemented.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Viterbi/viterbi_reimplemented.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/viterbi/viterbi.py" beforeDir="false" afterPath="$PROJECT_DIR$/viterbi/viterbi.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -362,26 +364,21 @@
           <option name="timeStamp" value="251" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
-          <line>195</line>
-          <option name="timeStamp" value="274" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py</url>
           <line>11</line>
           <option name="timeStamp" value="304" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/viterbi/viterbi.py</url>
-          <line>101</line>
+          <line>103</line>
           <option name="timeStamp" value="305" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/viterbi/viterbi.py</url>
+          <line>130</line>
+          <option name="timeStamp" value="324" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="tests">
-        <watch expression="list" language="Python" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>

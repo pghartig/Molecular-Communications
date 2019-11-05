@@ -17,7 +17,7 @@ def test_viterbi_new():
 
     # detect with Viterbi
     # notice that this assumes perfect CSI at receiver
-    detected = viterbi_reimplemented(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix)
+    detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1])
     # check WER
     ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
     assert error_tolerance >= ser
