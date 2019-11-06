@@ -3,78 +3,7 @@ from communication_util.model_metrics import *
 from communication_util.general_tools import get_combinatoric_list
 
 
-def viterbi_output(transmit_alphabet, channel_output, channel_information):
-    alphabet_size = transmit_alphabet.size
-    # number of states is alphabet size raised to the power of the number of channel taps minus one.
-    num_states = np.power(alphabet_size, channel_information.shape[1] - 1)
-    survivor_paths = 1j * np.zeros((num_states, channel_output.shape[1]))
-    survivor_paths_costs = np.zeros((num_states,1))
-
-
-    # iterate through the metrics
-    for i in range(channel_output.shape[1]):
-        # assume zero-padding at beginning of word so set survivor path portions to zeros automatically
-        if i < channel_information.shape[1] - 1:
-            for state in range(num_states):
-                survivor_paths[state, i] = transmit_alphabet[0]
-            continue
-        else:
-            # TODO don't pass entire channel_output and survivor_paths
-            metric_vector = gaussian_channel_metric(
-                survivor_paths,
-                i,
-                transmit_alphabet,
-                channel_output,
-                channel_information,
-            )
-            for state in range(num_states):
-                symbol = np.argmin(
-                    (metric_vector[state * alphabet_size : (state + 1) * alphabet_size])
-                )
-                survivor_paths[state, i] = transmit_alphabet[symbol]
-                survivor_paths_costs[state, 0] += metric_vector[symbol]
-
-
-    final_path_ind = np.argmin(np.sum(survivor_paths, axis=1))
-    return survivor_paths[final_path_ind, channel_information.size - 1:]
-
-
-def viterbi_reimplemented(transmit_alphabet, channel_output, channel_information):
-    alphabet_size = transmit_alphabet.size
-    # number of states is alphabet size raised to the power of the number of channel taps minus one.
-    num_states = np.power(alphabet_size, channel_information.shape[1])
-    survivor_paths = 1j * np.zeros((num_states, channel_output.shape[1]))
-    survivor_paths_costs = np.zeros((num_states, 1))
-
-    # iterate through the metrics
-    for i in range(channel_output.shape[1]):
-        # assume zero-padding at beginning of word so set survivor path portions to zeros automatically
-        if i < channel_information.shape[1] - 1:
-            for state in range(num_states):
-                survivor_paths[state, i] = transmit_alphabet[0]
-                # no cost added to paths since symbols are known
-            continue
-        else:
-            # TODO don't pass entire channel_output and survivor_paths
-            metric_vector = gaussian_channel_metric(
-                survivor_paths,
-                i,
-                transmit_alphabet,
-                channel_output,
-                channel_information,
-            )
-            for state in range(num_states):
-                survivor_costs = survivor_paths_costs[state * alphabet_size: (state + 1) * alphabet_size]
-                probability_metrics = metric_vector[state * alphabet_size: (state + 1) * alphabet_size]
-                symbol = np.argmin(survivor_costs.flatten() + probability_metrics)
-                survivor_paths[state, i] = transmit_alphabet[symbol]
-                survivor_paths_costs[state, 0] += metric_vector[symbol]
-
-    final_path_ind = np.argmin(np.sum(survivor_paths, axis=1))
-    return survivor_paths[final_path_ind, channel_information.size - 1:]
-
-
-def viterbi_NN_MM_output(transmit_alphabet, channel_output, channel_length,mm,net):
+def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, metric_function):
     """
 
     :param transmit_alphabet:
@@ -84,90 +13,79 @@ def viterbi_NN_MM_output(transmit_alphabet, channel_output, channel_length,mm,ne
     :param net:
     :return:
     """
-    alphabet_size = transmit_alphabet.size
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
-    num_states = alphabet_size**(channel_length)
-    survivor_paths = 1j * np.zeros((num_states, channel_output.shape[1]))
-    survivor_paths_costs = np.zeros((num_states,1))
-
-    # iterate through the metrics
-    for i in range(channel_output.shape[1]):
-        # assume zero-padding at beginning of word so set survivor path portions to zeros automatically
-        if i < channel_length - 1:
-            for state in range(num_states):
-                survivor_paths[state, i] = transmit_alphabet[0]
-            continue
-        else:
-            metric_vector =\
-                autoencoder_channel_metric(net, mm, transmit_alphabet, channel_output[0, i], channel_length)
-            for state in range(num_states):
-                candidates = metric_vector[state]+survivor_paths_costs[state * alphabet_size: (state + 1) * alphabet_size,0]
-                symbol = np.argmin(candidates)
-                survivor_paths[state, i] = transmit_alphabet[symbol]
-                survivor_paths_costs[state, 0] += metric_vector[symbol]
-
-    final_path_ind = np.argmin(np.sum(survivor_paths, axis=1))
-    return survivor_paths[final_path_ind, channel_length - 1:]
-
-
-def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length):
-    """
-
-    :param transmit_alphabet:
-    :param channel_output:
-    :param channel_length:
-    :param mm:
-    :param net:
-    :return:
-    """
-    alphabet_size = transmit_alphabet.size
-    # number of states is alphabet size raised to the power of the number of channel taps minus one.
-    num_states = alphabet_size**channel_length
-
     states = []
     item = []
     get_combinatoric_list(transmit_alphabet, channel_length, states, item)  # Generate states used below
-    tellis = viterbi_trellis(np.add, num_states, transmit_alphabet, states)
-    survivor_paths_costs = np.zeros((num_states, 1))
-
-    # iterate through the metrics
-
-    return False
+    trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
+    # step through channel output
+    for index in range(channel_output.shape[1]):
+        trellis.step_trellis(index)
+    return trellis.return_survivor()
 
 
 class viterbi_trellis():
-    def __init__(self, num_states, alphabet,states):
+    def __init__(self, alphabet, states, metric_function):
         self.states = states
         self.alphabet = alphabet
         self.survivor_paths = []
         self.next_states = []
-        self.setup_trellis()
+        self.setup_trellis(metric_function)
 
-    def setup_trellis(self):
+    def setup_trellis(self, metric_function):
+        # create the trellis structure for a single step in the trellis
         for state in self.states:
-            self.survivor_paths.append(viterbi_node(state))
-            self.next_states.append(viterbi_node(state))
+            self.survivor_paths.append(viterbi_node(state, metric_function))
+            self.next_states.append(viterbi_node(state, metric_function))
+        # make connections between the nodes in the trellis
+        for node in self.next_states:
+            for previous_state in self.survivor_paths:
+                check1 = node.state[:-1]
+                check2 = previous_state.state[1:]
+                if check1 == check2:
+                    node.incoming_nodes.append(previous_state)
 
-    def step_trellis(self,metrics):
-        for index, state in self.next_states:
-            state.check_smallest_incoming(metrics[index-1])
-        #need to then move next_steps to previous and zero out next step costs
+    def step_trellis(self, index):
+        for node in self.next_states:
+            node.check_smallest_incoming(index)
+        # Move next_steps to previous and zero out next step costs
+        i = 0
+        for node in self.next_states:
+            self.survivor_paths[i] = node
+            i+=1
+
+    def return_survivor(self):
+        costs = []
+        for path in self.survivor_paths:
+            costs.append(path.survivor_path_cost)
+        survivor_index = np.argmin(np.asarray(costs))
+        return self.survivor_paths[survivor_index]
+
 
 class viterbi_node():
-    def __init__(self, state):
+    def __init__(self, state, metric_function):
         self.incoming_nodes = []
-        self.outgoing_nodes = []
-        self.survivor_path = 0
+        self.survivor_path = []
         self.survivor_path_cost = 0
         self.state = state
+        self.metric_function = metric_function
 
-    def check_smallest_incoming(self):
-        incoming_metrics = []
+    def check_smallest_incoming(self, index):
+        """
+        Based on a metric, find the new surviving path going into the next step in the trellis
+        :return:
+        """
+        incoming_costs = []
         for incoming in self.incoming_nodes:
-            metric = 0
-            cost = incoming.survivor_path_cost + metric
-            incoming_metrics.append(incoming.survivor_path_cost)
-            # look through all incoming nodes and select the one with the
+            incoming_metric = self.metric_function(index, self.state)
+            incoming_costs.append(incoming.survivor_path_cost+incoming_metric)
+        survivor_index = np.argmin(np.asarray(incoming_costs))
+        survivor_node = self.incoming_nodes[survivor_index]
+        # add symbol to survivor path
+        self.survivor_path = [survivor_node.survivor_path] + [self.state[-1] ] + [3]
+        self.survivor_path_cost = incoming_costs[survivor_index]
+
+
 
 
 

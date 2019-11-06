@@ -47,3 +47,23 @@ def autoencoder_channel_metric(net, mixture_model, transmit_alphabet, received_s
         for i in range(transmit_alphabet.size):
             metric_vector[path * alphabet_cardinality + i] = p_s_y[path * alphabet_cardinality + i]*p_y
     return metric_vector
+
+class gaussian_channel_metric_working():
+    """
+    returns vector of metrics for incoming state of viterbi with a gaussian channel
+    :param survivor_paths:
+    :param index:
+    :param transmit_alphabet:
+    :param channel_output:
+    :param cir:
+    :return:
+    """
+    def __init__(self, csi, received):
+        self.parameters = csi
+        self.received = received
+
+    def metric(self, index, state):
+        channel_output = self.received[0, index]
+        predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
+        cost = np.linalg.norm((predicted - channel_output))
+        return cost

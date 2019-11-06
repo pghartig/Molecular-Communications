@@ -2,7 +2,7 @@ from communication_util.data_gen import *
 from viterbi.viterbi import *
 from communication_util.error_rates import *
 
-def test_viterbi_new():
+def test_viterbi_new_gaussian():
     error_tolerance = np.power(10.0, -3)
     # setup data
     channel = np.zeros((1, 8))
@@ -17,7 +17,9 @@ def test_viterbi_new():
 
     # detect with Viterbi
     # notice that this assumes perfect CSI at receiver
-    detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1])
+    metric = gaussian_channel_metric_working(channel, data_gen.channel_output)
+    detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+                                        metric.metric)
     # check WER
     ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
     assert error_tolerance >= ser
