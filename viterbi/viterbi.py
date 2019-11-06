@@ -28,18 +28,18 @@ class viterbi_trellis():
     def __init__(self, alphabet, states, metric_function):
         self.states = states
         self.alphabet = alphabet
-        self.survivor_paths = []
+        self.previous_states = []
         self.next_states = []
         self.setup_trellis(metric_function)
 
     def setup_trellis(self, metric_function):
         # create the trellis structure for a single step in the trellis
         for state in self.states:
-            self.survivor_paths.append(viterbi_node(state, metric_function))
+            self.previous_states.append(viterbi_node(state, metric_function))
             self.next_states.append(viterbi_node(state, metric_function))
         # make connections between the nodes in the trellis
         for node in self.next_states:
-            for previous_state in self.survivor_paths:
+            for previous_state in self.previous_states:
                 check1 = node.state[:-1]
                 check2 = previous_state.state[1:]
                 if check1 == check2:
@@ -48,18 +48,19 @@ class viterbi_trellis():
     def step_trellis(self, index):
         for node in self.next_states:
             node.check_smallest_incoming(index)
-        # Move next_steps to previous and zero out next step costs
         i = 0
         for node in self.next_states:
-            self.survivor_paths[i] = node
+            self.previous_states[i].survivor_path = node.survivor_path
+            self.previous_states[i].survivor_path_cost = node.survivor_path_cost
             i+=1
 
     def return_survivor(self):
         costs = []
-        for path in self.survivor_paths:
+        for path in self.previous_states:
             costs.append(path.survivor_path_cost)
         survivor_index = np.argmin(np.asarray(costs))
-        return self.survivor_paths[survivor_index]
+        survivor = self.previous_states[survivor_index]
+        return survivor.survivor_path
 
 
 class viterbi_node():
@@ -82,7 +83,7 @@ class viterbi_node():
         survivor_index = np.argmin(np.asarray(incoming_costs))
         survivor_node = self.incoming_nodes[survivor_index]
         # add symbol to survivor path
-        self.survivor_path = [survivor_node.survivor_path] + [self.state[-1] ] + [3]
+        self.survivor_path = survivor_node.survivor_path + [self.state[-1]]
         self.survivor_path_cost = incoming_costs[survivor_index]
 
 

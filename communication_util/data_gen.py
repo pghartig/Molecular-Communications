@@ -23,8 +23,8 @@ class training_data_generator:
         self.transmit_signal_matrix = []
         self.CIR_matrix = channel
         self.channel_shape = channel_shape
-        self.zero_pad = True
-        self.terminated = True
+        self.zero_pad = False
+        self.terminated = False
         self.plot = plot
         self.noise_parameter = noise_parameter
         self.channel_output = []
@@ -152,12 +152,7 @@ class training_data_generator:
         """
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             self.channel_output.append(
-                np.convolve(
-                    self.symbol_stream_matrix[bit_streams, :],
-                    np.flip(self.CIR_matrix[bit_streams, :]),
-                    mode="full",
-                )
-            )
+                np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.asarray(self.channel_output)
         # add noise
         # adjust noise power to provided SNR parameter

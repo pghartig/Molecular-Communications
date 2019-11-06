@@ -376,8 +376,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/viterbi/viterbi.py</url>
-          <line>60</line>
-          <option name="timeStamp" value="381" />
+          <line>21</line>
+          <option name="timeStamp" value="407" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/viterbi/viterbi.py</url>
+          <line>52</line>
+          <option name="timeStamp" value="408" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
