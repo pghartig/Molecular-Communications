@@ -67,3 +67,23 @@ class gaussian_channel_metric_working():
         predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
         cost = np.linalg.norm((predicted - channel_output))
         return cost
+
+
+class nn_mm_metric():
+
+    """
+    returns vector of metrics for incoming state of viterbi with a gaussian channel
+    :param survivor_paths:
+    :param index:
+    :param transmit_alphabet:
+    :param channel_output:
+    :param cir:
+    :return:
+    """
+    def __init__(self, nn, mm, received):
+        self.nn = nn
+        self.mm = mm
+        self.received = received
+
+    def metric(self, index, state):
+        return self.nn(self.received[0, index])* self.mm(self.received[0, index])

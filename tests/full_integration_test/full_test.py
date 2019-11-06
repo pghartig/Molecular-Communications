@@ -14,56 +14,76 @@ import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
 import pickle
+from communication_util.data_gen import *
+from viterbi.viterbi import *
+from communication_util.error_rates import *
 
-"""
-Load in Trained Neural Network
-"""
+def test_full_integration():
 
-saved_network_path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
-neural_net = torch.load(saved_network_path)
+    error_tolerance = np.power(10.0, -3)
 
-"""
-Load Trained Mixture Model
-"""
-mm_pickle_in = open(
-    "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "rb")
-model = pickle.load(mm_pickle_in)
-mm = mixture_model(mu=model[0], sigma_square=model[0])
+    """
+    Load in Trained Neural Network
+    """
 
-mm_pickle_in.close()
+    saved_network_path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
+    neural_net = torch.load(saved_network_path)
 
-"""
-Generated Testing Data using the same channel as was used for training the mixture model and the nn
-"""
-number_symbols = 60
+    """
+    Load Trained Mixture Model
+    """
+    mm_pickle_in = open(
+        "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "rb")
+    model = pickle.load(mm_pickle_in)
+    mm = mixture_model(mu=model[0], sigma_square=model[0])
+    mm = mm.get_probability()
+    mm_pickle_in.close()
 
-channel = 1j * np.zeros((1, 5))
-channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-data_gen = training_data_generator(
-    symbol_stream_shape=(1, number_symbols + 2 * channel.size),
-    SNR=10,
-    plot=True,
-    channel=channel,
-)
-data_gen.setup_channel(shape=None)
-data_gen.random_symbol_stream()
-data_gen.send_through_channel()
+    """
+    Generated Testing Data using the same channel as was used for training the mixture model and the nn
+    """
+    number_symbols = 60
 
-"""
-After sending through channel, symbol detection should be performed using something like a matched filter
-"""
+    channel = 1j * np.zeros((1, 5))
+    channel[0, [0, 3, 4]] = 1, 0.5, 0.4
+    data_gen = training_data_generator(
+        symbol_stream_shape=(1, number_symbols + 2 * channel.size),
+        SNR=10,
+        plot=True,
+        channel=channel,
+    )
 
-x, y = data_gen.get_labeled_data()
-x = torch.Tensor(x)
-y = torch.Tensor(y)
+    channel = np.zeros((1, 8))
+    channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
+    # channel[0, [0, 3]] = 1, 0.7
+    # channel[0, [0]] = 1
 
-"""
-Detect symbols using Viterbi Algorithm
-"""
-detected = \
-    viterbi_NN_MM_output(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.size, mm.get_probability, neural_net)
-"""
-Analyze SER performance
-"""
-ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
+    # TODO make consolidate this part
+    data_gen = \
+        training_data_generator(SNR=1, symbol_stream_shape=(1, number_symbols), channel=channel, plot=True)
+    # data_gen = training_data_generator(plot=True)
 
+    data_gen.setup_channel(shape=None)
+    data_gen.random_symbol_stream()
+    data_gen.send_through_channel()
+
+    """
+    After sending through channel, symbol detection should be performed using something like a matched filter
+    """
+
+    x, y = data_gen.get_labeled_data()
+    x = torch.Tensor(x)
+    y = torch.Tensor(y)
+
+    # detect with Viterbi
+    # notice that this assumes perfect CSI at receiver
+    metric = gaussian_channel_metric_working(channel, data_gen.channel_output)
+    metric = nn_mm_metric(neural_net, mm, data_gen.channel_output)
+    detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+                                        metric.metric)
+
+    """
+    Analyze SER performance
+    """
+    ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
+    assert error_tolerance >= ser

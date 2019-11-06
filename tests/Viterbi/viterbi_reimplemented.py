@@ -5,9 +5,9 @@ from communication_util.error_rates import *
 def test_viterbi_new_gaussian():
     error_tolerance = np.power(10.0, -3)
     # setup data
-    channel = np.zeros((1, 5))
-    # channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
-    channel[0, [0, 3]] = 1, 0.7
+    channel = np.zeros((1, 8))
+    channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
+    # channel[0, [0, 3]] = 1, 0.7
     # channel[0, [0]] = 1
 
     # TODO make consolidate this part
