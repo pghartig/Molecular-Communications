@@ -2,6 +2,7 @@ from communication_util.em_algorithm import em_gausian
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
+import os
 
 
 def test_em_gaussian():
@@ -30,9 +31,7 @@ def test_em_gaussian():
     plt.figure
     plt.plot(np.sort(true_mu), np.sort(true_sigma), "bs")
     plt.plot(np.sort(mu), np.sort(variance), "g^")
-    plt.savefig(
-        "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/SER.png",
-        format="png",
-    )
+    test = os.getcwd()+"Output/SER.png"
+    plt.savefig(os.getcwd()+"Output/SER.png", format="png")
     plt.show()
     assert True

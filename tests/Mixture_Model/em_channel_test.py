@@ -50,9 +50,7 @@ def test_em_real_channel():
     plt.figure
     plt.plot(np.sort(true_mu), np.sort(true_sigma), "bs")
     plt.plot(np.sort(mu), np.sort(variance), "g^")
-    plt.savefig(
-        "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/SER.png",
-        format="png",
-    )
+    path = "Output/SER.png"
+    plt.savefig(path, format="png")
     plt.show()
     assert True

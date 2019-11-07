@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/Mixture_Model/em_channel_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/molecular-communications-project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/molecular-communications-project.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/communication_util/em_algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/em_algorithm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/NN_related/testing_vn_class.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/NN_related/testing_vn_class.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -38,8 +40,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/tests/Data_Channel_Related/performance_plots.py" root0="SKIP_INSPECTION" />
     <setting file="file://$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/tests/Data_Channel_Related/performance_plots.py" root0="SKIP_INSPECTION" />
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
     <option name="width" value="1280" />
@@ -49,7 +51,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/Viterbi" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -78,7 +80,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.em_channel_test">
+  <component name="RunManager" selected="Python tests.em_gaussian_test">
     <configuration name="torchsetup" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -86,7 +88,7 @@
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/pytorch_sandbox" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -104,7 +106,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -119,7 +121,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -134,22 +136,22 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="C:\Users\hartig\AppData\Local\Continuum\anaconda3\envs\molecular-communications-project\python.exe" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;tests.Mixture_Model.em_channel_test&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="full_test" type="tests" factoryName="py.test">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -164,7 +166,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -179,7 +181,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -194,7 +196,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -209,7 +211,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -224,7 +226,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -239,7 +241,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -254,7 +256,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -269,7 +271,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -284,7 +286,7 @@
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="SDK_HOME" value="$USER_HOME$/Environments/bin/python" />
       <option name="WORKING_DIRECTORY" value="" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
@@ -356,11 +358,6 @@
           <option name="timeStamp" value="249" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py</url>
-          <line>37</line>
-          <option name="timeStamp" value="251" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py</url>
           <line>11</line>
           <option name="timeStamp" value="304" />
@@ -369,6 +366,26 @@
           <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
           <line>205</line>
           <option name="timeStamp" value="305" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py</url>
+          <line>34</line>
+          <option name="timeStamp" value="306" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/em_algorithm.py</url>
+          <line>49</line>
+          <option name="timeStamp" value="309" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/em_algorithm.py</url>
+          <line>48</line>
+          <option name="timeStamp" value="310" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/em_algorithm.py</url>
+          <line>52</line>
+          <option name="timeStamp" value="311" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

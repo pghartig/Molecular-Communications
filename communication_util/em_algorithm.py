@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-
+import os
 
 def em_gausian(num_gaussians, data, iterations):
     """
@@ -45,7 +45,8 @@ def em_gausian(num_gaussians, data, iterations):
             sigma_square[i] = np.dot(
                 weights[:, i].T, np.power(data - mu[i], 2)
             ) / np.sum(weights[:, i], axis=0)
-    pickle_out = open("/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "wb")
+    path = "Output/mm.pickle"
+    pickle_out = open(path, "wb")
     pickle.dump([mu, sigma_square, alpha], pickle_out)
     pickle_out.close()
 
