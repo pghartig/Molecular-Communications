@@ -25,7 +25,7 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 500
+    number_symbols = 250
 
     channel = 1j * np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -65,7 +65,7 @@ def test_viterbi_net_class():
 
 
     net = models.viterbiNet(D_in, H1, H2, D_out)
-    optimizer = optim.SGD(net.parameters(), lr=1e-1)
+    optimizer = optim.SGD(net.parameters(), lr=1e-2)
 
     """
     Train NN
@@ -91,8 +91,13 @@ def test_viterbi_net_class():
     """
     Test NN
     """
-    plt.plot(test_cost_over_epoch)
-    plt.plot(train_cost_over_epoch)
+    plt.figure()
+    plt.plot(test_cost_over_epoch, label='Test Error')
+    plt.plot(train_cost_over_epoch, label='Train Error')
+    plt.title("Error over epochs")
+    plt.xlabel("Epoch")
+    plt.ylabel("Error")
+    plt.legend(loc='upper left')
     plt.show()
 
     assert True

@@ -72,10 +72,11 @@ def receive_probability(symbol,mu,sigma_square):
     return np.prod(probability_from_gaussian_sources(symbol,mu,sigma_square))
 
 class mixture_model():
-    def __init__(self, mu, sigma_square):
+    def __init__(self, mu, sigma_square, alpha):
         self.mu = mu
         self.sigma_square = sigma_square
+        self.alpha = alpha
     def get_probability(self,symbol):
-        return np.prod(probability_from_gaussian_sources(symbol, self.mu, self.sigma_square))
+        return np.prod(np.dot(self.alpha, probability_from_gaussian_sources(symbol, self.mu, self.sigma_square)))
 
 

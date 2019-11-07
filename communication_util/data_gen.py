@@ -183,7 +183,7 @@ class training_data_generator:
         num_possible_states = np.power(self.alphabet, self.CIR_matrix.shape[1])
         states = []
         item = []
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1]-1, states, item)  # Generate states used below
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
         states = np.sort(np.asarray(states),1)
         if self.channel_output is not None:
             for i in range(self.channel_output.shape[1]):
@@ -204,7 +204,7 @@ class training_data_generator:
         metrics = []
         for state_ind in range(num_possible_states):
             state = states[state_ind, :]  # Look up state in table based on index (should be passed from calling loop!
-            if np.array_equal(input,state):
+            if np.array_equal(input, state):
                 metrics.append(1)
             else:
                 metrics.append(0)
