@@ -31,6 +31,8 @@ class viterbi_trellis():
         self.previous_states = []
         self.next_states = []
         self.setup_trellis(metric_function)
+        self.metric_function = metric_function
+
 
     def setup_trellis(self, metric_function):
         # create the trellis structure for a single step in the trellis
@@ -46,8 +48,11 @@ class viterbi_trellis():
                     node.incoming_nodes.append(previous_state)
 
     def step_trellis(self, index):
+        i = 0
+        metrics = self.metric_function(index, self.states)
         for node in self.next_states:
-            node.check_smallest_incoming(index)
+            node.check_smallest_incoming(index, metrics[i])
+            i+=1
         i = 0
         for node in self.next_states:
             self.previous_states[i].survivor_path = node.survivor_path
@@ -69,17 +74,17 @@ class viterbi_node():
         self.survivor_path = []
         self.survivor_path_cost = 0
         self.state = state
-        self.metric_function = metric_function
+        self.state_metric = 0
+        self.metric_function = metric_function #TODO get rid of after testing
 
-    def check_smallest_incoming(self, index):
+    def check_smallest_incoming(self, index, state_metric):
         """
         Based on a metric, find the new surviving path going into the next step in the trellis
         :return:
         """
         incoming_costs = []
         for incoming in self.incoming_nodes:
-            incoming_metric = self.metric_function(index, self.state)
-            incoming_costs.append(incoming.survivor_path_cost+incoming_metric)
+            incoming_costs.append(incoming.survivor_path_cost+state_metric)
         survivor_index = np.argmin(np.asarray(incoming_costs))
         survivor_node = self.incoming_nodes[survivor_index]
         # add symbol to survivor path

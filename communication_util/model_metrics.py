@@ -48,6 +48,7 @@ def autoencoder_channel_metric(net, mixture_model, transmit_alphabet, received_s
             metric_vector[path * alphabet_cardinality + i] = p_s_y[path * alphabet_cardinality + i]*p_y
     return metric_vector
 
+
 class gaussian_channel_metric_working():
     """
     returns vector of metrics for incoming state of viterbi with a gaussian channel
@@ -62,11 +63,14 @@ class gaussian_channel_metric_working():
         self.parameters = csi
         self.received = received
 
-    def metric(self, index, state):
-        channel_output = self.received[0, index]
-        predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
-        cost = np.linalg.norm((predicted - channel_output))
-        return cost
+    def metric(self, index, states):
+        costs = []
+        for i in range(states.shape[0]):
+            channel_output = self.received[0, index]
+            predicted = np.dot(np.asarray(states[i, :]), np.flip(self.parameters).T)
+            cost = np.linalg.norm((predicted - channel_output))
+            costs.append(cost)
+        return np.asarray(costs)
 
 
 class nn_mm_metric():
@@ -85,5 +89,7 @@ class nn_mm_metric():
         self.mm = mm
         self.received = received
 
-    def metric(self, index, state):
-        return self.nn(self.received[0, index])* self.mm(self.received[0, index])
+    def metric(self, index, state=None):
+        torch_input = torch.tensor([self.received[0, index]])   # Be careful with the PyTorch parser with scalars
+        test = self.nn(torch_input) * self.mm(self.received[0, index])
+        return self.nn(torch_input) * self.mm(self.received[0, index])  # Provides metrics for entire column of states
