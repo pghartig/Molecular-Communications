@@ -35,8 +35,8 @@ def test_full_integration():
     mm_pickle_in = open(
         "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "rb")
     model = pickle.load(mm_pickle_in)
-    mm = mixture_model(mu=model[0], sigma_square=model[0])
-    mm = mm.get_probability()
+    mm = mixture_model(mu=model[0], sigma_square=model[1],alpha=model[2])
+    mm = mm.get_probability
     mm_pickle_in.close()
 
     """
@@ -44,17 +44,11 @@ def test_full_integration():
     """
     number_symbols = 60
 
-    channel = 1j * np.zeros((1, 5))
-    channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-    data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols + 2 * channel.size),
-        SNR=10,
-        plot=True,
-        channel=channel,
-    )
+    #TODO look at handling complex channels
 
-    channel = np.zeros((1, 8))
-    channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
+    # channel = 1j * np.zeros((1, 5))
+    channel =  np.zeros((1, 5))
+    channel[0, [0, 3, 4]] = 1, 0.5, 0.4
     # channel[0, [0, 3]] = 1, 0.7
     # channel[0, [0]] = 1
 
@@ -71,19 +65,16 @@ def test_full_integration():
     After sending through channel, symbol detection should be performed using something like a matched filter
     """
 
-    x, y = data_gen.get_labeled_data()
-    x = torch.Tensor(x)
-    y = torch.Tensor(y)
 
-    # detect with Viterbi
-    # notice that this assumes perfect CSI at receiver
-    metric = gaussian_channel_metric_working(channel, data_gen.channel_output)
     metric = nn_mm_metric(neural_net, mm, data_gen.channel_output)
     detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
 
+
+
     """
     Analyze SER performance
     """
+
     ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
     assert error_tolerance >= ser

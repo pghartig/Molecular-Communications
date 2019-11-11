@@ -78,6 +78,6 @@ class mixture_model():
         self.sigma_square = sigma_square
         self.alpha = alpha
     def get_probability(self,symbol):
-        return np.prod(np.dot(self.alpha, probability_from_gaussian_sources(symbol, self.mu, self.sigma_square)))
+        return np.prod(np.dot(self.alpha, probability_from_gaussian_sources(symbol, self.mu, self.sigma_square).T))
 
 
