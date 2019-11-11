@@ -2,13 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/molecular-communications-project.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/molecular-communications-project.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/em_algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/em_algorithm.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -43,10 +37,6 @@
     <setting file="file://$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/tests/Data_Channel_Related/performance_plots.py" root0="SKIP_INSPECTION" />
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="width" value="1280" />
-    <option name="height" value="800" />
-  </component>
   <component name="ProjectId" id="1TBUnEDklcfmlI1R4tiynCUomxH" />
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
@@ -56,15 +46,15 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/tests/Viterbi" />
-      <recent name="$PROJECT_DIR$/tests" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hartig\Docs\molecular-communications-project\tests\Mixture_Model" />
       <recent name="$PROJECT_DIR$/tests/Viterbi" />
       <recent name="$PROJECT_DIR$/tests/NN_related" />
       <recent name="$PROJECT_DIR$/tests/Data_Channel_Related" />
       <recent name="$PROJECT_DIR$/tests/Mixture_Model" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/tests/Viterbi" />
       <recent name="$PROJECT_DIR$/tests" />
     </key>
   </component>
@@ -371,16 +361,6 @@
           <url>file://$PROJECT_DIR$/tests/Mixture_Model/em_gaussian_test.py</url>
           <line>34</line>
           <option name="timeStamp" value="306" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/communication_util/em_algorithm.py</url>
-          <line>49</line>
-          <option name="timeStamp" value="309" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/communication_util/em_algorithm.py</url>
-          <line>48</line>
-          <option name="timeStamp" value="310" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/communication_util/em_algorithm.py</url>
