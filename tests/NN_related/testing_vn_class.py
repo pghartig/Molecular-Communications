@@ -85,7 +85,7 @@ def test_viterbi_net_class():
         optimizer.step()
         test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
 
-    path = 'Output/nn.pt'
+    path = "nn.pt"
     torch.save(net, path)
 
     """
