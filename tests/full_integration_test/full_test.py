@@ -26,14 +26,14 @@ def test_full_integration():
     Load in Trained Neural Network
     """
 
-    saved_network_path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
+    saved_network_path = '/C:\Users\hartig\Docs\molecular-communications-project/tests\Output/nn.pt'
     neural_net = torch.load(saved_network_path)
 
     """
     Load Trained Mixture Model
     """
     mm_pickle_in = open(
-        "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "rb")
+        "/C:\Users\hartig\Docs\molecular-communications-project/tests\Output/mm.pickle", "rb")
     model = pickle.load(mm_pickle_in)
     mm = mixture_model(mu=model[0], sigma_square=model[1],alpha=model[2])
     mm = mm.get_probability
