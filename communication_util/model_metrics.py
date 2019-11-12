@@ -65,9 +65,9 @@ class gaussian_channel_metric_working():
 
     def metric(self, index, states):
         costs = []
-        for i in range(states.shape[0]):
+        for state in states:
             channel_output = self.received[0, index]
-            predicted = np.dot(np.asarray(states[i, :]), np.flip(self.parameters).T)
+            predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
             cost = np.linalg.norm((predicted - channel_output))
             costs.append(cost)
         return np.asarray(costs)

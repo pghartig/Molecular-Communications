@@ -26,14 +26,13 @@ def test_full_integration():
     Load in Trained Neural Network
     """
 
-    saved_network_path = '/C:\Users\hartig\Docs\molecular-communications-project/tests\Output/nn.pt'
+    saved_network_path = "tests/NN_related/nn.pt"
     neural_net = torch.load(saved_network_path)
 
     """
     Load Trained Mixture Model
     """
-    mm_pickle_in = open(
-        "/C:\Users\hartig\Docs\molecular-communications-project/tests\Output/mm.pickle", "rb")
+    mm_pickle_in = open("tests/Mixture_Model/Output/mm.pickle", "rb")
     model = pickle.load(mm_pickle_in)
     mm = mixture_model(mu=model[0], sigma_square=model[1],alpha=model[2])
     mm = mm.get_probability
@@ -54,7 +53,7 @@ def test_full_integration():
 
     # TODO make consolidate this part
     data_gen = \
-        training_data_generator(SNR=1, symbol_stream_shape=(1, number_symbols), channel=channel, plot=True)
+        training_data_generator(SNR=2, symbol_stream_shape=(1, number_symbols), channel=channel, plot=True)
     # data_gen = training_data_generator(plot=True)
 
     data_gen.setup_channel(shape=None)
@@ -67,14 +66,22 @@ def test_full_integration():
 
 
     metric = nn_mm_metric(neural_net, mm, data_gen.channel_output)
-    detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+    detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
+    ser_nn = symbol_error_rate(detected_nn, data_gen.symbol_stream_matrix)
 
 
+    """
+    Compare to Classical Viterbi with full CSI
+    """
+
+    metric = gaussian_channel_metric_working(channel, data_gen.channel_output)
+    detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+                                        metric.metric)
+    ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix)
 
     """
     Analyze SER performance
     """
 
-    ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
-    assert error_tolerance >= ser
+    assert error_tolerance >= ser_nn
