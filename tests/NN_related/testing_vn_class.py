@@ -25,7 +25,7 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 200
+    number_symbols = 1000
 
     channel = np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -65,7 +65,9 @@ def test_viterbi_net_class():
 
 
     net = models.viterbiNet(D_in, H1, H2, D_out)
-    optimizer = optim.SGD(net.parameters(), lr=1e-2)
+    # optimizer = optim.SGD(net.parameters(), lr=1e-1)
+    optimizer = optim.SGD(net.parameters(), lr=5)
+
 
     """
     Train NN
@@ -75,7 +77,7 @@ def test_viterbi_net_class():
     train_cost_over_epoch = []
     test_cost_over_epoch = []
 
-    for t in range(500):
+    for t in range(1050):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)
