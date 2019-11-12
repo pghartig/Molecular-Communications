@@ -18,7 +18,8 @@ def test_em_real_channel():
     """
     Setup Training Data
     """
-    number_symbols = 500
+    #EM is stable to number of training examples TODO see when not stable to number of iterations
+    number_symbols = 200
 
     channel = np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -35,22 +36,11 @@ def test_em_real_channel():
 
     # generate data from a set of gaussians
     data = data_gen.channel_output.flatten()
-    true_mu = []
-    true_sigma = []
-    # TODO look how much training should be required for convergence
-    mu, variance, alpha = em_gausian(num_sources, data, 50)
+
+    # TODO See why diverging for large number of iterations
+    mu, variance, alpha = em_gausian(num_sources, data, 10)
 
     """
     Want to plot the probability of a train and test set during each iteration
     """
-
-
-
-
-    plt.figure
-    plt.plot(np.sort(true_mu), np.sort(true_sigma), "bs")
-    plt.plot(np.sort(mu), np.sort(variance), "g^")
-    path = "Output/SER.png"
-    plt.savefig(path, format="png")
-    plt.show()
     assert True

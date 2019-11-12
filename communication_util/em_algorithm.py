@@ -10,11 +10,13 @@ def em_gausian(num_gaussians, data, iterations):
     :param iterations:
     :return:
     """
-    # TODO look at how to initialize
+    # Currently just initializing with some of the input data
     num_observations = data.shape[0]
     initialization_sample = data[0:num_gaussians]
     mu = initialization_sample
+    #decide how to initialize
     sigma_square = np.ones((num_gaussians, 1)) * np.var(initialization_sample)
+
 
     # current probability of each component (initialize as equiprobable)
     alpha = np.ones((num_gaussians, 1)) * (1 / num_gaussians)
@@ -52,7 +54,6 @@ def em_gausian(num_gaussians, data, iterations):
 
     return mu, sigma_square, alpha
 
-
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """
     return (as a vector) the probability of data point originating from all parameterized distrubutions
@@ -65,8 +66,7 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
     for i in range(mu.size):
         probabilities[i] = np.divide(
             np.exp(np.divide(-np.power(data_point - mu[i], 2), 2 * sigma_square[i])),
-            np.sqrt(2 * np.pi * sigma_square[i]),
-        )
+            np.sqrt(2 * np.pi * sigma_square[i]))
     return probabilities
 
 def receive_probability(symbol,mu,sigma_square):

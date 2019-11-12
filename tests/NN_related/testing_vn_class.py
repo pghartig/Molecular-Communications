@@ -25,13 +25,13 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 250
+    number_symbols = 200
 
-    channel = 1j * np.zeros((1, 5))
+    channel = np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
     data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols + 2 * channel.size),
-        SNR=10,
+        symbol_stream_shape=(1, number_symbols),
+        SNR=2,
         plot=True,
         channel=channel,
     )

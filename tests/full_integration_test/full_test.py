@@ -41,25 +41,19 @@ def test_full_integration():
     """
     Generated Testing Data using the same channel as was used for training the mixture model and the nn
     """
-    number_symbols = 60
+    number_symbols = 200
 
-    #TODO look at handling complex channels
-
-    # channel = 1j * np.zeros((1, 5))
-    channel =  np.zeros((1, 5))
+    channel = np.zeros((1, 5))
     channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-    # channel[0, [0, 3]] = 1, 0.7
-    # channel[0, [0]] = 1
-
-    # TODO make consolidate this part
-    data_gen = \
-        training_data_generator(SNR=2, symbol_stream_shape=(1, number_symbols), channel=channel, plot=True)
-    # data_gen = training_data_generator(plot=True)
-
+    data_gen = training_data_generator(
+        symbol_stream_shape=(1, number_symbols),
+        SNR=2,
+        plot=True,
+        channel=channel,
+    )
     data_gen.setup_channel(shape=None)
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
-
     """
     After sending through channel, symbol detection should be performed using something like a matched filter
     """
