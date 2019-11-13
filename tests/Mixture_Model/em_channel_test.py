@@ -37,7 +37,7 @@ def test_em_real_channel():
     # generate data from a set of gaussians
     data = data_gen.channel_output.flatten()
 
-    # TODO See why diverging for large number of iterations
+    # TODO See why diverging for large number of iterations (check if diverging in gaussian case)
     mu, variance, alpha = em_gausian(num_sources, data, 10)
 
     """

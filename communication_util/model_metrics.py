@@ -91,5 +91,4 @@ class nn_mm_metric():
 
     def metric(self, index, state=None):
         torch_input = torch.tensor([self.received[0, index]])   # Be careful with the PyTorch parser with scalars
-        test = self.nn(torch_input) * self.mm(self.received[0, index])
         return self.nn(torch_input) * self.mm(self.received[0, index])  # Provides metrics for entire column of states
