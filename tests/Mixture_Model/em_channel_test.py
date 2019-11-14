@@ -12,12 +12,11 @@ def test_em_real_channel():
     """
     tolerance = np.power(10.0, -3)
 
-
     """
     Setup Training Data
     """
     #EM is stable to number of training examples TODO see when not stable to number of iterations
-    number_symbols = 5000
+    number_symbols = 400
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -38,14 +37,21 @@ def test_em_real_channel():
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
     num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
+    true_variance= 0
+    true_mu = 0
+    true_alpha = np.ones((1,num_sources))/num_sources
 
     # generate data from a set of gaussians
     data = data_gen.channel_output.flatten()
 
     # TODO See why diverging for large number of iterations (check if diverging in gaussian case)
     mu, variance, alpha = em_gausian(num_sources, data, 50)
+    error_mu = np.linalg.norm(np.sort(mu)-np.sort(true_mu))
+    error_variance = np.linalg.norm(np.sort(variance)-np.sort(true_variance))
+    error_alpha = np.linalg.norm(np.sort(true_alpha) - np.sort(alpha))
+
 
     """
     Want to plot the probability of a train and test set during each iteration
     """
-    assert True
+    assert error_mu < tolerance and error_variance < tolerance and error_alpha < tolerance

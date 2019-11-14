@@ -17,12 +17,14 @@ def test_em_gaussian():
     true_mu = []
     true_sigma = []
     for i in range(num_sources):
-        data.append(np.random.normal(loc=(i + 1), scale=1 / (i + 1), size=(1, 30)))
-        true_mu.append((i + 1))
-        true_sigma.append(1 / (i + 1))
+        var = 1
+        mu = (i + 1)
+        data.append(np.random.normal(loc=mu, scale=var, size=(1, 50)))
+        true_mu.append(mu)
+        true_sigma.append(var)
     data = np.asarray(data).flatten().T
     data = np.random.permutation(np.asarray(data).flatten().T)
-    mu, variance, alpha = em_gausian(num_sources, data, 20)
+    mu, variance, alpha = em_gausian(num_sources, data, 50)
 
 
 

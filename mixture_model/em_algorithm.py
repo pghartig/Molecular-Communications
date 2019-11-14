@@ -15,7 +15,8 @@ def em_gausian(num_gaussians, data, iterations):
     initialization_sample = data[0:num_gaussians]
     mu = initialization_sample
     #decide how to initialize
-    sigma_square = np.ones((num_gaussians, 1)) * np.var(initialization_sample)
+    test = np.var(initialization_sample)
+    sigma_square = np.ones((num_gaussians, 1))*0.1
 
 
     # current probability of each component (initialize as equiprobable)
