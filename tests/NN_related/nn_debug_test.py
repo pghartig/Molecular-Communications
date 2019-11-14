@@ -25,20 +25,13 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 1000
+    number_symbols = 100
 
-    # channel = np.zeros((1, 5))
-    # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-
-    channel = np.zeros((1, 2))
-    channel[0, [0, 1]] = 1, 0.1
-
-    # channel = np.zeros((1, 1))
-    # channel[0, 0] = 1
-
+    channel = np.zeros((1, 1))
+    channel[0, 0] = 1
     data_gen = training_data_generator(
         symbol_stream_shape=(1, number_symbols),
-        SNR=2,
+        SNR=10,
         plot=True,
         channel=channel,
     )
@@ -74,8 +67,6 @@ def test_viterbi_net_class():
     net = models.viterbiNet(D_in, H1, H2, D_out)
     #TODO use better optimizer
     optimizer = optim.SGD(net.parameters(), lr=1e-2)
-    optimizer = optim.Adam(net.parameters(), lr=1e-2)
-
     # optimizer = optim.SGD(net.parameters(), lr=5)
 
 
@@ -98,8 +89,6 @@ def test_viterbi_net_class():
         optimizer.step()
         test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
 
-    path = "nn.pt"
-    torch.save(net, path)
 
     """
     Test NN

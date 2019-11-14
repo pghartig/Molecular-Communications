@@ -153,7 +153,7 @@ class training_data_generator:
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             self.channel_output.append(
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
-        self.channel_output = np.asarray(self.channel_output)
+        self.channel_output = np.flip(np.asarray(self.channel_output))
         # add noise
         # adjust noise power to provided SNR parameter
         self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
@@ -189,11 +189,10 @@ class training_data_generator:
         states = np.asarray(states)
         if self.channel_output is not None:
             for i in range(self.channel_output.shape[1]):
-                if (i >= self.CIR_matrix.shape[1]
-                        and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1]):
-                    x_list.append(self.channel_output[:, i].flatten())
-                    input = self.symbol_stream_matrix[:, i - self.CIR_matrix.shape[1]: i].flatten()
+                if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
+                    input = self.symbol_stream_matrix[:, i - self.CIR_matrix.shape[1]+1: i+1].flatten()
                     probability_vec = self.get_probability(input, states)
+                    x_list.append(self.channel_output[:, i].flatten())
                     y_list.append(probability_vec)
         return x_list, y_list
 
@@ -210,6 +209,8 @@ class training_data_generator:
                 metrics.append(1)
             else:
                 metrics.append(0)
+        test1 = metrics
+        test = np.asarray(metrics)
         return np.asarray(metrics)
 
     def plot_setup(self):
