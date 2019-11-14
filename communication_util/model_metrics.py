@@ -94,4 +94,4 @@ class nn_mm_metric():
         nn = self.nn(torch_input)
         mm = self.mm(self.received[0, index])
         # return nn*mm  # Provides metrics for entire column of states
-        return -nn
+        return - nn     # Need to change sign to align with argmin used in viterbi
