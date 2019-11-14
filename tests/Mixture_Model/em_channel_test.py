@@ -45,7 +45,7 @@ def test_em_real_channel():
     data = data_gen.channel_output.flatten()
 
     # TODO See why diverging for large number of iterations (check if diverging in gaussian case)
-    mu, variance, alpha = em_gausian(num_sources, data, 10)
+    mu, variance, alpha = em_gausian(num_sources, data, 50)
 
     """
     Want to plot the probability of a train and test set during each iteration

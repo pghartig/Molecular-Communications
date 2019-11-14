@@ -84,5 +84,7 @@ def test_full_integration():
     """
     Analyze SER performance
     """
+    print("viterbi SER" + str(ser_classic))
+    print("viterbiNet" + str(ser_nn))
 
     assert error_tolerance >= ser_nn
