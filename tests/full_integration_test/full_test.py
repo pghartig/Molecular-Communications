@@ -49,7 +49,8 @@ def test_full_integration():
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
     x = torch.Tensor(x)
     y = torch.Tensor(y)
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.NLLLoss()
+    # criterion = nn.CrossEntropyLoss()
     cost = criterion(neural_net(x), y.long())
     threshold = 1e-2
     assert cost < threshold

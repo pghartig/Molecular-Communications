@@ -82,8 +82,8 @@ def test_viterbi_net_class():
     """
     Train NN
     """
-    criterion = nn.CrossEntropyLoss()
-    # criterion = nn.NLLLoss()
+    # criterion = nn.CrossEntropyLoss()
+    criterion = nn.NLLLoss()
     train_cost_over_epoch = []
     test_cost_over_epoch = []
 

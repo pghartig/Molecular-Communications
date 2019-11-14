@@ -1,5 +1,7 @@
 import numpy as np
 import torch
+import torch.nn.functional as F
+
 
 
 def gaussian_channel_metric(survivor_paths, index, transmit_alphabet, channel_output, cir):
@@ -88,5 +90,8 @@ class nn_mm_metric():
         self.received = received
 
     def metric(self, index, state=None):
-        torch_input = torch.tensor([self.received[0, index]])   # Be careful with the PyTorch parser with scalars
-        return self.nn(torch_input) * self.mm(self.received[0, index])  # Provides metrics for entire column of states
+        torch_input = torch.tensor([self.received[0, index]])   # Be careful using the PyTorch parser with scalars
+        nn = self.nn(torch_input)
+        mm = self.mm(self.received[0, index])
+        # return nn*mm  # Provides metrics for entire column of states
+        return -nn
