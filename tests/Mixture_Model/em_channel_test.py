@@ -19,17 +19,24 @@ def test_em_real_channel():
     Setup Training Data
     """
     #EM is stable to number of training examples TODO see when not stable to number of iterations
-    number_symbols = 200
+    number_symbols = 5000
 
-    channel = np.zeros((1, 5))
-    channel[0, [0, 3, 4]] = 1, 0.5, 0.4
+    # channel = np.zeros((1, 5))
+    # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
+
+    channel = np.zeros((1, 3))
+    channel[0, [0, 1, 2]] = 1, 0.6, 0.3
+
+    # channel = np.zeros((1, 1))
+    # channel[0, 0] = 1
+
     data_gen = training_data_generator(
         symbol_stream_shape=(1, number_symbols),
         SNR=2,
         plot=True,
         channel=channel,
     )
-    data_gen.setup_channel(shape=None)
+    # data_gen.setup_channel(shape=None)
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
     num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])

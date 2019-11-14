@@ -61,7 +61,7 @@ class gaussian_channel_metric_working():
     """
     def __init__(self, csi, received):
         self.parameters = csi
-        self.received = received
+        self.received = np.flip(received)
 
     def metric(self, index, states):
         costs = []

@@ -25,13 +25,13 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 1000
+    number_symbols = 5000
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
 
-    channel = np.zeros((1, 2))
-    channel[0, [0, 1]] = 1, 0.1
+    channel = np.zeros((1, 3))
+    channel[0, [0, 1, 2]] = 1, 0.6, 0.3
 
     # channel = np.zeros((1, 1))
     # channel[0, 0] = 1
