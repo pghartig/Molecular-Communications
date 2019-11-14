@@ -18,18 +18,34 @@ class training_data_generator:
         noise_parameter=np.array((0, 1)),
         seed=None,
     ):
-        self.SNR = SNR
+
+        """
+        Basic parameters of the data generations
+        """
         self.symbol_stream_matrix = np.zeros(symbol_stream_shape)
-        self.transmit_signal_matrix = []
         self.CIR_matrix = channel
         self.channel_shape = channel_shape
         self.zero_pad = False
         self.terminated = False
         self.plot = plot
-        self.noise_parameter = noise_parameter
         self.channel_output = []
         self.alphabet = self.constellation(constellation, constellation_size)
         self.seed = seed
+
+        """
+        Parameters and Variables Related to the communication channel
+        """
+        self.SNR = SNR
+        self.noise_parameter = noise_parameter
+
+        """
+        Modulation and pulse related parameters and variables
+        """
+        self.transmit_signal_matrix = []
+        self.modulated_channel_output = []
+        self.sampling_period = 1 / 10
+        self.symbol_period = 1 / 1
+
 
     def setup_channel(self, shape=(1, 1)):
         if self.CIR_matrix is not None:
@@ -42,6 +58,22 @@ class training_data_generator:
         # else:
         #     self.CIR_matrix = np.zeros((1,10))
         #     self.CIR_matrix[0, [0, 3, 5]] = 1, .5, .2
+
+    def constellation(self, type, size):
+        # TODO for large tests may want to select dtype
+        if type is "QAM":
+            points = np.linspace(-1, 1, np.floor(math.log(size, 2)))
+            constellation = 1j * np.zeros((points.size, points.size))
+            for i in range(points.size):
+                for k in range(points.size):
+                    constellation[i, k] = points[i] + 1j * points[k]
+            return constellation.flatten()
+        elif type is "ASK":
+            return np.linspace(-1, +1, size)
+        elif type is "PSK":
+            return np.exp(1j * np.linspace(0, 2 * np.pi, size))
+        else:
+            return np.array([1, -1])
 
     def random_symbol_stream(self):
         """
@@ -90,49 +122,44 @@ class training_data_generator:
 
     def modulate_fundamental_pulse(self, fundamental_pulse):
         """
-        Fundamenet
-        The purpose of this funcion is to take a symbol stream and use it to modulate the fundemental pulse
+
+        The purpose of this funcion is to take a symbol stream and use it to modulate the fundamental pulse
         on which it will be send over the channel.
         :return:
         """
         # include parameter of samples/symbol
-        t_samp = 1 / 10
-        t_sym = 1 / 1
+        self.sampling_period = 1 / 10
+        self.symbol_period = 1 / 1
 
         """
         First look at pulse and determine where to cut off
-        will just keep making samples until we full to some percentage of max.
-        Notice that assumes a symmetric pulse shape
+        will just keep making samples until some percentage of max is reached.
+        Notice that this assumes a symmetric pulse shape
         """
         sample_number = 0
-        peak_energy = energy = fundamental_pulse(sample_number * t_samp)
-        # TODO verify this threshold for where to cutoff fundamental pulse (asymetric case)
+        peak_energy = energy = fundamental_pulse(sample_number * self.sampling_period)
+        # TODO verify this threshold for where to cutoff fundamental pulse
+        #  TODO (asymetric case)
         while energy >= 0.05 * peak_energy:
             energy = fundamental_pulse(
-                sample_number * t_samp, sample_period=t_samp, symbol_period=t_sym
+                sample_number * self.sampling_period, sample_period=self.sampling_period, symbol_period=self.symbol_period
             )
             sample_number += 1
 
-        sample_vector = np.arange(-sample_number, sample_number + 1) * t_samp
-        vec_pulse = np.vectorize(fundamental_pulse)
+        sample_vector = np.arange(-sample_number, sample_number + 1) * self.sampling_period
+        vec_pulse = np.vectorize(fundamental_pulse)  # TODO turn pulse into Lambda function
         sample_vector = vec_pulse(sample_vector)
-        sampling_width = int(np.floor(sample_vector.size / 2))
+        sampling_width = int(np.floor(sample_vector.size / 2))  #TODO change for asymetric case
 
         """
         In order to allow for adding components from multiple symbols into a single sample, the array for the
         sampled, modulated signal must be pre-allocated.
         """
-        samples_per_symbol_period = int(np.floor(t_sym / t_samp))
-        overlap = max(int(sampling_width - samples_per_symbol_period / 2), 0)
+        samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
+        overlap = max(int(sampling_width - samples_per_symbol_period / 2), 0)  #TODO change for asymetric case
         # TODO figure out why +1 is needed in line below for shape
-        self.transmit_signal_matrix = np.zeros(
-            (
-                1,
-                samples_per_symbol_period * self.symbol_stream_matrix.shape[1]
-                + 2 * overlap
-                + 1,
-            )
-        )
+        self.transmit_signal_matrix = np.zeros((1, samples_per_symbol_period * self.symbol_stream_matrix.shape[1]
+                + 2 * overlap + 1,))
         try:
             for symbol_ind in range(self.symbol_stream_matrix.shape[1]):
                 center = symbol_ind * samples_per_symbol_period + sampling_width
@@ -163,21 +190,18 @@ class training_data_generator:
             1
         ] * np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
 
-    def constellation(self, type, size):
-        # TODO for large tests may want to select dtype
-        if type is "QAM":
-            points = np.linspace(-1, 1, np.floor(math.log(size, 2)))
-            constellation = 1j * np.zeros((points.size, points.size))
-            for i in range(points.size):
-                for k in range(points.size):
-                    constellation[i, k] = points[i] + 1j * points[k]
-            return constellation.flatten()
-        elif type is "ASK":
-            return np.linspace(-1, +1, size)
-        elif type is "PSK":
-            return np.exp(1j * np.linspace(0, 2 * np.pi, size))
-        else:
-            return np.array([1, -1])
+    def transmit_modulated_signal(self):
+        """
+        Transmit the signal that has been modulated on a fundemental pulse through the channel.
+        :return:
+        """
+
+    def filter_received_modulated_signal(self):
+        """
+        Use a provided filter to identify received symbols (e.g. matched filtering)
+        :return:
+        """
+        # First check that there is a received signal
 
     def get_labeled_data(self):
         x_list = []
