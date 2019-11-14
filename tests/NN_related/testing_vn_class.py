@@ -88,7 +88,7 @@ def test_viterbi_net_class():
     test_cost_over_epoch = []
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(1000):
+    for t in range(200):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)

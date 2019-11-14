@@ -1,8 +1,6 @@
-from communication_util.em_algorithm import em_gausian
+from mixture_model.em_algorithm import em_gausian
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
-import os
 
 
 def test_em_gaussian():

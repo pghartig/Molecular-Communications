@@ -1,7 +1,5 @@
-from communication_util.em_algorithm import em_gausian
+from mixture_model.em_algorithm import em_gausian
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
 from communication_util import training_data_generator
 
 

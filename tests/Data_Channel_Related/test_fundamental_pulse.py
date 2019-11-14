@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def test_fundamental_pulse():
     plt.figure(1)
-    sample = np.linspace(-1, 1, num=1000)
+    sample = np.linspace(-1, 1, num=500)
     plt.plot(sample, pulse_shapes.root_raise_cosine(sample, 1 / 100, 1 / 10, 1, 0.5))
 
     # plt.figure(1)

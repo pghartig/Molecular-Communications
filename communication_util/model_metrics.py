@@ -1,7 +1,5 @@
 import numpy as np
 import torch
-from itertools import permutations
-from communication_util.em_algorithm import em_gausian
 
 
 def gaussian_channel_metric(survivor_paths, index, transmit_alphabet, channel_output, cir):
