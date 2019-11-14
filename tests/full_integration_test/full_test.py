@@ -69,7 +69,7 @@ def test_full_integration():
     After sending through channel, symbol detection should be performed using something like a matched filter
     """
 
-
+    #   !! Make sure channel output gets flipped here!!
     metric = nn_mm_metric(neural_net, mm, data_gen.channel_output)  # This is a function to be used in the viterbi
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)

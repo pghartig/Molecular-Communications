@@ -87,7 +87,7 @@ class nn_mm_metric():
     def __init__(self, nn, mm, received):
         self.nn = nn
         self.mm = mm
-        self.received = received
+        self.received = np.flip(received)
 
     def metric(self, index, state=None):
         torch_input = torch.tensor([self.received[0, index]])   # Be careful using the PyTorch parser with scalars
