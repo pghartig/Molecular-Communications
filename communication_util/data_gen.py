@@ -202,6 +202,11 @@ class training_data_generator:
         :return:
         """
         # First check that there is a received signal
+        if self.modulated_channel_output is not None:
+            """
+            Sample/filter the received, modulated signal every 
+            """
+            return None
 
     def get_labeled_data(self):
         x_list = []

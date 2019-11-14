@@ -66,3 +66,12 @@ def rectangle(
     #     else:
     #         ret.append(pulse_energy/symbol_period)
     # return np.asarray(ret)
+
+def flow_injection(time):
+    """
+    provide samples from  flow channel injection pulse
+    :return: function value at the sample point
+    """
+    sample = 0
+
+    return sample
