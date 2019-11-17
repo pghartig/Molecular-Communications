@@ -1,6 +1,6 @@
 import numpy as np
 import pickle
-
+import os
 
 def em_gausian(num_gaussians, data, iterations):
     """
@@ -10,11 +10,14 @@ def em_gausian(num_gaussians, data, iterations):
     :param iterations:
     :return:
     """
-    # TODO look at how to initialize
+    # Currently just initializing with some of the input data
     num_observations = data.shape[0]
     initialization_sample = data[0:num_gaussians]
     mu = initialization_sample
-    sigma_square = np.ones((num_gaussians, 1)) * np.var(initialization_sample)
+    #decide how to initialize
+    test = np.var(initialization_sample)
+    sigma_square = np.ones((num_gaussians, 1))*0.1
+
 
     # current probability of each component (initialize as equiprobable)
     alpha = np.ones((num_gaussians, 1)) * (1 / num_gaussians)
@@ -45,12 +48,12 @@ def em_gausian(num_gaussians, data, iterations):
             sigma_square[i] = np.dot(
                 weights[:, i].T, np.power(data - mu[i], 2)
             ) / np.sum(weights[:, i], axis=0)
-    pickle_out = open("/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle", "wb")
+    path = "Output/mm.pickle"
+    pickle_out = open(path, "wb")
     pickle.dump([mu, sigma_square, alpha], pickle_out)
     pickle_out.close()
 
     return mu, sigma_square, alpha
-
 
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """
@@ -64,8 +67,7 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
     for i in range(mu.size):
         probabilities[i] = np.divide(
             np.exp(np.divide(-np.power(data_point - mu[i], 2), 2 * sigma_square[i])),
-            np.sqrt(2 * np.pi * sigma_square[i]),
-        )
+            np.sqrt(2 * np.pi * sigma_square[i]))
     return probabilities
 
 def receive_probability(symbol,mu,sigma_square):

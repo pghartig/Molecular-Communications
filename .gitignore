@@ -108,5 +108,6 @@ venv.bak/
 notebook.txt
 *.png
 *.pt
+tests/Mixture_Model/Output/
+.idea/
 Output/
-

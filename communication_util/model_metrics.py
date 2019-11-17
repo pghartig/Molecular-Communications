@@ -1,7 +1,7 @@
 import numpy as np
 import torch
-from itertools import permutations
-from communication_util.em_algorithm import em_gausian
+import torch.nn.functional as F
+
 
 
 def gaussian_channel_metric(survivor_paths, index, transmit_alphabet, channel_output, cir):
@@ -61,13 +61,13 @@ class gaussian_channel_metric_working():
     """
     def __init__(self, csi, received):
         self.parameters = csi
-        self.received = received
+        self.received = np.flip(received)
 
     def metric(self, index, states):
         costs = []
-        for i in range(states.shape[0]):
+        for state in states:
             channel_output = self.received[0, index]
-            predicted = np.dot(np.asarray(states[i, :]), np.flip(self.parameters).T)
+            predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
             cost = np.linalg.norm((predicted - channel_output))
             costs.append(cost)
         return np.asarray(costs)
@@ -87,9 +87,11 @@ class nn_mm_metric():
     def __init__(self, nn, mm, received):
         self.nn = nn
         self.mm = mm
-        self.received = received
+        self.received = np.flip(received)
 
     def metric(self, index, state=None):
-        torch_input = torch.tensor([self.received[0, index]])   # Be careful with the PyTorch parser with scalars
-        test = self.nn(torch_input) * self.mm(self.received[0, index])
-        return self.nn(torch_input) * self.mm(self.received[0, index])  # Provides metrics for entire column of states
+        torch_input = torch.tensor([self.received[0, index]])   # Be careful using the PyTorch parser with scalars
+        nn = self.nn(torch_input)
+        mm = self.mm(self.received[0, index])
+        # return nn*mm  # Provides metrics for entire column of states
+        return - nn     # Need to change sign to align with argmin used in viterbi

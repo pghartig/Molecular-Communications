@@ -30,15 +30,15 @@ class viterbi_trellis():
         self.alphabet = alphabet
         self.previous_states = []
         self.next_states = []
-        self.setup_trellis(metric_function)
         self.metric_function = metric_function
+        self.setup_trellis()
 
 
-    def setup_trellis(self, metric_function):
+    def setup_trellis(self):
         # create the trellis structure for a single step in the trellis
         for state in self.states:
-            self.previous_states.append(viterbi_node(state, metric_function))
-            self.next_states.append(viterbi_node(state, metric_function))
+            self.previous_states.append(viterbi_node(state, self.metric_function))
+            self.next_states.append(viterbi_node(state, self.metric_function))
         # make connections between the nodes in the trellis
         for node in self.next_states:
             for previous_state in self.previous_states:
@@ -51,6 +51,7 @@ class viterbi_trellis():
         i = 0
         metrics = self.metric_function(index, self.states)
         for node in self.next_states:
+            test = metrics[i]
             node.check_smallest_incoming(index, metrics[i])
             i+=1
         i = 0
@@ -75,7 +76,6 @@ class viterbi_node():
         self.survivor_path_cost = 0
         self.state = state
         self.state_metric = 0
-        self.metric_function = metric_function #TODO get rid of after testing
 
     def check_smallest_incoming(self, index, state_metric):
         """

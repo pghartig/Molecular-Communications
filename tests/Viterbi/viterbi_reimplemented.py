@@ -11,7 +11,7 @@ def test_viterbi_new_gaussian():
     # channel[0, [0]] = 1
 
     # TODO make consolidate this part
-    data_gen = training_data_generator(SNR=1, channel=channel, plot=True)
+    data_gen = training_data_generator(SNR=2, channel=channel, plot=True)
     # data_gen = training_data_generator(plot=True)
 
     data_gen.setup_channel(shape=None)

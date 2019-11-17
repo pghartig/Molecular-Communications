@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 def test_fundamental_pulse():
     plt.figure(1)
-    sample = np.linspace(-1, 1, num=1000)
+    sample = np.linspace(-1, 1, num=500)
     plt.plot(sample, pulse_shapes.root_raise_cosine(sample, 1 / 100, 1 / 10, 1, 0.5))
 
     # plt.figure(1)
@@ -20,7 +20,7 @@ def test_fundamental_pulse():
         symbol_stream_shape=(1, 30), SNR=1, channel=channel, plot=True
     )
     # data_gen = training_data_generator(plot=True)
-    data_gen.setup_channel()
+    # data_gen.setup_channel()
     data_gen.random_symbol_stream()
     data_gen.modulate_fundamental_pulse(pulse_shapes.rectangle)
     # data_gen.modulate_fundemental_pulse(pulse_shapes.root_raise_cosine)
