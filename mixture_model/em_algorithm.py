@@ -35,19 +35,19 @@ def em_gausian(num_gaussians, data, iterations):
             weighted_probabilities = alpha * probabilities
             new_weights = weighted_probabilities / np.sum(weighted_probabilities)
             weights[i, :] = np.reshape(new_weights, weights[i, :].shape)
-            # for j in range(mu.size):
-            #     weights[i, j] = new_weights[j]
 
         alpha = np.reshape(np.sum(weights, axis=0) / num_observations, alpha.shape)
 
         """
         Maximization step
         """
-        mu = np.dot(weights.T, data) / np.reshape(np.sum(weights, axis=0), mu.shape)
+        mu = np.sum(weights.T * data, axis=1)/np.sum(weights, axis=0)
         for i in range(num_gaussians):
-            sigma_square[i] = np.dot(
-                weights[:, i].T, np.power(data - mu[i], 2)
-            ) / np.sum(weights[:, i], axis=0)
+            sub = mu[i]
+            squared_difference = np.power(data - sub,2)
+            data_weight = weights[:, i]
+            total_square_difference = np.dot(squared_difference.T, data_weight)
+            sigma_square[i] = total_square_difference / np.sum(data_weight)
 
     path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
     # path = "Output/mm.pickle"
@@ -68,7 +68,7 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
     probabilities = np.zeros(sigma_square.shape)
     for i in range(mu.size):
         probabilities[i] = np.divide(
-            np.exp(np.divide(-np.power(data_point - mu[i], 2), 2 * sigma_square[i])),
+            np.exp(np.divide(-np.power((data_point - mu[i]), 2), (2 * sigma_square[i]))),
             np.sqrt(2 * np.pi * sigma_square[i]))
     return probabilities
 
@@ -81,6 +81,6 @@ class mixture_model():
         self.sigma_square = sigma_square
         self.alpha = alpha
     def get_probability(self,symbol):
-        return np.prod(np.dot(self.alpha, probability_from_gaussian_sources(symbol, self.mu, self.sigma_square).T))
+        return np.sum(np.dot(self.alpha, probability_from_gaussian_sources(symbol, self.mu, self.sigma_square).T))
 
 
