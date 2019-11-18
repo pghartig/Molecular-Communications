@@ -24,13 +24,12 @@ def test_em_gaussian():
         true_sigma.append(var)
     data = np.asarray(data).flatten().T
     data = np.random.permutation(np.asarray(data).flatten().T)
-    mu, variance, alpha = em_gausian(num_sources, data, 50)
+    mu, variance, alpha, interation_probability = em_gausian(num_sources, data, 50)
 
 
 
     plt.figure
-    plt.plot(np.sort(true_mu), np.sort(true_sigma), "bs")
-    plt.plot(np.sort(mu), np.sort(variance), "g^")
+    plt.plot(interation_probability)
     # test = os.getcwd()+"Output/SER.png"
     path = "Output/SER.png"
     plt.savefig(path, format="png")

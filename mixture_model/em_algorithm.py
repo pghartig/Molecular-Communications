@@ -24,23 +24,34 @@ def em_gausian(num_gaussians, data, iterations):
     # For each data point attribute a probability of originating from each gaussian component of the mixture.
     weights = np.ones((num_observations, num_gaussians)) * (1 / num_gaussians)
 
+    # Collect the probability of the training data set after each iteration and the difference between subsequent
+    # iterations to ensure it is monotonically increasing
+
+    likelihood_vector = []
+    diference_likelihood_vector = []
+
     for iteration in range(iterations):
+
+
         """
         Expectation step
         """
-        # Find probability of a certain observation originating from each source using current parameters
-        # TODO look for faster way to update these
+        total_sequence_probability = []
         for i in range(num_observations):
             probabilities = probability_from_gaussian_sources(data[i], mu, sigma_square)
             weighted_probabilities = alpha * probabilities
             new_weights = weighted_probabilities / np.sum(weighted_probabilities)
-            weights[i, :] = np.reshape(new_weights, weights[i, :].shape)
+            weights[i, :] = w = np.reshape(new_weights, weights[i, :].shape)
+            w = np.reshape(w, probabilities.shape)
+            test = probabilities/w
+            total_sequence_probability.append(np.sum(w*(np.log(test))))
 
-        alpha = np.reshape(np.sum(weights, axis=0) / num_observations, alpha.shape)
 
         """
         Maximization step
         """
+
+        alpha = np.reshape(np.sum(weights, axis=0) / num_observations, alpha.shape)
         mu = np.sum(weights.T * data, axis=1)/np.sum(weights, axis=0)
         for i in range(num_gaussians):
             sub = mu[i]
@@ -49,13 +60,14 @@ def em_gausian(num_gaussians, data, iterations):
             total_square_difference = np.dot(squared_difference.T, data_weight)
             sigma_square[i] = total_square_difference / np.sum(data_weight)
 
+
     path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
     # path = "Output/mm.pickle"
     pickle_out = open(path, "wb")
     pickle.dump([mu, sigma_square, alpha], pickle_out)
     pickle_out.close()
 
-    return mu, sigma_square, alpha
+    return mu, sigma_square, alpha, total_sequence_probability
 
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """
