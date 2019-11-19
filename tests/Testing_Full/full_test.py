@@ -44,7 +44,9 @@ def test_full_integration():
     """
     #Load NN
     saved_network_path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
-    saved_network_path = "tests/NN_related/nn.pt"
+    saved_network_path = "Output/nn.pt"
+    test = os.getcwd()
+
     neural_net = torch.load(saved_network_path)
     # Test NN
     x, y = data_gen.get_labeled_data()
@@ -61,7 +63,7 @@ def test_full_integration():
     Load Trained Mixture Model
     """
     path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
-    path = "tests/Mixture_Model/Output/mm.pickle"
+    path = "Output/mm.pickle"
     mm_pickle_in = open(path, "rb")
 
     model = pickle.load(mm_pickle_in)

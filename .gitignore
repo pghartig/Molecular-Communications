@@ -110,5 +110,5 @@ notebook.txt
 *.pt
 tests/Mixture_Model/Output/
 .idea/
-Output/
+Output/*
 .idea/workspace.xml
