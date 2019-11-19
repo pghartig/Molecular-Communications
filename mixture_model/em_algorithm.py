@@ -61,8 +61,8 @@ def em_gausian(num_gaussians, data, iterations):
             sigma_square[i] = total_square_difference / np.sum(data_weight)
 
 
-    path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
-    # path = "Output/mm.pickle"
+    # path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
+    path = "Output/mm.pickle"
     pickle_out = open(path, "wb")
     pickle.dump([mu, sigma_square, alpha], pickle_out)
     pickle_out.close()

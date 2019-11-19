@@ -5,10 +5,21 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
+import os
 
 
 
 def test_viterbi_net_class():
+
+    """
+    Train and save the neural network
+    :return:
+    """
+
+    """
+    setup paths
+    """
+
 
     """
     Testing the setup and training of a neural network using the viterbiNet Architecture
@@ -99,7 +110,8 @@ def test_viterbi_net_class():
         test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
 
     path = "nn.pt"
-    path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
+    test = os.getcwd()
+    # path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
     torch.save(net, path)
 
     """
