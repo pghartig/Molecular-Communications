@@ -99,6 +99,7 @@ def test_viterbi_net_class():
         test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
 
     path = "nn.pt"
+    path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
     torch.save(net, path)
 
     """

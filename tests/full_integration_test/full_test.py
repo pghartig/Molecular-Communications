@@ -8,14 +8,15 @@ import pickle
 from communication_util.data_gen import *
 from viterbi.viterbi import *
 from communication_util.error_rates import *
+import os
 
 def test_full_integration():
 
     error_tolerance = np.power(10.0, -3)
 
     """
-       Generated Testing Data using the same channel as was used for training the mixture model and the nn
-       """
+    Generated Testing Data using the same channel as was used for training the mixture model and the nn
+    """
     number_symbols = 5000
 
     # channel = np.zeros((1, 5))
@@ -42,7 +43,8 @@ def test_full_integration():
     Load in Trained Neural Network and verify that it is acceptable performance
     """
     #Load NN
-    saved_network_path = "nn.pt"
+    saved_network_path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
+    # saved_network_path = "nn.pt"
     neural_net = torch.load(saved_network_path)
     # Test NN
     x, y = data_gen.get_labeled_data()
@@ -58,7 +60,10 @@ def test_full_integration():
     """
     Load Trained Mixture Model
     """
-    mm_pickle_in = open("tests/Mixture_Model/Output/mm.pickle", "rb")
+    path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
+    # path = "tests/Mixture_Model/Output/mm.pickle"
+    mm_pickle_in = open(path, "rb")
+
     model = pickle.load(mm_pickle_in)
     mm = mixture_model(mu=model[0], sigma_square=model[1], alpha=model[2])
     mm = mm.get_probability

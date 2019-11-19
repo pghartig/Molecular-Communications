@@ -109,4 +109,6 @@ notebook.txt
 *.png
 *.pt
 tests/Mixture_Model/Output/
-.idea
+.idea/
+Output/
+.idea/workspace.xml
