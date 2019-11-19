@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import os
 
-def em_gausian(num_gaussians, data, iterations):
+def em_gausian(num_gaussians, data, iterations, test_data= None, save= False):
     """
     implementation of EM for gaussian model
     :param num_gaussians:
@@ -36,16 +36,18 @@ def em_gausian(num_gaussians, data, iterations):
         """
         Expectation step
         """
-        total_sequence_probability = []
+        itr_total_sequence_probability = []
         for i in range(num_observations):
             probabilities = probability_from_gaussian_sources(data[i], mu, sigma_square)
             weighted_probabilities = alpha * probabilities
             new_weights = weighted_probabilities / np.sum(weighted_probabilities)
-            weights[i, :] = w = np.reshape(new_weights, weights[i, :].shape)
-            w = np.reshape(w, probabilities.shape)
-            test = probabilities/w
-            total_sequence_probability.append(np.sum(w*(np.log(test))))
+            weights[i, :] = np.reshape(new_weights, weights[i, :].shape)
+            # This is a lower bound on the probability of this observation given the current
+            # test = np.log(np.sum(probabilities*new_weights))
+            test = np.log(np.sum(probabilities*alpha))
+            itr_total_sequence_probability.append(test)
 
+        likelihood_vector.append(np.sum(itr_total_sequence_probability))
 
         """
         Maximization step
@@ -60,14 +62,14 @@ def em_gausian(num_gaussians, data, iterations):
             total_square_difference = np.dot(squared_difference.T, data_weight)
             sigma_square[i] = total_square_difference / np.sum(data_weight)
 
+    if save is True:
+        # path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
+        path = "Output/mm.pickle"
+        pickle_out = open(path, "wb")
+        pickle.dump([mu, sigma_square, alpha], pickle_out)
+        pickle_out.close()
 
-    # path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
-    path = "Output/mm.pickle"
-    pickle_out = open(path, "wb")
-    pickle.dump([mu, sigma_square, alpha], pickle_out)
-    pickle_out.close()
-
-    return mu, sigma_square, alpha, total_sequence_probability
+    return mu, sigma_square, alpha, likelihood_vector
 
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """

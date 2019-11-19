@@ -1,7 +1,7 @@
 from mixture_model.em_algorithm import em_gausian
 import numpy as np
 from communication_util import training_data_generator
-
+from matplotlib import pyplot as plt
 
 
 def test_em_real_channel():
@@ -16,7 +16,7 @@ def test_em_real_channel():
     Setup Training Data
     """
     #EM is stable to number of training examples TODO see when not stable to number of iterations
-    number_symbols = 400
+    number_symbols = 1000
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -45,13 +45,23 @@ def test_em_real_channel():
     data = data_gen.channel_output.flatten()
 
     # TODO See why diverging for large number of iterations (check if diverging in gaussian case)
-    mu, variance, alpha, total_sequence_probability = em_gausian(num_sources, data, 50)
+    mu, variance, alpha, total_sequence_probability = em_gausian(num_sources, data, 20, save=True)
+    plt.figure()
+    plt.plot(total_sequence_probability)
+    path = "Output/Mixture_Model_Convergence.png"
+    plt.title("Error over epochs")
+    plt.xlabel("Iteration")
+    plt.ylabel("Probability of Data set")
+    plt.legend(loc='upper left')
+    plt.savefig(path, format="png")
+
     # error_mu = np.linalg.norm(np.sort(mu)-np.sort(true_mu))
     # error_variance = np.linalg.norm(np.sort(variance)-np.sort(true_variance))
     # error_alpha = np.linalg.norm(np.sort(true_alpha) - np.sort(alpha))
-    #
-    #
-    # """
-    # Want to plot the probability of a train and test set during each iteration
-    # """
+
+
+    """
+    Want to plot the probability of a train and test set during each iteration
+    """
     # assert error_mu < tolerance and error_variance < tolerance and error_alpha < tolerance
+    assert True #TODO decide on pass criteria

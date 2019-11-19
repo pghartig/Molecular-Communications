@@ -125,6 +125,9 @@ def test_viterbi_net_class():
     plt.xlabel("Epoch")
     plt.ylabel("Error")
     plt.legend(loc='upper left')
-    plt.show()
+    path = "Output/Neural_Network_Convergence.png"
+    plt.savefig(path, format="png")
+    plt.figure()
+
 
     assert True

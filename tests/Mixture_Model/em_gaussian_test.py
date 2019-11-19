@@ -12,7 +12,7 @@ def test_em_gaussian():
     tolerance = np.power(10.0, -3)
 
     # generate data from a set of gaussians
-    num_sources = 8
+    num_sources = 16
     data = []
     true_mu = []
     true_sigma = []
@@ -24,12 +24,12 @@ def test_em_gaussian():
         true_sigma.append(var)
     data = np.asarray(data).flatten().T
     data = np.random.permutation(np.asarray(data).flatten().T)
-    mu, variance, alpha, interation_probability = em_gausian(num_sources, data, 50)
+    mu, variance, alpha, iteration = em_gausian(num_sources, data, 50)
 
 
 
     plt.figure
-    plt.plot(interation_probability)
+    plt.plot(iteration)
     # test = os.getcwd()+"Output/SER.png"
     path = "Output/SER.png"
     plt.savefig(path, format="png")
