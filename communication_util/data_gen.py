@@ -41,6 +41,7 @@ class training_data_generator:
         """
         Modulation and pulse related parameters and variables
         """
+        self.modulated_CIR_matrix = []
         self.transmit_signal_matrix = []
         self.modulated_channel_output = []
         self.sampling_period = 1 / 10
@@ -55,9 +56,9 @@ class training_data_generator:
         else:
             self.CIR_matrix = np.ones((1, 1))
             self.channel_shape = self.CIR_matrix.shape
-        # else:
-        #     self.CIR_matrix = np.zeros((1,10))
-        #     self.CIR_matrix[0, [0, 3, 5]] = 1, .5, .2
+
+    def setup_real_channel(self):
+        self.modulated_CIR_matrix = None
 
     def constellation(self, type, size):
         # TODO for large tests may want to select dtype
@@ -192,9 +193,14 @@ class training_data_generator:
 
     def transmit_modulated_signal(self):
         """
-        Transmit the signal that has been modulated on a fundemental pulse through the channel.
+        Transmit the signal that has been modulated on a fundamental pulse through the channel.
         :return:
         """
+        for bit_streams in range(self.symbol_stream_matrix.shape[0]):
+            self.modulated_channel_output.append(
+                np.convolve(np.flip(self.symbol_stream_matrix[bit_streams, :]), self.modulated_CIR_matrix[bit_streams, :],
+                            mode="full"))
+        self.modulated_channel_output = np.flip(np.asarray(self.channel_output))
 
     def filter_received_modulated_signal(self):
         """
