@@ -9,12 +9,12 @@ def test_pulse_with_viterbi():
     :return:
     """
 
-    number_symbols = 1000
+    number_symbols = 20
     channel = np.zeros((1, 8))
     channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
     # TODO consolidate this part
     data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols), SNR=1, channel=channel, plot=True
+        symbol_stream_shape=(1, number_symbols), SNR=2, channel=channel, plot=True
     )
     data_gen.random_symbol_stream()
     data_gen.modulate_fundamental_pulse(pulse_shapes.rectangle)
@@ -37,4 +37,9 @@ def test_pulse_with_viterbi():
      """
     data_gen.send_through_channel()
     data_gen.transmit_modulated_signal()
+    data_gen.filter_received_modulated_signal()
+    data_gen.plot_setup()
+
+
+    assert True
 

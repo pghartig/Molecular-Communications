@@ -46,6 +46,7 @@ class training_data_generator:
         self.transmit_signal_matrix = []
         self.modulated_channel_output = []
         self.receive_filter = None
+        self.demodulated_symbols = []
         self.sampling_period = 1 / 10
         self.symbol_period = 1 / 1
 
@@ -224,9 +225,23 @@ class training_data_generator:
         """
         # First check that there is a received signal
         if self.modulated_channel_output is not None:
+            samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
+            offset = int(samples_per_symbol_period/2)
             """
             Sample/filter the received, modulated signal every 
             """
+            for stream_ind in range(self.symbol_stream_matrix.shape[0]):
+                stream = []
+                for ind in range(self.symbol_stream_matrix.shape[1]):
+                    ind1 = offset+samples_per_symbol_period*ind- int(samples_per_symbol_period/2)
+                    ind2 = offset+int(samples_per_symbol_period/2) + samples_per_symbol_period * ind
+                    check = self.modulated_channel_output[stream_ind, 0:2]
+                    samples_filtered = self.modulated_channel_output[stream_ind, offset+samples_per_symbol_period*ind
+                                                                  - int(samples_per_symbol_period/2)
+                                                                  :offset+int(samples_per_symbol_period/2) +
+                                    samples_per_symbol_period * ind]
+                    stream.append(np.dot(self.receive_filter,samples_filtered))
+                self.demodulated_symbols.append(np.asarray(stream))
 
 
             return None
@@ -268,15 +283,18 @@ class training_data_generator:
         return np.asarray(metrics)
 
     def plot_setup(self):
+        num =5
         figure = plt.figure()
-        figure.add_subplot(411)
+        figure.add_subplot(num, 1,1)
         self.visualize(self.CIR_matrix, "C0-")
-        figure.add_subplot(412)
+        figure.add_subplot(num, 1,2)
         self.visualize(self.symbol_stream_matrix, "C1-")
-        figure.add_subplot(413)
+        figure.add_subplot(num, 1,3)
         self.visualize(self.channel_output, "C2-")
-        figure.add_subplot(414)
+        figure.add_subplot(num, 1,4)
         self.visualize(self.transmit_signal_matrix, "C3-")
+        figure.add_subplot(num, 1,5)
+        self.visualize(self.modulated_channel_output, "C4-")
         plt.show()
 
     def visualize(self, data, c):
