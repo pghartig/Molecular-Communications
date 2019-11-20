@@ -4,10 +4,10 @@ from communication_util import pulse_shapes
 import matplotlib.pyplot as plt
 
 def test_pulse_with_viterbi():
+    """
 
-    # plt.figure(1)
-    # sample = np.linspace(-1, 1, num=1000)
-    # plt.plot(sample, pulse_shapes.rectangle(sample, 1/100, 1/10, 1, .5))
+    :return:
+    """
 
     number_symbols = 1000
     channel = np.zeros((1, 8))
@@ -19,5 +19,22 @@ def test_pulse_with_viterbi():
     data_gen.random_symbol_stream()
     data_gen.modulate_fundamental_pulse(pulse_shapes.rectangle)
     # data_gen.modulate_fundemental_pulse(pulse_shapes.root_raise_cosine)
+
+    """
+    Setup Channel function
+    """
+    sample_period = 1 / 10
+    filter = pulse_shapes.rect_function_class(1/5).return_samples
+    data_gen.setup_real_channel(filter, 5)
+    """
+    Setup Receive Filter
+    """
+    sample_period = 1 / 10
+    filter = pulse_shapes.rect_function_class(1/5).return_samples
+    data_gen.setup_receive_filter(filter)
+    """
+     Send modulated signal through channel
+     """
     data_gen.send_through_channel()
-    data_gen.plot_setup()
+    data_gen.transmit_modulated_signal()
+

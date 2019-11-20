@@ -3,6 +3,7 @@ import math
 import matplotlib.pyplot as plt
 import logging as log
 from communication_util.general_tools import get_combinatoric_list
+from communication_util.pulse_shapes import  *
 
 
 class training_data_generator:
@@ -41,9 +42,10 @@ class training_data_generator:
         """
         Modulation and pulse related parameters and variables
         """
-        self.modulated_CIR_matrix = []
+        self.modulated_CIR_matrix = None
         self.transmit_signal_matrix = []
         self.modulated_channel_output = []
+        self.receive_filter = None
         self.sampling_period = 1 / 10
         self.symbol_period = 1 / 1
 
@@ -57,8 +59,22 @@ class training_data_generator:
             self.CIR_matrix = np.ones((1, 1))
             self.channel_shape = self.CIR_matrix.shape
 
-    def setup_real_channel(self):
-        self.modulated_CIR_matrix = None
+    def setup_real_channel(self, function: sampled_function.return_samples, symbol_length):
+        """
+        :param function: The function for the fundamental pulse and a number of transmission symbols over which the
+        function should be extended.
+        :param symbol_length: Describes the number of symbols over which the channel should be extended.
+        :return: a  channel according to the provided function and the symbol mixing length
+        *Note that the provided function should be scaled appropriate to the current sampling period.
+        """
+        samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
+        num_samples = symbol_length*samples_per_symbol_period
+        self.modulated_CIR_matrix = function(num_samples, self.sampling_period)
+
+    def setup_receive_filter(self, filter: sampled_function.return_samples):
+        samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
+        test = filter(samples_per_symbol_period, self.sampling_period)
+        self.receive_filter = filter(samples_per_symbol_period, self.sampling_period)
 
     def constellation(self, type, size):
         # TODO for large tests may want to select dtype
@@ -123,7 +139,6 @@ class training_data_generator:
 
     def modulate_fundamental_pulse(self, fundamental_pulse):
         """
-
         The purpose of this funcion is to take a symbol stream and use it to modulate the fundamental pulse
         on which it will be send over the channel.
         :return:
@@ -198,9 +213,9 @@ class training_data_generator:
         """
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             self.modulated_channel_output.append(
-                np.convolve(np.flip(self.symbol_stream_matrix[bit_streams, :]), self.modulated_CIR_matrix[bit_streams, :],
+                np.convolve(np.flip(self.transmit_signal_matrix[bit_streams, :]), self.modulated_CIR_matrix,
                             mode="full"))
-        self.modulated_channel_output = np.flip(np.asarray(self.channel_output))
+        self.modulated_channel_output = np.flip(np.asarray(self.modulated_channel_output))
 
     def filter_received_modulated_signal(self):
         """
@@ -212,6 +227,8 @@ class training_data_generator:
             """
             Sample/filter the received, modulated signal every 
             """
+
+
             return None
 
     def get_labeled_data(self):
