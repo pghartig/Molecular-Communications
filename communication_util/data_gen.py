@@ -174,7 +174,7 @@ class training_data_generator:
         """
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
         overlap = max(int(sampling_width - samples_per_symbol_period / 2), 0)  #TODO change for asymetric case
-        # TODO figure out why +1 is needed in line below for shape
+        #TODO add symbol dependent modulation pulse
         self.transmit_signal_matrix = np.zeros((1, samples_per_symbol_period * self.symbol_stream_matrix.shape[1]
                 + 2 * overlap))
         try:
