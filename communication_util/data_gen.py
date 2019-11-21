@@ -18,6 +18,8 @@ class training_data_generator:
         constellation_size=2,
         noise_parameter=np.array((0, 1)),
         seed=None,
+        sampling_period = 1 / 10,
+        symbol_period = 1 / 1
     ):
 
         """
@@ -46,9 +48,9 @@ class training_data_generator:
         self.transmit_signal_matrix = []
         self.modulated_channel_output = []
         self.receive_filter = None
-        self.demodulated_symbols = []
-        self.sampling_period = 1 / 10
-        self.symbol_period = 1 / 1
+        self.demodulated_symbols = np.zeros(symbol_stream_shape)
+        self.sampling_period = sampling_period
+        self.symbol_period = symbol_period
 
 
     def setup_channel(self, shape=(1, 1)):
@@ -60,7 +62,7 @@ class training_data_generator:
             self.CIR_matrix = np.ones((1, 1))
             self.channel_shape = self.CIR_matrix.shape
 
-    def setup_real_channel(self, function: sampled_function.return_samples, symbol_length):
+    def setup_real_channel(self, function: sampled_function, symbol_length):
         """
         :param function: The function for the fundamental pulse and a number of transmission symbols over which the
         function should be extended.
@@ -70,12 +72,14 @@ class training_data_generator:
         """
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
         num_samples = symbol_length*samples_per_symbol_period
-        self.modulated_CIR_matrix = function(num_samples, self.sampling_period)
+        test = function.return_samples(num_samples, self.sampling_period)
+        self.modulated_CIR_matrix = function.return_samples(num_samples, self.sampling_period)
 
-    def setup_receive_filter(self, filter: sampled_function.return_samples):
+    def setup_receive_filter(self, filter: sampled_function):
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
-        test = filter(samples_per_symbol_period, self.sampling_period)
-        self.receive_filter = filter(samples_per_symbol_period, self.sampling_period)
+        test = filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=self.start_index)
+        self.receive_filter = \
+            filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=self.start_index)
 
     def constellation(self, type, size):
         # TODO for large tests may want to select dtype
@@ -138,15 +142,12 @@ class training_data_generator:
             )
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
 
-    def modulate_fundamental_pulse(self, fundamental_pulse):
+    def modulate_fundamental_pulse(self, fundamental_pulse: sampled_function):
         """
         The purpose of this funcion is to take a symbol stream and use it to modulate the fundamental pulse
         on which it will be send over the channel.
         :return:
         """
-        # include parameter of samples/symbol
-        self.sampling_period = 1 / 10
-        self.symbol_period = 1 / 1
 
         """
         First look at pulse and determine where to cut off
@@ -154,19 +155,18 @@ class training_data_generator:
         Notice that this assumes a symmetric pulse shape
         """
         sample_number = 0
-        peak_energy = energy = fundamental_pulse(sample_number * self.sampling_period)
+        peak_energy = energy = fundamental_pulse.evaluate(sample_number * self.sampling_period)
         # TODO verify this threshold for where to cutoff fundamental pulse
         #  TODO (asymetric case)
         while energy >= 0.05 * peak_energy:
-            energy = fundamental_pulse(
-                sample_number * self.sampling_period, sample_period=self.sampling_period, symbol_period=self.symbol_period
-            )
             sample_number += 1
-
-        sample_vector = np.arange(-sample_number, sample_number + 1) * self.sampling_period
-        vec_pulse = np.vectorize(fundamental_pulse)  # TODO turn pulse into Lambda function
-        sample_vector = vec_pulse(sample_vector)
-        sampling_width = int(np.floor(sample_vector.size / 2))  #TODO change for asymetric case
+            energy = fundamental_pulse.evaluate((sample_number) * self.sampling_period)
+        sample_number -=1
+        num_samples = 2*sample_number+1
+        start_index = - sample_number
+        self.start_index = start_index
+        pulse_sample_vector = fundamental_pulse.return_samples(num_samples, self.sampling_period, start_index)
+        sampling_width = int(np.floor(pulse_sample_vector.size / 2))  #TODO change for asymetric case
 
         """
         In order to allow for adding components from multiple symbols into a single sample, the array for the
@@ -176,15 +176,14 @@ class training_data_generator:
         overlap = max(int(sampling_width - samples_per_symbol_period / 2), 0)  #TODO change for asymetric case
         # TODO figure out why +1 is needed in line below for shape
         self.transmit_signal_matrix = np.zeros((1, samples_per_symbol_period * self.symbol_stream_matrix.shape[1]
-                + 2 * overlap + 1,))
+                + 2 * overlap))
         try:
             for symbol_ind in range(self.symbol_stream_matrix.shape[1]):
                 center = symbol_ind * samples_per_symbol_period + sampling_width
-                # samples = self.symbol_stream_matrix.shape[symbol_ind]*sample_vector
-                # test = self.transmit_signal_matrix[:, (- sample_number + center) : (center + sample_number +1)]
-                self.transmit_signal_matrix[
-                    :, (-sample_number + center) : (center + sample_number + 1)
-                ] = (sample_vector * self.symbol_stream_matrix[:, symbol_ind])
+                ind1= center - sample_number
+                ind2= center + sample_number+1
+                self.transmit_signal_matrix[:, ind1 : ind2] = \
+                    (pulse_sample_vector * self.symbol_stream_matrix[:, symbol_ind])/samples_per_symbol_period
         except:
             log.log("problem")
 
@@ -226,24 +225,18 @@ class training_data_generator:
         # First check that there is a received signal
         if self.modulated_channel_output is not None:
             samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
-            offset = int(samples_per_symbol_period/2)
+            offset = int(1+samples_per_symbol_period/2)
             """
             Sample/filter the received, modulated signal every 
             """
             for stream_ind in range(self.symbol_stream_matrix.shape[0]):
                 stream = []
                 for ind in range(self.symbol_stream_matrix.shape[1]):
-                    ind1 = offset+samples_per_symbol_period*ind- int(samples_per_symbol_period/2)
+                    ind1 = offset+samples_per_symbol_period*ind - offset
                     ind2 = offset+int(samples_per_symbol_period/2) + samples_per_symbol_period * ind
-                    check = self.modulated_channel_output[stream_ind, 0:2]
-                    samples_filtered = self.modulated_channel_output[stream_ind, offset+samples_per_symbol_period*ind
-                                                                  - int(samples_per_symbol_period/2)
-                                                                  :offset+int(samples_per_symbol_period/2) +
-                                    samples_per_symbol_period * ind]
+                    samples_filtered = self.modulated_channel_output[stream_ind, ind1:ind2]
                     stream.append(np.dot(self.receive_filter,samples_filtered))
-                self.demodulated_symbols.append(np.asarray(stream))
-
-
+                self.demodulated_symbols[stream_ind,:]= np.asarray(stream)
             return None
 
     def get_labeled_data(self):

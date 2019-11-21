@@ -11,38 +11,48 @@ def test_pulse_with_viterbi():
 
     :return:
     """
-
+    """
+    Generate symbol stream
+    """
     number_symbols = 20
     channel = np.zeros((1, 8))
     channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
     # TODO consolidate this part
     data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols), SNR=2, channel=channel, plot=True
+        symbol_stream_shape=(1, number_symbols), SNR=2, channel=channel, plot=True, sampling_period=1, symbol_period= 11
     )
     data_gen.random_symbol_stream()
-    data_gen.modulate_fundamental_pulse(pulse_shapes.rectangle)
-    # data_gen.modulate_fundemental_pulse(pulse_shapes.root_raise_cosine)
+
+    """
+    Modulate symbols onto fundamental pulse
+    """
+    fundamental_pulse = pulse_shapes.rect_function_class(1/10)
+    data_gen.modulate_fundamental_pulse(fundamental_pulse)
 
     """
     Setup Channel function
     """
-    sample_period = 1 / 10
-    filter = pulse_shapes.rect_function_class(1/5).return_samples
-    data_gen.setup_real_channel(filter, 5)
-    """
-    Setup Receive Filter
-    """
-    sample_period = 1 / 10
-    filter = pulse_shapes.rect_function_class(1/5).return_samples
-    data_gen.setup_receive_filter(filter)
+    # channel = pulse_shapes.rect_function_class(1/10)
+    # data_gen.setup_real_channel(channel, 5)
+    channel_real = pulse_shapes.dirac_channel()
+    data_gen.setup_real_channel(channel_real, 1)
+    corresponding_channel = np.zeros((1, 8))
+    channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
+
+
     """
      Send modulated signal through channel
      """
     data_gen.send_through_channel()
     data_gen.transmit_modulated_signal()
+
+    """
+    Setup Receive Filter
+    """
+    receive_filter = pulse_shapes.rect_function_class(1/10)
+    data_gen.setup_receive_filter(receive_filter)
     data_gen.filter_received_modulated_signal()
     # data_gen.plot_setup()
-
 
     """
     Viterbi Performance with demodulated symbols from sampled transmission

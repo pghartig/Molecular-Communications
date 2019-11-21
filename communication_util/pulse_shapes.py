@@ -77,22 +77,33 @@ def flow_injection(time):
     return sample
 
 class sampled_function():
-    def return_samples(self, number_samples, sampling_period):
+    def return_samples(self, number_samples, sampling_period, start_index=0):
         samples = []
         for i in range(number_samples):
-            samples.append(self.evaluate(i*sampling_period))
+            samples.append(self.evaluate(i*sampling_period + start_index*sampling_period))
         return np.asarray(samples)
+
     def evaluate(self,sample_points):
         pass
 
+
 class rect_function_class(sampled_function):
-    def __init__(self, half_width):
-        self.half_width = half_width
-        self.symbol_period = 1 / 1
+    def __init__(self, width):
+        self.width = width
 
     def evaluate(self, sample_points):
-        test = -1 / (self.half_width * 2)
-        return (0 if sample_points < -1 / (self.half_width * 2) or sample_points > 1 / (self.half_width * 2) else 1)
+        test2 = 1 / (self.width * 2)
+        return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+
+
+class dirac_channel(sampled_function):
+    def __init__(self, delay=0):
+        self.delay = delay
+
+    def evaluate(self, sample_points):
+        return 1 if sample_points == self.delay else 0
+
+
 
 
 
