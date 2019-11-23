@@ -1,5 +1,5 @@
 """
-Full Test for using the mixture model and neural network to provide metrics to be used in the viterbi algorithm
+This test generates the symbol error rate curves over various SNR for comparing the performance of different decoding scemes.
 """
 
 import torch.nn as nn
@@ -17,7 +17,7 @@ def test_full_integration():
 
     viterbi_net_performance = []
     classic_performance = []
-    SNRs = np.linspace(1, 2, 10)
+    SNRs = np.linspace(1, 2, 2)
     seed_generator = 0
     for SRN in SNRs:
 
@@ -131,4 +131,18 @@ def test_full_integration():
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
+    path = "Output/SER.pickle"
+    pickle_out = open(path, "wb")
+    pickle.dump([classic_performance, viterbi_net_performance], pickle_out)
+    pickle_out.close()
+
+    plt.figure(1)
+    plt.plot(SNRs, viterbi_net_performance, label='viterbi net')
+    plt.plot(SNRs, classic_performance, label='standard viterbi')
+    plt.title("SER vs SNR Curve")
+    plt.xlabel("SNR")
+    plt.ylabel("SER")
+    plt.legend(loc='upper left')
+    path = "Output/SER_curves.png"
+    plt.savefig(path, format="png")
     assert True
