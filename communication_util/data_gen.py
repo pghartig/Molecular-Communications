@@ -46,6 +46,8 @@ class training_data_generator:
         """
         self.modulated_CIR_matrix = None
         self.transmit_signal_matrix = []
+        self.modulated_signal_function = []
+        self.modulated_signal_function_sampled = []
         self.modulated_channel_output = []
         self.receive_filter = None
         self.demodulated_symbols = np.zeros(symbol_stream_shape)
@@ -187,6 +189,21 @@ class training_data_generator:
         except:
             log.log("problem")
 
+    def modulate_version2(self, modulation_function):
+        for stream_ind in range(self.symbol_stream_matrix.shape[0]):
+            stream = list(self.symbol_stream_matrix[stream_ind, :])
+            self.modulated_signal_function.append(lambda x:
+                                                  sum([modulation_function(x - ind*self.symbol_period) * symbol
+                                                       for ind, symbol in enumerate(stream)]))
+        print('works')
+
+    def sample_modulated_function(self,num_samples):
+        for function in self.modulated_signal_function:
+            samples = []
+            for sample_index in range(num_samples):
+                samples.append(function(sample_index*self.sampling_period))
+            self.modulated_signal_function_sampled.append(np.asarray(samples))
+
     def send_through_channel(self):
         """
         Note that given the numpy convolution default, the impulse response should be provided with the longest delay
@@ -276,7 +293,7 @@ class training_data_generator:
         return np.asarray(metrics)
 
     def plot_setup(self):
-        num =5
+        num =6
         figure = plt.figure()
         figure.add_subplot(num, 1,1)
         self.visualize(self.CIR_matrix, "C0-")
@@ -288,6 +305,8 @@ class training_data_generator:
         self.visualize(self.transmit_signal_matrix, "C3-")
         figure.add_subplot(num, 1,5)
         self.visualize(self.modulated_channel_output, "C4-")
+        figure.add_subplot(num, 1,6)
+        self.visualize(self.modulated_channel_output, "C5-")
         plt.show()
 
     def visualize(self, data, c):

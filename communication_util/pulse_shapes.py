@@ -76,6 +76,7 @@ def flow_injection(time):
 
     return sample
 
+
 class sampled_function():
     def return_samples(self, number_samples, sampling_period, start_index=0):
         samples = []
@@ -103,12 +104,6 @@ class dirac_channel(sampled_function):
     def evaluate(self, sample_points):
         return 1 if sample_points == self.delay else 0
 
-
-
-
-
-
-
 def rect_function(
     sample_points,
     sample_period=1 / 10,
@@ -135,3 +130,13 @@ def rect_function(
     #     else:
     #         ret.append(pulse_energy/symbol_period)
     # return np.asarray(ret)
+
+# class stream_function(sampled_function):
+
+def func1(x):
+    return np.abs(x)
+
+def func2(x):
+    return x
+
+

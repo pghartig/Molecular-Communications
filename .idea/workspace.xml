@@ -2,9 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Testing_Full/Output/mm.pickle" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Testing_Full/Output/mm.pickle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/Testing_Full/SER_Curve_full_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/Testing_Full/SER_Curve_full_test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/communication_util/pulse_shapes.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/pulse_shapes.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -78,7 +79,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python tests.SER_curve_generation">
+  <component name="RunManager" selected="Python tests.new_modulation">
     <configuration name="SER_curve_generation" type="tests" factoryName="py.test">
       <module name="molecular-communications-project" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -105,8 +106,8 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;$PROJECT_DIR$/tests/full_integration_test/full_test.py&quot;" />
-      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <option name="_new_target" value="&quot;tests.Testing_Full.full_test&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
     <configuration name="mm" type="tests" factoryName="py.test">
@@ -121,6 +122,21 @@
       <option name="_new_keywords" value="&quot;&quot;" />
       <option name="_new_additionalArguments" value="&quot;&quot;" />
       <option name="_new_target" value="&quot;tests.Mixture_Model.em_channel_test&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
+    <configuration name="new_modulation" type="tests" factoryName="py.test">
+      <module name="molecular-communications-project" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="$PROJECT_DIR$/../../Environments/bin/python" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;tests.fundemental_pulse_and_filtering.new_modulation&quot;" />
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
@@ -143,6 +159,8 @@
       <item itemvalue="Python tests.nn" />
       <item itemvalue="Python tests.mm" />
       <item itemvalue="Python tests.SER_curve_generation" />
+      <item itemvalue="Python tests.full" />
+      <item itemvalue="Python tests.new_modulation" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -192,6 +210,16 @@
           <url>file://$PROJECT_DIR$/tests/Data_Channel_Related/test_combinatoric_list.py</url>
           <line>13</line>
           <option name="timeStamp" value="304" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py</url>
+          <line>6</line>
+          <option name="timeStamp" value="377" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py</url>
+          <line>7</line>
+          <option name="timeStamp" value="378" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
