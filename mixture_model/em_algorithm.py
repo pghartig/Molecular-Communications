@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import os
 
-def em_gausian(num_gaussians, data, iterations, test_data= None, save= False):
+def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, model=False):
     """
     implementation of EM for gaussian model
     :param num_gaussians:
@@ -69,7 +69,10 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False):
         pickle.dump([mu, sigma_square, alpha], pickle_out)
         pickle_out.close()
 
-    return mu, sigma_square, alpha, likelihood_vector
+    if model==True:
+        return mixture_model(mu, sigma_square, alpha)
+    else:
+        return mu, sigma_square, alpha, likelihood_vector
 
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """
