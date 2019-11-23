@@ -67,14 +67,6 @@ def rectangle(
     #         ret.append(pulse_energy/symbol_period)
     # return np.asarray(ret)
 
-def flow_injection(time):
-    """
-    provide samples from  flow channel injection pulse
-    :return: function value at the sample point
-    """
-    sample = 0
-
-    return sample
 
 
 class sampled_function():
@@ -84,7 +76,7 @@ class sampled_function():
             samples.append(self.evaluate(i*sampling_period + start_index*sampling_period))
         return np.asarray(samples)
 
-    def evaluate(self,sample_points):
+    def evaluate(self,sample_points, symbol):
         pass
 
 
@@ -92,9 +84,22 @@ class rect_function_class(sampled_function):
     def __init__(self, width):
         self.width = width
 
-    def evaluate(self, sample_points):
-        test2 = 1 / (self.width * 2)
-        return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+    def evaluate(self, sample_points, symbol):
+        return symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+
+
+class dynamic_pulse(sampled_function):
+    def __init__(self, width):
+        self.width = width
+
+    def evaluate(self, sample_points, symbol):
+        if symbol == -1:
+            test2 = 1 / (self.width * 2)
+            return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+        elif symbol == 1:
+            test2 = 1 / (self.width * 2)
+            return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+
 
 
 class dirac_channel(sampled_function):
@@ -103,40 +108,3 @@ class dirac_channel(sampled_function):
 
     def evaluate(self, sample_points):
         return 1 if sample_points == self.delay else 0
-
-def rect_function(
-    sample_points,
-    sample_period=1 / 10,
-    symbol_period=1 / 1,
-    pulse_energy=1,
-    alpha=0.5,
-):
-    """
-    provide samples from root raised cosine pulse
-    :param sample_point:
-    :param symbol_period:
-    :return:
-    """
-    return (
-        0
-        if sample_points < -1 / (symbol_period * 2)
-        or sample_points > 1 / (symbol_period * 2)
-        else 1
-    )
-    # ret = []
-    # for sample in sample_points:
-    #     if sample < -symbol_period/2 or sample > symbol_period/2:
-    #         ret.append(0)
-    #     else:
-    #         ret.append(pulse_energy/symbol_period)
-    # return np.asarray(ret)
-
-# class stream_function(sampled_function):
-
-def func1(x):
-    return np.abs(x)
-
-def func2(x):
-    return x
-
-

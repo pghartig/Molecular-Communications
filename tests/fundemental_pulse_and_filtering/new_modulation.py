@@ -36,8 +36,10 @@ def test_pulse_with_viterbi():
     """
     Modulate symbols onto fundamental pulse
     """
-    fundamental_pulse = lambda x: rect_function_class(1/10).evaluate(x)
+    fundamental_pulse = rect_function_class(1/10).evaluate  #Note the passed function here cannot be a lambda function
     data_gen.modulate_version2(fundamental_pulse)
+    data_gen.sample_modulated_function(500)
+    data_gen.plot_setup()
 
     """
      Send modulated signal through channel

@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/communication_util/pulse_shapes.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/pulse_shapes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -220,6 +220,16 @@
           <url>file://$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py</url>
           <line>7</line>
           <option name="timeStamp" value="378" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/data_gen.py</url>
+          <line>313</line>
+          <option name="timeStamp" value="389" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py</url>
+          <line>41</line>
+          <option name="timeStamp" value="395" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
