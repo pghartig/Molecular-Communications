@@ -112,3 +112,12 @@ notebook.txt
 Output/*
 #.idea/workspace.xml
 documentation/build
+documentation/presentations/Images
+*.toc
+*.nav
+*.out
+*.pdf
+*.aux
+*.synctex.gz
+
+

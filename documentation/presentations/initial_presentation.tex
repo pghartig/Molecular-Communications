@@ -40,6 +40,24 @@
 	\end{frame} 
 } 
 
+
+\tikzstyle{state}=[shape=circle,draw=blue!30,fill=blue!10]
+\tikzstyle{observation}=[shape=rectangle,draw=orange!30,fill=orange!10]
+\tikzstyle{lightedge}=[<-, dashed]
+\tikzstyle{mainstate}=[state, thick]
+\tikzstyle{mainedge}=[<-, thick]
+\tikzstyle{block} = [draw,rectangle,thick,minimum height=2em,minimum width=2em]
+\tikzstyle{sum} = [draw,circle,inner sep=0mm,minimum size=2mm]
+\tikzstyle{connector} = [->,thick]
+\tikzstyle{line} = [thick]
+\tikzstyle{branch} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black]
+\tikzstyle{guide} = []
+\tikzstyle{snakeline} = [connector, decorate, decoration={pre length=0.2cm,
+                         post length=0.2cm, snake, amplitude=.4mm,
+                         segment length=2mm},thick, magenta, ->]
+
+
+
 %% begin presentation
 
 \title{\large \bfseries Viterbi Decoding of Complex Channels using Neural Networks}
@@ -56,19 +74,19 @@
 \titlepage
 }
 
-\section{First section}
+\section{Background}
 
 \begin{frame}
 \frametitle{Viterbi Setup}
-	Probability of transmit signal given the received signal
+	Probability of transmitted symbol sequence given the received signal
 	\begin{equation}
 		Pr(\mathbf{x}|\mathbf{y})
 	\end{equation}
-	For channels without intersymbol interference
+	For channels without inter-symbol interference
 	\begin{equation}
 		\prod_{\mathrm{i=1}}^{\mathrm{n}}pr(x_{\mathrm{i}}|y_{\mathrm{i}}) 
 	\end{equation}
-	Using Baye's rules
+	Using Baye's rule
 	\begin{equation}
 		Pr(x|y) = \frac{Pr(y|x) Pr(x)}{Pr(y)}
 	\end{equation}
@@ -81,18 +99,121 @@
 
 \begin{frame}
 \frametitle{Viterbi Setup Continued}
-	Given a finite channel length and finite symbol constellation, sequence decoding can be formalized as 
+	Given a finite channel impulse response, and finite symbol constellation, sequence decoding can be formalized as 
 	\begin{equation}
 	\begin{array}{ll}
-		\underset{\mathbf{x}}{\mathrm{maximize}} &\prod_{\mathrm{i=1}}^{\mathrm{N}}Pr(x_{\mathrm{i}}|y_{\mathrm{i}}) 
+		\underset{\mathbf{x}}{\mathrm{maximize}} &\prod_{\mathrm{i=1}}^{\mathrm{N}}Pr(y_{\mathrm{i}}|x_{\mathrm{i}})
+		\\ 
+		\\
+		\underset{\mathbf{x}}{\mathrm{minimize}} &\sum_{\mathrm{i=1}}^{\mathrm{N}} -log(Pr(y_{\mathrm{i}}|x_{\mathrm{i}})) 
 	\end{array}
 	\end{equation}
+	\bigskip
+	Example with channel impulse response length 2 and constellation size 2
+	\\
+	\begin{center}
+\begin{tikzpicture}[]
+% 1st column
+\node               at (-1.5,5) {$s_1=00$};
+\node               at (-1.5,4) {$s_2=01$};
+\node               at (-1.5,3) {$s_3=10$};
+\node               at (-1.5,2) {$s_4=11$};
+\node[mainstate] (s1_1) at (0,5) {$s_1$};
+\node[state] (s2_1) at (0,4) {$s_2$};
+\node[state] (s3_1) at (0,3) {$s_3$};
+\node[state] (s4_1) at (0,2) {$s_4$};
+%\node at (0,1) {Node1};
+% 2nd column
+\node[mainstate] (s1_2) at (2,5) {$s_1$}
+    edge[mainedge] (s1_1);
+\node[mainstate] (s2_2) at (2,4) {$s_2$}
+     edge[lightedge] (s1_1);
+
+\node[state] (s3_2) at (2,3) {$s_3$};
+
+\node[state] (s4_2) at (2,2) {$s_4$};
+
+%\node at (2,1) {Node2};
+% 3rd column
+%\node               at (4,6) {$t=2$};
+\node[mainstate] (s1_3) at (4,5) {$s_1$}
+    edge[mainedge]  (s1_2);
+
+\node[mainstate] (s2_3) at (4,4) {$s_2$}
+    edge[lightedge] (s1_2);
+
+\node[mainstate] (s3_3) at (4,3) {$s_3$}
+    edge[mainedge] (s2_2);    
+\node[mainstate] (s4_3) at (4,2) {$s_4$}
+    edge[lightedge] (s2_2);
+%\node at (4,1) {Node3};
+% 4th column
+%\node               at (6,6) {$t=3$};
+\node[mainstate] (s1_4) at (6,5) {$s_1$}
+    edge[mainedge]  (s1_3)
+    edge[mainedge]  (s3_3);
+\node[mainstate] (s2_4) at (6,4) {$s_2$}
+    edge[lightedge] (s1_3)
+    edge[lightedge] (s3_3);
+\node[mainstate] (s3_4) at (6,3) {$s_3$}
+    edge[mainedge] (s2_3)
+    edge[mainedge] (s4_3);
+\node[mainstate] (s4_4) at (6,2) {$s_4$}
+    edge[lightedge] (s2_3)
+    edge[lightedge] (s4_3);
+%\node at (6,1) {Node4};
+
+\end{tikzpicture}
+	\end{center}
 \end{frame}
+
+
 
 \begin{frame}
 	\frametitle{Incorporating Neural Net into Viterbi Decoding}
+	The metric used to make a decision on the surviving branch of the trellis is based on the metric 
+	$Pr(y_{\mathrm{i}}|x_{\mathrm{i}})$. As Neural Networks typically take an observation as the input and output a distribution over a set of classifications, this problem needs to be reformulated.
+	For equi-probable transmit symbols, this becomes $Pr(y_{\mathrm{i}}) Pr(x_{\mathrm{i}}|y_{\mathrm{i}})$.
+	
+\end{frame}
+
+
+\begin{frame}[fragile]
+	\frametitle{Metrics for $Pr(x_{\mathrm{i}}|y_{\mathrm{i}})$}
+	\begin{figure}
+		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
+		\newcommand{\x}[2]{$x_#2$}
+		\newcommand{\y}[2]{$\hat{y}_#2$}
+		\newcommand{\hfirst}[2]{\small $h^{(1)}_#2$}
+		\newcommand{\hsecond}[2]{\small $h^{(2)}_#2$}
+		\newcommand{\hthird}[2]{\small $h^{(3)}_#2$}
+		\newcommand{\hfourth}[2]{\small $h^{(4)}_#2$}
+		\inputlayer[count=1, bias=false, title=Received\\, text=\x]
+		\hiddenlayer[count=2, bias=false, title=\\, text=\hthird] \linklayers
+		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
+		\outputlayer[count=4, title=States\\, text=\x] \linklayers
+	    \end{neuralnetwork}
+	\end{figure}
+	%We can take the output of an intermediate layer after training as use it as the input features for a
+	%classification neural network.
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Metrics for $r(y_{\mathrm{i}})$}
+	Using mixture model from gaussian sources (trained using data used for training Neural Network.
+	In particular the Expectation-Maximization is used.
+	TODO Discuss problems that I'm having with this
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Full system}
 
 \end{frame}
+
+
+\section{Initial Results}
 
 
 \begin{frame}
@@ -139,7 +260,6 @@
 \end{itemize}
 \end{frame}
 
-\section{Second section}
 
 \begin{frame}
 \frametitle{Group lasso \\[-0.3em] 

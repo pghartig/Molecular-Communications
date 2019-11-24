@@ -2,10 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9baa4684-7241-498f-9938-84f3e59c7dad" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/data_gen.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/data_gen.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/communication_util/pulse_shapes.py" beforeDir="false" afterPath="$PROJECT_DIR$/communication_util/pulse_shapes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/presentations/initial_presentation.aux" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/presentations/initial_presentation.aux" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/presentations/initial_presentation.nav" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/presentations/initial_presentation.nav" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/presentations/initial_presentation.out" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/presentations/initial_presentation.out" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/presentations/initial_presentation.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/presentations/initial_presentation.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/presentations/initial_presentation.synctex.gz" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/presentations/initial_presentation.synctex.gz" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/presentations/initial_presentation.tex" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/presentations/initial_presentation.tex" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/documentation/presentations/initial_presentation.toc" beforeDir="false" afterPath="$PROJECT_DIR$/documentation/presentations/initial_presentation.toc" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -230,6 +235,11 @@
           <url>file://$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py</url>
           <line>41</line>
           <option name="timeStamp" value="395" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/communication_util/pulse_shapes.py</url>
+          <line>87</line>
+          <option name="timeStamp" value="396" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
