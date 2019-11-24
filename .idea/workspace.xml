@@ -228,13 +228,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/tests/fundemental_pulse_and_filtering/new_modulation.py</url>
-          <line>42</line>
-          <option name="timeStamp" value="395" />
+          <line>47</line>
+          <option name="timeStamp" value="403" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/communication_util/pulse_shapes.py</url>
-          <line>106</line>
-          <option name="timeStamp" value="400" />
+          <line>83</line>
+          <option name="timeStamp" value="418" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

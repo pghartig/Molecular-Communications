@@ -74,7 +74,6 @@ class training_data_generator:
         """
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
         num_samples = symbol_length*samples_per_symbol_period
-        test = function.return_samples(num_samples, self.sampling_period)
         self.modulated_CIR_matrix = function.return_samples(num_samples, self.sampling_period)
 
     def setup_receive_filter(self, filter: sampled_function):
@@ -197,8 +196,7 @@ class training_data_generator:
                                                        for ind, symbol in enumerate(stream)]))
         print('works')
 
-
-    def modulate_version3(self, modulation_function):
+    def modulate_version3(self, modulation_function: sampled_function(), parameters):
         """
         Some further refinements on the second verions
         :param modulation_function:
@@ -206,16 +204,18 @@ class training_data_generator:
         """
         for stream_ind in range(self.symbol_stream_matrix.shape[0]):
             stream = list(self.symbol_stream_matrix[stream_ind, :])
-            self.modulated_signal_function.append(lambda x:
-                                                  sum([modulation_function(x, ind*self.symbol_period, symbol)
-                                                       for ind, symbol in enumerate(stream)]))
-        print('works')
+            function = combined_function()
+            for ind, symbol in enumerate(stream):
+                to_add = modulation_function(parameters)
+                to_add.setup(ind*self.symbol_period, symbol)
+                function.add_function(to_add)
+            self.modulated_signal_function.append(function)
 
     def sample_modulated_function(self, num_samples):
         for function in self.modulated_signal_function:
             samples = []
             for sample_index in range(num_samples):
-                samples.append(function(sample_index*self.sampling_period))
+                samples.append(function.evaluate(sample_index*self.sampling_period))
             self.modulated_signal_function_sampled.append(np.asarray(samples))
         self.modulated_signal_function_sampled = np.asarray(self.modulated_signal_function_sampled)
 
@@ -245,8 +245,8 @@ class training_data_generator:
         :return:
         """
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
-            self.modulated_signal_function[bit_streams].virtual_convole(self.modulated_CIR_matrix[bit_streams])
-            test = self.modulated_signal_function.evaluate(1)
+            self.modulated_signal_function[bit_streams].virtual_convole_functions(self.modulated_CIR_matrix[bit_streams])
+            test = self.modulated_signal_function[bit_streams].evaluate(1)
 
         #TODO make sure the signal is properly flipped if convolution flips output.
 
@@ -260,7 +260,6 @@ class training_data_generator:
                 np.convolve(np.flip(self.transmit_signal_matrix[bit_streams, :]), self.modulated_CIR_matrix,
                             mode="full"))
         self.modulated_channel_output = np.flip(np.asarray(self.modulated_channel_output))
-
 
     def filter_received_modulated_signal(self):
         """

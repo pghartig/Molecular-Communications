@@ -28,16 +28,21 @@ def test_pulse_with_viterbi():
     channel = np.zeros((1, 8))
     channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
     # TODO consolidate this part
+
     data_gen = training_data_generator(
         symbol_stream_shape=(1, number_symbols), SNR=2, channel=channel, plot=True, sampling_period=1, symbol_period= 11
     )
     data_gen.random_symbol_stream()
 
+    channel_real = pulse_shapes.dirac_channel()
+    data_gen.setup_real_channel(channel_real, 1)
+
     """
     Modulate symbols onto fundamental pulse
     """
-    fundamental_pulse = rect_function_class  #Note the passed function here cannot be a lambda function
-    data_gen.modulate_version2(fundamental_pulse)
+    fundamental_pulse = rect_function_class     #Note the passed function here cannot be a lambda function
+    parameters = 1/10
+    data_gen.modulate_version3(fundamental_pulse, parameters)
     data_gen.sample_modulated_function(500)
     data_gen.transmit_modulated_signal2()
     data_gen.plot_setup()

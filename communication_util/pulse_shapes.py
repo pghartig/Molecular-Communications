@@ -70,11 +70,10 @@ def rectangle(
 
 
 class sampled_function():
-    def __init__(self, center, symbol):
+
+    def setup(self, center, symbol):
         self.center = center
         self.symbol = symbol
-        # test with lambda functions
-        self.evaluate_convolved = lambda sample_point: self.evaluate(sample_point)
 
     def return_samples(self, number_samples, sampling_period, start_index=0):
         samples = []
@@ -89,24 +88,9 @@ class sampled_function():
     def evaluate(self, sample_points):
         pass
 
-class combined_function():
-    """
-    This implementation is needed in order to exploit the linearity of convolution in the case of a known channel
-    impulse response.
-    """
-    def return_samples(self, number_samples, sampling_period, start_index=0):
-        samples = []
-        for i in range(number_samples):
-            samples.append(self.evaluate(i*sampling_period + start_index*sampling_period))
-        return np.asarray(samples)
-
-    def evaluate(self,sample_points, symbol):
-        pass
-
 
 class rect_function_class(sampled_function):
     def __init__(self, width):
-        super().__init__()
         self.width = width
 
     def evaluate(self, sample_points):
@@ -127,13 +111,33 @@ class dynamic_pulse(sampled_function):
             return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
 
 
-
 class dirac_channel(sampled_function):
     def __init__(self, delay=0):
         super().__init__()
         self.delay = delay
 
-
     def evaluate(self, sample_points):
         sample_points -= self.center
         return 1 if sample_points == self.delay else 0
+
+
+class combined_function():
+    """
+    This implementation is needed in order to exploit the linearity of convolution in the case of a known channel
+    impulse response.
+    """
+    def __init__(self):
+        self.functions = []
+
+    def add_function(self, function):
+        self.functions.append(function)
+
+    #TODO implement faster
+    def evaluate(self, sample_point):
+        sample = 0
+        for function in self.functions:
+            function.evaluate(sample_point)
+
+    def virtual_convole_functions(self, impulse_response):
+        for function in self.functions:
+            function.virtual_convole(impulse_response)
