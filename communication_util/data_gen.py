@@ -189,11 +189,25 @@ class training_data_generator:
         except:
             log.log("problem")
 
-    def modulate_version2(self, modulation_function):
+    def modulate_version2(self, modulation_function: sampled_function):
+        for stream_ind in range(self.symbol_stream_matrix.shape[0]):
+            stream = list(self.symbol_stream_matrix[stream_ind, :])
+            self.modulated_signal_function.append(lambda:
+                                                  sum([modulation_function(- ind*self.symbol_period, symbol)
+                                                       for ind, symbol in enumerate(stream)]))
+        print('works')
+
+
+    def modulate_version3(self, modulation_function):
+        """
+        Some further refinements on the second verions
+        :param modulation_function:
+        :return:
+        """
         for stream_ind in range(self.symbol_stream_matrix.shape[0]):
             stream = list(self.symbol_stream_matrix[stream_ind, :])
             self.modulated_signal_function.append(lambda x:
-                                                  sum([modulation_function(x - ind*self.symbol_period, symbol)
+                                                  sum([modulation_function(x, ind*self.symbol_period, symbol)
                                                        for ind, symbol in enumerate(stream)]))
         print('works')
 
@@ -224,6 +238,18 @@ class training_data_generator:
             1
         ] * np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
 
+    def transmit_modulated_signal2(self):
+        """
+        For this version, it is assumed that a impulse response is obtained. Using this, the linearity property of
+        convolution is exploited in order to imitate the mixing of symbols in the channel.
+        :return:
+        """
+        for bit_streams in range(self.symbol_stream_matrix.shape[0]):
+            self.modulated_signal_function[bit_streams].virtual_convole(self.modulated_CIR_matrix[bit_streams])
+            test = self.modulated_signal_function.evaluate(1)
+
+        #TODO make sure the signal is properly flipped if convolution flips output.
+
     def transmit_modulated_signal(self):
         """
         Transmit the signal that has been modulated on a fundamental pulse through the channel.
@@ -234,6 +260,7 @@ class training_data_generator:
                 np.convolve(np.flip(self.transmit_signal_matrix[bit_streams, :]), self.modulated_CIR_matrix,
                             mode="full"))
         self.modulated_channel_output = np.flip(np.asarray(self.modulated_channel_output))
+
 
     def filter_received_modulated_signal(self):
         """

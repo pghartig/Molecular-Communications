@@ -70,6 +70,30 @@ def rectangle(
 
 
 class sampled_function():
+    def __init__(self, center, symbol):
+        self.center = center
+        self.symbol = symbol
+        # test with lambda functions
+        self.evaluate_convolved = lambda sample_point: self.evaluate(sample_point)
+
+    def return_samples(self, number_samples, sampling_period, start_index=0):
+        samples = []
+        for i in range(number_samples):
+            samples.append(self.evaluate(i*sampling_period + start_index*sampling_period))
+        return np.asarray(samples)
+
+    def virtual_convole(self, channel_impulse_response):
+        self.evaluate_convolved = lambda x: \
+            sum([self.evaluate(x+ind)*tap for ind, tap in enumerate(channel_impulse_response)])
+
+    def evaluate(self, sample_points):
+        pass
+
+class combined_function():
+    """
+    This implementation is needed in order to exploit the linearity of convolution in the case of a known channel
+    impulse response.
+    """
     def return_samples(self, number_samples, sampling_period, start_index=0):
         samples = []
         for i in range(number_samples):
@@ -82,21 +106,23 @@ class sampled_function():
 
 class rect_function_class(sampled_function):
     def __init__(self, width):
+        super().__init__()
         self.width = width
 
-    def evaluate(self, sample_points, symbol):
-        return symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+    def evaluate(self, sample_points):
+        sample_points -= self.center
+        return self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
 
 
 class dynamic_pulse(sampled_function):
     def __init__(self, width):
         self.width = width
 
-    def evaluate(self, sample_points, symbol):
-        if symbol == -1:
+    def evaluate(self, sample_points):
+        if self.symbol == -1:
             test2 = 1 / (self.width * 2)
             return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
-        elif symbol == 1:
+        elif self.symbol == 1:
             test2 = 1 / (self.width * 2)
             return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
 
@@ -104,7 +130,10 @@ class dynamic_pulse(sampled_function):
 
 class dirac_channel(sampled_function):
     def __init__(self, delay=0):
+        super().__init__()
         self.delay = delay
 
+
     def evaluate(self, sample_points):
+        sample_points -= self.center
         return 1 if sample_points == self.delay else 0
