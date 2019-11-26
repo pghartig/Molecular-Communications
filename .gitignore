@@ -119,5 +119,6 @@ documentation/presentations/Images
 *.pdf
 *.aux
 *.synctex.gz
+workspace.xml
 
 
