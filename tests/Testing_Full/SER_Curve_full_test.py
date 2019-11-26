@@ -12,12 +12,13 @@ from communication_util.error_rates import *
 from nn_utilities import models
 import torch.optim as optim
 import os
+import time
 
 def test_full_integration():
 
     viterbi_net_performance = []
     classic_performance = []
-    SNRs = np.linspace(1, 2, 2)
+    SNRs = np.linspace(1, 4, 10)
     seed_generator = 0
     for SRN in SNRs:
 
@@ -145,4 +146,6 @@ def test_full_integration():
     plt.legend(loc='upper left')
     path = "Output/SER_curves.png"
     plt.savefig(path, format="png")
+    time_path = "Output/SER_" + str(time.time())+"curves.png"
+    plt.savefig(time_path, format="png")
     assert True

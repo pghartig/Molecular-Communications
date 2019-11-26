@@ -92,23 +92,32 @@ class sampled_function():
 class rect_function_class(sampled_function):
     def __init__(self, width):
         self.width = width
+        self.center = 0
 
     def evaluate(self, sample_points):
         sample_points -= self.center
         return self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
 
-
-class dynamic_pulse(sampled_function):
+class rect_receiver_class(sampled_function):
     def __init__(self, width):
         self.width = width
 
     def evaluate(self, sample_points):
+        return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+
+
+class dynamic_pulse(sampled_function):
+    def __init__(self, width):
+        self.width = width
+        self.center = 0
+
+    def evaluate(self, sample_points):
+        sample_points -= self.center
         if self.symbol == -1:
-            test2 = 1 / (self.width * 2)
-            return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+            test = 3*self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+            return 3*self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
         elif self.symbol == 1:
-            test2 = 1 / (self.width * 2)
-            return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+            return self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
 
 
 class dirac_channel(sampled_function):

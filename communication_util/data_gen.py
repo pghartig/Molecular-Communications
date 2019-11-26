@@ -78,9 +78,9 @@ class training_data_generator:
 
     def setup_receive_filter(self, filter: sampled_function):
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
-        test = filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=self.start_index)
+        test = filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=0)
         self.receive_filter = \
-            filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=self.start_index)
+            filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=0)
 
     def constellation(self, type, size):
         # TODO for large tests may want to select dtype
@@ -278,7 +278,7 @@ class training_data_generator:
                 for ind in range(self.symbol_stream_matrix.shape[1]):
                     ind1 = offset+samples_per_symbol_period*ind - offset
                     ind2 = offset+int(samples_per_symbol_period/2) + samples_per_symbol_period * ind
-                    samples_filtered = self.modulated_channel_output[stream_ind, ind1:ind2]
+                    samples_filtered = self.modulated_signal_function_sampled[stream_ind, ind1:ind2]
                     stream.append(np.dot(self.receive_filter,samples_filtered))
                 self.demodulated_symbols[stream_ind,:]= np.asarray(stream)
             return None
@@ -331,7 +331,7 @@ class training_data_generator:
         # figure.add_subplot(num, 1,4)
         # self.visualize(self.transmit_signal_matrix, "C3-")
         # figure.add_subplot(num, 1,5)
-        # self.visualize(self.modulated_channel_output, "C4-")
+        # self.visualize(self.modulated_signal_function_sampled, "C4-")
         figure.add_subplot(num, 1, 1)
         self.visualize(self.modulated_signal_function_sampled, "C5-")
         plt.show()
