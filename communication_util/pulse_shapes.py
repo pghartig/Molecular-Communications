@@ -115,6 +115,7 @@ class dirac_channel(sampled_function):
     def __init__(self, delay=0):
         super().__init__()
         self.delay = delay
+        self.center = 0
 
     def evaluate(self, sample_points):
         sample_points -= self.center
@@ -136,7 +137,8 @@ class combined_function():
     def evaluate(self, sample_point):
         sample = 0
         for function in self.functions:
-            function.evaluate(sample_point)
+            sample += function.evaluate(sample_point)
+        return sample
 
     def virtual_convole_functions(self, impulse_response):
         for function in self.functions:

@@ -215,6 +215,7 @@ class training_data_generator:
         for function in self.modulated_signal_function:
             samples = []
             for sample_index in range(num_samples):
+                test = function.evaluate(sample_index*self.sampling_period)
                 samples.append(function.evaluate(sample_index*self.sampling_period))
             self.modulated_signal_function_sampled.append(np.asarray(samples))
         self.modulated_signal_function_sampled = np.asarray(self.modulated_signal_function_sampled)
@@ -246,7 +247,6 @@ class training_data_generator:
         """
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             self.modulated_signal_function[bit_streams].virtual_convole_functions(self.modulated_CIR_matrix[bit_streams])
-            test = self.modulated_signal_function[bit_streams].evaluate(1)
 
         #TODO make sure the signal is properly flipped if convolution flips output.
 

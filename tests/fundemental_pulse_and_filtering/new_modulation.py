@@ -43,8 +43,8 @@ def test_pulse_with_viterbi():
     fundamental_pulse = rect_function_class     #Note the passed function here cannot be a lambda function
     parameters = 1/10
     data_gen.modulate_version3(fundamental_pulse, parameters)
-    data_gen.sample_modulated_function(500)
     data_gen.transmit_modulated_signal2()
+    data_gen.sample_modulated_function(500)
     data_gen.plot_setup()
 
     """
