@@ -108,7 +108,7 @@ venv.bak/
 notebook.txt
 *.png
 *.pt
-#.idea/
+.idea/
 Output/*
 #.idea/workspace.xml
 documentation/build
