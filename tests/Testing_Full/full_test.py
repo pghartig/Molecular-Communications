@@ -7,7 +7,7 @@ from mixture_model.em_algorithm import mixture_model
 import pickle
 from communication_util.data_gen import *
 from viterbi.viterbi import *
-from communication_util.error_rates import *
+from communication_util.general_tools import *
 import os
 
 def test_full_integration():

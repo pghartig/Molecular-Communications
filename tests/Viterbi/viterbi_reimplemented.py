@@ -1,6 +1,6 @@
 from communication_util.data_gen import *
 from viterbi.viterbi import *
-from communication_util.error_rates import *
+from communication_util.general_tools import *
 
 def test_viterbi_new_gaussian():
     error_tolerance = np.power(10.0, -3)

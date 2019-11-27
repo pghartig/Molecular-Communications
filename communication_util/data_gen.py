@@ -57,7 +57,7 @@ class training_data_generator:
         """
         Decoding metrics
         """
-
+        self.metrics = None
 
     def setup_channel(self, shape=(1, 1)):
         if self.CIR_matrix is not None:
@@ -77,8 +77,10 @@ class training_data_generator:
         *Note that the provided function should be scaled appropriate to the current sampling period.
         """
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
+        self.samples_per_symbol_period = samples_per_symbol_period
         num_samples = symbol_length*samples_per_symbol_period
         self.modulated_CIR_matrix = function.return_samples(num_samples, self.sampling_period)
+        return None
 
     def setup_receive_filter(self, filter: sampled_function):
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
@@ -210,7 +212,8 @@ class training_data_generator:
             stream = list(self.symbol_stream_matrix[stream_ind, :])
             self.modulated_signal_function.append(self._modulate_stream_on_function(stream, modulation_function, parameters))
 
-    def sample_modulated_function(self, num_samples):
+    def sample_modulated_function(self):
+        num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function)
         return None
 
@@ -285,20 +288,35 @@ class training_data_generator:
         :param states:
         :return:
         """
-        self.metrics =  []
+        self.metrics = []
         for state in states:
             # For each state create the modulated sym
-            stream = list(self.symbol_stream_matrix[state, :])
-            modulated_stream = self._modulate_stream_on_function(stream, modulation_function, parameters)
-            sampled = None
+            stream = list(state)
+            # returns a function for the modulated version fo the state
+            modulated_state = self._modulate_stream_on_function(stream, modulation_function, parameters)
+            #returns samples of above function
+            sampled = self._sample_function(self.modulated_CIR_matrix.size, modulated_state)
             predicted = sampled*self.modulated_CIR_matrix
             self.metrics.append(predicted)
 
-    def metric_cost_sampled(self, index):
+    def metric_cost_sampled(self, index, states):
+        """
+        Like all metrics used by the Viterbi class. This should take a set of states and index and output the metrics
+        for the various states possible given the sampled input.
+        :param index:
+        :return:
+        """
         costs = []
-        for metric in self.metrics:
-            received = None
-            costs.append(np.linalg.norm(received-metric))
+        sampled_index = self.samples_per_symbol_period*index + self.modulated_CIR_matrix.size
+        received = self.modulated_signal_function_sampled[0,sampled_index - self.modulated_CIR_matrix.size:sampled_index]
+        for ind, state in enumerate(states):
+            """
+            Note that the line below is sensitive to ordering but is like this to prevent recreating the metrics for
+            each state transition.
+            """
+            costs.append(np.linalg.norm(received - self.metrics[ind]))
+        return np.asarray(costs)
+
 
     def get_labeled_data(self):
         x_list = []
@@ -366,12 +384,19 @@ class training_data_generator:
         return function
 
     def _sample_function(self, num_samples, function):
-        total_samples = []
-        for function_ind in function:
+        if type(function) == list:
+            total_samples = []
+            for function_ind in function:
+                samples = []
+                for sample_index in range(num_samples):
+                    samples.append(function_ind.evaluate(sample_index*self.sampling_period))
+            total_samples.append(np.asarray(samples))
+            return np.asarray(total_samples)
+        else:
             samples = []
             for sample_index in range(num_samples):
-                samples.append(function_ind.evaluate(sample_index*self.sampling_period))
-        total_samples.append(np.asarray(samples))
-        return np.asarray(total_samples)
+                samples.append(function.evaluate(sample_index*self.sampling_period))
+            return np.asarray(samples)
+
 
 
