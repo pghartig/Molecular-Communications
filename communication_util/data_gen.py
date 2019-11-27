@@ -54,6 +54,10 @@ class training_data_generator:
         self.sampling_period = sampling_period
         self.symbol_period = symbol_period
 
+        """
+        Decoding metrics
+        """
+
 
     def setup_channel(self, shape=(1, 1)):
         if self.CIR_matrix is not None:
@@ -78,9 +82,9 @@ class training_data_generator:
 
     def setup_receive_filter(self, filter: sampled_function):
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
-        test = filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=self.start_index)
+        test = filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=0)
         self.receive_filter = \
-            filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=self.start_index)
+            filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=0)
 
     def constellation(self, type, size):
         # TODO for large tests may want to select dtype
@@ -204,20 +208,11 @@ class training_data_generator:
         """
         for stream_ind in range(self.symbol_stream_matrix.shape[0]):
             stream = list(self.symbol_stream_matrix[stream_ind, :])
-            function = combined_function()
-            for ind, symbol in enumerate(stream):
-                to_add = modulation_function(parameters)
-                to_add.setup(ind*self.symbol_period, symbol)
-                function.add_function(to_add)
-            self.modulated_signal_function.append(function)
+            self.modulated_signal_function.append(self._modulate_stream_on_function(stream, modulation_function, parameters))
 
     def sample_modulated_function(self, num_samples):
-        for function in self.modulated_signal_function:
-            samples = []
-            for sample_index in range(num_samples):
-                samples.append(function.evaluate(sample_index*self.sampling_period))
-            self.modulated_signal_function_sampled.append(np.asarray(samples))
-        self.modulated_signal_function_sampled = np.asarray(self.modulated_signal_function_sampled)
+        self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function)
+        return None
 
     def send_through_channel(self):
         """
@@ -245,8 +240,7 @@ class training_data_generator:
         :return:
         """
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
-            self.modulated_signal_function[bit_streams].virtual_convole_functions(self.modulated_CIR_matrix[bit_streams])
-            test = self.modulated_signal_function[bit_streams].evaluate(1)
+            self.modulated_signal_function[bit_streams].virtual_convole_functions(self.modulated_CIR_matrix)
 
         #TODO make sure the signal is properly flipped if convolution flips output.
 
@@ -278,10 +272,33 @@ class training_data_generator:
                 for ind in range(self.symbol_stream_matrix.shape[1]):
                     ind1 = offset+samples_per_symbol_period*ind - offset
                     ind2 = offset+int(samples_per_symbol_period/2) + samples_per_symbol_period * ind
-                    samples_filtered = self.modulated_channel_output[stream_ind, ind1:ind2]
+                    samples_filtered = self.modulated_signal_function_sampled[stream_ind, ind1:ind2]
                     stream.append(np.dot(self.receive_filter,samples_filtered))
                 self.demodulated_symbols[stream_ind,:]= np.asarray(stream)
             return None
+
+    def gaussian_channel_metric_sampled(self, modulation_function, parameters, states):
+        """
+        Needs to return the costs of the
+        :param modulation_function:
+        :param parameters:
+        :param states:
+        :return:
+        """
+        self.metrics =  []
+        for state in states:
+            # For each state create the modulated sym
+            stream = list(self.symbol_stream_matrix[state, :])
+            modulated_stream = self._modulate_stream_on_function(stream, modulation_function, parameters)
+            sampled = None
+            predicted = sampled*self.modulated_CIR_matrix
+            self.metrics.append(predicted)
+
+    def metric_cost_sampled(self, index):
+        costs = []
+        for metric in self.metrics:
+            received = None
+            costs.append(np.linalg.norm(received-metric))
 
     def get_labeled_data(self):
         x_list = []
@@ -331,7 +348,7 @@ class training_data_generator:
         # figure.add_subplot(num, 1,4)
         # self.visualize(self.transmit_signal_matrix, "C3-")
         # figure.add_subplot(num, 1,5)
-        # self.visualize(self.modulated_channel_output, "C4-")
+        # self.visualize(self.modulated_signal_function_sampled, "C4-")
         figure.add_subplot(num, 1, 1)
         self.visualize(self.modulated_signal_function_sampled, "C5-")
         plt.show()
@@ -339,3 +356,22 @@ class training_data_generator:
     def visualize(self, data, c):
         for channels in range(data.shape[0]):
             plt.stem(data[channels, :], linefmt=c)
+
+    def _modulate_stream_on_function(self, stream, modulation_function: sampled_function(), parameters):
+        function = combined_function()
+        for ind, symbol in enumerate(stream):
+            to_add = modulation_function(parameters)
+            to_add.setup(ind*self.symbol_period, symbol)
+            function.add_function(to_add)
+        return function
+
+    def _sample_function(self, num_samples, function):
+        total_samples = []
+        for function_ind in function:
+            samples = []
+            for sample_index in range(num_samples):
+                samples.append(function_ind.evaluate(sample_index*self.sampling_period))
+        total_samples.append(np.asarray(samples))
+        return np.asarray(total_samples)
+
+

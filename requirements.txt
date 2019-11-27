@@ -1,5 +1,5 @@
 numpy
 matplotlib
 pytest
-torch
+pytorch
 sphinx
