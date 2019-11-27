@@ -77,6 +77,7 @@ class training_data_generator:
         *Note that the provided function should be scaled appropriate to the current sampling period.
         """
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
+        self.samples_per_symbol_period = samples_per_symbol_period
         num_samples = symbol_length*samples_per_symbol_period
         self.modulated_CIR_matrix = function.return_samples(num_samples, self.sampling_period)
 
@@ -288,10 +289,11 @@ class training_data_generator:
         self.metrics = []
         for state in states:
             # For each state create the modulated sym
-            stream = list(self.symbol_stream_matrix[state, :])
+            stream = list(state)
             # returns a function for the modulated version fo the state
             modulated_state = self._modulate_stream_on_function(stream, modulation_function, parameters)
-            sampled = None
+            #returns samples of above function
+            sampled = self._sample_function(self.modulated_CIR_matrix.size, modulated_state)
             predicted = sampled*self.modulated_CIR_matrix
             self.metrics.append(predicted)
 
@@ -303,7 +305,8 @@ class training_data_generator:
         :return:
         """
         costs = []
-        received = self.modulated_signal_function_sampled[index]
+        sampled_index = self.samples_per_symbol_period*index + self.modulated_CIR_matrix.size
+        received = self.modulated_signal_function_sampled[0,sampled_index - self.modulated_CIR_matrix.size:sampled_index]
         for ind, state in enumerate(states):
             """
             Note that the line below is sensitive to ordering but is like this to prevent recreating the metrics for
@@ -379,12 +382,19 @@ class training_data_generator:
         return function
 
     def _sample_function(self, num_samples, function):
-        total_samples = []
-        for function_ind in function:
+        if type(function) == list:
+            total_samples = []
+            for function_ind in function:
+                samples = []
+                for sample_index in range(num_samples):
+                    samples.append(function_ind.evaluate(sample_index*self.sampling_period))
+            total_samples.append(np.asarray(samples))
+            return np.asarray(total_samples)
+        else:
             samples = []
             for sample_index in range(num_samples):
-                samples.append(function_ind.evaluate(sample_index*self.sampling_period))
-        total_samples.append(np.asarray(samples))
-        return np.asarray(total_samples)
+                samples.append(function.evaluate(sample_index*self.sampling_period))
+            return np.asarray(samples)
+
 
 

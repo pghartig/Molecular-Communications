@@ -8,7 +8,7 @@ from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.data_gen import *
 from viterbi.viterbi import *
-from communication_util.error_rates import *
+from communication_util.general_tools import *
 from nn_utilities import models
 import torch.optim as optim
 import os
