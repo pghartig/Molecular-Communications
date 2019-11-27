@@ -57,6 +57,10 @@ def test_pulse_with_viterbi():
     """
     Viterbi Performance with demodulated symbols from sampled transmission
     """
+    states = []
+    item = []
+    get_combinatoric_list(data_gen, channel_length, states, item)
+
     metric = gaussian_channel_metric_working(channel, data_gen.demodulated_symbols)
     detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.demodulated_symbols, data_gen.CIR_matrix.shape[1],
                                         metric.metric)

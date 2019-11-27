@@ -4,15 +4,7 @@ from communication_util.general_tools import get_combinatoric_list
 
 
 def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, metric_function):
-    """
 
-    :param transmit_alphabet:
-    :param channel_output:
-    :param channel_length:
-    :param mm:
-    :param net:
-    :return:
-    """
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
     states = []
     item = []
@@ -33,12 +25,11 @@ class viterbi_trellis():
         self.metric_function = metric_function
         self.setup_trellis()
 
-
     def setup_trellis(self):
         # create the trellis structure for a single step in the trellis
         for state in self.states:
-            self.previous_states.append(viterbi_node(state, self.metric_function))
-            self.next_states.append(viterbi_node(state, self.metric_function))
+            self.previous_states.append(viterbi_node(state))
+            self.next_states.append(viterbi_node(state))
         # make connections between the nodes in the trellis
         for node in self.next_states:
             for previous_state in self.previous_states:
@@ -51,7 +42,6 @@ class viterbi_trellis():
         i = 0
         metrics = self.metric_function(index, self.states)
         for node in self.next_states:
-            test = metrics[i]
             node.check_smallest_incoming(index, metrics[i])
             i+=1
         i = 0
@@ -70,7 +60,7 @@ class viterbi_trellis():
 
 
 class viterbi_node():
-    def __init__(self, state, metric_function):
+    def __init__(self, state):
         self.incoming_nodes = []
         self.survivor_path = []
         self.survivor_path_cost = 0

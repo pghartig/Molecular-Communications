@@ -49,15 +49,6 @@ def test_dynamic_pulse():
      """
     data_gen.transmit_modulated_signal2()
     data_gen.sample_modulated_function(500)
-    data_gen.plot_setup()
-
-    """
-    Setup Receive Filter
-    """
-
-    receive_filter = pulse_shapes.rect_receiver_class(1 / 10)
-    data_gen.setup_receive_filter(receive_filter)
-    data_gen.filter_received_modulated_signal()
 
     """
     Viterbi Performance with demodulated symbols from sampled transmission

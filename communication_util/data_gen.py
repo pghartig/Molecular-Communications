@@ -57,7 +57,7 @@ class training_data_generator:
         """
         Decoding metrics
         """
-
+        self.metrics = None
 
     def setup_channel(self, shape=(1, 1)):
         if self.CIR_matrix is not None:
@@ -285,20 +285,33 @@ class training_data_generator:
         :param states:
         :return:
         """
-        self.metrics =  []
+        self.metrics = []
         for state in states:
             # For each state create the modulated sym
             stream = list(self.symbol_stream_matrix[state, :])
-            modulated_stream = self._modulate_stream_on_function(stream, modulation_function, parameters)
+            # returns a function for the modulated version fo the state
+            modulated_state = self._modulate_stream_on_function(stream, modulation_function, parameters)
             sampled = None
             predicted = sampled*self.modulated_CIR_matrix
             self.metrics.append(predicted)
 
-    def metric_cost_sampled(self, index):
+    def metric_cost_sampled(self, index, states):
+        """
+        Like all metrics used by the Viterbi class. This should take a set of states and index and output the metrics
+        for the various states possible given the sampled input.
+        :param index:
+        :return:
+        """
         costs = []
-        for metric in self.metrics:
-            received = None
-            costs.append(np.linalg.norm(received-metric))
+        received = self.modulated_signal_function_sampled[index]
+        for ind, state in enumerate(states):
+            """
+            Note that the line below is sensitive to ordering but is like this to prevent recreating the metrics for
+            each state transition.
+            """
+            costs.append(np.linalg.norm(received - self.metrics[ind]))
+        return np.asarray(costs)
+
 
     def get_labeled_data(self):
         x_list = []
