@@ -80,6 +80,7 @@ class training_data_generator:
         self.samples_per_symbol_period = samples_per_symbol_period
         num_samples = symbol_length*samples_per_symbol_period
         self.modulated_CIR_matrix = function.return_samples(num_samples, self.sampling_period)
+        return None
 
     def setup_receive_filter(self, filter: sampled_function):
         samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
@@ -211,7 +212,8 @@ class training_data_generator:
             stream = list(self.symbol_stream_matrix[stream_ind, :])
             self.modulated_signal_function.append(self._modulate_stream_on_function(stream, modulation_function, parameters))
 
-    def sample_modulated_function(self, num_samples):
+    def sample_modulated_function(self):
+        num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function)
         return None
 
