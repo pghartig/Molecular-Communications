@@ -54,6 +54,10 @@ class training_data_generator:
         self.sampling_period = sampling_period
         self.symbol_period = symbol_period
 
+        """
+        Decoding metrics
+        """
+
 
     def setup_channel(self, shape=(1, 1)):
         if self.CIR_matrix is not None:
@@ -202,12 +206,12 @@ class training_data_generator:
         :param modulation_function:
         :return:
         """
+        self.modulated_signal_function.append(self._modulate_stream_on_function(modulation_function,parameters))
         for stream_ind in range(self.symbol_stream_matrix.shape[0]):
             stream = list(self.symbol_stream_matrix[stream_ind, :])
             function = combined_function()
             for ind, symbol in enumerate(stream):
-                to_add = modulation_function(parameters)
-                to_add.setup(ind*self.symbol_period, symbol)
+                to_add = modulation_function(parameters)                                           to_add.setup(ind*self.symbol_period, symbol)
                 function.add_function(to_add)
             self.modulated_signal_function.append(function)
 
@@ -283,6 +287,31 @@ class training_data_generator:
                 self.demodulated_symbols[stream_ind,:]= np.asarray(stream)
             return None
 
+    def gaussian_channel_metric_sampled(self,modulation_function, index, states):
+        for stream_ind in range(self.symbol_stream_matrix.shape[0]):
+            stream = list(self.symbol_stream_matrix[stream_ind, :])
+            function = combined_function()
+            for ind, symbol in enumerate(stream):
+                to_add = modulation_function(parameters)
+                to_add.setup(ind * self.symbol_period, symbol)
+                function.add_function(to_add)
+            self.modulated_signal_function.append(function)
+
+        costs = []
+        function = combined_function()
+        for state in states:
+            # For each state create the modulated sym
+            modulated = []
+            for ind, symbol in enumerate(state):
+                to_add = modulation_function(parameters)
+                return None
+            channel_output = self.received[0, index]
+            predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
+            cost = np.linalg.norm((predicted - channel_output))
+            costs.append(cost)
+        return np.asarray(costs)
+        return None
+
     def get_labeled_data(self):
         x_list = []
         y_list = []
@@ -339,3 +368,13 @@ class training_data_generator:
     def visualize(self, data, c):
         for channels in range(data.shape[0]):
             plt.stem(data[channels, :], linefmt=c)
+
+    def _modulate_stream_on_function(self, stream, modulation_function: sampled_function(), parameters):
+        function = combined_function()
+        for ind, symbol in enumerate(stream):
+            to_add = modulation_function(parameters)
+            to_add.setup(ind*self.symbol_period, symbol)
+            function.add_function(to_add)
+        return function
+
+
