@@ -16,7 +16,7 @@ class training_data_generator:
         plot=False,
         constellation="ASK",
         constellation_size=2,
-        noise_parameter=np.array((0, 1)),
+        noise_parameter=np.array((0.0, 1.0)),
         seed=None,
         sampling_period = 1 / 10,
         symbol_period = 1 / 1
@@ -386,7 +386,6 @@ class training_data_generator:
         return function
 
     def _sample_function(self, num_samples, function, noise = False):
-        test = self.noise_parameter[1]
         self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
         if noise == False:
             if type(function) == list:
@@ -409,16 +408,14 @@ class training_data_generator:
                     samples = []
                     for sample_index in range(num_samples):
                         samples.append(function_ind.evaluate(sample_index * self.sampling_period)+
-                                       self.noise_parameter[0] + self.noise_parameter[1] *
-                                       np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1]))
+                                       self.noise_parameter[0] + self.noise_parameter[1] * np.random.randn())
                 total_samples.append(np.asarray(samples))
                 return np.asarray(total_samples)
             else:
                 samples = []
                 for sample_index in range(num_samples):
                     samples.append(function.evaluate(sample_index * self.sampling_period) +
-                                   self.noise_parameter[0] + self.noise_parameter[1] *
-                                   np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1]))
+                                   self.noise_parameter[0] + self.noise_parameter[1] *  np.random.randn)
                 return np.asarray(samples)
 
 

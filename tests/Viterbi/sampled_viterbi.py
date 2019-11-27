@@ -16,12 +16,12 @@ def test_dynamic_pulse():
     """
     tolerance = 1e-3
 
-    number_symbols = 1000
+    number_symbols = 50
     channel = np.zeros((1, 2))
     channel[0, [0, 1]] = 1, 1
     channel = np.ones((1, 1))
     data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols), SNR=2, plot=True, sampling_period=1, symbol_period= 10
+        symbol_stream_shape=(1, number_symbols), SNR=4, plot=True, sampling_period=1, symbol_period= 10
     )
     data_gen.random_symbol_stream()
     channel_length = channel.shape[1]
@@ -31,7 +31,6 @@ def test_dynamic_pulse():
     """
     # channel_real = pulse_shapes.rect_receiver_class(1/10) #channel length 1 for dirac
     channel_real = pulse_shapes.dirac_channel()     #channel length 1 for dirac
-
     data_gen.setup_real_channel(channel_real, channel_length)
 
     """
@@ -49,6 +48,7 @@ def test_dynamic_pulse():
      """
     data_gen.transmit_modulated_signal2()
     data_gen.sample_modulated_function()
+    data_gen.plot_setup()
 
     """
     Viterbi Performance with demodulated symbols from sampled transmission

@@ -74,13 +74,17 @@ class combined_function():
     #TODO implement faster
     def evaluate(self, sample_point):
         sample = 0
+
         for function in self.functions:
-            sample += function.evaluate(sample_point)
+            # sample += function.evaluate(sample_point)
+            sample += function.evaluate_convolved(sample_point)
         return sample
 
     def virtual_convole_functions(self, impulse_response):
         for function in self.functions:
             function.virtual_convole(impulse_response)
+            # now update the evaluate function
+            # self.evaluate_convolved = lambda x :
 
 
 class rect_function_class(sampled_function):
