@@ -25,7 +25,6 @@ class gaussian_channel_metric_working():
             costs.append(cost)
         return np.asarray(costs)
 
-
 class nn_mm_metric():
 
     """

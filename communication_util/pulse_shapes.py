@@ -14,13 +14,13 @@ def root_raise_cosine(
     alpha=0.5,
 ):
     """
+    # t_samp = 1 / 1000
+    # t_sym = 1 / 10
     provide samples from root raised cosine pulse
     :param sample_point:
     :param symbol_period:
     :return:
     """
-    # t_samp = 1 / 1000
-    # t_sym = 1 / 10
 
     sample = (
         np.sqrt((pulse_energy / symbol_period))
@@ -38,35 +38,6 @@ def root_raise_cosine(
     # for testing
     # sample = np.cos(sample_point)
     return sample
-
-
-def rectangle(
-    sample_points,
-    sample_period=1 / 100,
-    symbol_period=1 / 10,
-    pulse_energy=1,
-    alpha=0.5,
-):
-    """
-    provide samples from root raised cosine pulse
-    :param sample_point:
-    :param symbol_period:
-    :return:
-    """
-    return (
-        0
-        if sample_points < -1 / (symbol_period * 2)
-        or sample_points > 1 / (symbol_period * 2)
-        else 1
-    )
-    # ret = []
-    # for sample in sample_points:
-    #     if sample < -symbol_period/2 or sample > symbol_period/2:
-    #         ret.append(0)
-    #     else:
-    #         ret.append(pulse_energy/symbol_period)
-    # return np.asarray(ret)
-
 
 
 class sampled_function():
@@ -87,6 +58,29 @@ class sampled_function():
 
     def evaluate(self, sample_points):
         pass
+
+
+class combined_function():
+    """
+    This implementation is needed in order to exploit the linearity of convolution in the case of a known channel
+    impulse response.
+    """
+    def __init__(self):
+        self.functions = []
+
+    def add_function(self, function):
+        self.functions.append(function)
+
+    #TODO implement faster
+    def evaluate(self, sample_point):
+        sample = 0
+        for function in self.functions:
+            sample += function.evaluate(sample_point)
+        return sample
+
+    def virtual_convole_functions(self, impulse_response):
+        for function in self.functions:
+            function.virtual_convole(impulse_response)
 
 
 class rect_function_class(sampled_function):
@@ -130,26 +124,3 @@ class dirac_channel(sampled_function):
     def evaluate(self, sample_points):
         sample_points -= self.center
         return 1 if sample_points == self.delay else 0
-
-
-class combined_function():
-    """
-    This implementation is needed in order to exploit the linearity of convolution in the case of a known channel
-    impulse response.
-    """
-    def __init__(self):
-        self.functions = []
-
-    def add_function(self, function):
-        self.functions.append(function)
-
-    #TODO implement faster
-    def evaluate(self, sample_point):
-        sample = 0
-        for function in self.functions:
-            sample += function.evaluate(sample_point)
-        return sample
-
-    def virtual_convole_functions(self, impulse_response):
-        for function in self.functions:
-            function.virtual_convole(impulse_response)
