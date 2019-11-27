@@ -41,6 +41,7 @@ class training_data_generator:
         self.SNR = SNR
         self.noise_parameter = noise_parameter
 
+
         """
         Modulation and pulse related parameters and variables
         """
@@ -214,7 +215,7 @@ class training_data_generator:
 
     def sample_modulated_function(self):
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
-        self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function)
+        self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function,noise=True)
         return None
 
     def send_through_channel(self):
@@ -294,7 +295,9 @@ class training_data_generator:
             stream = list(state)
             # returns a function for the modulated version fo the state
             modulated_state = self._modulate_stream_on_function(stream, modulation_function, parameters)
-            #returns samples of above function
+            # imitate this state running through the known channel
+            modulated_state.virtual_convole_functions(self.modulated_CIR_matrix)
+            # returns samples of above function
             sampled = self._sample_function(self.modulated_CIR_matrix.size, modulated_state)
             predicted = sampled*self.modulated_CIR_matrix
             self.metrics.append(predicted)
@@ -316,7 +319,6 @@ class training_data_generator:
             """
             costs.append(np.linalg.norm(received - self.metrics[ind]))
         return np.asarray(costs)
-
 
     def get_labeled_data(self):
         x_list = []
@@ -383,20 +385,40 @@ class training_data_generator:
             function.add_function(to_add)
         return function
 
-    def _sample_function(self, num_samples, function):
-        if type(function) == list:
-            total_samples = []
-            for function_ind in function:
+    def _sample_function(self, num_samples, function, noise = False):
+        test = self.noise_parameter[1]
+        self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
+        if noise == False:
+            if type(function) == list:
+                total_samples = []
+                for function_ind in function:
+                    samples = []
+                    for sample_index in range(num_samples):
+                        samples.append(function_ind.evaluate(sample_index*self.sampling_period))
+                total_samples.append(np.asarray(samples))
+                return np.asarray(total_samples)
+            else:
                 samples = []
                 for sample_index in range(num_samples):
-                    samples.append(function_ind.evaluate(sample_index*self.sampling_period))
-            total_samples.append(np.asarray(samples))
-            return np.asarray(total_samples)
-        else:
-            samples = []
-            for sample_index in range(num_samples):
-                samples.append(function.evaluate(sample_index*self.sampling_period))
-            return np.asarray(samples)
-
+                    samples.append(function.evaluate(sample_index*self.sampling_period))
+                return np.asarray(samples)
+        if noise == True:
+            if type(function) == list:
+                total_samples = []
+                for function_ind in function:
+                    samples = []
+                    for sample_index in range(num_samples):
+                        samples.append(function_ind.evaluate(sample_index * self.sampling_period)+
+                                       self.noise_parameter[0] + self.noise_parameter[1] *
+                                       np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1]))
+                total_samples.append(np.asarray(samples))
+                return np.asarray(total_samples)
+            else:
+                samples = []
+                for sample_index in range(num_samples):
+                    samples.append(function.evaluate(sample_index * self.sampling_period) +
+                                   self.noise_parameter[0] + self.noise_parameter[1] *
+                                   np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1]))
+                return np.asarray(samples)
 
 

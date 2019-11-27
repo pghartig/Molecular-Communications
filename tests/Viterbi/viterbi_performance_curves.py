@@ -7,7 +7,7 @@ def test_viterbi_performance_curve():
     error_tolerance = np.power(10.0, -3)
 
     classic_performance = []
-    SNRs = np.linspace(0.1, 2, 10)
+    SNRs = np.linspace(0.1, 3, 10)
     seed_generator = 0
     for SRN in SNRs:
         number_symbols = 10000

@@ -21,7 +21,7 @@ def test_dynamic_pulse():
     channel[0, [0, 1]] = 1, 1
     channel = np.ones((1, 1))
     data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols), SNR=4, plot=True, sampling_period=1, symbol_period= 10
+        symbol_stream_shape=(1, number_symbols), SNR=2, plot=True, sampling_period=1, symbol_period= 10
     )
     data_gen.random_symbol_stream()
     channel_length = channel.shape[1]
