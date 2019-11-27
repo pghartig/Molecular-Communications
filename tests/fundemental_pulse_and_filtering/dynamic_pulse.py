@@ -24,11 +24,17 @@ def test_dynamic_pulse():
     channel = np.zeros((1, 2))
     channel[0, [0, 1]] = 1, 1
     data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols), SNR=2, plot=True, sampling_period=1, symbol_period= 11
+        symbol_stream_shape=(1, number_symbols), SNR=2, plot=True, sampling_period=1, symbol_period= 10
     )
     data_gen.random_symbol_stream()
     channel_length = 2
-    channel_real = pulse_shapes.rect_receiver_class(1/10) #channel length 1 for dirac
+
+    """
+    Setup convolution channel
+    """
+    channel_real = pulse_shapes.rect_receiver_class(1/5) #channel length 1 for dirac
+    # channel_real = pulse_shapes.dirac_channel() #channel length 1 for dirac
+
     data_gen.setup_real_channel(channel_real, channel_length)
 
     """

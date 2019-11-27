@@ -246,7 +246,7 @@ class training_data_generator:
         :return:
         """
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
-            self.modulated_signal_function[bit_streams].virtual_convole_functions(self.modulated_CIR_matrix[bit_streams])
+            self.modulated_signal_function[bit_streams].virtual_convole_functions(self.modulated_CIR_matrix)
 
         #TODO make sure the signal is properly flipped if convolution flips output.
 
