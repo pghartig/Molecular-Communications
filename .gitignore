@@ -110,7 +110,7 @@ notebook.txt
 *.pt
 #.idea/
 Output/*
-#.idea/workspace.xml
+.idea/
 documentation/build
 documentation/presentations/Images
 *.toc
