@@ -206,23 +206,13 @@ class training_data_generator:
         :param modulation_function:
         :return:
         """
-        self.modulated_signal_function.append(self._modulate_stream_on_function(modulation_function,parameters))
         for stream_ind in range(self.symbol_stream_matrix.shape[0]):
             stream = list(self.symbol_stream_matrix[stream_ind, :])
-            function = combined_function()
-            for ind, symbol in enumerate(stream):
-                to_add = modulation_function(parameters)                                           to_add.setup(ind*self.symbol_period, symbol)
-                function.add_function(to_add)
-            self.modulated_signal_function.append(function)
+            self.modulated_signal_function.append(self._modulate_stream_on_function(stream, modulation_function, parameters))
 
     def sample_modulated_function(self, num_samples):
-        for function in self.modulated_signal_function:
-            samples = []
-            for sample_index in range(num_samples):
-                test = function.evaluate(sample_index*self.sampling_period)
-                samples.append(function.evaluate(sample_index*self.sampling_period))
-            self.modulated_signal_function_sampled.append(np.asarray(samples))
-        self.modulated_signal_function_sampled = np.asarray(self.modulated_signal_function_sampled)
+        self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function)
+        return None
 
     def send_through_channel(self):
         """
@@ -287,30 +277,28 @@ class training_data_generator:
                 self.demodulated_symbols[stream_ind,:]= np.asarray(stream)
             return None
 
-    def gaussian_channel_metric_sampled(self,modulation_function, index, states):
-        for stream_ind in range(self.symbol_stream_matrix.shape[0]):
-            stream = list(self.symbol_stream_matrix[stream_ind, :])
-            function = combined_function()
-            for ind, symbol in enumerate(stream):
-                to_add = modulation_function(parameters)
-                to_add.setup(ind * self.symbol_period, symbol)
-                function.add_function(to_add)
-            self.modulated_signal_function.append(function)
-
-        costs = []
-        function = combined_function()
+    def gaussian_channel_metric_sampled(self, modulation_function, parameters, states):
+        """
+        Needs to return the costs of the
+        :param modulation_function:
+        :param parameters:
+        :param states:
+        :return:
+        """
+        self.metrics =  []
         for state in states:
             # For each state create the modulated sym
-            modulated = []
-            for ind, symbol in enumerate(state):
-                to_add = modulation_function(parameters)
-                return None
-            channel_output = self.received[0, index]
-            predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
-            cost = np.linalg.norm((predicted - channel_output))
-            costs.append(cost)
-        return np.asarray(costs)
-        return None
+            stream = list(self.symbol_stream_matrix[state, :])
+            modulated_stream = self._modulate_stream_on_function(stream, modulation_function, parameters)
+            sampled = None
+            predicted = sampled*self.modulated_CIR_matrix
+            self.metrics.append(predicted)
+
+    def metric_cost_sampled(self, index):
+        costs = []
+        for metric in self.metrics:
+            received = None
+            costs.append(np.linalg.norm(received-metric))
 
     def get_labeled_data(self):
         x_list = []
@@ -376,5 +364,14 @@ class training_data_generator:
             to_add.setup(ind*self.symbol_period, symbol)
             function.add_function(to_add)
         return function
+
+    def _sample_function(self, num_samples, function):
+        total_samples = []
+        for function_ind in function:
+            samples = []
+            for sample_index in range(num_samples):
+                samples.append(function_ind.evaluate(sample_index*self.sampling_period))
+        total_samples.append(np.asarray(samples))
+        return np.asarray(total_samples)
 
 

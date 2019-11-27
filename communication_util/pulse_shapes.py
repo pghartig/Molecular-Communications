@@ -98,6 +98,7 @@ class rect_function_class(sampled_function):
         sample_points -= self.center
         return self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
 
+
 class rect_receiver_class(sampled_function):
     def __init__(self, width):
         self.width = width
