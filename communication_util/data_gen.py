@@ -49,6 +49,7 @@ class training_data_generator:
         self.transmit_signal_matrix = []
         self.modulated_signal_function = []
         self.modulated_signal_function_sampled = []
+        self.modulated_convolved_signal_function_sampled = []
         self.modulated_channel_output = []
         self.receive_filter = None
         self.demodulated_symbols = np.zeros(symbol_stream_shape)
@@ -215,8 +216,7 @@ class training_data_generator:
 
     def sample_modulated_function(self):
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
-        self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function,noise=True)
-        return None
+        self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function, noise=False)
 
     def send_through_channel(self):
         """
@@ -248,6 +248,26 @@ class training_data_generator:
 
         #TODO make sure the signal is properly flipped if convolution flips output.
 
+    def convolve_sampled_modulated(self):
+        """
+        For this version, it is assumed that a impulse response is obtained. Using this, the linearity property of
+        convolution is exploited in order to imitate the mixing of symbols in the channel.
+        :return:
+        """
+        for bit_streams in range(self.symbol_stream_matrix.shape[0]):
+            self.modulated_convolved_signal_function_sampled.append(
+                np.convolve(np.flip(self.modulated_signal_function_sampled[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
+        self.modulated_convolved_signal_function_sampled = np.asarray(self.modulated_convolved_signal_function_sampled)
+        # self.modulated_convolved_signal_function_sampled = np.flip(np.asarray(self.modulated_convolved_signal_function_sampled))
+
+        self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
+        self.modulated_convolved_signal_function_sampled += self.noise_parameter[0] + self.noise_parameter[1] * \
+                               np.random.randn(self.modulated_convolved_signal_function_sampled.shape[0],
+                                               self.modulated_convolved_signal_function_sampled.shape[1])
+
+
+        #TODO make sure the signal is properly flipped if convolution flips output.
+
     def transmit_modulated_signal(self):
         """
         Transmit the signal that has been modulated on a fundamental pulse through the channel.
@@ -267,7 +287,7 @@ class training_data_generator:
         # First check that there is a received signal
         if self.modulated_channel_output is not None:
             samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
-            offset = int(1+samples_per_symbol_period/2)
+            offset = int(np.ceil(self.symbol_period / 2))
             """
             Sample/filter the received, modulated signal every 
             """
@@ -276,7 +296,7 @@ class training_data_generator:
                 for ind in range(self.symbol_stream_matrix.shape[1]):
                     ind1 = offset+samples_per_symbol_period*ind - offset
                     ind2 = offset+int(samples_per_symbol_period/2) + samples_per_symbol_period * ind
-                    samples_filtered = self.modulated_signal_function_sampled[stream_ind, ind1:ind2]
+                    samples_filtered = self.modulated_convolved_signal_function_sampled[stream_ind, ind1:ind2]
                     stream.append(np.dot(self.receive_filter, samples_filtered))
                 self.demodulated_symbols[stream_ind,:] = np.asarray(stream)
             return None
@@ -381,7 +401,8 @@ class training_data_generator:
         function = combined_function()
         for ind, symbol in enumerate(stream):
             to_add = modulation_function(parameters)
-            to_add.setup(ind*self.symbol_period, symbol)
+            center = ind*self.symbol_period + np.ceil(self.symbol_period/2)
+            to_add.setup(center, symbol)
             function.add_function(to_add)
         return function
 

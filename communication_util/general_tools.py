@@ -13,7 +13,7 @@ def get_combinatoric_list(alpabet, item_length, item_list, item):
 def symbol_error_rate(detected_symbols, input_symbols):
     # ignore last symbols since there is extra from the convolution
     array = np.asarray(detected_symbols)
-    detected = np.flip(array[:input_symbols.shape[1]])
+    detected = np.flip(array[:input_symbols.shape[1]])  #This is a very key step to ensuring the detected symbols are aligned properly
     return np.sum(np.logical_not(np.equal(detected, input_symbols))) / detected.size
 
 def symbol_error_rate_sampled(detected_symbols, input_symbols):

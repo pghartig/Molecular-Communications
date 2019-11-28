@@ -76,8 +76,8 @@ class combined_function():
         sample = 0
 
         for function in self.functions:
-            # sample += function.evaluate(sample_point)
-            sample += function.evaluate_convolved(sample_point)
+            sample += function.evaluate(sample_point)
+            # sample += function.evaluate_convolved(sample_point)
         return sample
 
     def virtual_convole_functions(self, impulse_response):
@@ -94,7 +94,7 @@ class rect_function_class(sampled_function):
 
     def evaluate(self, sample_points):
         sample_points -= self.center
-        return self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+        return self.symbol*(0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)*self.width
 
 
 class rect_receiver_class(sampled_function):
@@ -102,7 +102,7 @@ class rect_receiver_class(sampled_function):
         self.width = width
 
     def evaluate(self, sample_points):
-        return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)
+        return (0 if sample_points < -1 / (self.width * 2) or sample_points > 1 / (self.width * 2) else 1)*self.width
 
 
 class dynamic_pulse(sampled_function):

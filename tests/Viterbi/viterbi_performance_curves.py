@@ -8,15 +8,15 @@ def test_viterbi_performance_curve():
     error_tolerance = np.power(10.0, -3)
     threshold_performance = []
     classic_performance = []
-    SNRs = np.linspace(0.1, 4, 50)
+    SNRs = np.linspace(0.1, 4, 10)
     seed_generator = 0
     for SRN in SNRs:
-        number_symbols = 10000
+        number_symbols = 1000
         channel = np.zeros((1, 8))
         channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
-        channel = np.ones((1, 1))
+        # channel = np.ones((1, 1))
         data_gen = training_data_generator(
-            symbol_stream_shape=(1, number_symbols), SNR=SRN, plot=True, sampling_period=1, symbol_period=10
+            symbol_stream_shape=(1, number_symbols), SNR=SRN, channel=channel, plot=True, sampling_period=1, symbol_period=10
         )
         # data_gen = training_data_generator(plot=True)
 

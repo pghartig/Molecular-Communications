@@ -1,13 +1,10 @@
 from communication_util.pulse_shapes import *
-
-
-
 import numpy as np
 from communication_util import training_data_generator
 from communication_util import pulse_shapes
 from communication_util.data_gen import *
 from viterbi.viterbi import *
-from communication_util.error_rates import *
+from communication_util.general_tools import *
 import matplotlib.pyplot as plt
 
 def test_dynamic_pulse():
@@ -48,7 +45,7 @@ def test_dynamic_pulse():
      Send modulated signal through channel
      """
     data_gen.transmit_modulated_signal2()
-    data_gen.sample_modulated_function(500)
+    data_gen.sample_modulated_function()
     data_gen.plot_setup()
 
     """
