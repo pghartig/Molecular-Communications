@@ -10,6 +10,7 @@ def test_viterbi_performance_curve():
     classic_performance = []
     SNRs = np.linspace(0.1, 4, 10)
     seed_generator = 0
+    data_gen=None
     for SRN in SNRs:
         number_symbols = 1000
         channel = np.zeros((1, 8))
@@ -38,6 +39,7 @@ def test_viterbi_performance_curve():
     plt.figure(1)
     plt.plot(SNRs, threshold_performance, label='basic threshold')
     plt.plot(SNRs, classic_performance, label='standard viterbi')
+    plt.title(str(data_gen.get_info_for_plot()),fontdict={'fontsize':10} )
     plt.title("SER vs SNR Curve")
     plt.xlabel("SNR")
     plt.ylabel("SER")
