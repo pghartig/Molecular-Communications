@@ -121,13 +121,11 @@ def test_viterbi_net_class():
     plt.figure()
     plt.plot(test_cost_over_epoch, label='Test Error')
     plt.plot(train_cost_over_epoch, label='Train Error')
-    plt.title("Error over epochs")
+    plt.title(str(data_gen.get_info_for_plot()),fontdict={'fontsize':10} )
     plt.xlabel("Epoch")
     plt.ylabel("Error")
     plt.legend(loc='upper left')
     path = "Output/Neural_Network_Convergence.png"
     plt.savefig(path, format="png")
-    plt.figure()
-
-
+    plt.show()
     assert True

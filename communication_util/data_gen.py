@@ -418,4 +418,10 @@ class training_data_generator:
                                    self.noise_parameter[0] + self.noise_parameter[1] *  np.random.randn)
                 return np.asarray(samples)
 
+    def get_info_for_plot(self):
+        information = []
+        information.append("Alphabet Size: " + str(len(self.alphabet)))
+        information.append("Channel Length (wrt symbols): " + str(self.CIR_matrix.shape[1]))
+        information.append("# transmitted symbols: " + str(self.symbol_stream_matrix.shape[1]))
+        return information
 

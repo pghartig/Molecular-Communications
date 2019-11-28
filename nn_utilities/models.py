@@ -15,7 +15,7 @@ class viterbiNet(nn.Module):
         self.fc3 = nn.Linear(H2, D_out)
 
     def forward(self, x):
-        x = F.sigmoid(self.fc1(x))
+        x = torch.sigmoid(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
         # x = F.softmax(self.fc3(x))

@@ -22,6 +22,7 @@ def test_full_integration():
     classic_performance = []
     SNRs = np.linspace(1, 10, 10)
     seed_generator = 0
+    data_gen = None
     for SNR in SNRs:
 
 
@@ -142,8 +143,7 @@ def test_full_integration():
     plt.figure(1)
     plt.plot(SNRs, viterbi_net_performance, label='viterbi net')
     plt.plot(SNRs, classic_performance, label='standard viterbi')
-    title = "SER vs SNR Curve for " + str(number_symbols) + " symbols"
-    plt.title(title)
+    plt.title(str(data_gen.get_info_for_plot()),fontdict={'fontsize':10} )
     plt.xlabel("SNR")
     plt.ylabel("SER")
     plt.legend(loc='upper left')
