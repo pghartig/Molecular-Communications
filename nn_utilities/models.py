@@ -37,7 +37,7 @@ class deeper_viterbiNet(nn.Module):
         self.fc4 = nn.Linear(H3, D_out)
 
     def forward(self, x):
-        x = F.sigmoid(self.fc1(x))
+        x = F.tanh(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
         # x = self.fc4(x)  # Note that the cross entropy function in PyTorch automatically takes softmax

@@ -38,7 +38,7 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 2000
+    number_symbols = 100
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4

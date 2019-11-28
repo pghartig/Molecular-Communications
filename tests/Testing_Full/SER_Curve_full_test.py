@@ -6,6 +6,7 @@ import torch.nn as nn
 from mixture_model.em_algorithm import mixture_model
 from mixture_model.em_algorithm import em_gausian
 import pickle
+from communication_util.basic_detectors import *
 from communication_util.data_gen import *
 from viterbi.viterbi import *
 from communication_util.general_tools import *
@@ -17,17 +18,17 @@ import time
 def test_full_integration():
 
     viterbi_net_performance = []
+    threshold_performance = []
     classic_performance = []
-    SNRs = np.linspace(1, 4, 10)
+    SNRs = np.linspace(1, 10, 10)
     seed_generator = 0
     for SNR in SNRs:
 
-        error_tolerance = np.power(10.0, -3)
 
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
+        number_symbols = 100
         channel = np.zeros((1, 3))
         channel[0, [0, 1, 2]] = 1, 0.6, 0.3
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -54,16 +55,11 @@ def test_full_integration():
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
 
-        # N is batch size; D_in is input dimension;
-        # H is hidden dimension; D_out is output dimension.
-        N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
-
-        net = models.viterbiNet(D_in, H1, H2, D_out)
-        # TODO use better optimizer
-        optimizer = optim.SGD(net.parameters(), lr=1e-2)
+        # N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
+        # net = models.viterbiNet(D_in, H1, H2, D_out)
+        N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 10, 10, np.power(m, channel_length)
+        net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-2)
-
-        # optimizer = optim.SGD(net.parameters(), lr=5)
 
         """
         Train NN
@@ -107,8 +103,13 @@ def test_full_integration():
 
 
         """
-        After sending through channel, symbol detection should be performed using something like a matched filter
+        After sending through channel, symbol detection should be performed using something like a matched filter.
+        Create new set of test data. 
         """
+
+        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
+        data_gen.random_symbol_stream()
+        data_gen.send_through_channel()
 
         #   !! Make sure channel output gets flipped here!!
         metric = nn_mm_metric(net, mm, data_gen.channel_output)  # This is a function to be used in the viterbi
@@ -132,6 +133,7 @@ def test_full_integration():
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
+
     path = "Output/SER.pickle"
     pickle_out = open(path, "wb")
     pickle.dump([classic_performance, viterbi_net_performance], pickle_out)
@@ -140,12 +142,13 @@ def test_full_integration():
     plt.figure(1)
     plt.plot(SNRs, viterbi_net_performance, label='viterbi net')
     plt.plot(SNRs, classic_performance, label='standard viterbi')
-    plt.title("SER vs SNR Curve")
+    title = "SER vs SNR Curve for " + str(number_symbols) + " symbols"
+    plt.title(title)
     plt.xlabel("SNR")
     plt.ylabel("SER")
     plt.legend(loc='upper left')
     path = "Output/SER_curves.png"
     plt.savefig(path, format="png")
-    time_path = "Output/SER_" + str(time.time())+"curves.png"
+    time_path = "Output/SER_" + str(number_symbols) + " symbols " + str(time.time())+"curves.png"
     plt.savefig(time_path, format="png")
     assert True

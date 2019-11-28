@@ -72,7 +72,7 @@ class combined_function():
         self.functions.append(function)
 
     #TODO implement faster
-    def evaluate(self, sample_point):
+    def evaluate(self, sample_point, channel_length=1):
         sample = 0
 
         for function in self.functions:

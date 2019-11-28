@@ -277,8 +277,8 @@ class training_data_generator:
                     ind1 = offset+samples_per_symbol_period*ind - offset
                     ind2 = offset+int(samples_per_symbol_period/2) + samples_per_symbol_period * ind
                     samples_filtered = self.modulated_signal_function_sampled[stream_ind, ind1:ind2]
-                    stream.append(np.dot(self.receive_filter,samples_filtered))
-                self.demodulated_symbols[stream_ind,:]= np.asarray(stream)
+                    stream.append(np.dot(self.receive_filter, samples_filtered))
+                self.demodulated_symbols[stream_ind,:] = np.asarray(stream)
             return None
 
     def gaussian_channel_metric_sampled(self, modulation_function, parameters, states):

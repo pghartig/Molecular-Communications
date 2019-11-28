@@ -16,7 +16,7 @@ def test_dynamic_pulse():
     """
     tolerance = 1e-3
 
-    number_symbols = 50
+    number_symbols = 500
     channel = np.zeros((1, 2))
     channel[0, [0, 1]] = 1, 1
     channel = np.ones((1, 1))

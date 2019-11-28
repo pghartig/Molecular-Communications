@@ -1,13 +1,14 @@
 from communication_util.data_gen import *
 from viterbi.viterbi import *
 from communication_util.general_tools import *
+from communication_util.basic_detectors import *
 import time
 
 def test_viterbi_performance_curve():
     error_tolerance = np.power(10.0, -3)
-
+    threshold_performance = []
     classic_performance = []
-    SNRs = np.linspace(0.1, 3, 10)
+    SNRs = np.linspace(0.1, 4, 50)
     seed_generator = 0
     for SRN in SNRs:
         number_symbols = 10000
@@ -28,10 +29,14 @@ def test_viterbi_performance_curve():
         metric = gaussian_channel_metric_working(channel, data_gen.channel_output)
         detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
+        threshold_detected = threshold_detector(data_gen.alphabet, data_gen.channel_output)
+        threshold_ser = symbol_error_rate(threshold_detected, data_gen.symbol_stream_matrix)
         ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
         classic_performance.append(ser)
+        threshold_performance.append(threshold_ser)
 
     plt.figure(1)
+    plt.plot(SNRs, threshold_performance, label='basic threshold')
     plt.plot(SNRs, classic_performance, label='standard viterbi')
     plt.title("SER vs SNR Curve")
     plt.xlabel("SNR")
