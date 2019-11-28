@@ -2,6 +2,8 @@ from mixture_model.em_algorithm import em_gausian
 import numpy as np
 from communication_util import training_data_generator
 from matplotlib import pyplot as plt
+import time
+
 
 
 def test_em_real_channel():
@@ -16,7 +18,7 @@ def test_em_real_channel():
     Setup Training Data
     """
     #EM is stable to number of training examples TODO see when not stable to number of iterations
-    number_symbols = 1000
+    number_symbols = 100
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -29,7 +31,7 @@ def test_em_real_channel():
 
     data_gen = training_data_generator(
         symbol_stream_shape=(1, number_symbols),
-        SNR=10,
+        SNR=5,
         plot=True,
         channel=channel,
     )
@@ -37,9 +39,9 @@ def test_em_real_channel():
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
     num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
-    true_variance= 0
+    true_variance = 0
     true_mu = 0
-    true_alpha = np.ones((1,num_sources))/num_sources
+    true_alpha = np.ones((1, num_sources))/num_sources
 
     # generate data from a set of gaussians
     data = data_gen.channel_output.flatten()
@@ -48,10 +50,10 @@ def test_em_real_channel():
     mu, variance, alpha, total_sequence_probability = em_gausian(num_sources, data, 20, save=True)
     plt.figure()
     plt.plot(total_sequence_probability)
-    path = "Output/Mixture_Model_Convergence.png"
+    path = "Output/Mixture_Model_" + str(time.time())+ "_Convergence.png"
     plt.title("Error over epochs")
     plt.xlabel("Iteration")
-    plt.ylabel("Probability of Data set")
+    plt.ylabel("Log Probability of Data set")
     plt.legend(loc='upper left')
     plt.savefig(path, format="png")
 

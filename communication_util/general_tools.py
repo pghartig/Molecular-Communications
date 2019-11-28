@@ -20,3 +20,6 @@ def symbol_error_rate_sampled(detected_symbols, input_symbols):
     # ignore last symbols since there is extra from the convolution
     array = np.asarray(detected_symbols)
     return np.sum(np.logical_not(np.equal(array, input_symbols))) / array.size
+
+def random_channel():
+    return np.random.randn()

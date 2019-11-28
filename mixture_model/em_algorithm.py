@@ -47,7 +47,7 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
             test = np.log(np.sum(probabilities*alpha))
             itr_total_sequence_probability.append(test)
 
-        likelihood_vector.append(np.sum(itr_total_sequence_probability))
+        likelihood_vector.append(np.sum(itr_total_sequence_probability)/num_observations)
 
         """
         Maximization step
