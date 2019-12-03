@@ -29,9 +29,9 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 300
-        channel = np.zeros((1, 3))
-        channel[0, [0, 1, 2]] = 1, 0.6, 0.3
+        number_symbols = 500
+        channel = np.zeros((1, 4))
+        channel[0, [0, 1, 2, 3]] = 1, 0.6, 0.3, 0.2
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -40,7 +40,7 @@ def test_full_integration():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        num_inputs_for_nn = 3
+        num_inputs_for_nn = 1
         x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
@@ -72,7 +72,7 @@ def test_full_integration():
         test_cost_over_epoch = []
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        for t in range(200):
+        for t in range(400):
             output = net(x_train)
             loss = criterion(output, y_train.long())
             train_cost_over_epoch.append(loss)
@@ -150,6 +150,6 @@ def test_full_integration():
     plt.legend(loc='upper left')
     path = "Output/SER_curves.png"
     plt.savefig(path, format="png")
-    time_path = "Output/SER_" + str(number_symbols) + " symbols " + str(time.time())+"curves.png"
+    time_path = "Output/SER_" +str(num_inputs_for_nn)+ str(number_symbols) + " symbols " + str(time.time())+"curves.png"
     plt.savefig(time_path, format="png")
     assert True
