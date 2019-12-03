@@ -18,7 +18,7 @@ def test_em_real_channel():
     Setup Training Data
     """
     #EM is stable to number of training examples TODO see when not stable to number of iterations
-    number_symbols = 100
+    number_symbols = 1000
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -45,17 +45,32 @@ def test_em_real_channel():
 
     # generate data from a set of gaussians
     data = data_gen.channel_output.flatten()
+    data_gen.random_symbol_stream()
+    data_gen.send_through_channel()
+    test_data = data_gen.channel_output.flatten()
 
-    # TODO See why diverging for large number of iterations (check if diverging in gaussian case)
-    mu, variance, alpha, total_sequence_probability = em_gausian(num_sources, data, 20, save=True)
+    """
+    Train Mixture Model
+    """
+    model, mu, variance, alpha, total_sequence_probability, test_sequence_probability = \
+        em_gausian(num_sources, data, 10, test_data=test_data, save=True, both=True)
+
+    """
+    Plot Results
+    """
+
     plt.figure()
-    plt.plot(total_sequence_probability)
-    path = "Output/Mixture_Model_" + str(time.time())+ "_Convergence.png"
+    plt.plot(total_sequence_probability, label='training_probability')
+    plt.plot(test_sequence_probability, label='test_probability')
+    path = "Output/Mixture_Model_" + str(time.time())+"_Convergence.png"
     plt.title("Error over epochs")
     plt.xlabel("Iteration")
     plt.ylabel("Log Probability of Data set")
     plt.legend(loc='upper left')
     plt.savefig(path, format="png")
+
+
+
 
     # error_mu = np.linalg.norm(np.sort(mu)-np.sort(true_mu))
     # error_variance = np.linalg.norm(np.sort(variance)-np.sort(true_variance))

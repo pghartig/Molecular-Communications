@@ -224,6 +224,7 @@ class training_data_generator:
         tap on the left most index.
         :return:
         """
+        self.channel_output = []
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             self.channel_output.append(
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))

@@ -18,20 +18,9 @@ def test_viterbi_net_class():
     """
 
     """
-    setup paths
-    """
-
-
-    """
-    Testing the setup and training of a neural network using the viterbiNet Architecture
-    :return:
-    """
-
-    """
     Choose platform
     """
     device = torch.device("cpu")
-
     # device = torch.device('cuda') # Uncomment this to run on GPU
 
     """
@@ -111,8 +100,6 @@ def test_viterbi_net_class():
         test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
 
     path = "Output/nn.pt"
-    test = os.getcwd()
-    # path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
     torch.save(net, path)
 
     """
@@ -121,7 +108,7 @@ def test_viterbi_net_class():
     plt.figure()
     plt.plot(test_cost_over_epoch, label='Test Error')
     plt.plot(train_cost_over_epoch, label='Train Error')
-    plt.title(str(data_gen.get_info_for_plot()),fontdict={'fontsize':10} )
+    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
     plt.xlabel("Epoch")
     plt.ylabel("Error")
     plt.legend(loc='upper left')

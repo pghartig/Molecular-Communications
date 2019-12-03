@@ -143,7 +143,7 @@ def test_full_integration():
     plt.figure(1)
     plt.plot(SNRs, viterbi_net_performance, label='viterbi net')
     plt.plot(SNRs, classic_performance, label='standard viterbi')
-    plt.title(str(data_gen.get_info_for_plot()),fontdict={'fontsize':10} )
+    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize':10} )
     plt.xlabel("SNR")
     plt.ylabel("SER")
     plt.legend(loc='upper left')
