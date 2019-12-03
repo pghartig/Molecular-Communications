@@ -9,7 +9,6 @@ class viterbiNet(nn.Module):
         super(viterbiNet, self).__init__()
 
         # initialize weight layers of the network
-
         self.fc1 = nn.Linear(D_in, H1)
         self.fc2 = nn.Linear(H1, H2)
         self.fc3 = nn.Linear(H2, D_out)

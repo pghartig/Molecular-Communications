@@ -49,16 +49,16 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
             itr_total_sequence_probability.append(test)
 
 
-        if test is not None:
+        if test_data is not None:
             test_obs = test_data.shape[0]
             test_set_probability = []
             for i in range(test_obs):
                 test_probabilities = probability_from_gaussian_sources(test_data[i], mu, sigma_square)
                 test = np.log(np.sum(test_probabilities*alpha))
                 test_set_probability.append(test)
+            test_likelihood_vector.append(np.sum(test_set_probability) / num_observations)
 
         likelihood_vector.append(np.sum(itr_total_sequence_probability)/num_observations)
-        test_likelihood_vector.append(np.sum(test_set_probability)/num_observations)
 
 
         """

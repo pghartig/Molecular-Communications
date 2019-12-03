@@ -31,7 +31,7 @@ def test_em_real_channel():
 
     data_gen = training_data_generator(
         symbol_stream_shape=(1, number_symbols),
-        SNR=5,
+        SNR=2,
         plot=True,
         channel=channel,
     )

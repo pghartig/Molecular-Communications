@@ -341,22 +341,20 @@ class training_data_generator:
             costs.append(np.linalg.norm(received - self.metrics[ind]))
         return np.asarray(costs)
 
-    def get_labeled_data(self):
+    def get_labeled_data(self, inputs=1):
+        inputs -=1
         x_list = []
         y_list = []
-        num_possible_states = np.power(self.alphabet, self.CIR_matrix.shape[1])
         states = []
         item = []
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
-        test = np.asarray(states)  # up to here signs are preserved. Sorting is flipping signs
-        # states = np.sort(np.asarray(states), 1)
         states = np.asarray(states)
         if self.channel_output is not None:
             for i in range(self.channel_output.shape[1]):
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     input = self.symbol_stream_matrix[:, i - self.CIR_matrix.shape[1]+1: i+1].flatten()
                     probability_vec = self.get_probability(input, states)
-                    x_list.append(self.channel_output[:, i].flatten())
+                    x_list.append(self.channel_output[:, i-inputs:i+1].flatten())
                     y_list.append(probability_vec)
         return x_list, y_list
 

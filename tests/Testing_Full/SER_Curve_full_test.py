@@ -29,7 +29,7 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 100
+        number_symbols = 300
         channel = np.zeros((1, 3))
         channel[0, [0, 1, 2]] = 1, 0.6, 0.3
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -40,7 +40,8 @@ def test_full_integration():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        x, y = data_gen.get_labeled_data()
+        num_inputs_for_nn = 1
+        x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
@@ -58,7 +59,7 @@ def test_full_integration():
 
         # N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
         # net = models.viterbiNet(D_in, H1, H2, D_out)
-        N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 10, 10, np.power(m, channel_length)
+        N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-2)
 
@@ -83,7 +84,7 @@ def test_full_integration():
 
 
         # Test NN
-        x, y = data_gen.get_labeled_data()
+        x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
@@ -113,7 +114,7 @@ def test_full_integration():
         data_gen.send_through_channel()
 
         #   !! Make sure channel output gets flipped here!!
-        metric = nn_mm_metric(net, mm, data_gen.channel_output)  # This is a function to be used in the viterbi
+        metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)  # This is a function to be used in the viterbi
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
         ser_nn = symbol_error_rate(detected_nn, data_gen.symbol_stream_matrix)
