@@ -40,7 +40,7 @@ def test_full_integration():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        num_inputs_for_nn = 1
+        num_inputs_for_nn = 3
         x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
@@ -117,7 +117,7 @@ def test_full_integration():
         metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)  # This is a function to be used in the viterbi
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
-        ser_nn = symbol_error_rate(detected_nn, data_gen.symbol_stream_matrix)
+        ser_nn = symbol_error_rate_channel_compensated(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
         """
@@ -127,7 +127,7 @@ def test_full_integration():
         metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
         detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
-        ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix)
+        ser_classic = symbol_error_rate_channel_compensated(detected_classic, data_gen.symbol_stream_matrix, channel_length)
 
         """
         Analyze SER performance

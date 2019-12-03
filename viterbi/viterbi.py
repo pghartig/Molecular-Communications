@@ -12,7 +12,9 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
     trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
     # step through channel output
     for index in range(channel_output.shape[1]):
-        trellis.step_trellis(index)
+        # Need to prevent stepping until there are sufficient metrics for the input to the NN
+        if index>=channel_length-1:
+            trellis.step_trellis(index)
     return trellis.return_survivor()
 
 
