@@ -17,7 +17,7 @@ def test_full_integration():
     """
     Generated Testing Data using the same channel as was used for training the mixture model and the nn
     """
-    number_symbols = 5000
+    number_symbols = 50
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -43,13 +43,13 @@ def test_full_integration():
     Load in Trained Neural Network and verify that it is acceptable performance
     """
     #Load NN
-    saved_network_path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
     saved_network_path = "Output/nn.pt"
     test = os.getcwd()
 
     neural_net = torch.load(saved_network_path)
     # Test NN
-    x, y = data_gen.get_labeled_data()
+    num_inputs_for_training_data = neural_net.fc1.in_features
+    x, y = data_gen.get_labeled_data(inputs=num_inputs_for_training_data)
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
     x = torch.Tensor(x)
     y = torch.Tensor(y)
@@ -62,7 +62,6 @@ def test_full_integration():
     """
     Load Trained Mixture Model
     """
-    path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
     path = "Output/mm.pickle"
     mm_pickle_in = open(path, "rb")
 
@@ -77,7 +76,7 @@ def test_full_integration():
     """
 
     #   !! Make sure channel output gets flipped here!!
-    metric = nn_mm_metric(neural_net, mm, data_gen.channel_output)  # This is a function to be used in the viterbi
+    metric = nn_mm_metric(neural_net, mm, data_gen.channel_output, input_length=num_inputs_for_training_data)  # This is a function to be used in the viterbi
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
     ser_nn = symbol_error_rate(detected_nn, data_gen.symbol_stream_matrix)

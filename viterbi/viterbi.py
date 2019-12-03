@@ -12,7 +12,9 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
     trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
     # step through channel output
     for index in range(channel_output.shape[1]):
-        trellis.step_trellis(index)
+        # Need to prevent stepping until there are sufficient metrics for the input to the NN
+        if index>=channel_length-1:
+            trellis.step_trellis(index)
     return trellis.return_survivor()
 
 
@@ -39,16 +41,12 @@ class viterbi_trellis():
                     node.incoming_nodes.append(previous_state)
 
     def step_trellis(self, index):
-        i = 0
         metrics = self.metric_function(index, self.states)
-        for node in self.next_states:
-            node.check_smallest_incoming(index, metrics[i])
-            i+=1
-        i = 0
-        for node in self.next_states:
-            self.previous_states[i].survivor_path = node.survivor_path
-            self.previous_states[i].survivor_path_cost = node.survivor_path_cost
-            i+=1
+        for ind, node in enumerate(self.next_states):
+            node.check_smallest_incoming(index, metrics[ind])
+        for ind, node in enumerate(self.next_states):
+            self.previous_states[ind].survivor_path = node.survivor_path
+            self.previous_states[ind].survivor_path_cost = node.survivor_path_cost
 
     def return_survivor(self):
         costs = []

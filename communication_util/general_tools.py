@@ -16,6 +16,15 @@ def symbol_error_rate(detected_symbols, input_symbols):
     detected = np.flip(array[:input_symbols.shape[1]])  #This is a very key step to ensuring the detected symbols are aligned properly
     return np.sum(np.logical_not(np.equal(detected, input_symbols))) / detected.size
 
+def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channel_length):
+    # ignore last symbols since there is extra from the convolution
+    channel_length -= 1
+    array = np.flip(np.asarray(detected_symbols))
+    # This is a key step to ensuring the detected symbols are aligned properly
+    detected = np.flip(array[channel_length:input_symbols.shape[1]])
+    input = np.flip(input_symbols)
+    return np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
+
 def symbol_error_rate_sampled(detected_symbols, input_symbols):
     # ignore last symbols since there is extra from the convolution
     array = np.asarray(detected_symbols)

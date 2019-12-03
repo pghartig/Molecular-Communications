@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import matplotlib.pyplot as plt
+import time
 import os
 import pickle
 
@@ -18,26 +19,15 @@ def test_viterbi_net_class():
     """
 
     """
-    setup paths
-    """
-
-
-    """
-    Testing the setup and training of a neural network using the viterbiNet Architecture
-    :return:
-    """
-
-    """
     Choose platform
     """
     device = torch.device("cpu")
-
     # device = torch.device('cuda') # Uncomment this to run on GPU
 
     """
     Setup Training Data
     """
-    number_symbols = 5000
+    number_symbols = 1000
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -61,8 +51,8 @@ def test_viterbi_net_class():
     """
     After sending through channel, symbol detection should be performed using something like a matched filter
     """
-
-    x, y = data_gen.get_labeled_data()
+    num_inputs_for_training_data = 1
+    x, y = data_gen.get_labeled_data(inputs=num_inputs_for_training_data)
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
     x = torch.Tensor(x)
     y = torch.Tensor(y)
@@ -80,13 +70,13 @@ def test_viterbi_net_class():
 
     # N is batch size; D_in is input dimension;
     # H is hidden dimension; D_out is output dimension.
-    N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
+    N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_training_data, 100, 50, np.power(m, channel_length)
 
 
     net = models.viterbiNet(D_in, H1, H2, D_out)
     #TODO use better optimizer
     optimizer = optim.SGD(net.parameters(), lr=1e-2)
-    optimizer = optim.Adam(net.parameters(), lr=1e-2)
+    optimizer = optim.Adam(net.parameters(), lr=1e-1)
 
     # optimizer = optim.SGD(net.parameters(), lr=5)
 
@@ -100,7 +90,7 @@ def test_viterbi_net_class():
     test_cost_over_epoch = []
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(200):
+    for t in range(50):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)
@@ -111,8 +101,6 @@ def test_viterbi_net_class():
         test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
 
     path = "Output/nn.pt"
-    test = os.getcwd()
-    # path = '/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/nn.pt'
     torch.save(net, path)
 
     """
@@ -121,11 +109,13 @@ def test_viterbi_net_class():
     plt.figure()
     plt.plot(test_cost_over_epoch, label='Test Error')
     plt.plot(train_cost_over_epoch, label='Train Error')
-    plt.title(str(data_gen.get_info_for_plot()),fontdict={'fontsize':10} )
+    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
     plt.xlabel("Epoch")
     plt.ylabel("Error")
     plt.legend(loc='upper left')
     path = "Output/Neural_Network_Convergence.png"
+    path = "Output/NN_ERROR" + str(number_symbols) + " symbols " \
+           + str(num_inputs_for_training_data) + " inputs " + str(time.time())+"curves.png"
     plt.savefig(path, format="png")
     plt.show()
     assert True

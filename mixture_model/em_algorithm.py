@@ -2,7 +2,7 @@ import numpy as np
 import pickle
 import os
 
-def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, model=False):
+def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, model=False,both=False):
     """
     implementation of EM for gaussian model
     :param num_gaussians:
@@ -11,6 +11,7 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
     :return:
     """
     # Currently just initializing with some of the input data
+    test_set_probability = None
     num_observations = data.shape[0]
     initialization_sample = data[0:num_gaussians]
     mu = initialization_sample
@@ -28,7 +29,7 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
     # iterations to ensure it is monotonically increasing
 
     likelihood_vector = []
-    diference_likelihood_vector = []
+    test_likelihood_vector = []
 
     for iteration in range(iterations):
 
@@ -47,7 +48,18 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
             test = np.log(np.sum(probabilities*alpha))
             itr_total_sequence_probability.append(test)
 
+
+        if test_data is not None:
+            test_obs = test_data.shape[0]
+            test_set_probability = []
+            for i in range(test_obs):
+                test_probabilities = probability_from_gaussian_sources(test_data[i], mu, sigma_square)
+                test = np.log(np.sum(test_probabilities*alpha))
+                test_set_probability.append(test)
+            test_likelihood_vector.append(np.sum(test_set_probability) / num_observations)
+
         likelihood_vector.append(np.sum(itr_total_sequence_probability)/num_observations)
+
 
         """
         Maximization step
@@ -71,8 +83,10 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
 
     if model==True:
         return mixture_model(mu, sigma_square, alpha)
+    if both==True:
+        return mixture_model(mu, sigma_square, alpha), mu, sigma_square, alpha, likelihood_vector, test_likelihood_vector
     else:
-        return mu, sigma_square, alpha, likelihood_vector
+        return mu, sigma_square, alpha, likelihood_vector, test_set_probability
 
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """
