@@ -398,3 +398,6 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+
+#My Whitelisting for special output results
+!interesting_results/*

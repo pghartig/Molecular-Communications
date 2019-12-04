@@ -229,7 +229,6 @@ class training_data_generator:
             self.channel_output.append(
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.flip(np.asarray(self.channel_output))
-        # self.channel_output = np.asarray(self.channel_output)   #Test to correct problem with viterbi
 
         # add noise
         # adjust noise power to provided SNR parameter
