@@ -27,7 +27,7 @@ def test_results_nerual_net():
     """
     Setup Training Data
     """
-    number_symbols = 500
+    number_symbols = 5000
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
@@ -87,7 +87,7 @@ def test_results_nerual_net():
     test_cost_over_epoch = []
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(100):
+    for t in range(1000):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)

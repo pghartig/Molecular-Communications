@@ -29,7 +29,7 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
+        number_symbols = 50000
         channel = np.zeros((1, 2))
         channel[0, [0, 1]] = 1, 0.6
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -88,8 +88,8 @@ def test_full_integration():
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
-        criterion = nn.NLLLoss()
-        # criterion = nn.CrossEntropyLoss()
+        # criterion = nn.NLLLoss()
+        criterion = nn.CrossEntropyLoss()
         cost = criterion(net(x), y.long())
         threshold = 1e-2
         # assert cost < threshold
