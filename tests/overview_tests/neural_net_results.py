@@ -27,20 +27,20 @@ def test_results_nerual_net():
     """
     Setup Training Data
     """
-    number_symbols = 200
+    number_symbols = 500
 
     # channel = np.zeros((1, 5))
     # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
 
-    channel = np.zeros((1, 3))
-    channel[0, [0, 1, 2]] = 1, 0.6, 0.3
+    channel = np.zeros((1, 4))
+    channel[0, [0, 1, 2, 3]] = 1, 0.6, 0.3, 0.2
 
     # channel = np.zeros((1, 1))
     # channel[0, 0] = 1
 
     data_gen = training_data_generator(
         symbol_stream_shape=(1, number_symbols),
-        SNR=2,
+        SNR=10,
         plot=True,
         channel=channel,
     )
@@ -76,21 +76,18 @@ def test_results_nerual_net():
     net = models.viterbiNet(D_in, H1, H2, D_out)
     #TODO use better optimizer
     optimizer = optim.SGD(net.parameters(), lr=1e-2)
-    optimizer = optim.Adam(net.parameters(), lr=1e-1)
-
-    # optimizer = optim.SGD(net.parameters(), lr=5)
-
+    optimizer = optim.Adam(net.parameters(), lr=1e-2)
 
     """
     Train NN
     """
-    # criterion = nn.CrossEntropyLoss()
-    criterion = nn.NLLLoss()
+    criterion = nn.CrossEntropyLoss()
+    # criterion = nn.NLLLoss()
     train_cost_over_epoch = []
     test_cost_over_epoch = []
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(500):
+    for t in range(100):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)

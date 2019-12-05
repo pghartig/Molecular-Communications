@@ -76,7 +76,7 @@ def test_viterbi_net_class():
     net = models.viterbiNet(D_in, H1, H2, D_out)
     #TODO use better optimizer
     optimizer = optim.SGD(net.parameters(), lr=1e-2)
-    optimizer = optim.Adam(net.parameters(), lr=1e-1)
+    optimizer = optim.Adam(net.parameters(), lr=1e-2)
 
     # optimizer = optim.SGD(net.parameters(), lr=5)
 
@@ -84,13 +84,13 @@ def test_viterbi_net_class():
     """
     Train NN
     """
-    # criterion = nn.CrossEntropyLoss()
-    criterion = nn.NLLLoss()
+    criterion = nn.CrossEntropyLoss()
+    # criterion = nn.NLLLoss()
     train_cost_over_epoch = []
     test_cost_over_epoch = []
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(50):
+    for t in range(500):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)

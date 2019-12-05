@@ -363,16 +363,12 @@ class training_data_generator:
 
         :return:
         """
-        num_possible_states = int(np.power(self.alphabet.size, self.CIR_matrix.shape[1]))
         metrics = []
-        for state_ind in range(num_possible_states):
-            state = states[state_ind, :]  # Look up state in table based on index (should be passed from calling loop!
+        for state in states:
             if np.array_equal(input, state):
                 metrics.append(1)
             else:
                 metrics.append(0)
-        test1 = metrics
-        test = np.asarray(metrics)
         return np.asarray(metrics)
 
     def plot_setup(self, save=False):
