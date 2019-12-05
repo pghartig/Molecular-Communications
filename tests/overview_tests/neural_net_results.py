@@ -28,22 +28,9 @@ def test_results_nerual_net():
     Setup Training Data
     """
     number_symbols = 5000
-
-    # channel = np.zeros((1, 5))
-    # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-
     channel = np.zeros((1, 4))
     channel[0, [0, 1, 2, 3]] = 1, 0.6, 0.3, 0.2
-
-    # channel = np.zeros((1, 1))
-    # channel[0, 0] = 1
-
-    data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols),
-        SNR=10,
-        plot=True,
-        channel=channel,
-    )
+    data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=4, plot=True, channel=channel)
     # data_gen.setup_channel(shape=None)
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
@@ -87,7 +74,7 @@ def test_results_nerual_net():
     test_cost_over_epoch = []
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(1000):
+    for t in range(400):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)
