@@ -406,7 +406,7 @@ TSWLatexianTemp*
 
 #My Whitelisting for special output results
 !interesting_results/*
-!interesting_results/data_generation/
-!interesting_results/Decoding Results/
-!interesting_results/Neural_Net/
+!interesting_results/data_generation/*
+!interesting_results/Decoding Results/*
+!interesting_results/Neural_Net/*
 
