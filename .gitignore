@@ -409,4 +409,6 @@ TSWLatexianTemp*
 !interesting_results/data_generation/*
 !interesting_results/Decoding Results/*
 !interesting_results/Neural_Net/*
+!documentation/presentations/figures/*
+!documentation/presentations/gt_initial_presentation.pdf
 
