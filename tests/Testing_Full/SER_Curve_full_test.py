@@ -20,18 +20,17 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs = np.linspace(.1, 10, 10)
+    SNRs = np.linspace(.1, 20, 10)
+    SNRs_dB = np.power(10, SNRs/10)
     seed_generator = 0
     data_gen = None
-    for SNR in SNRs:
-
-
+    for SNR in SNRs_dB:
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 2000
-        channel = np.zeros((1, 4))
-        channel[0, [0, 1, 2, 3]] = 1, 0.1, 0.1, 0.2
+        number_symbols = 1000
+        channel = np.zeros((1, 3))
+        channel[0, [0, 1, 2]] = 1, 0.1, 0.1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -57,7 +56,7 @@ def test_full_integration():
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
 
-        N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
+        N, D_in, H1, H2, D_out = number_symbols, 1, 100, 75, np.power(m, channel_length)
         net = models.viterbiNet(D_in, H1, H2, D_out)
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
@@ -72,7 +71,7 @@ def test_full_integration():
         test_cost_over_epoch = []
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        for t in range(500):
+        for t in range(300):
             output = net(x_train)
             loss = criterion(output, y_train.long())
             train_cost_over_epoch.append(loss)
@@ -97,10 +96,9 @@ def test_full_integration():
         """
         Train Mixture Model
         """
-        mixture_model_training_data = data_gen.channel_output.flatten()
-
+        mixture_model_training_data = data_gen.channel_output.flatten()[0:train_size]
         num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
-        mm = em_gausian(num_sources, mixture_model_training_data, 20, save=True, model=True)
+        mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
         mm = mm.get_probability
         # mm = 1
 
@@ -143,14 +141,26 @@ def test_full_integration():
     pickle_out.close()
 
     plt.figure(1)
-    plt.plot(SNRs, viterbi_net_performance, label='viterbi net')
-    plt.plot(SNRs, classic_performance, label='standard viterbi')
+    plt.plot(SNRs_dB, viterbi_net_performance, label='viterbi net')
+    plt.plot(SNRs_dB, classic_performance, label='standard viterbi')
     plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize':10} )
-    plt.xlabel("SNR")
-    plt.ylabel("SER")
+    plt.xlabel("SNR (dB)")
+    plt.ylabel("Symbol Error Rate")
     plt.legend(loc='upper left')
     path = "Output/SER_curves.png"
     plt.savefig(path, format="png")
     time_path = "Output/SER_"+net.name+str(num_inputs_for_nn)+ str(number_symbols) + " symbols " + str(time.time())+"curves.png"
     plt.savefig(time_path, format="png")
+
+    #Plots for NN training informatino
+    plt.figure(2)
+    plt.plot(test_cost_over_epoch, label='Test Error')
+    plt.plot(train_cost_over_epoch, label='Train Error')
+    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
+    plt.xlabel("Epoch")
+    plt.ylabel("Error")
+    plt.legend(loc='upper left')
+    path = f"Output/Neural_Network{time.time()}_Convergence.png"
+    plt.savefig(path, format="png")
+
     assert True

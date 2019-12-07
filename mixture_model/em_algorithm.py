@@ -16,7 +16,6 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
     initialization_sample = data[0:num_gaussians]
     mu = initialization_sample
     #decide how to initialize
-    test = np.var(initialization_sample)
     sigma_square = np.ones((num_gaussians, 1))*0.1
 
 
@@ -38,13 +37,12 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
         Expectation step
         """
         itr_total_sequence_probability = []
-        for i in range(num_observations):
-            probabilities = probability_from_gaussian_sources(data[i], mu, sigma_square)
+        for ind, observation in enumerate(data):
+            probabilities = probability_from_gaussian_sources(observation, mu, sigma_square)
             weighted_probabilities = alpha * probabilities
             new_weights = weighted_probabilities / np.sum(weighted_probabilities)
-            weights[i, :] = np.reshape(new_weights, weights[i, :].shape)
+            weights[ind, :] = np.reshape(new_weights, weights[ind, :].shape)
             # This is a lower bound on the probability of this observation given the current
-            # test = np.log(np.sum(probabilities*new_weights))
             test = np.log(np.sum(probabilities*alpha))
             itr_total_sequence_probability.append(test)
 
@@ -58,6 +56,7 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
                 test_set_probability.append(test)
             test_likelihood_vector.append(np.sum(test_set_probability) / num_observations)
 
+        # after each iteration, this value should become less negative and approach zero.
         likelihood_vector.append(np.sum(itr_total_sequence_probability)/num_observations)
 
 
@@ -69,7 +68,7 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
         mu = np.sum(weights.T * data, axis=1)/np.sum(weights, axis=0)
         for i in range(num_gaussians):
             sub = mu[i]
-            squared_difference = np.power(data - sub,2)
+            squared_difference = np.power(data - sub, 2)
             data_weight = weights[:, i]
             total_square_difference = np.dot(squared_difference.T, data_weight)
             sigma_square[i] = total_square_difference / np.sum(data_weight)
@@ -96,12 +95,17 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
     :param sigma_square:
     :return:
     """
-    probabilities = np.zeros(sigma_square.shape)
-    for i in range(mu.size):
-        probabilities[i] = np.divide(
-            np.exp(np.divide(-np.power((data_point - mu[i]), 2), (2 * sigma_square[i]))),
-            np.sqrt(2 * np.pi * sigma_square[i]))
-    return probabilities
+    if not isinstance(mu,np.ndarray):
+        return np.divide(
+            np.exp(np.divide(-np.power((data_point - mu), 2), (2 * sigma_square))),
+            np.sqrt(2 * np.pi * sigma_square))
+    else:
+        probabilities = []
+        for ind, mu_i in enumerate(mu):
+            probabilities.append(np.divide(
+                np.exp(np.divide(-np.power((data_point - mu_i), 2), (2 * sigma_square[ind]))),
+                np.sqrt(2 * np.pi * sigma_square[ind])))
+        return np.asarray(probabilities)
 
 def receive_probability(symbol,mu,sigma_square):
     return np.prod(probability_from_gaussian_sources(symbol,mu,sigma_square))

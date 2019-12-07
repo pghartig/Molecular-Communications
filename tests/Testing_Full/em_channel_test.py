@@ -2,11 +2,18 @@ from mixture_model.em_algorithm import em_gausian
 import numpy as np
 from communication_util import training_data_generator
 from matplotlib import pyplot as plt
+from mixture_model.em_algorithm import *
 import time
 
 
 
 def test_em_real_channel():
+    vec = np.linspace(-3, 3, 100)
+    samples = []
+    for i in vec:
+        samples.append(probability_from_gaussian_sources(i, 0, .1))
+    plt.plot(vec,samples)
+    # plt.show()
     """
     The goal of this test is to ensure that the implemented EM algorithm converges to the correct parameters used to
     to generate a set of data that is then fed into the algorithm.
