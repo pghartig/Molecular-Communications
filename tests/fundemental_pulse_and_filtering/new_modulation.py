@@ -45,7 +45,6 @@ def test_pulse_with_viterbi():
      Send modulated signal through channel
      """
     data_gen.sample_modulated_function()
-    # data_gen.plot_setup()
     data_gen.convolve_sampled_modulated()
 
 

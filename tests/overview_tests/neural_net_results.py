@@ -11,7 +11,7 @@ import pickle
 
 
 
-def test_viterbi_net_class():
+def test_results_nerual_net():
 
     """
     Train and save the neural network
@@ -27,23 +27,10 @@ def test_viterbi_net_class():
     """
     Setup Training Data
     """
-    number_symbols = 1000
-
-    # channel = np.zeros((1, 5))
-    # channel[0, [0, 3, 4]] = 1, 0.5, 0.4
-
-    channel = np.zeros((1, 3))
-    channel[0, [0, 1, 2]] = 1, 0.6, 0.3
-
-    # channel = np.zeros((1, 1))
-    # channel[0, 0] = 1
-
-    data_gen = training_data_generator(
-        symbol_stream_shape=(1, number_symbols),
-        SNR=2,
-        plot=True,
-        channel=channel,
-    )
+    number_symbols = 5000
+    channel = np.zeros((1, 4))
+    channel[0, [0, 1, 2, 3]] = 1, 0.6, 0.3, 0.2
+    data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=4, plot=True, channel=channel)
     # data_gen.setup_channel(shape=None)
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
@@ -78,9 +65,6 @@ def test_viterbi_net_class():
     optimizer = optim.SGD(net.parameters(), lr=1e-2)
     optimizer = optim.Adam(net.parameters(), lr=1e-2)
 
-    # optimizer = optim.SGD(net.parameters(), lr=5)
-
-
     """
     Train NN
     """
@@ -90,7 +74,7 @@ def test_viterbi_net_class():
     test_cost_over_epoch = []
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(500):
+    for t in range(400):
         output = net(x_train)
         loss = criterion(output, y_train.long())
         train_cost_over_epoch.append(loss)

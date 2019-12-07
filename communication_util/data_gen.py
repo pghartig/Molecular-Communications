@@ -55,6 +55,7 @@ class training_data_generator:
         self.demodulated_symbols = np.zeros(symbol_stream_shape)
         self.sampling_period = sampling_period
         self.symbol_period = symbol_period
+        self.samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
 
         """
         Decoding metrics
@@ -229,7 +230,6 @@ class training_data_generator:
             self.channel_output.append(
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.flip(np.asarray(self.channel_output))
-        # self.channel_output = np.asarray(self.channel_output)   #Test to correct problem with viterbi
 
         # add noise
         # adjust noise power to provided SNR parameter
@@ -363,37 +363,32 @@ class training_data_generator:
 
         :return:
         """
-        num_possible_states = int(np.power(self.alphabet.size, self.CIR_matrix.shape[1]))
         metrics = []
-        for state_ind in range(num_possible_states):
-            state = states[state_ind, :]  # Look up state in table based on index (should be passed from calling loop!
+        for state in states:
             if np.array_equal(input, state):
                 metrics.append(1)
             else:
                 metrics.append(0)
-        test1 = metrics
-        test = np.asarray(metrics)
         return np.asarray(metrics)
 
-    def plot_setup(self):
-        num =1
+    def plot_setup(self, save=False):
+        num = 3
         figure = plt.figure()
-        # figure.add_subplot(num, 1,1)
-        # self.visualize(self.CIR_matrix, "C0-")
-        # figure.add_subplot(num, 1,2)
-        # self.visualize(self.symbol_stream_matrix, "C1-")
-        # figure.add_subplot(num, 1,3)
-        # self.visualize(self.channel_output, "C2-")
-        # figure.add_subplot(num, 1,4)
-        # self.visualize(self.transmit_signal_matrix, "C3-")
-        # figure.add_subplot(num, 1,5)
-        # self.visualize(self.modulated_signal_function_sampled, "C4-")
-        figure.add_subplot(num, 1, 1)
-        self.visualize(self.modulated_signal_function_sampled, "C5-")
-        plt.show()
+        figure.add_subplot(num, 1,1)
+        self.visualize(self.CIR_matrix, "C0-", name="CIR_matrix")
+        figure.add_subplot(num, 1,2)
+        self.visualize(self.symbol_stream_matrix, "C1-", name="symbol_stream_matrix")
+        figure.add_subplot(num, 1,3)
+        self.visualize(self.modulated_signal_function_sampled, "C4-", name="modulated_signal_function_sampled")
 
-    def visualize(self, data, c):
+        plt.show()
+        if save==True:
+            time_path = "modulated_rect.png"
+            figure.savefig(time_path, format="png")
+
+    def visualize(self, data, c, name = None):
         for channels in range(data.shape[0]):
+            plt.title(str(name), fontdict={'fontsize': 10})
             plt.stem(data[channels, :], linefmt=c)
 
     def _modulate_stream_on_function(self, stream, modulation_function: sampled_function(), parameters):
