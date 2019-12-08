@@ -20,7 +20,7 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(0, 30, 10)
+    SNRs_dB = np.linspace(0, 10, 10)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
@@ -28,7 +28,7 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
+        number_symbols = 1000
         channel = np.zeros((1, 3))
         channel[0, [0, 1, 2]] = 1, 0.1, 0.1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -140,17 +140,9 @@ def test_full_integration():
     pickle.dump([classic_performance, viterbi_net_performance], pickle_out)
     pickle_out.close()
 
-    plt.figure(1)
-    plt.plot(SNRs_dB, viterbi_net_performance, label='viterbi net')
-    plt.plot(SNRs_dB, classic_performance, label='standard viterbi')
-    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize':10} )
-    plt.xlabel("SNR (dB)")
-    plt.ylabel("Symbol Error Rate")
-    plt.legend(loc='upper left')
-    path = "Output/SER_curves.png"
-    plt.savefig(path, format="png")
+    figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,viterbi_net_performance], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+net.name+str(num_inputs_for_nn)+ str(number_symbols) + " symbols " + str(time.time())+"curves.png"
-    plt.savefig(time_path, format="png")
+    figure.savefig(time_path, format="png")
 
     #Plots for NN training informatino
     plt.figure(2)

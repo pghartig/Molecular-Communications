@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import time
 
 
 def get_combinatoric_list(alpabet, item_length, item_list, item):
@@ -19,9 +21,9 @@ def symbol_error_rate(detected_symbols, input_symbols):
 def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channel_length):
     # ignore last symbols since there is extra from the convolution
     channel_length -= 1
-    array = np.flip(np.asarray(detected_symbols))
+    detected_array = np.flip(np.asarray(detected_symbols))
     # This is a key step to ensuring the detected symbols are aligned properly
-    detected = np.flip(array[channel_length:input_symbols.shape[1]])
+    detected = np.flip(detected_array[channel_length:input_symbols.shape[1]])
     input = np.flip(input_symbols)
     return np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
 
@@ -32,3 +34,18 @@ def symbol_error_rate_sampled(detected_symbols, input_symbols):
 
 def random_channel():
     return np.random.randn()
+
+def plot_symbol_error_rates(SNRs_dB, SER_list,info):
+    fig = plt.figure(1)
+    for SER in SER_list:
+        plt.plot(SNRs_dB, SER, label='standard viterbi')
+    plt.xlabel("SNR (dB)")
+    plt.ylabel("SER")
+    plt.xscale('linear')
+    plt.yscale('log')
+    plt.grid(True)
+    plt.legend(loc='upper left')
+    plt.title(str(info), fontdict={'fontsize': 10})
+    plt.title("SER vs SNR Curve")
+    # plt.show()
+    return fig

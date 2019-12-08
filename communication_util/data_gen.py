@@ -231,12 +231,10 @@ class training_data_generator:
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.flip(np.asarray(self.channel_output))
 
-        # add noise
         # adjust noise power to provided SNR parameter
         self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
-        self.channel_output += self.noise_parameter[0] + self.noise_parameter[
-            1
-        ] * np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
+        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1] *\
+                               np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
 
     def transmit_modulated_signal2(self):
         """
