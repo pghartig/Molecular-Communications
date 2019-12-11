@@ -42,7 +42,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info):
     plt.xlabel("SNR (dB)")
     plt.ylabel("SER")
     plt.xscale('linear')
-    plt.yscale('log')
+    # plt.yscale('log')
     plt.grid(True)
     plt.legend(loc='upper left')
     plt.title(str(info), fontdict={'fontsize': 10})

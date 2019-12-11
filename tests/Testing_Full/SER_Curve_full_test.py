@@ -20,7 +20,7 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(0, 10, 10)
+    SNRs_dB = np.linspace(0, 10, 5)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
@@ -28,7 +28,7 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 1000
+        number_symbols = 5000
         channel = np.zeros((1, 3))
         channel[0, [0, 1, 2]] = 1, 0.1, 0.1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -60,26 +60,34 @@ def test_full_integration():
         net = models.viterbiNet(D_in, H1, H2, D_out)
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
-        optimizer = optim.Adam(net.parameters(), lr=1e-2)
+        # optimizer = optim.Adam(net.parameters(), lr=1e-3)
+        optimizer = optim.SGD(net.parameters(), lr=1e-6)
 
         """
         Train NN
         """
-        # criterion = nn.CrossEntropyLoss()
-        criterion = nn.NLLLoss()
+        # criterion = nn.NLLLoss()
+        criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
+        batch_size = 20
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        for t in range(300):
-            output = net(x_train)
-            loss = criterion(output, y_train.long())
+        for t in range(10):
+            batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
+            x_batch = x_train[(batch_indices)]
+            y_batch = y_train[(batch_indices)]
+            output = net(x_batch)
+            loss = criterion(output, y_batch.long())
             train_cost_over_epoch.append(loss)
             net.zero_grad()
             print(loss)
             loss.backward()
             optimizer.step()
-            test_cost_over_epoch.append(criterion(net(x_test), y_test.long()))
+            test_batch_indices = np.random.randint(len(y_test), size=(1, batch_size))
+            x_batch_test = x_test[(test_batch_indices)]
+            y_batch_test = y_test[(test_batch_indices)]
+            test_cost_over_epoch.append(criterion(net(x_batch_test), y_batch_test.long()))
 
 
         # Test NN
@@ -144,7 +152,7 @@ def test_full_integration():
     time_path = "Output/SER_"+net.name+str(num_inputs_for_nn)+ str(number_symbols) + " symbols " + str(time.time())+"curves.png"
     figure.savefig(time_path, format="png")
 
-    #Plots for NN training informatino
+    #Plots for NN training information
     plt.figure(2)
     plt.plot(test_cost_over_epoch, label='Test Error')
     plt.plot(train_cost_over_epoch, label='Train Error')
