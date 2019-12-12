@@ -351,8 +351,10 @@ class training_data_generator:
             for i in range(self.channel_output.shape[1]):
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     input = self.symbol_stream_matrix[:, i - self.CIR_matrix.shape[1]+1: i+1].flatten()
-                    probability_vec = self.get_probability(input, states)
-                    x_list.append(self.channel_output[:, i-inputs:i+1].flatten())
+                    test = self.symbol_stream_matrix[:, i: i+self.CIR_matrix.shape[1]].flatten()
+                    probability_vec = self.get_probability(test, states)
+                    check = self.channel_output[:, i:i + inputs + 1].flatten()
+                    x_list.append(self.channel_output[:, i:i+inputs+1].flatten())
                     y_list.append(probability_vec)
         return x_list, y_list
 

@@ -45,7 +45,8 @@ class nn_mm_metric():
     def metric(self, index, state=None):
         # Be careful using the PyTorch parser with scalars
         torch_input = torch.tensor([self.received[0, index-self.nn_input_size:index+1]]).float()
-        nn = self.nn(torch_input).flatten()
+        test = torch.tensor([self.received[0, index:index+1+self.nn_input_size]]).float()
+        nn = self.nn(test).flatten()
         mm = self.mm(self.received[0, index])
         # return -nn*mm  # Provides metrics for entire column of states
         return - nn    # Need to change sign to align with argmin used in viterbi

@@ -37,8 +37,8 @@ def random_channel():
 
 def plot_symbol_error_rates(SNRs_dB, SER_list,info):
     fig = plt.figure(1)
-    for SER in SER_list:
-        plt.plot(SNRs_dB, SER, label='standard viterbi')
+    for ind, SER in enumerate (SER_list):
+        plt.plot(SNRs_dB, SER, label=f'curve: {ind}')
     plt.xlabel("SNR (dB)")
     plt.ylabel("SER")
     plt.xscale('linear')
