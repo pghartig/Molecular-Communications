@@ -233,8 +233,8 @@ class training_data_generator:
 
         # adjust noise power to provided SNR parameter
         self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
-        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1] *\
-                               np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
+        # self.channel_output += self.noise_parameter[0] + self.noise_parameter[1] *\
+        #                        np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
 
     def transmit_modulated_signal2(self):
         """
@@ -348,14 +348,15 @@ class training_data_generator:
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
         states = np.asarray(states)
         if self.channel_output is not None:
+            j=0
             for i in range(self.channel_output.shape[1]):
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
-                    input = self.symbol_stream_matrix[:, i - self.CIR_matrix.shape[1]+1: i+1].flatten()
-                    test = self.symbol_stream_matrix[:, i: i+self.CIR_matrix.shape[1]].flatten()
+                    test = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()
                     probability_vec = self.get_probability(test, states)
                     check = self.channel_output[:, i:i + inputs + 1].flatten()
                     x_list.append(self.channel_output[:, i:i+inputs+1].flatten())
                     y_list.append(probability_vec)
+                    j+=1
         return x_list, y_list
 
     def get_probability(self, input, states):

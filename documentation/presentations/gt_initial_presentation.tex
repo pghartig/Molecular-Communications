@@ -61,7 +61,7 @@
 
 %% begin presentation
 
-\title{\large \bfseries Viterbi Decoding of Complex Channels using Neural Networks}
+\title{\large \bfseries Neural Network Metrics for Viterbi Decoding in Molecular Communication Channels}
 
 \author{Peter Hartig\\[3ex]
 }
@@ -176,7 +176,7 @@ Maximum Likelihood sequence decoding can be formalized as
 \begin{frame}
 \frametitle{Viterbi Setup Continued}
 
-Each state change is decided by the metric $ Pr(y_{\mathrm{i}}|\mathbf{x})$. In a linear channel with finite impulse response, this metric becomes 
+Each state change is decided by the metric $ Pr(y_{\mathrm{i}}|\mathbf{x})$. In a linear channel with length $l$ impulse response , this metric becomes 
 $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$.
 	
 	\bigskip
@@ -293,9 +293,8 @@ Generating training data $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{
 
 \begin{frame}
 	\frametitle{Metrics for $Pr(y_{\mathrm{i}})$}
-	Using mixture model from gaussian sources (trained using data used for training Neural Network.
-	In particular the Expectation-Maximization is used.
-	TODO Discuss problems that I'm having with this
+	Gaussian Mixture Model using  Expectation-Maximization algorithm
+		\includegraphics[width=\textwidth,height=7cm]{em_figure}
 \end{frame}
 
 
@@ -303,43 +302,30 @@ Generating training data $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{
 \section{Initial Results}
 
 \begin{frame}
-\frametitle{Training Neural Network and Mixture Model}
+\frametitle{Detection Performance}
 \begin{columns}
 \begin{column}{0.5\linewidth}
-	\includegraphics[width=\textwidth]{nn_training}
+	\includegraphics[width=\textwidth]{with_mm}
 \end{column}
 \begin{column}{0.5\linewidth}
-	\includegraphics[width=\textwidth]{mm_training}
-\end{column}
-\end{columns}
-\end{frame}
-
-\begin{frame}
-\frametitle{Decoding Performance}
-Include Channel Info
-\begin{columns}
-\begin{column}{0.5\linewidth}
-	\includegraphics[width=\textwidth]{decoding}
-\end{column}
-\begin{column}{0.5\linewidth}
-	\includegraphics[width=\textwidth]{decoding}
+	\includegraphics[width=\textwidth]{without_mm}
 \end{column}
 \end{columns}
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Future Work}
+\frametitle{Next Step}
 \begin{itemize}
-\item Apply to a sampled molecular communications channel 
-\item Generate training data for molecular communications channel
+\item Apply to a sampled molecular communications channel.
+\begin{itemize}
+\item Estimate matched filter
+\end{itemize}
+\item Generate training data for molecular communications channel and test "transfer learning" to real data.
 \end{itemize}
 \end{frame}
 
-\begin{frame}
-\frametitle{Supplement: Data Generation Details}
 
-\end{frame}
 
 
 
