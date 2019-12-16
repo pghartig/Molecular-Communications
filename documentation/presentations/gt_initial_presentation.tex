@@ -180,8 +180,7 @@ Each state change is decided by the metric $ Pr(y_{\mathrm{i}}|\mathbf{x})$. In 
 $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$.
 	
 	\bigskip
-	Example with channel impulse response length 2 and constellation size 2
-	\\
+
 	\begin{center}
 \begin{tikzpicture}[]
 % 1st column
@@ -243,11 +242,11 @@ $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$.
 \begin{frame}
 	\frametitle{Incorporating Neural Net into Viterbi Decoding}
 	\begin{block}{Problem 1}
-	Viterbi algorithm requires distribution $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}
-	^{\mathrm{i}})$ (or its parameters).
+	Viterbi algorithm requires the distribution $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}
+	^{\mathrm{i}})$.
 	\begin{itemize}
 			\item \begin{block}{Solution}
-Have Neural Network learn $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$
+Have a neural network learn $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$.
 		\end{block}
 \end{itemize}		
 	\end{block}
@@ -264,7 +263,7 @@ Generating training data $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{
 		\end{gather}
 		\end{block}
 \end{itemize}
-		\end{block}
+		\end{block}.
 
 
 \end{frame}
@@ -320,22 +319,31 @@ Generating training data $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{
 
 \begin{frame}
 \frametitle{Detection Performance}
-	Reduced Training data
-
-	\includegraphics[width=\textwidth]{low_training_data}
+	Reduced Training data (100 vs. 1000 symbols)
+	\includegraphics[width=\textwidth,height = 7cm]{low_training_data}
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Next Steps}
 \begin{itemize}
-\item Improve Neural Net Performance
+\item Improve decoding performance with neural net.
 \item Apply to a sampled molecular communications channel.
 \begin{itemize}
 \item Estimate matched filter
 \end{itemize}
 \item Generate training data for molecular communications channel and test "transfer learning" to real data.
 \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \centering \Large
+  \emph{Thank You.}
+  \\
+	\bigskip
+    \centering \Large
+  \emph{Questions or Comments?}
+
 \end{frame}
 
 
