@@ -28,13 +28,13 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 100
+        number_symbols = 1000
         channel = np.zeros((1, 4))
-        channel[0, [0, 1, 2, 3]] = 1, .3 , .1 , .2
+        channel[0, [0, 1, 2, 3]] = 1, .3, .1, .2
         # channel = np.zeros((1, 6))
         # channel[0, [0, 1, 2,3,4]] = 1, .4 , .5,.1,.3
-        # channel = np.zeros((1, 4))
-        # channel[0, [0]] = 1
+        channel = np.zeros((1, 4))
+        channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -74,7 +74,7 @@ def test_full_integration():
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 100
+        batch_size = 50
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
         for t in range(800):
