@@ -13,12 +13,16 @@ def get_combinatoric_list(alpabet, item_length, item_list, item):
             item_list.append(new)
 
 def symbol_error_rate(detected_symbols, input_symbols,channel_length):
-    # ignore last symbols since there is extra from the convolution
-    detected = np.flip(np.asarray(detected_symbols))
-    input = input_symbols.flatten()
-    input = input[1:detected.size]
-    test = np.sum(np.logical_not(np.equal(detected, input_symbols))) / detected.size
-    return np.sum(np.logical_not(np.equal(detected, input_symbols))) / detected.size
+    detected_array = np.asarray(detected_symbols)
+    # This is a key step to ensuring the detected symbols are aligned properly
+    t = input_symbols.flatten()
+    test1 = np.max(np.convolve(detected_array,t))
+    test2 = np.argmax(np.convolve(detected_array,t))
+    detected_array = np.flip(detected_array)
+    check2 = t[(channel_length-1)::]
+    check1 = detected_array[channel_length::]
+    ser = np.sum(np.not_equal(check2[:check1.size], check1)) / check1.size
+    return ser
 
 def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channel_length):
     channel_length -= 1

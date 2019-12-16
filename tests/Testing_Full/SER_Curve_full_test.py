@@ -19,8 +19,8 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    # SNRs_dB = np.linspace(-5, 10, 10)
-    SNRs_dB = np.linspace(6, 10,3)
+    SNRs_dB = np.linspace(-5, 10, 5)
+    # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
@@ -28,13 +28,13 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 500
-        # channel = np.zeros((1, 4))
-        # channel[0, [0, 1, 2]] = 1, .2 , .1
+        number_symbols = 1000
+        channel = np.zeros((1, 4))
+        channel[0, [0, 1, 2]] = 1, .2 , .1
         # channel = np.zeros((1, 6))
         # channel[0, [0, 1, 2,3,4]] = 1, .4 , .5,.1,.3
-        channel = np.zeros((1, 2))
-        channel[0, [0]] = 1
+        # channel = np.zeros((1, 4))
+        # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -74,7 +74,7 @@ def test_full_integration():
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 100
+        batch_size = 10
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
         for t in range(1000):
@@ -100,7 +100,6 @@ def test_full_integration():
         num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
         mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
         mm = mm.get_probability
-        # mm = 1
 
 
         """
@@ -153,8 +152,6 @@ def test_full_integration():
     plt.legend(loc='upper left')
     path = f"Output/Neural_Network{time.time()}_Convergence.png"
     plt.savefig(path, format="png")
-
-
 
 
     assert True
