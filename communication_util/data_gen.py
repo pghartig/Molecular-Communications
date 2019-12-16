@@ -71,6 +71,9 @@ class training_data_generator:
             self.CIR_matrix = np.ones((1, 1))
             self.channel_shape = self.CIR_matrix.shape
 
+    def add_channel_uncertainty(self):
+        self.CIR_matrix += self.noise_parameter[1] * np.random.randn(self.CIR_matrix[0], self.CIR_matrix[1])
+
     def setup_real_channel(self, function: sampled_function, symbol_length):
         """
         :param function: The function for the fundamental pulse and a number of transmission symbols over which the
