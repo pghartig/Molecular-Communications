@@ -19,7 +19,7 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 10)
+    SNRs_dB = np.linspace(-5, 20, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -29,12 +29,12 @@ def test_full_integration():
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
         number_symbols = 1000
-        channel = np.zeros((1, 4))
-        channel[0, [0, 1, 2, 3]] = 1, .3, .1, .2
+        channel = np.zeros((1, 5))
+        channel[0, [0, 1, 2, 3, 4]] = 1, .3, .1, .2, .4
         # channel = np.zeros((1, 6))
         # channel[0, [0, 1, 2,3,4]] = 1, .4 , .5,.1,.3
-        channel = np.zeros((1, 4))
-        channel[0, [0]] = 1
+        # channel = np.zeros((1, 4))
+        # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -61,7 +61,11 @@ def test_full_integration():
         channel_length = data_gen.CIR_matrix.shape[1]
 
         N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, np.power(m, channel_length)
-        net = models.viterbiNet(D_in, H1, H2, D_out)
+
+        # net = models.viterbiNet(D_in, H1, H2, D_out)
+        dropout_probability = .6
+        net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-3)
@@ -74,13 +78,16 @@ def test_full_integration():
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 50
+        batch_size = 10
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        for t in range(800):
+        epochs = 300
+        for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
             y_batch = y_train[(batch_indices)]
+            # Add "dropout to prevent overfitting data"
+
             output = net(x_batch)
             loss = criterion(output, y_batch.long())
             train_cost_over_epoch.append(loss)
@@ -107,7 +114,7 @@ def test_full_integration():
         Create new set of test data. 
         """
 
-        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols*2), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -141,7 +148,7 @@ def test_full_integration():
     pickle_out.close()
 
     figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,viterbi_net_performance], data_gen.get_info_for_plot())
-    time_path = "Output/SER_"+net.name+str(num_inputs_for_nn)+ str(number_symbols) + " symbols " + str(time.time())+"curves.png"
+    time_path = "Output/SER_"+f"epochs:{epochs}"+ f"_batch_size:{batch_size}" + f"_symbols {number_symbols} " + str(time.time())+"curves.png"
     figure.savefig(time_path, format="png")
 
     #Plots for NN training information
