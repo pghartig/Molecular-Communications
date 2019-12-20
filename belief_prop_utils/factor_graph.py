@@ -1,5 +1,5 @@
 import numpy as np
-
+from communication_util.model_metrics import *
 # import ABC, abstract_method
 
 class factor_graph():
@@ -7,18 +7,19 @@ class factor_graph():
     The factor graph should be determined by the nodes and thus no inheritence for specific factor graph algorithms
     should be needed here.
     """
-    def __init__(self, received_sequence, code_rules = None):
+    def __init__(self, metric : metric, code_rules = None):
         self.variables = []
         self.functions = []
-        self.setup_varible_nodes(received_sequence)
+        self.setup_varible_nodes(metric)
         self.setup_function_nodes(code_rules)
 
-    def setup_varible_nodes(self, received):
+    def setup_varible_nodes(self, metric):
         # First setup variables nodes
-        for symbol in received:
-            self.variables.append(variable_node(symbol))
+        for index , symbol in enumerate(metric.received):
+            test = metric.metric(index)
+            self.variables.append(variable_node(metric(index)))
 
-    def setup_function_nodes(self, code_rules= None):
+    def setup_function_nodes(self, code_rules=None):
         """
         Code Rules should come as a dict with the associated parity checks for each bit as the values for the symbrol
         index key.

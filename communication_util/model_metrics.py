@@ -1,8 +1,18 @@
 import numpy as np
 import torch
 import torch.nn.functional as F
+# import ABC, abstract_method
 
-class gaussian_channel_metric_working():
+#TODO import ABC
+class metric():
+    def __init__(self,received):
+        self.received = np.flip(received)
+    #absract_method
+    # def metric(self, index):
+    #     pass
+
+
+class gaussian_channel_metric_working(metric):
     """
     returns vector of metrics for incoming state of viterbi with a gaussian channel
     :param survivor_paths:
@@ -13,8 +23,8 @@ class gaussian_channel_metric_working():
     :return:
     """
     def __init__(self, csi, received):
+        metric.__init__(self, received)
         self.parameters = csi
-        self.received = np.flip(received)
 
     def metric(self, index, states):
         costs = []
@@ -25,7 +35,7 @@ class gaussian_channel_metric_working():
             costs.append(cost)
         return np.asarray(costs)
 
-class nn_mm_metric():
+class nn_mm_metric(metric):
 
     """
     returns vector of metrics for incoming state of viterbi with a gaussian channel
@@ -37,6 +47,7 @@ class nn_mm_metric():
     :return:
     """
     def __init__(self, nn, mm, received, input_length=1):
+        metric.__init__(self, received)
         self.nn = nn
         self.mm = mm
         self.received = np.flip(received)
