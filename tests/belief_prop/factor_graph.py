@@ -10,3 +10,4 @@ def test_graph_setup():
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
     graph = factor_graph(data_gen.channel_output.flatten())
+    graph.iterate_message_passing()

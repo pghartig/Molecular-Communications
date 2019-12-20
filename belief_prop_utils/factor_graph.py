@@ -16,9 +16,9 @@ class factor_graph():
     def setup_varible_nodes(self, received):
         # First setup variables nodes
         for symbol in received:
-            self.variables.append(graph_node(symbol))
+            self.variables.append(variable_node(symbol))
 
-    def setup_function_nodes(self, code_rules):
+    def setup_function_nodes(self, code_rules= None):
         """
         Code Rules should come as a dict with the associated parity checks for each bit as the values for the symbrol
         index key.
@@ -27,24 +27,30 @@ class factor_graph():
         """
         if code_rules is None:
             # In this case just attach adjacent variable nodes
+            #TODO turn into a code rule
             previous = None
             for ind, variable_node in enumerate(self.variables):
                 if previous is not None:
-                    variable_node.add_connection(previous)
-                    previous.add_connection(variable_node)
+                    new_func_node = function_node(np.sum)
+                    self.functions.append(new_func_node)
+                    variable_node.add_connection(new_func_node)
+                    previous.add_connection(new_func_node)
+                previous = variable_node
         else:
             #TODO
             for symbol in code_rules:
                 self.factors.get("variables")[symbol]
 
+    def iterate_message_passing(self):
+        pass
 
 #TODO make ABC
 class graph_node():
     """
     may want to enforce bitartite creation first
     """
-    def __init__(self, metric):
-        self.neighbors  = []
+    def __init__(self):
+        self.neighbors = []
         # Rule for processing incoming message (this will be a function)
         self.rule = None
         self.incoming_message_queue = []
@@ -66,11 +72,13 @@ class graph_node():
         for neighbor in self.neighbors:
             neighbor.add_message(self.outgoing_message)
 
-class function_node():
-    def __init__(self):
-        pass
+class variable_node(graph_node):
+    def __init__(self, metric):
+        graph_node.__init__(self)
+        self.metric = metric
 
 
-class function_node():
-    def __init__(self):
-        pass
+class function_node(graph_node):
+    def __init__(self, operation = np.sum):
+        graph_node.__init__(self)
+        self.operation = operation
