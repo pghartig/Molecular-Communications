@@ -28,9 +28,10 @@ class graph_node():
 
     #@abstract_method
     def map_message(self):
+        return None
 
 
 
-
-class function_noe()
-
+class function_noe():
+    def __init__(self):
+        pass
