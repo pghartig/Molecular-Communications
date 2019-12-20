@@ -3,15 +3,44 @@ import numpy as np
 # import ABC, abstract_method
 
 class factor_graph():
-    def __init__(self):
-        factor = dict()
+    """
+    The factor graph should be determined by the nodes and thus no inheritence for specific factor graph algorithms
+    should be needed here.
+    """
+    def __init__(self, received_sequence, code_rules = None):
+        self.variables = []
+        self.functions = []
+        self.setup_varible_nodes(received_sequence)
+        self.setup_function_nodes(code_rules)
+
+    def setup_varible_nodes(self, received):
+        # First setup variables nodes
+        for symbol in received:
+            self.variables.append(graph_node(symbol))
+
+    def setup_function_nodes(self, code_rules):
+        """
+        Code Rules should come as a dict with the associated parity checks for each bit as the values for the symbrol
+        index key.
+        :param code_rules:
+        :return:
+        """
+        if code_rules is None:
+            # In this case just attach adjacent variable nodes
+            for variable_node in self.variables:
+                variable_node.
+        else:
+            #TODO
+            for symbol in code_rules:
+                self.factors.get("variables")[symbol]
+
 
 #TODO make ABC
 class graph_node():
     """
     may want to enforce bitartite creation first
     """
-    def __init__(self):
+    def __init__(self, metric):
         self.neighbors  = []
         # Rule for processing incoming message (this will be a function)
         self.rule = None
@@ -31,7 +60,11 @@ class graph_node():
         return None
 
 
+class function_node():
+    def __init__(self):
+        pass
 
-class function_noe():
+
+class function_node():
     def __init__(self):
         pass
