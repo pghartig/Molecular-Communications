@@ -27,8 +27,11 @@ class factor_graph():
         """
         if code_rules is None:
             # In this case just attach adjacent variable nodes
-            for variable_node in self.variables:
-                variable_node.
+            previous = None
+            for ind, variable_node in enumerate(self.variables):
+                if previous is not None:
+                    variable_node.add_connection(previous)
+                    previous.add_connection(variable_node)
         else:
             #TODO
             for symbol in code_rules:
@@ -47,6 +50,9 @@ class graph_node():
         self.incoming_message_queue = []
         self.outgoing_message = None
 
+    def add_connection(self, neighbor):
+        self.neighbors.append(neighbor)
+
     def add_message(self, message):
         self.incoming_message_queue.append(message)
 
@@ -57,8 +63,8 @@ class graph_node():
 
     #@abstract_method
     def map_message(self):
-        return None
-
+        for neighbor in self.neighbors:
+            neighbor.add_message(self.outgoing_message)
 
 class function_node():
     def __init__(self):
