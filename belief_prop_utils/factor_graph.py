@@ -16,8 +16,7 @@ class factor_graph():
     def setup_varible_nodes(self, metric):
         # First setup variables nodes
         for index , symbol in enumerate(metric.received):
-            test = metric.metric(index)
-            self.variables.append(variable_node(metric(index)))
+            self.variables.append(variable_node(metric.metric(index)))
 
     def setup_function_nodes(self, code_rules=None):
         """
