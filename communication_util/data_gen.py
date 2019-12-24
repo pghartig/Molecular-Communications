@@ -446,4 +446,3 @@ class training_data_generator:
         information.append("Channel Length (wrt symbols): " + str(self.CIR_matrix.shape[1]))
         information.append("# transmitted symbols: " + str(self.symbol_stream_matrix.shape[1]))
         return information
-

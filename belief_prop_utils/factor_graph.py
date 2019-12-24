@@ -1,6 +1,6 @@
 import numpy as np
 from communication_util.model_metrics import *
-# import ABC, abstract_method
+from abc import ABC, abstractmethod
 
 class factor_graph():
     """
@@ -15,7 +15,7 @@ class factor_graph():
 
     def setup_varible_nodes(self, metric):
         # First setup variables nodes
-        for index , symbol in enumerate(metric.received):
+        for index, symbol in enumerate(metric.received):
             self.variables.append(variable_node(metric.metric(index)))
 
     def setup_function_nodes(self, code_rules=None):
@@ -42,10 +42,29 @@ class factor_graph():
                 self.factors.get("variables")[symbol]
 
     def iterate_message_passing(self):
+        """
+        First all variables nodes will passing their message to the queue of adjacent function nodes.
+        Then function nodes will pass the message back to the queue of variable nodes.
+        In this way, potential decoding can be done after each iteration.
+        Each set of nodes will empty their message queue following an iteration.
+        :return:
+        """
+        self.map_messages(self.variables)
+        self.collect(self.functions)
+        self.map_messages(self.functions)
+        self.collect(self.variables)
+
+    def map_messages(self, nodes):
+        for node in nodes:
+            node.map_message()
         pass
 
-#TODO make ABC
-class graph_node():
+    def collect(self, nodes):
+        for node in nodes:
+            node.collect_messages()
+        pass
+
+class graph_node(ABC):
     """
     may want to enforce bitartite creation first
     """
@@ -62,12 +81,13 @@ class graph_node():
     def add_message(self, message):
         self.incoming_message_queue.append(message)
 
-    #@abstract_method
+    #@abstractmethod
     def collect_messages(self):
         while self.incoming_message_queue is not None:
             self.rule(self.outgoing_message, self.incoming_message_queue.pop())
+        self.incoming_message_queue = []
 
-    #@abstract_method
+    #@abstractmethod
     def map_message(self):
         for neighbor in self.neighbors:
             neighbor.add_message(self.outgoing_message)
