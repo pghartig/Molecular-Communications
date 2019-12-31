@@ -97,7 +97,6 @@ class variable_node(graph_node):
         graph_node.__init__(self)
         self.metric = metric
 
-
 class function_node(graph_node):
     def __init__(self, operation = np.sum):
         graph_node.__init__(self)
