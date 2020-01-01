@@ -12,7 +12,27 @@ def load_file(path):
     susceptability = normalize_vector(susceptability)
     return time, susceptability
 
-def get_pulse(time, measurement):
+def get_pulse(time_vec, measurement):
+    """
+    This algorithm is used to identify a fundamental pulse with which to subsequently match filter a signal and works
+    as follows:
+    1. Find all points in training data exceeding some threshold.
+    2. Using this to find the length (time) between the training pulses.
+    3. Use the length from previous step to sample impulse responses in the training data and place in matrix.
+    4. Using the covariance matrix of the above training examples and find eigenvector for largest eigenvalue.
+    5. Averaging the impulse responses yields a nearly identical model pulse.
+    :param time:
+    :param measurement:
+    :return:
+    """
+    truncate = 490
+    for ind ,time_point in enumerate(time_vec):
+        if time_point > truncate:
+            time = time_vec[:ind]
+            break
+    measurement = measurement[:time.size]
+    plt.plot(time,measurement)
+    plt.show()
     threshold = max(measurement)/2
     # get index of values exceeding threshold
     exceed_threshold = measurement > threshold
@@ -32,18 +52,15 @@ def get_pulse(time, measurement):
     symbol_period_estimate = np.average(lengths)
     symbol_period_estimate = np.median(lengths)
     impulse_responses = []
+    training_data_size = 10
     for index, value in enumerate(exceed_threshold):
-        if value and not previous:
-            lengths.append(cur_length)
-            cur_length = 0
+        if value and not previous and len(impulse_responses)<training_data_size:
             if exceed_threshold.size> index+symbol_period_estimate:
                 impulse = measurement[index-30:index+int(symbol_period_estimate)]
                 impulse_responses.append(impulse)
-                # plt.plot(impulse)
-        else:
-            cur_length += 1
+                plt.plot(impulse)
         previous = value
-    # plt.show()
+    plt.show()
     impulse_responses = np.vstack(impulse_responses)
     Rxx = impulse_responses.T@impulse_responses
     eigen_values, eigen_vectors = np.linalg.eigh(Rxx)
@@ -61,5 +78,4 @@ def match_filter(measurements, receive_filter):
 
 
 def normalize_vector(vector):
-    check = np.std(vector)
     return (vector - np.average(vector))/np.std(vector)
