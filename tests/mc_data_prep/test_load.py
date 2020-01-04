@@ -10,5 +10,5 @@ def test_load():
     test_time, test_measurement = load_file(test_path)
     pulse_shape = get_pulse(train_time, train_measurement)
     symbols = match_filter(test_measurement, pulse_shape)
-    plt.plot(test_measurement)
-    plt.show()
+    # plt.plot(test_measurement)
+    # plt.show()

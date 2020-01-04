@@ -31,8 +31,8 @@ def get_pulse(time_vec, measurement):
             time = time_vec[:ind]
             break
     measurement = measurement[:time.size]
-    plt.plot(time,measurement)
-    plt.show()
+    # plt.plot(time,measurement)
+    # plt.show()
     threshold = max(measurement)/2
     # get index of values exceeding threshold
     exceed_threshold = measurement > threshold
@@ -72,8 +72,11 @@ def get_pulse(time_vec, measurement):
     return ave_impulse_response
 
 def match_filter(measurements, receive_filter):
-    check = np.convolve(measurements,np.flip(receive_filter))
-    plt.plot(check)
+    check = np.convolve(measurements, np.flip(receive_filter))
+    plt.plot(check,'r')
+    # check = np.convolve(measurements, receive_filter)
+    # plt.plot(check,'g')
+    plt.title("filtered")
     plt.show()
 
 

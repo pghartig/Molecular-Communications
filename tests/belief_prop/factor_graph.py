@@ -1,15 +1,12 @@
-from belief_prop_utils.factor_graph import factor_graph
-from communication_util import *
+from communication_util.Equalization.belief_prop_utils.factor_graph import factor_graph
 import torch.nn as nn
 from mixture_model.em_algorithm import em_gausian
-import pickle
 from communication_util.data_gen import *
 from viterbi.viterbi import *
 from communication_util.general_tools import *
 from nn_utilities import models
 import torch.optim as optim
-import os
-import time
+
 
 def test_graph_setup():
     number_symbols = 1000

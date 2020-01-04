@@ -8,7 +8,7 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
     states = []
     item = []
-    get_combinatoric_list(transmit_alphabet, channel_length, states, item)  # Generate states used below
+    get_combinatoric_list(transmit_alphabet, channel_length, states, item)
     trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
     # step through channel output
     for index in range(channel_output.shape[1]):
@@ -19,6 +19,9 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
 
 
 class viterbi_trellis():
+    """
+    Note that in order to prevent keeping a large trellis in memory, the nodes are reused in each step.
+    """
     def __init__(self, alphabet, states, metric_function):
         self.states = states
         self.alphabet = alphabet

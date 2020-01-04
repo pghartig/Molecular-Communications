@@ -10,13 +10,13 @@ class factor_graph():
     def __init__(self, metric : metric, code_rules = None):
         self.variables = []
         self.functions = []
-        self.setup_varible_nodes(metric)
+        self.setup_variable_nodes(metric)
         self.setup_function_nodes(code_rules)
 
-    def setup_varible_nodes(self, metric):
+    def setup_variable_nodes(self, variable_metric):
         # First setup variables nodes
-        for index, symbol in enumerate(metric.received):
-            self.variables.append(variable_node(metric.metric(index)))
+        for index, symbol in enumerate(variable_metric.received):
+            self.variables.append(variable_node(variable_metric.metric(index)))
 
     def setup_function_nodes(self, code_rules=None):
         """
@@ -37,7 +37,7 @@ class factor_graph():
                     previous.add_connection(new_func_node)
                 previous = variable_node
         else:
-            #TODO
+            #TODO impelement factor node setup for general code
             for symbol in code_rules:
                 self.factors.get("variables")[symbol]
 

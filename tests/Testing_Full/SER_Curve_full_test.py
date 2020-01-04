@@ -19,7 +19,7 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 20, 10)
+    SNRs_dB = np.linspace(-5, 10, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -30,7 +30,8 @@ def test_full_integration():
         """
         number_symbols = 1000
         channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .3, .1, .2, .4
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .1, .1, .4
         # channel = np.zeros((1, 6))
         # channel[0, [0, 1, 2,3,4]] = 1, .4 , .5,.1,.3
         # channel = np.zeros((1, 4))
@@ -81,7 +82,7 @@ def test_full_integration():
         batch_size = 10
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 300
+        epochs = 500
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]

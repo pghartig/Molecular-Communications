@@ -1,15 +1,16 @@
 import numpy as np
 import torch
 import torch.nn.functional as F
-# import ABC, abstract_method
+from abc import ABC, abstractclassmethod
 
 #TODO import ABC
-class metric():
+class metric(ABC):
     def __init__(self,received):
         self.received = np.flip(received)
-    #absract_method
-    # def metric(self, index):
-    #     pass
+
+    @classmethod
+    def metric(self, index):
+        pass
 
 
 class gaussian_channel_metric_working(metric):
@@ -58,8 +59,8 @@ class nn_mm_metric(metric):
         torch_input = torch.tensor([self.received[0, index-self.nn_input_size:index+1]]).float()
         nn = self.nn(torch_input).flatten()
         mm = self.mm(self.received[0, index])
-        return -nn*mm  # Provides metrics for entire column of states
-        # return - nn    # Need to change sign to align with argmin used in viterbi
+        # return -nn*mm  # Provides metrics for entire column of states
+        return - nn    # Need to change sign to align with argmin used in viterbi
 
     def llr_metric(self, index, states):
         # Be careful using the PyTorch parser with scalars
