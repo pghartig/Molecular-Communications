@@ -1,6 +1,6 @@
 # Implementations
 
-##Table of Contents
+##  Table of Contents
 
 1.  Equalization Schemes
   * Viterbi equalization for linear dispersive channels
@@ -9,4 +9,3 @@
   * Data-driven matched filter detection
 4.  Forward Error Correction Channel decoding
   * Hamming Codes
-  
