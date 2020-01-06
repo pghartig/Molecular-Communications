@@ -9,6 +9,7 @@ The end goal of this example will be to implement a basic  channel coding scheme
 3.  Transmit the encoded signal
 4.  Perform hard-decision detection on the received signal
 5.  Decode the received detected signal using the channel code
+6.  Analyze system performance
 
 ##  Implement
 1. Describe a transmit signal
@@ -37,4 +38,6 @@ The end goal of this example will be to implement a basic  channel coding scheme
 
 4.  Using the received signal, we now apply a hard-decision detection scheme.
 
-5. Finally, we find a detected information sequence using the rules of the channel coding scheme.
+5. We now find the detected information sequence using the rules of the channel coding scheme.
+
+6.  Finally, we will analyze the system performance for the bit error rate (BER) over a desired range of SNR. 

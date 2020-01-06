@@ -75,7 +75,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info):
     plt.xscale('linear')
     plt.yscale('log')
     plt.grid(True)
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper right')
     plt.title(str(info), fontdict={'fontsize': 10})
     plt.title("Symbol Error Rate vs SNR")
     # plt.show()

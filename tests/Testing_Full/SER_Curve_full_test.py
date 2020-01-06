@@ -24,6 +24,7 @@ def test_full_integration():
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
+    channel = None
     for SNR in SNRs:
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
@@ -31,10 +32,9 @@ def test_full_integration():
         number_symbols = 1000
         channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .1, .1, .4
-        # channel = np.zeros((1, 6))
-        # channel[0, [0, 1, 2,3,4]] = 1, .4 , .5,.1,.3
-        # channel = np.zeros((1, 4))
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .1, .1, .4
+        channel[0, [0, 1, 2, 3, 4]] = 1, .4, .5, .1, .3
+        # channel = np.zeros((1, 2))
         # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
@@ -64,7 +64,7 @@ def test_full_integration():
         N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, np.power(m, channel_length)
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
-        dropout_probability = .6
+        dropout_probability = .3
         net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
 
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
@@ -159,8 +159,16 @@ def test_full_integration():
     plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
     plt.xlabel("Epoch")
     plt.ylabel("Error")
-    plt.legend(loc='upper left')
+    plt.legend(loc='upper right')
     path = f"Output/Neural_Network{time.time()}_Convergence.png"
+    plt.savefig(path, format="png")
+
+    #Plots for channel
+    plt.figure(3)
+    plt.plot(channel)
+    plt.title("channel", fontdict={'fontsize': 10})
+    plt.ylabel("tap gain")
+    path = f"Output/Channel{time.time()}.png"
     plt.savefig(path, format="png")
 
 
