@@ -7,14 +7,14 @@
 \bibliographystyle{alpha}
 
 
-\title{Neural Network Based Decoding over a Molecular Communication Channel}
+\title{Neural Network Based Decoding over Molecular Communication Channels}
 \author{Peter Hartig}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-The general communication channel is equivalent to a conditional probability $P(x|y)$. This takes into account the transmitted information, the (potentially random) channel through which this information passes as well as random noise added to the information prior to being received. The communication problems optimizes a form of $P(x|y)$ over a set of transmitted information. In general such problems do not require perfect knowledge of the distribution $P(x|y)$. Such solutions are attractive when $P(x|y)$ is unknown or difficult to obtain. In this work, forms of $P(x|y)$ are used so as to allow for the use of a neural network in finding a solution to the communication problem. 
+
 \end{abstract}
 
 \newpage
@@ -22,9 +22,15 @@ The general communication channel is equivalent to a conditional probability $P(
 \newpage
 
 \section{Introduction}
+Characterizing and obtaining information about communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier in many contexts have enabled vast and effective communication infrastructure, this barrier still limits communication in others. Molecular Communication channels pose a particularly difficult context in which to overcome this barrier as channel characteristics are often non-linear and may be dependent on the specific transmitted information stream.
+In communication contexts, such as wireless, long, "Pilot" symbol-streams are often used to mitigate the difficultly in obtaining channel information by provide real-time information supporting an underlying channel model. The low symbol rate of Molecular Communication channels often makes such strategies impractical. However, the success of this data-driven technique in wireless channels suggest that perhaps an alternative, data-driven method may be viable in the Molecular Communication context. One potential data-driven method for characterizing these channels is a neural network. Neural networks have shown to be an effective tool in data-driven approximating of probability distributions.
+\par
 
+The general communication channel is equivalent to a conditional probability $P(x|y)$, in which $x$ is transmitted information and $y$ is received information.  $P(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes, and random noise added prior to receiving $y$. The communication problem entails optimizing a form of $P(x|y)$ over a set of possible, transmitted information. In general, sub-optimal solutions do not require perfect knowledge of the distribution $P(x|y)$ and may be used when $P(x|y)$ is unknown or impractical to obtain. In this work, a neural network is used to estimate $P(x|y)$.
 
 \section{System Model}
+
+
 \subsection{Maximum Likelihood}
 \subsection{Maximum A Posteriori}
 
