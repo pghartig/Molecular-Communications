@@ -1,6 +1,6 @@
 # Communication System Component Development and Testing framework
 
-The goal of this framework is to provide a consistent communication system structure that may be used during the development of new components within the system such as:
+The goal of this framework is to provide a consistent communication system structure that may be used during the development of new system components such as:
 
 1.  Pulse shaping and receiver filtering
 2.  Equalization and decoding
