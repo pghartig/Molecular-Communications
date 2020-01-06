@@ -71,7 +71,7 @@ def get_pulse(time_vec, measurement):
     plt.show()
     return ave_impulse_response
 
-def match_filter(measurements, receive_filter):
+def match_filter(measurements, receive_filter, symbol_period):
     check = np.convolve(measurements, np.flip(receive_filter))
     plt.plot(check,'r')
     # check = np.convolve(measurements, receive_filter)
