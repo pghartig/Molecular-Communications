@@ -10,6 +10,6 @@ def test_linear_mmse_equalization():
     data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
     data_gen.random_symbol_stream()
     data_gen.send_through_channel()
-    equalizer = linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, channel.size)
+    equalizer = linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix, channel.size)
 
     pass

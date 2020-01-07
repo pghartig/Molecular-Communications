@@ -1,5 +1,5 @@
 import numpy as np
-def linear_mmse(transmit_sequence, received_sequence, channel_length):
+def linear_mmse(transmit_sequence, received_sequence, true_sequence, channel_length):
     """
 
     :param transmit_sequence: Should be long enough to fully represent the observed sequence for a given channel length
@@ -28,6 +28,7 @@ def linear_mmse(transmit_sequence, received_sequence, channel_length):
             one = received_sequence[:,ind:(ind+len(h))]
             check = received_sequence[:,ind:(ind+len(h))]@h
             equalizer_detection.append(received_sequence[:,ind:(ind+len(h))]@h)
-    equalizer_detection = np.asarray(equalizer_detection).flatten()
-
+    equalizer_detection = np.sign(np.asarray(equalizer_detection).flatten())
+    true = true_sequence.flatten()
+    ser = np.sum(np.not_equal(equalizer_detection, true)) / true.size
     return h
