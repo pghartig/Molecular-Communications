@@ -6,6 +6,9 @@ def test_load():
     test_path = 'mc_data/5_cm_test.csv'
     # train_path = 'mc_data/20_cm_train.csv'
     # test_path = 'mc_data/20_cm_test.csv'
+    test_input_sequence = 'mc_data/input_string.txt'
+    test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
+    frame_train_sequence  = np.array((1,1,1,0,0,1,0,1,1,0))
     symbol_period = 10
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)

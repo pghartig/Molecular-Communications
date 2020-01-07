@@ -31,9 +31,9 @@ def test_full_integration():
         """
         number_symbols = 1000
         channel = np.zeros((1, 5))
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .1, .1, .4
-        channel[0, [0, 1, 2, 3, 4]] = 1, .4, .5, .1, .3
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .5, .1, .3
         # channel = np.zeros((1, 2))
         # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -79,10 +79,10 @@ def test_full_integration():
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 10
+        batch_size = 1
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 500
+        epochs = 5000
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -149,7 +149,8 @@ def test_full_integration():
     pickle_out.close()
 
     figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,viterbi_net_performance], data_gen.get_info_for_plot())
-    time_path = "Output/SER_"+f"epochs:{epochs}"+ f"_batch_size:{batch_size}" + f"_symbols {number_symbols} " + str(time.time())+"curves.png"
+    time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
+
     figure.savefig(time_path, format="png")
 
     #Plots for NN training information

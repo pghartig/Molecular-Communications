@@ -31,5 +31,4 @@ def linear_mmse(transmit_sequence, received_sequence, true_sequence, channel_len
     equalizer_detection = np.sign(np.asarray(equalizer_detection).flatten())
     true = true_sequence.flatten()
     ser = np.sum(np.not_equal(equalizer_detection, true)) / true.size
-
     return h
