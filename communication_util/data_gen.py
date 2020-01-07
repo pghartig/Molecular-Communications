@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import logging as log
 from communication_util.general_tools import get_combinatoric_list
 from communication_util.pulse_shapes import  *
+from communication_util.load_mc_data import normalize_vector
 
 
 class training_data_generator:
@@ -26,7 +27,8 @@ class training_data_generator:
         Basic parameters of the data generations
         """
         self.symbol_stream_matrix = np.zeros(symbol_stream_shape)
-        self.CIR_matrix = channel
+        # self.CIR_matrix = channel
+        self.setup_channel(channel)
         self.channel_shape = channel_shape
         self.zero_pad = False
         self.terminated = False
@@ -62,11 +64,17 @@ class training_data_generator:
         """
         self.metrics = None
 
-    def setup_channel(self, shape=(1, 1)):
-        if self.CIR_matrix is not None:
-            self.channel_shape = self.CIR_matrix.shape
-        elif self.channel_shape is not None:
-            self.CIR_matrix = np.random.randn(shape[0], shape[1])
+    def setup_channel(self, channel):
+        """
+        Setup channel matrix such that the channel is normalized
+        :param shape:
+        :return:
+        """
+        if channel is not None:
+            self.CIR_matrix = np.zeros((channel.shape))
+            self.channel_shape = channel.shape
+            for ind in range(channel.shape[0]):
+                self.CIR_matrix[ind, :] = channel/np.linalg.norm(channel)
         else:
             self.CIR_matrix = np.ones((1, 1))
             self.channel_shape = self.CIR_matrix.shape

@@ -60,8 +60,8 @@ def test_full_integration():
         """
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
-
-        N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, np.power(m, channel_length)
+        test_length = channel_length-1
+        N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, np.power(m, test_length)
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
         dropout_probability = .3
@@ -79,10 +79,10 @@ def test_full_integration():
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 1
+        batch_size = 50
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 5000
+        epochs = 500
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
