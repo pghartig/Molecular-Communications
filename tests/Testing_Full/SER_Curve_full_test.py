@@ -19,7 +19,7 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(0, 10, 5)
+    SNRs_dB = np.linspace(-5, 10, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -31,9 +31,9 @@ def test_full_integration():
         """
         number_symbols = 2000
         channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .1, .1, .4
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .9, .1, .3
+        channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 2))
         # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -79,10 +79,10 @@ def test_full_integration():
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 10
+        batch_size = 30
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 50
+        epochs = 300
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -115,7 +115,7 @@ def test_full_integration():
         Create new set of test data. 
         """
 
-        data_gen = training_data_generator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -130,7 +130,7 @@ def test_full_integration():
         """
         Compare to Classical Viterbi with full CSI
         """
-        channel= np.round(channel*10)
+        # channel= np.round(channel*10)
         metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
         detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)

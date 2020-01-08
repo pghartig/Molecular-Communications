@@ -250,7 +250,7 @@ class training_data_generator:
         #   Quantize
 
         # test = np.round(self.channel_output*100)
-        self.channel_output = np.round(self.channel_output*10)
+        # self.channel_output = np.round(self.channel_output*10)
         # self.channel_output = self.channel_output.astype('half')
         test =1
 

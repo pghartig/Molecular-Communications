@@ -77,6 +77,21 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info):
     # plt.show()
     return fig
 
+
+def quant_symbol_error_rates(SNRs_dB, SER_list):
+    fig = plt.figure(1)
+    for ind in range(SER_list.shape[0]):
+        plt.plot(SNRs_dB, SER_list[ind,:], label=f" {ind}")
+    plt.xlabel("SNR (dB)")
+    plt.ylabel("SER")
+    plt.xscale('linear')
+    plt.yscale('log')
+    plt.grid(True)
+    plt.legend(loc='upper right')
+    plt.title("Symbol Error Rate vs SNR")
+    # plt.show()
+    return fig
+
 def threshold_detector(alphabet, output):
     detected_symbols = []
     for stream in range(output.shape[0]):
