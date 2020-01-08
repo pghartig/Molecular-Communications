@@ -33,7 +33,6 @@ def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channe
     test = np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
     return np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
 
-
 def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,channel_length):
     """
     The first symbol the viterbi detects is the l-1 symbol in the stream. where l is the channel impulse response length.
@@ -54,9 +53,6 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     return ser
 
-
-
-
 def symbol_error_rate_sampled(detected_symbols, input_symbols):
     # ignore last symbols since there is extra from the convolution
     array = np.asarray(detected_symbols)
@@ -67,7 +63,7 @@ def random_channel():
 
 def plot_symbol_error_rates(SNRs_dB, SER_list,info):
     fig = plt.figure(1)
-    names =["Classic Viterbi", "Nerual Net"]
+    names =["Classic Viterbi", "Neural Net"]
     for ind, SER in enumerate (SER_list):
         plt.plot(SNRs_dB, SER, label=f'curve: {names[ind]}')
     plt.xlabel("SNR (dB)")
@@ -81,7 +77,6 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info):
     # plt.show()
     return fig
 
-
 def threshold_detector(alphabet, output):
     detected_symbols = []
     for stream in range(output.shape[0]):
@@ -89,3 +84,24 @@ def threshold_detector(alphabet, output):
             detected = alphabet[np.argmin(np.abs(alphabet - received_symbol))]
             detected_symbols.append(detected)
     return detected_symbols
+
+def quantizer(input, largest, bits_available):
+    """
+    Range should be based on expected std of noise and the largest value due to the estimate channel and the known transmit alphabet
+    :param input:
+    :param range:
+    :param bits_available:
+    :return:
+    """
+    bins = np.linspace(0, largest, pow(2,bits_available-1))
+    bins[-1] = 500
+    quantized_vector = []
+    for sample in input.flatten():
+        previous = 0
+        binary = int(sample)
+        for bin in bins:
+            if np.abs(sample) < bin:
+                quantized_vector.append(np.sign(sample)*previous)
+                break
+            previous = bin
+    return np.asarray(quantized_vector)

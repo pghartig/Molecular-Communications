@@ -230,7 +230,7 @@ class training_data_generator:
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function, noise=False)
 
-    def send_through_channel(self):
+    def send_through_channel(self, quantizer = None):
         """
         Note that given the numpy convolution default, the impulse response should be provided with the longest delay
         tap on the left most index.
@@ -242,10 +242,18 @@ class training_data_generator:
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.flip(np.asarray(self.channel_output))
 
-        # adjust noise power to provided SNR parameter
+        #   adjust noise power to provided SNR parameter
         self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1] *\
                                np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
+
+        #   Quantize
+
+        # test = np.round(self.channel_output*100)
+        self.channel_output = np.round(self.channel_output*10)
+        # self.channel_output = self.channel_output.astype('half')
+        test =1
+
 
     def transmit_modulated_signal2(self):
         """
