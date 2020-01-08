@@ -31,9 +31,9 @@ def test_full_integration():
         """
         number_symbols = 1000
         channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .1, .1, .4
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .5, .1, .3
+        channel[0, [0, 1, 2, 3, 4]] = 1, .4, .9, .1, .3
         # channel = np.zeros((1, 2))
         # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -45,7 +45,7 @@ def test_full_integration():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
+        x, y = data_gen.get_labeled_data_reduced_state(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)

@@ -373,6 +373,47 @@ class training_data_generator:
                     j+=1
         return x_list, y_list
 
+    def get_labeled_data_reduced_state(self, inputs=1):
+        num_reduced_states = 2
+        inputs -= 1
+        x_list = []
+        y_list = []
+        reduced_states = []
+        item = []
+        get_combinatoric_list(self.alphabet,num_reduced_states+1, reduced_states, item)  # Generate states used below
+        reduced_states = np.asarray(reduced_states)
+        inputs -=1
+        x_list = []
+        y_list = []
+        states = []
+        item = []
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
+        states = np.asarray(states)
+        #   Create a state compression (in this case a projection matrix to the largest covariance eigenvectors)
+        reduced = states[:, :-1]*self.CIR_matrix[:, :-1]
+        covariance_reduced = reduced.T@reduced
+        eigen_vectors = np.linalg.eig(covariance_reduced)[1][:, :num_reduced_states]
+        projection_matrix = np.zeros((self.CIR_matrix.shape[1], eigen_vectors.shape[1]+1))
+        projection_matrix[:eigen_vectors.shape[0],:eigen_vectors.shape[1]] = eigen_vectors
+        projection_matrix[-1, -1] = 1
+        projection_matrix = np.sign(projection_matrix)
+        if self.channel_output is not None:
+            j=0
+            #   Go create training example from each channel output
+            for i in range(self.channel_output.shape[1]):
+                #   Take care of causality of creating training sets and unused output symbols
+                if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
+                    #   Get true state of the system
+                    state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()==1
+                    state = state.T@projection_matrix
+                    probability_vec = self.get_probability(state, states)
+                    x_list.append(self.channel_output[:, i:i+inputs+1].flatten())
+                    y_list.append(probability_vec)
+                    j+=1
+        return x_list, y_list
+
+
+
     def get_probability(self, input, states):
         """
 
