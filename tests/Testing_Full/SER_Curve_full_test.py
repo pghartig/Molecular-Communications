@@ -45,7 +45,7 @@ def test_full_integration():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
+        x, y = data_gen.get_labeled_data_reduced_state(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)

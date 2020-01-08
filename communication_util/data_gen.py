@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.cluster.vq import kmeans2
 import math
 import matplotlib.pyplot as plt
 import logging as log
@@ -398,13 +399,17 @@ class training_data_generator:
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
         states = np.asarray(states)
         #   Create a state compression (in this case a projection matrix to the largest covariance eigenvectors)
-        reduced = states[:, :-1]*self.CIR_matrix[:, :-1]
-        covariance_reduced = reduced.T@reduced
-        eigen_vectors = np.linalg.eig(covariance_reduced)[1][:, :num_reduced_states]
-        projection_matrix = np.zeros((self.CIR_matrix.shape[1], eigen_vectors.shape[1]+1))
-        projection_matrix[:eigen_vectors.shape[0],:eigen_vectors.shape[1]] = eigen_vectors
-        projection_matrix[-1, -1] = 1
-        projection_matrix = np.sign(projection_matrix)
+        reduced = np.asarray(states)[:, :-1]@self.CIR_matrix[:, :-1].T
+        # plt.scatter(reduced,reduced)
+        # plt.show()
+        # TODO perform k-means cluseter on the states here and then group together in subsequent training data creation
+        clusters = kmeans2(reduced, 4)[1]
+        # covariance_reduced = reduced.T@reduced
+        # eigen_vectors = np.linalg.eig(covariance_reduced)[1][:, :num_reduced_states]
+        # projection_matrix = np.zeros((self.CIR_matrix.shape[1], eigen_vectors.shape[1]+1))
+        # projection_matrix[:eigen_vectors.shape[0],:eigen_vectors.shape[1]] = eigen_vectors
+        # projection_matrix[-1, -1] = 1
+        # projection_matrix = np.sign(projection_matrix)
         if self.channel_output is not None:
             j=0
             #   Go create training example from each channel output
@@ -412,8 +417,9 @@ class training_data_generator:
                 #   Take care of causality of creating training sets and unused output symbols
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     #   Get true state of the system
-                    state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()==1
-                    state = state.T@projection_matrix
+                    state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]]
+                    probability_vec = self.get_probability(state, states)
+                    state = clusters[np.argmax(probability_vec)]
                     probability_vec = self.get_probability(state, states)
                     x_list.append(self.channel_output[:, i:i+inputs+1].flatten())
                     y_list.append(probability_vec)
