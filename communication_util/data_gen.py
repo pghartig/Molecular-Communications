@@ -420,8 +420,6 @@ class training_data_generator:
                     j+=1
         return x_list, y_list
 
-
-
     def get_probability(self, input, states):
         """
 
