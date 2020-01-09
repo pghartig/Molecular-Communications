@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import time
+from scipy.stats import norm
 
 
 def get_combinatoric_list(alpabet, item_length, item_list, item):
@@ -61,11 +62,18 @@ def symbol_error_rate_sampled(detected_symbols, input_symbols):
 def random_channel():
     return np.random.randn()
 
-def plot_symbol_error_rates(SNRs_dB, SER_list,info):
+def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     fig = plt.figure(1)
     names =["Classic Viterbi", "Neural Net"]
     for ind, SER in enumerate (SER_list):
         plt.plot(SNRs_dB, SER, label=f'curve: {names[ind]}')
+    if analytic_ser==True:
+        #TODO general to other pam schemes
+        SNRs_dB = np.linspace(-5, 10, 100)
+        snrs = np.power(10, SNRs_dB / 10)
+        q_function = norm.sf
+        SER = q_function(2 * np.sqrt(snrs))
+        plt.plot(SNRs_dB, SER, label='analytic_ml')
     plt.xlabel("SNR (dB)")
     plt.ylabel("SER")
     plt.xscale('linear')
@@ -76,7 +84,6 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info):
     plt.title("Symbol Error Rate vs SNR")
     # plt.show()
     return fig
-
 
 def quant_symbol_error_rates(SNRs_dB, SER_list):
     fig = plt.figure(1)

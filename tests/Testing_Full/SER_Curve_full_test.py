@@ -19,7 +19,7 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 10)
+    SNRs_dB = np.linspace(-5, 10, 5)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -45,7 +45,7 @@ def test_full_integration():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        x, y = data_gen.get_labeled_data_reduced_state(inputs=num_inputs_for_nn)
+        x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
@@ -174,3 +174,14 @@ def test_full_integration():
 
 
     assert True
+
+
+def test_plt_ser():
+    SNRs_dB = np.linspace(-5, 10, 100)
+    snrs = np.power(10, SNRs_dB / 10)
+    q_function = norm.sf
+    SER = q_function(2 * np.sqrt(snrs))
+    plt.plot(SNRs_dB, SER, label='analytic_ml')
+    plt.xscale('linear')
+    plt.yscale('log')
+    plt.show()
