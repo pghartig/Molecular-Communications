@@ -8,6 +8,8 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
     if reduced_length == None:
         reduced_length = channel_length
+    else:
+        reduced_length = int(np.log2(reduced_length))
     states = []
     item = []
     get_combinatoric_list(transmit_alphabet, reduced_length, states, item)

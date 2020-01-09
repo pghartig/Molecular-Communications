@@ -34,9 +34,6 @@ def test_viterbi_quantization():
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 2))
         # channel[0, [0]] = 1
-        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
-        data_gen.random_symbol_stream()
-        data_gen.send_through_channel()
 
         """
         After sending through channel, symbol detection should be performed using something like a matched filter.
@@ -53,7 +50,7 @@ def test_viterbi_quantization():
         channel_length = data_gen.CIR_matrix.shape[1]
         quant_ser = []
         for level in range(4):
-            quantized_output =  np.round(data_gen.channel_output*(pow(10,level)))
+            quantized_output = np.round(data_gen.channel_output*(pow(10, level)))
             metric = gaussian_channel_metric_working(channel, quantized_output)
             detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, quantized_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)

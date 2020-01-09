@@ -380,23 +380,28 @@ class training_data_generator:
         return x_list, y_list
 
     def get_labeled_data_reduced_state(self, inputs=1):
-        num_reduced_states = 2
-        inputs -= 1
         x_list = []
         y_list = []
-        reduced_states = []
-        item = []
-        get_combinatoric_list(self.alphabet,num_reduced_states+1, reduced_states, item)  # Generate states used below
-        reduced_states = np.asarray(reduced_states)
         inputs -=1
-        x_list = []
-        y_list = []
+        reduced_states = 4
         states = []
         item = []
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1]-1, states, item)  # Generate states used below
         states = np.asarray(states)
+        states_reduced = []
+        item_reduced = []
+        base_states = int(np.log2(np.ceil(reduced_states)))
+        get_combinatoric_list(self.alphabet, np.log2(np.ceil(reduced_states)), states_reduced, item_reduced)  # Generate states used below
+        states_reduced = np.asarray(states_reduced)
+
+        states_final = []
+        item_final = []
+        get_combinatoric_list(self.alphabet, np.log2(np.ceil(reduced_states))+1, states_final,
+                              item_final)  # Generate states used below
+        states_reduced = np.asarray(states_reduced)
+
         #   Create a state compression (in this case a projection matrix to the largest covariance eigenvectors)
-        reduced = np.asarray(states)[:, :-1]@self.CIR_matrix[:, :-1].T
+        reduced = np.asarray(states)@np.flip(self.CIR_matrix[:, :-1]).T
         # plt.scatter(reduced,reduced)
         # plt.show()
         # TODO perform k-means cluseter on the states here and then group together in subsequent training data creation
@@ -414,12 +419,17 @@ class training_data_generator:
                 #   Take care of causality of creating training sets and unused output symbols
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     #   Get true state of the system
-                    state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]]
+                    symbol = self.symbol_stream_matrix[:,j].flatten()
+                    state = self.symbol_stream_matrix[:, j+1: j+self.CIR_matrix.shape[1]].flatten()
                     probability_vec = self.get_probability(state, states)
                     state = clusters[np.argmax(probability_vec)]
-                    probability_vec = self.get_probability(state, states)
-                    x_list.append(self.channel_output[:, i:i+inputs+1].flatten())
-                    y_list.append(probability_vec)
+                    new_state = states_reduced[state]
+                    #   turn zeros into -1s
+                    reduced_state = np.flip(np.append(new_state, symbol))
+                    reduced_state += (reduced_state == 0)*-1
+                    probability_vec_reduced = self.get_probability(reduced_state, states_final)
+                    y_list.append(probability_vec_reduced)
+                    x_list.append(self.channel_output[:, i].flatten())
                     j+=1
         return x_list, y_list
 
@@ -504,3 +514,6 @@ class training_data_generator:
         information.append("Channel Length (wrt symbols): " + str(self.CIR_matrix.shape[1]))
         information.append("# transmitted symbols: " + str(self.symbol_stream_matrix.shape[1]))
         return information
+
+
+
