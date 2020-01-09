@@ -31,9 +31,9 @@ def test_reduced_state():
         """
         number_symbols = 2000
         channel = np.zeros((1, 5))
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
-        channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
