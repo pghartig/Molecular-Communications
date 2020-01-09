@@ -19,7 +19,7 @@ def test_full_integration():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(5, 10, 10)
+    SNRs_dB = np.linspace(-5, 10, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -30,12 +30,12 @@ def test_full_integration():
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
         number_symbols = 2000
-        # channel = np.zeros((1, 5))
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel = np.zeros((1, 5))
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .1, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
-        channel = np.zeros((1, 1))
-        channel[0, [0]] = 1
+        # channel = np.zeros((1, 1))
+        # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -114,7 +114,7 @@ def test_full_integration():
         After sending through channel, symbol detection should be performed using something like a matched filter.
         Create new set of test data. 
         """
-
+        del data_gen
         data_gen = training_data_generator(symbol_stream_shape=(1, 10000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()

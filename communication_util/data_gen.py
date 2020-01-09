@@ -243,13 +243,11 @@ class training_data_generator:
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.flip(np.asarray(self.channel_output))
 
-        #   adjust noise power to provided SNR parameter
-        self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
-        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1] *\
-                               np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
+        #   adjust noise power to provided SNR parameter. Note symbols should always be normalized to unit power.
+        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
+        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
 
         #   Quantize
-
         # test = np.round(self.channel_output*100)
         # self.channel_output = np.round(self.channel_output*10)
         # self.channel_output = self.channel_output.astype('half')

@@ -20,7 +20,7 @@ def symbol_error_rate(detected_symbols, input_symbols,channel_length):
     test1 = np.max(np.convolve(detected_array,t))
     test2 = np.argmax(np.convolve(detected_array,t))
     detected_array = np.flip(detected_array)
-    check2 = t[(channel_length-1)::]
+    check2 = t[(channel_length)::]
     check1 = detected_array[channel_length::]
     ser = np.sum(np.not_equal(check2[:check1.size], check1)) / check1.size
     return ser
@@ -49,7 +49,7 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     # test1 = np.max(np.convolve(detected_array,t))
     # test2 = np.argmax(np.convolve(detected_array,t))
     detected_array = np.flip(detected_array)
-    check1 = detected_array[(channel_length):]
+    check1 = detected_array[(channel_length-1):]
     check2 = t[:check1.size]
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     return ser
@@ -57,7 +57,8 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
 def symbol_error_rate_sampled(detected_symbols, input_symbols):
     # ignore last symbols since there is extra from the convolution
     array = np.asarray(detected_symbols)
-    return np.sum(np.logical_not(np.equal(array, input_symbols))) / array.size
+    ser = np.sum(np.logical_not(np.equal(array, input_symbols))) / array.size
+    return ser
 
 def random_channel():
     return np.random.randn()
