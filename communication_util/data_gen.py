@@ -255,7 +255,6 @@ class training_data_generator:
         # self.channel_output = self.channel_output.astype('half')
         test =1
 
-
     def transmit_modulated_signal2(self):
         """
         For this version, it is assumed that a impulse response is obtained. Using this, the linearity property of
