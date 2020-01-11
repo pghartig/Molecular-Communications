@@ -3,17 +3,21 @@ from communication_util.model_metrics import *
 from communication_util.general_tools import get_combinatoric_list
 
 
-def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, metric_function):
+def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, metric_function, reduced_length=None):
 
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
+    if reduced_length == None:
+        reduced_length = channel_length
+    else:
+        reduced_length = int(np.log2(reduced_length))
     states = []
     item = []
-    get_combinatoric_list(transmit_alphabet, channel_length, states, item)
+    get_combinatoric_list(transmit_alphabet, reduced_length, states, item)
     trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
     # step through channel output
     for index in range(channel_output.shape[1]):
         # Need to prevent stepping until there are sufficient metrics for the input to the NN
-        if index>=channel_length-1 and index<= channel_output.shape[1] - (channel_length-1):
+        if index>=channel_length-1 and index<= channel_output.shape[1] - (channel_length):
             trellis.step_trellis(index)
     return trellis.return_survivor()
 

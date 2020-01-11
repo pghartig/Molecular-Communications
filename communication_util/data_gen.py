@@ -1,9 +1,11 @@
 import numpy as np
+from scipy.cluster.vq import kmeans2
 import math
 import matplotlib.pyplot as plt
 import logging as log
 from communication_util.general_tools import get_combinatoric_list
 from communication_util.pulse_shapes import  *
+from communication_util.load_mc_data import normalize_vector
 
 
 class training_data_generator:
@@ -26,7 +28,8 @@ class training_data_generator:
         Basic parameters of the data generations
         """
         self.symbol_stream_matrix = np.zeros(symbol_stream_shape)
-        self.CIR_matrix = channel
+        # self.CIR_matrix = channel
+        self.setup_channel(channel)
         self.channel_shape = channel_shape
         self.zero_pad = False
         self.terminated = False
@@ -62,11 +65,17 @@ class training_data_generator:
         """
         self.metrics = None
 
-    def setup_channel(self, shape=(1, 1)):
-        if self.CIR_matrix is not None:
-            self.channel_shape = self.CIR_matrix.shape
-        elif self.channel_shape is not None:
-            self.CIR_matrix = np.random.randn(shape[0], shape[1])
+    def setup_channel(self, channel):
+        """
+        Setup channel matrix such that the channel is normalized
+        :param shape:
+        :return:
+        """
+        if channel is not None:
+            self.CIR_matrix = np.zeros((channel.shape))
+            self.channel_shape = channel.shape
+            for ind in range(channel.shape[0]):
+                self.CIR_matrix[ind, :] = channel/np.linalg.norm(channel)
         else:
             self.CIR_matrix = np.ones((1, 1))
             self.channel_shape = self.CIR_matrix.shape
@@ -222,7 +231,7 @@ class training_data_generator:
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function, noise=False)
 
-    def send_through_channel(self):
+    def send_through_channel(self, quantizer = None):
         """
         Note that given the numpy convolution default, the impulse response should be provided with the longest delay
         tap on the left most index.
@@ -234,10 +243,15 @@ class training_data_generator:
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.flip(np.asarray(self.channel_output))
 
-        # adjust noise power to provided SNR parameter
-        self.noise_parameter[1] *= np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
-        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1] *\
-                               np.random.randn(self.channel_output.shape[0], self.channel_output.shape[1])
+        #   adjust noise power to provided SNR parameter. Note symbols should always be normalized to unit power.
+        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
+        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
+
+        #   Quantize
+        # test = np.round(self.channel_output*100)
+        # self.channel_output = np.round(self.channel_output*10)
+        # self.channel_output = self.channel_output.astype('half')
+        test =1
 
     def transmit_modulated_signal2(self):
         """
@@ -365,6 +379,60 @@ class training_data_generator:
                     j+=1
         return x_list, y_list
 
+    def get_labeled_data_reduced_state(self, inputs=1):
+        x_list = []
+        y_list = []
+        inputs -=1
+        reduced_states = 4
+        states = []
+        item = []
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1]-1, states, item)  # Generate states used below
+        states = np.asarray(states)
+        states_reduced = []
+        item_reduced = []
+        base_states = int(np.log2(np.ceil(reduced_states)))
+        get_combinatoric_list(self.alphabet, np.log2(np.ceil(reduced_states)), states_reduced, item_reduced)  # Generate states used below
+        states_reduced = np.asarray(states_reduced)
+
+        states_final = []
+        item_final = []
+        get_combinatoric_list(self.alphabet, np.log2(np.ceil(reduced_states))+1, states_final,
+                              item_final)  # Generate states used below
+        states_reduced = np.asarray(states_reduced)
+
+        #   Create a state compression (in this case a projection matrix to the largest covariance eigenvectors)
+        reduced = np.asarray(states)@np.flip(self.CIR_matrix[:, :-1]).T
+        # plt.scatter(reduced,reduced)
+        # plt.show()
+        # TODO perform k-means cluseter on the states here and then group together in subsequent training data creation
+        clusters = kmeans2(reduced, 4)[1]
+        # covariance_reduced = reduced.T@reduced
+        # eigen_vectors = np.linalg.eig(covariance_reduced)[1][:, :num_reduced_states]
+        # projection_matrix = np.zeros((self.CIR_matrix.shape[1], eigen_vectors.shape[1]+1))
+        # projection_matrix[:eigen_vectors.shape[0],:eigen_vectors.shape[1]] = eigen_vectors
+        # projection_matrix[-1, -1] = 1
+        # projection_matrix = np.sign(projection_matrix)
+        if self.channel_output is not None:
+            j=0
+            #   Go create training example from each channel output
+            for i in range(self.channel_output.shape[1]):
+                #   Take care of causality of creating training sets and unused output symbols
+                if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
+                    #   Get true state of the system
+                    symbol = self.symbol_stream_matrix[:,j].flatten()
+                    state = self.symbol_stream_matrix[:, j+1: j+self.CIR_matrix.shape[1]].flatten()
+                    probability_vec = self.get_probability(state, states)
+                    state = clusters[np.argmax(probability_vec)]
+                    new_state = states_reduced[state]
+                    #   turn zeros into -1s
+                    reduced_state = np.flip(np.append(new_state, symbol))
+                    reduced_state += (reduced_state == 0)*-1
+                    probability_vec_reduced = self.get_probability(reduced_state, states_final)
+                    y_list.append(probability_vec_reduced)
+                    x_list.append(self.channel_output[:, i].flatten())
+                    j+=1
+        return x_list, y_list
+
     def get_probability(self, input, states):
         """
 
@@ -446,3 +514,6 @@ class training_data_generator:
         information.append("Channel Length (wrt symbols): " + str(self.CIR_matrix.shape[1]))
         information.append("# transmitted symbols: " + str(self.symbol_stream_matrix.shape[1]))
         return information
+
+
+

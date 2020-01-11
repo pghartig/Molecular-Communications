@@ -14,7 +14,7 @@ import torch.optim as optim
 import os
 import time
 
-def test_full_integration():
+def test_reduced_state():
 
     viterbi_net_performance = []
     threshold_performance = []
@@ -45,7 +45,8 @@ def test_full_integration():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
+        reduced_state = 8
+        x, y = data_gen.get_labeled_data_reduced_state(inputs=num_inputs_for_nn)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
@@ -61,8 +62,8 @@ def test_full_integration():
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
         # test_length = channel_length-1
-        # output_layer_size = reduced_state
-        output_layer_size = np.power(m, channel_length)
+        output_layer_size = reduced_state
+        # output_layer_size = np.power(m, channel_length)
         N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
@@ -125,7 +126,7 @@ def test_full_integration():
 
         metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                            metric.metric)
+                                            metric.metric, reduced_length=output_layer_size)
         ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
