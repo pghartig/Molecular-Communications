@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import logging as log
 from communication_util.general_tools import get_combinatoric_list
 from communication_util.pulse_shapes import  *
+from communication_util.general_tools import quantizer
 from communication_util.load_mc_data import normalize_vector
 
 
@@ -231,7 +232,7 @@ class training_data_generator:
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function, noise=False)
 
-    def send_through_channel(self, quantizer = None):
+    def send_through_channel(self, quantization_level = None):
         """
         Note that given the numpy convolution default, the impulse response should be provided with the longest delay
         tap on the left most index.
@@ -248,10 +249,10 @@ class training_data_generator:
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
 
         #   Quantize
+        if quantization_level is not None:
+            self.channel_output = quantizer(self.channel_output, quantization_level)
         # test = np.round(self.channel_output*100)
-        # self.channel_output = np.round(self.channel_output*10)
         # self.channel_output = self.channel_output.astype('half')
-        test =1
 
     def transmit_modulated_signal2(self):
         """

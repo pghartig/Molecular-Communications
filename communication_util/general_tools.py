@@ -86,6 +86,31 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     # plt.show()
     return fig
 
+def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=True):
+    fig = plt.figure(1)
+    names =["Classic Viterbi", "Neural Net"]
+    for ind, SER in enumerate(SER_list):
+        for level in range(quantization_levels):
+            plt.plot(SNRs_dB, SER[level], label=f'curve: {names[ind]}_q{level}')
+    if analytic_ser==True:
+        #TODO general to other pam schemes
+        SNRs_dB = np.linspace(-5, 10, 100)
+        snrs = np.power(10, SNRs_dB / 10)
+        q_function = norm.sf
+        SER = q_function(2 * np.sqrt(snrs))
+        plt.plot(SNRs_dB, SER, label='analytic_ml')
+    plt.xlabel("SNR (dB)")
+    plt.ylabel("SER")
+    plt.xscale('linear')
+    plt.yscale('log')
+    plt.grid(True)
+    plt.legend(loc='lower left')
+    plt.title(str(info), fontdict={'fontsize': 10})
+    plt.title("Symbol Error Rate vs SNR")
+    # plt.show()
+    return fig
+
+
 def quant_symbol_error_rates(SNRs_dB, SER_list):
     fig = plt.figure(1)
     for ind in range(SER_list.shape[0]):
@@ -108,7 +133,7 @@ def threshold_detector(alphabet, output):
             detected_symbols.append(detected)
     return detected_symbols
 
-def quantizer(input, largest, bits_available):
+def quantizer(input, level):
     """
     Range should be based on expected std of noise and the largest value due to the estimate channel and the known transmit alphabet
     :param input:
@@ -116,15 +141,19 @@ def quantizer(input, largest, bits_available):
     :param bits_available:
     :return:
     """
-    bins = np.linspace(0, largest, pow(2,bits_available-1))
-    bins[-1] = 500
+    return np.round(input * (pow(10, level)))
+
+def correct_quantizer(input, bits_available):
+    """
+    Range should be based on expected std of noise and the largest value due to the estimate channel and the known transmit alphabet
+    :param input:
+    :param range:
+    :param bits_available:
+    :return:
+    """
     quantized_vector = []
     for sample in input.flatten():
-        previous = 0
+        check = int(sample, base=2)
+        binary_vector = "{0:6b}".format(sample)
         binary = int(sample)
-        for bin in bins:
-            if np.abs(sample) < bin:
-                quantized_vector.append(np.sign(sample)*previous)
-                break
-            previous = bin
     return np.asarray(quantized_vector)
