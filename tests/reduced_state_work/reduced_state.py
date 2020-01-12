@@ -19,7 +19,7 @@ def test_reduced_state():
     viterbi_net_performance = []
     threshold_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 10)
+    SNRs_dB = np.linspace(-5, 10, 5)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -29,9 +29,11 @@ def test_reduced_state():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 2000
-        channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        number_symbols = 5000
+        # channel = np.zeros((1, 5))
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel = np.zeros((1, 3))
+        channel[0, [0, 1, 2]] = 1, .1, .2
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
@@ -45,8 +47,8 @@ def test_reduced_state():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        reduced_state = 8
-        x, y = data_gen.get_labeled_data_reduced_state(inputs=num_inputs_for_nn)
+        reduced_state = 4
+        x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
@@ -61,7 +63,7 @@ def test_reduced_state():
         """
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
-        # test_length = channel_length-1
+        #TODO correct to proper value
         output_layer_size = reduced_state
         # output_layer_size = np.power(m, channel_length)
         N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
