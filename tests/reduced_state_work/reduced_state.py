@@ -7,6 +7,7 @@ from mixture_model.em_algorithm import mixture_model
 from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.data_gen import *
+from communication_util.Equalization.supervise_equalization import *
 from viterbi.viterbi import *
 from communication_util.general_tools import *
 from nn_utilities import models
@@ -17,7 +18,7 @@ import time
 def test_reduced_state():
 
     viterbi_net_performance = []
-    threshold_performance = []
+    linear_mmse_performance = []
     classic_performance = []
     SNRs_dB = np.linspace(-5, 10, 5)
     # SNRs_dB = np.linspace(6, 10,3)
@@ -30,10 +31,10 @@ def test_reduced_state():
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
         number_symbols = 5000
-        # channel = np.zeros((1, 5))
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        channel = np.zeros((1, 3))
-        channel[0, [0, 1, 2]] = 1, .1, .2
+        channel = np.zeros((1, 5))
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel = np.zeros((1, 3))
+        # channel[0, [0, 1, 2]] = 1, .1, .2
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
@@ -120,7 +121,7 @@ def test_reduced_state():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -144,13 +145,13 @@ def test_reduced_state():
         """
         Analyze SER performance
         """
+        linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
-
     path = "Output/SER.pickle"
     pickle_out = open(path, "wb")
-    pickle.dump([classic_performance, viterbi_net_performance], pickle_out)
+    pickle.dump([classic_performance, linear_mmse_performance, viterbi_net_performance], pickle_out)
     pickle_out.close()
 
     figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,viterbi_net_performance], data_gen.get_info_for_plot())

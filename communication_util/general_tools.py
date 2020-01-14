@@ -65,7 +65,7 @@ def random_channel():
 
 def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     fig = plt.figure(1)
-    names =["Classic Viterbi", "Neural Net"]
+    names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
     for ind, SER in enumerate (SER_list):
         plt.plot(SNRs_dB, SER, label=f'curve: {names[ind]}')
     if analytic_ser==True:
@@ -88,7 +88,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
 
 def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=True):
     fig = plt.figure(1)
-    names =["Classic Viterbi", "Neural Net"]
+    names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
     for ind, SER in enumerate(SER_list):
         for level in range(quantization_levels):
             plt.plot(SNRs_dB, SER[level], label=f'curve: {names[ind]}_q{level}')

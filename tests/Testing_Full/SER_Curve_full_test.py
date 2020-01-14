@@ -9,6 +9,7 @@ import pickle
 from communication_util.data_gen import *
 from viterbi.viterbi import *
 from communication_util.general_tools import *
+from communication_util.Equalization.supervise_equalization import *
 from nn_utilities import models
 import torch.optim as optim
 import os
@@ -17,7 +18,7 @@ import time
 def test_full_integration():
 
     viterbi_net_performance = []
-    threshold_performance = []
+    linear_mmse_performance = []
     classic_performance = []
     SNRs_dB = np.linspace(-5, 10, 10)
     # SNRs_dB = np.linspace(6, 10,3)
@@ -113,7 +114,6 @@ def test_full_integration():
 
 
         """
-        After sending through channel, symbol detection should be performed using something like a matched filter.
         Create new set of test data. 
         """
         del data_gen
@@ -121,8 +121,9 @@ def test_full_integration():
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
-        # data_gen.add_channel_uncertainty()
-
+        """
+        Evaluate Neural Net Performance
+        """
         metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
@@ -139,8 +140,14 @@ def test_full_integration():
         ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)
 
         """
+        Evaluate performance with linear MMSE
+        """
+
+
+        """
         Analyze SER performance
         """
+        linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
@@ -150,7 +157,7 @@ def test_full_integration():
     pickle.dump([classic_performance, viterbi_net_performance], pickle_out)
     pickle_out.close()
 
-    figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,viterbi_net_performance], data_gen.get_info_for_plot())
+    figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,linear_mmse_performance, viterbi_net_performance], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
 
     figure.savefig(time_path, format="png")

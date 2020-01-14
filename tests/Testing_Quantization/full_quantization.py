@@ -5,6 +5,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 import torch.nn as nn
 from mixture_model.em_algorithm import mixture_model
 from mixture_model.em_algorithm import em_gausian
+from communication_util.Equalization.supervise_equalization import *
 import pickle
 from communication_util.data_gen import *
 from viterbi.viterbi import *
@@ -17,6 +18,7 @@ import time
 def test_full_quantization():
     viterbi_net_performance_full = []
     classic_performance_full = []
+    linear_mmse_performance_full = []
     SNRs_dB = np.linspace(-5, 10, 4)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
@@ -27,6 +29,7 @@ def test_full_quantization():
     for level in range(quantization_levels):
         viterbi_net_performance = []
         classic_performance = []
+        linear_mmse_performance = []
         for SNR in SNRs:
             """
             Generated Testing Data using the same channel as was used for training the mixture model and the nn
@@ -145,8 +148,12 @@ def test_full_quantization():
             """
             viterbi_net_performance.append(ser_nn)
             classic_performance.append(ser_classic)
+            linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+
+
         viterbi_net_performance_full.append(viterbi_net_performance)
         classic_performance_full.append(classic_performance)
+        linear_mmse_performance_full.append(linear_mmse_performance)
 
 
     path = "Output/SER.pickle"
@@ -155,7 +162,7 @@ def test_full_quantization():
     pickle_out.close()
 
     figure = plot_quantized_symbol_error_rates(quantization_levels,
-        SNRs_dB, [classic_performance_full,viterbi_net_performance_full], data_gen.get_info_for_plot())
+        SNRs_dB, [classic_performance_full,linear_mmse_performance_full, viterbi_net_performance_full], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
     figure.savefig(time_path, format="png")
 
