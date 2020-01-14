@@ -30,11 +30,12 @@ def test_reduced_state():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
+        number_symbols = 2000
+        # channel = np.zeros((1, 5))
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        # channel = np.zeros((1, 3))
-        # channel[0, [0, 1, 2]] = 1, .1, .2
+        # channel[0, [0]] = 1
+        channel[0, [0, 1, 2, 3, 4]] = 1, .01, .01, .1, .2
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
@@ -48,9 +49,9 @@ def test_reduced_state():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        reduced_state = 4
+        reduced_state = 32
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
-        y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
+        y = np.argmax(y, axis=1)
         x = torch.Tensor(x)
         y = torch.Tensor(y)
         train_size = int(.6 * number_symbols)
@@ -154,7 +155,7 @@ def test_reduced_state():
     pickle.dump([classic_performance, linear_mmse_performance, viterbi_net_performance], pickle_out)
     pickle_out.close()
 
-    figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,viterbi_net_performance], data_gen.get_info_for_plot())
+    figure = plot_symbol_error_rates(SNRs_dB, [classic_performance, linear_mmse_performance, viterbi_net_performance], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
 
     figure.savefig(time_path, format="png")

@@ -67,7 +67,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     fig = plt.figure(1)
     names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
     for ind, SER in enumerate (SER_list):
-        plt.plot(SNRs_dB, SER, label=f'curve: {names[ind]}')
+        plt.plot(SNRs_dB, SER, label=f'{names[ind]}')
     if analytic_ser==True:
         #TODO general to other pam schemes
         SNRs_dB = np.linspace(-5, 10, 100)
@@ -91,7 +91,7 @@ def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,inf
     names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
     for ind, SER in enumerate(SER_list):
         for level in range(quantization_levels):
-            plt.plot(SNRs_dB, SER[level], label=f'curve: {names[ind]}_q{level}')
+            plt.plot(SNRs_dB, SER[level], label=f'{names[ind]}_q{level}')
     if analytic_ser==True:
         #TODO general to other pam schemes
         SNRs_dB = np.linspace(-5, 10, 100)

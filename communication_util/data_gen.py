@@ -382,12 +382,13 @@ class training_data_generator:
         base_states = int(np.ceil(np.log2(outputs)))
         states = []
         item = []
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
         states = np.asarray(states)
-        reduced = np.asarray(states)@np.flip(self.CIR_matrix[:, :]).T
-        num_clusters = int(pow(base_states-1,2))
+        reduced = np.asarray(states)@np.flip(self.CIR_matrix[:,1::]).T
+        num_clusters = int(pow(2, base_states-1))
         clusters = kmeans2(reduced, num_clusters)[1]
-
+        # plt.scatter(reduced,reduced)
+        # plt.show()
         states_reduced = []
         item_reduced = []
         get_combinatoric_list(self.alphabet, base_states-1, states_reduced, item_reduced)
@@ -399,9 +400,6 @@ class training_data_generator:
         get_combinatoric_list(self.alphabet, base_states, states_final, item_final)
         states_reduced = np.asarray(states_reduced)
 
-
-        # plt.scatter(reduced,reduced)
-        # plt.show()
         if self.channel_output is not None:
             j=0
             #   Go create training example from each channel output
@@ -410,8 +408,8 @@ class training_data_generator:
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     #   Get true state of the system
                     symbol = self.symbol_stream_matrix[:,j].flatten()
-                    state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()
-                    probability_vec = self.get_probability(state, states)
+                    true_state = self.symbol_stream_matrix[:, j+1: j+self.CIR_matrix.shape[1]].flatten()
+                    probability_vec = self.get_probability(true_state, states)
                     # Now find corresponding reduced state cluster number for the true state
                     state = clusters[np.argmax(probability_vec)]
                     new_state = states_reduced[state]
@@ -420,6 +418,7 @@ class training_data_generator:
                     reduced_state += (reduced_state == 0)*-1
                     probability_vec_reduced = self.get_probability(reduced_state, states_final)
                     y_list.append(probability_vec_reduced)
+                    # y_list.append(probability_vec)
                     x_list.append(self.channel_output[:, i].flatten())
                     j+=1
         return x_list, y_list
