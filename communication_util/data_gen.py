@@ -385,8 +385,9 @@ class training_data_generator:
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
         states = np.asarray(states)
         reduced = np.asarray(states)@np.flip(self.CIR_matrix[:,1::]).T
+        # reduced = np.asarray(states)@self.CIR_matrix[:,1::].T
         num_clusters = int(pow(2, base_states-1))
-        clusters = kmeans2(reduced, num_clusters)[1]
+        cluster_mapping = kmeans2(reduced, num_clusters)[1]
         # plt.scatter(reduced,reduced)
         # plt.show()
         states_reduced = []
@@ -411,16 +412,16 @@ class training_data_generator:
                     true_state = self.symbol_stream_matrix[:, j+1: j+self.CIR_matrix.shape[1]].flatten()
                     probability_vec = self.get_probability(true_state, states)
                     # Now find corresponding reduced state cluster number for the true state
-                    state = clusters[np.argmax(probability_vec)]
+                    state = cluster_mapping[np.argmax(probability_vec)]
                     new_state = states_reduced[state]
-                    #   binarize and turn zeros into -1s
-                    reduced_state = np.flip(np.append(new_state, symbol))
-                    reduced_state += (reduced_state == 0)*-1
+                    reduced_state = np.flip(np.append(symbol, new_state))
                     probability_vec_reduced = self.get_probability(reduced_state, states_final)
                     y_list.append(probability_vec_reduced)
                     # y_list.append(probability_vec)
                     x_list.append(self.channel_output[:, i].flatten())
                     j+=1
+        # below check should at least be symmetric
+        # totals = np.sum(np.asarray(y_list),axis=0)
         return x_list, y_list
 
     def get_probability(self, input, states):
@@ -432,6 +433,7 @@ class training_data_generator:
         for state in states:
             if np.array_equal(input, state):
                 metrics.append(1)
+                #TODO break out of loop after finding match
             else:
                 metrics.append(0)
         return np.asarray(metrics)

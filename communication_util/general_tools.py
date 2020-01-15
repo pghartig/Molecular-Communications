@@ -46,7 +46,7 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     detected_array = np.asarray(detected_symbols)
     # This is a key step to ensuring the detected symbols are aligned properly
     t = input_symbols.flatten()
-    # test1 = np.max(np.convolve(detected_array,t))
+    test1 = np.max(np.convolve(detected_array,t))
     # test2 = np.argmax(np.convolve(detected_array,t))
     detected_array = np.flip(detected_array)
     check1 = detected_array[(channel_length-1):]

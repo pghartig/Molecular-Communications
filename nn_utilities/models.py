@@ -46,13 +46,13 @@ class viterbiNet_dropout(nn.Module):
 
 class deeper_viterbiNet(nn.Module):
 
-    def __init__(self, D_in, H1, H2, H3, D_out):
+    def __init__(self, D_in, H1, H2, H3, D_out, dropout_probability):
         # initialize inheretence
         super(deeper_viterbiNet, self).__init__()
         self.name = "deeper_viterbiNet"
 
         # initialize weight layers of the network
-
+        self.drop_out = nn.Dropout(dropout_probability)
         self.fc1 = nn.Linear(D_in, H1)
         self.fc2 = nn.Linear(H1, H2)
         self.fc3 = nn.Linear(H2, H3)
