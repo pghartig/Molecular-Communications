@@ -382,9 +382,12 @@ class training_data_generator:
         base_states = int(np.ceil(np.log2(outputs)))
         states = []
         item = []
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
+        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
+
         states = np.asarray(states)
-        reduced = np.asarray(states)@np.flip(self.CIR_matrix[:,1::]).T
+        # reduced = np.asarray(states)@self.CIR_matrix[:, 1::].T
+        reduced = np.asarray(states)@np.flip(self.CIR_matrix).T
         # reduced = np.asarray(states)@self.CIR_matrix[:,1::].T
         num_clusters = int(pow(2, base_states-1))
         cluster_mapping = kmeans2(reduced, num_clusters)[1]
@@ -414,7 +417,7 @@ class training_data_generator:
                     # Now find corresponding reduced state cluster number for the true state
                     state = cluster_mapping[np.argmax(probability_vec)]
                     new_state = states_reduced[state]
-                    reduced_state = np.flip(np.append(symbol, new_state))
+                    reduced_state = np.flip(np.append(new_state, symbol))
                     probability_vec_reduced = self.get_probability(reduced_state, states_final)
                     y_list.append(probability_vec_reduced)
                     # y_list.append(probability_vec)
