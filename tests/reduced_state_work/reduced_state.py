@@ -20,8 +20,8 @@ def test_reduced_state():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    # SNRs_dB = np.linspace(-5, 10, 8)
-    SNRs_dB = np.linspace(6, 10,3)
+    SNRs_dB = np.linspace(-5, 10, 10)
+    # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
@@ -122,14 +122,14 @@ def test_reduced_state():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 3000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
         metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric, reduced_length=output_layer_size)
-        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+        ser_nn = symbol_error_rate_channel_compensated_NN_reduced(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
         """

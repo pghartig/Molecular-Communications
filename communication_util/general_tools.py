@@ -56,6 +56,31 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     return ser
 
+
+
+def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_symbols,channel_length):
+    """
+    The first symbol the viterbi detects is the l-1 symbol in the stream. where l is the channel impulse response length.
+    :param detected_symbols:
+    :param input_symbols:
+    :param channel_length:
+    :return:
+    """
+    #TODO Notes The returned survivor path should be this long if channel is longer than 1.
+    detected_array = np.asarray(detected_symbols)
+    # This is a key step to ensuring the detected symbols are aligned properly
+    t = input_symbols.flatten()
+    test1 = np.max(np.convolve(detected_array,t))
+    test2 = np.argmax(np.convolve(detected_array,t))
+    detected_array = np.flip(detected_array)
+    check1 = detected_array[(channel_length-1):]
+    check1 = detected_array
+    ratio_test = np.sum(check1)
+    check2 = t[:detected_array.size]
+    ratio_test2 = np.sum(check2)
+    ser = np.sum(np.not_equal(check2, check1)) / check1.size
+    return ser
+
 def symbol_error_rate_sampled(detected_symbols, input_symbols):
     # ignore last symbols since there is extra from the convolution
     array = np.asarray(detected_symbols)
