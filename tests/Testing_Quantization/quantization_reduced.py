@@ -15,7 +15,7 @@ import torch.optim as optim
 import os
 import time
 
-def test_full_quantization():
+def test_quantization_reduced():
     viterbi_net_performance_full = []
     classic_performance_full = []
     linear_mmse_performance_full = []
@@ -35,10 +35,10 @@ def test_full_quantization():
             Generated Testing Data using the same channel as was used for training the mixture model and the nn
             """
             number_symbols = 5000
-            # channel = np.zeros((1, 5))
-            # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-            channel = np.zeros((1, 3))
-            channel[0, [0, 1, 2 ]] = 1, .1, .2
+            channel = np.zeros((1, 5))
+            channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+            # channel = np.zeros((1, 3))
+            # channel[0, [0, 1, 2 ]] = 1, .1, .2
             # channel = np.zeros((1, 1))
             # channel[0, [0]] = 1
             data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
@@ -50,6 +50,7 @@ def test_full_quantization():
             """
             device = torch.device("cpu")
             reduced_state = 8
+            num_inputs_for_nn = 1
             x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
             y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
             x = torch.Tensor(x)
@@ -67,7 +68,7 @@ def test_full_quantization():
             channel_length = data_gen.CIR_matrix.shape[1]
             # test_length = channel_length-1
             # output_layer_size = reduced_state
-            output_layer_size = reduced_state
+            output_layer_size = np.power(m, channel_length)
             N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
 
             # net = models.viterbiNet(D_in, H1, H2, D_out)

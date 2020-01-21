@@ -117,7 +117,7 @@ def test_full_integration():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -188,9 +188,8 @@ def test_full_integration():
 def test_plt_ser():
     SNRs_dB = np.linspace(-5, 10, 100)
     snrs = np.power(10, SNRs_dB / 10)
-    q_function = norm.sf
-    SER = q_function(2 * np.sqrt(snrs))
-    plt.plot(SNRs_dB, SER, label='analytic_ml')
+    analytic = 1 - norm.cdf(np.sqrt(2*snrs))
+    plt.plot(SNRs_dB, analytic, label='analytic_ml')
     plt.xscale('linear')
     plt.yscale('log')
     plt.show()
