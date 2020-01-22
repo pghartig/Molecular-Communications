@@ -123,7 +123,7 @@ def test_reduced_state():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
