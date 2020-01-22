@@ -232,7 +232,7 @@ class training_data_generator:
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function, noise=False)
 
-    def send_through_channel(self, quantization_level = None):
+    def send_through_channel(self, quantization_level=None):
         """
         Note that given the numpy convolution default, the impulse response should be provided with the longest delay
         tap on the left most index.
@@ -381,12 +381,14 @@ class training_data_generator:
         base_states = int(np.ceil(np.log2(outputs)))
         states = []
         item = []
-        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
+        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
 
         states = np.asarray(states)
-        # reduced = np.asarray(states)@self.CIR_matrix[:, 1::].T
-        reduced = np.asarray(states)@self.CIR_matrix.T
+        # reduced = np.asarray(states)@self.CIR_matrix.T
+        normalized_channel =self.CIR_matrix[:, 1::]/ np.linalg.norm(self.CIR_matrix[:, 1::])
+        reduced = np.asarray(states)@normalized_channel.T
+
         if quantization_level is not None:
             reduced = quantizer(reduced,quantization_level)
         num_clusters = int(pow(2, base_states-1))

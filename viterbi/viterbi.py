@@ -3,7 +3,7 @@ from communication_util.model_metrics import *
 from communication_util.general_tools import get_combinatoric_list
 
 
-def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, metric_function, reduced_length=None):
+def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, metric_function, reduced_length=None, reduced=False):
 
     # number of states is alphabet size raised to the power of the number of channel taps minus one.
     if reduced_length == None:
@@ -13,7 +13,11 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
     states = []
     item = []
     get_combinatoric_list(transmit_alphabet, reduced_length, states, item)
-    trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
+    if reduced is False:
+        trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
+    else:
+        trellis = viterbi_trellis(transmit_alphabet, states, metric_function, reduced=True)
+
     # step through channel output
     for index in range(channel_output.shape[1]):
         # Need to prevent stepping until there are sufficient metrics for the input to the NN
@@ -26,15 +30,15 @@ class viterbi_trellis():
     """
     Note that in order to prevent keeping a large trellis in memory, the nodes are reused in each step.
     """
-    def __init__(self, alphabet, states, metric_function):
+    def __init__(self, alphabet, states, metric_function, reduced=False):
         self.states = states
         self.alphabet = alphabet
         self.previous_states = []
         self.next_states = []
         self.metric_function = metric_function
-        self.setup_trellis()
+        self.setup_trellis(reduced)
 
-    def setup_trellis(self):
+    def setup_trellis(self, reduced=False):
         # create the trellis structure for a single step in the trellis
         for state in self.states:
             self.previous_states.append(viterbi_node(state))
@@ -45,7 +49,10 @@ class viterbi_trellis():
                 check1 = node.state[:-1]
                 check2 = previous_state.state[1:]
                 #test for reduced state
-                if check1 == check2:
+                if reduced == False:
+                    if check1 == check2:
+                        node.incoming_nodes.append(previous_state)
+                if reduced == True:
                     node.incoming_nodes.append(previous_state)
 
     def step_trellis(self, index):

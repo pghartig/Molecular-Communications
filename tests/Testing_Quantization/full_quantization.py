@@ -36,10 +36,11 @@ def test_full_quantization():
             Generated Testing Data using the same channel as was used for training the mixture model and the nn
             """
             number_symbols = 5000
-            # channel = np.zeros((1, 5))
+            channel = np.zeros((1, 5))
             # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-            channel = np.zeros((1, 3))
-            channel[0, [0, 1, 2 ]] = 1, .1, .2
+            channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
+            # channel = np.zeros((1, 3))
+            # channel[0, [0, 1, 2 ]] = 1, .1, .2
             # channel = np.zeros((1, 1))
             # channel[0, [0]] = 1
             data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
