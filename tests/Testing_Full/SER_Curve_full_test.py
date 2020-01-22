@@ -32,12 +32,14 @@ def test_full_integration():
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
         number_symbols = 5000
-        channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel = np.zeros((1, 5))
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
+        channel = np.zeros((1, 3))
+        channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -127,7 +129,7 @@ def test_full_integration():
         metric = nn_mm_metric(net, mm, data_gen.channel_output)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
-        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+        ser_nn = symbol_error_rate_channel_compensated(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
         """

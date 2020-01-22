@@ -357,8 +357,7 @@ class training_data_generator:
             costs.append(np.linalg.norm(received - self.metrics[ind]))
         return np.asarray(costs)
 
-    def get_labeled_data(self, inputs=1):
-        inputs -=1
+    def get_labeled_data(self):
         x_list = []
         y_list = []
         states = []
@@ -371,7 +370,7 @@ class training_data_generator:
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()
                     probability_vec = self.get_probability(state, states)
-                    x_list.append(self.channel_output[:, i:i+inputs+1].flatten())
+                    x_list.append(self.channel_output[:, i].flatten())
                     y_list.append(probability_vec)
                     j+=1
         return x_list, y_list
