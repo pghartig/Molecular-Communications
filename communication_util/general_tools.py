@@ -92,9 +92,12 @@ def random_channel():
 
 def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     fig = plt.figure(1)
-    names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
-    for ind, SER in enumerate (SER_list):
+    names = ["Classic Viterbi", "Linear MMSE", "Neural Net"]
+    data_dict = dict()
+    data_dict["SNRs_dB"] = SNRs_dB
+    for ind, SER in enumerate(SER_list):
         plt.plot(SNRs_dB, SER, label=f'{names[ind]}')
+        data_dict[names[ind]]= np.asarray(SER)
     if analytic_ser==True:
         #TODO general to other pam schemes
         SNRs_dB = np.linspace(-5, 10, 100)
@@ -110,14 +113,17 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     plt.title(str(info), fontdict={'fontsize': 10})
     plt.title("Symbol Error Rate vs SNR")
     # plt.show()
-    return fig
+    return fig, data_dict
 
 def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=True):
     fig = plt.figure(1)
     names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
+    data_dict = dict()
+    data_dict["SNRs_dB"] = SNRs_dB
     for ind, SER in enumerate(SER_list):
         for level in range(quantization_levels):
             plt.plot(SNRs_dB, SER[level], label=f'{names[ind]}_q{level}')
+            data_dict[f"{names[ind]}_{level}"] = np.asarray(SER[level])
     if analytic_ser==True:
         #TODO general to other pam schemes
         SNRs_dB = np.linspace(-5, 10, 100)
@@ -134,7 +140,7 @@ def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,inf
     plt.title(str(info), fontdict={'fontsize': 10})
     plt.title("Symbol Error Rate vs SNR")
     # plt.show()
-    return fig
+    return fig, data_dict
 
 
 def quant_symbol_error_rates(SNRs_dB, SER_list):
@@ -167,6 +173,7 @@ def quantizer(input, level):
     :param bits_available:
     :return:
     """
+    check = np.round(input * (pow(10, level)))
     return np.round(input * (pow(10, level)))
 
 def correct_quantizer(input, bits_available):

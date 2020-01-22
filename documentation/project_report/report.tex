@@ -3,8 +3,12 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
+\usepackage{graphicx}
+
 \input defs.tex
 \bibliographystyle{alpha}
+\graphicspath{ {./figures/} }
+
 
 
 \title{Neural Network Based Decoding over Molecular Communication Channels}
@@ -30,13 +34,17 @@ The general communication channel is equivalent to a conditional probability $P(
 
 \section{System Model}
 
-
-\subsection{Maximum Likelihood}
-\subsection{Maximum A Posteriori}
+\subsection{MLSE}
 
 
-\section{Results}
+\section{Numerical Results}
+\subsection*{ViterbiNet}
+	\includegraphics[width=\textwidth,height = 7cm]{lti_standard}
+	\includegraphics[width=\textwidth,height = 7cm]{quant_standard}
 
+\subsection*{Reduced State ViterbiNet}
+	\includegraphics[width=\textwidth,height = 7cm]{lti_reduced}
+	\includegraphics[width=\textwidth,height = 7cm]{quant_reduced}
 \section{Conclusion}
 
 \newpage

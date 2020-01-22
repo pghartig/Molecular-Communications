@@ -12,6 +12,7 @@ from viterbi.viterbi import *
 from communication_util.general_tools import *
 from nn_utilities import models
 import torch.optim as optim
+import pandas as pd
 import os
 import time
 
@@ -20,7 +21,7 @@ def test_reduced_state():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 10)
+    SNRs_dB = np.linspace(5, 10, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -35,8 +36,8 @@ def test_reduced_state():
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         channel = np.zeros((1, 5))
         # channel[0, [0]] = 1
-        channel[0, [0, 1, 2, 3, 4]] = 1, .001, .001, .1, .2
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .001, .001, .1, .2
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
@@ -153,9 +154,13 @@ def test_reduced_state():
     pickle.dump([classic_performance, linear_mmse_performance, viterbi_net_performance], pickle_out)
     pickle_out.close()
 
-    figure = plot_symbol_error_rates(SNRs_dB, [classic_performance, linear_mmse_performance, viterbi_net_performance], data_gen.get_info_for_plot())
+    figure, dictionary = plot_symbol_error_rates(SNRs_dB, [classic_performance, linear_mmse_performance, viterbi_net_performance], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
 
+    figure.savefig(time_path, format="png")
+
+    text_path = "Output/SER_"+f"{time.time()}"+"curves.csv"
+    pd.DataFrame.from_dict(dictionary).to_csv(text_path)
     figure.savefig(time_path, format="png")
 
     #Plots for NN training information

@@ -376,19 +376,20 @@ class training_data_generator:
                     j+=1
         return x_list, y_list
 
-    def get_labeled_data_reduced_state(self, outputs):
+    def get_labeled_data_reduced_state(self, outputs, quantization_level=None):
         x_list = []
         y_list = []
         base_states = int(np.ceil(np.log2(outputs)))
         states = []
         item = []
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
-        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
+        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
 
         states = np.asarray(states)
-        reduced = np.asarray(states)@self.CIR_matrix[:, 1::].T
-        # reduced = np.asarray(states)@np.flip(self.CIR_matrix).T
-        # reduced = np.asarray(states)@self.CIR_matrix[:,1::].T
+        # reduced = np.asarray(states)@self.CIR_matrix[:, 1::].T
+        reduced = np.asarray(states)@self.CIR_matrix.T
+        if quantization_level is not None:
+            reduced = quantizer(reduced,quantization_level)
         num_clusters = int(pow(2, base_states-1))
         clusters = kmeans(reduced, num_clusters)
         labels = vq(reduced, clusters[0])[0]

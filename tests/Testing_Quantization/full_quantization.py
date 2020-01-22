@@ -13,6 +13,7 @@ from communication_util.general_tools import *
 from nn_utilities import models
 import torch.optim as optim
 import os
+import pandas as pd
 import time
 
 def test_full_quantization():
@@ -49,8 +50,7 @@ def test_full_quantization():
             Load in Trained Neural Network and verify that it is acceptable performance
             """
             device = torch.device("cpu")
-            reduced_state = 8
-            x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
+            x, y = data_gen.get_labeled_data()
             y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
             x = torch.Tensor(x)
             y = torch.Tensor(y)
@@ -67,7 +67,8 @@ def test_full_quantization():
             channel_length = data_gen.CIR_matrix.shape[1]
             # test_length = channel_length-1
             # output_layer_size = reduced_state
-            output_layer_size = reduced_state
+            output_layer_size = np.power(m, channel_length)
+            num_inputs_for_nn=1
             N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
 
             # net = models.viterbiNet(D_in, H1, H2, D_out)
@@ -161,40 +162,9 @@ def test_full_quantization():
     pickle.dump([classic_performance_full, viterbi_net_performance_full], pickle_out)
     pickle_out.close()
 
-    figure = plot_quantized_symbol_error_rates(quantization_levels,
+    figure, dictionary = plot_quantized_symbol_error_rates(quantization_levels,
         SNRs_dB, [classic_performance_full,linear_mmse_performance_full, viterbi_net_performance_full], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
+    text_path = "Output/SER_"+f"{time.time()}"+"curves.csv"
+    pd.DataFrame.from_dict(dictionary).to_csv(text_path)
     figure.savefig(time_path, format="png")
-
-    #Plots for NN training information
-    plt.figure(2)
-    plt.plot(test_cost_over_epoch, label='Test Error')
-    plt.plot(train_cost_over_epoch, label='Train Error')
-    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
-    plt.xlabel("Epoch")
-    plt.ylabel("Error")
-    plt.legend(loc='upper right')
-    path = f"Output/Neural_Network{time.time()}_Convergence.png"
-    plt.savefig(path, format="png")
-
-    #Plots for channel
-    plt.figure(3)
-    plt.plot(channel)
-    plt.title("channel", fontdict={'fontsize': 10})
-    plt.ylabel("tap gain")
-    path = f"Output/Channel{time.time()}.png"
-    plt.savefig(path, format="png")
-
-
-    assert True
-
-
-def test_plt_ser():
-    SNRs_dB = np.linspace(-5, 10, 100)
-    snrs = np.power(10, SNRs_dB / 10)
-    q_function = norm.sf
-    SER = q_function(2 * np.sqrt(snrs))
-    plt.plot(SNRs_dB, SER, label='analytic_ml')
-    plt.xscale('linear')
-    plt.yscale('log')
-    plt.show()

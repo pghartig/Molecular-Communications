@@ -14,13 +14,14 @@ from nn_utilities import models
 import torch.optim as optim
 import os
 import time
+import pandas as pd
 
 def test_full_integration():
 
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 10)
+    SNRs_dB = np.linspace(9, 10, 5)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -30,13 +31,13 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 2000
-        # channel = np.zeros((1, 5))
+        number_symbols = 5000
+        channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
-        channel = np.zeros((1, 1))
-        channel[0, [0]] = 1
+        # channel = np.zeros((1, 1))
+        # channel[0, [0]] = 1
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -154,12 +155,16 @@ def test_full_integration():
 
     path = "Output/SER.pickle"
     pickle_out = open(path, "wb")
-    pickle.dump([classic_performance, viterbi_net_performance], pickle_out)
+    pickle.dump([classic_performance, linear_mmse_performance, viterbi_net_performance], pickle_out)
     pickle_out.close()
 
-    figure = plot_symbol_error_rates(SNRs_dB, [classic_performance,linear_mmse_performance, viterbi_net_performance], data_gen.get_info_for_plot())
+    figure, dictionary = plot_symbol_error_rates(SNRs_dB, [classic_performance, linear_mmse_performance, viterbi_net_performance], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
 
+    figure.savefig(time_path, format="png")
+
+    text_path = "Output/SER_"+f"{time.time()}"+"curves.csv"
+    pd.DataFrame.from_dict(dictionary).to_csv(text_path)
     figure.savefig(time_path, format="png")
 
     #Plots for NN training information
@@ -173,23 +178,7 @@ def test_full_integration():
     path = f"Output/Neural_Network{time.time()}_Convergence.png"
     plt.savefig(path, format="png")
 
-    #Plots for channel
-    plt.figure(3)
-    plt.plot(channel)
-    plt.title("channel", fontdict={'fontsize': 10})
-    plt.ylabel("tap gain")
-    path = f"Output/Channel{time.time()}.png"
-    plt.savefig(path, format="png")
-
 
     assert True
 
 
-def test_plt_ser():
-    SNRs_dB = np.linspace(-5, 10, 100)
-    snrs = np.power(10, SNRs_dB / 10)
-    analytic = 1 - norm.cdf(np.sqrt(2*snrs))
-    plt.plot(SNRs_dB, analytic, label='analytic_ml')
-    plt.xscale('linear')
-    plt.yscale('log')
-    plt.show()
