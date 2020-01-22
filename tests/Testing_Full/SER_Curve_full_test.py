@@ -33,8 +33,8 @@ def test_full_integration():
         """
         number_symbols = 5000
         channel = np.zeros((1, 5))
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
@@ -46,8 +46,7 @@ def test_full_integration():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        num_inputs_for_nn = 1
-        x, y = data_gen.get_labeled_data(inputs=num_inputs_for_nn)
+        x, y = data_gen.get_labeled_data()
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
@@ -65,7 +64,7 @@ def test_full_integration():
         # test_length = channel_length-1
         # output_layer_size = reduced_state
         output_layer_size = np.power(m, channel_length)
-        N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
+        N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
         dropout_probability = .3
@@ -125,7 +124,7 @@ def test_full_integration():
         """
         Evaluate Neural Net Performance
         """
-        metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
+        metric = nn_mm_metric(net, mm, data_gen.channel_output)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
         ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)

@@ -31,7 +31,7 @@ def test_reduced_state():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
+        number_symbols = 1000
         # channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         channel = np.zeros((1, 5))
@@ -90,7 +90,7 @@ def test_reduced_state():
         batch_size = 30
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 300
+        epochs = 100
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -123,7 +123,7 @@ def test_reduced_state():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 3000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
