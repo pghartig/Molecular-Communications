@@ -411,5 +411,7 @@ TSWLatexianTemp*
 !interesting_results/Neural_Net/*
 !documentation/presentations/figures/*
 !documentation/presentations/gt_initial_presentation.pdf
+!documentation/project_report/*
+!documentation/project_report/figures/results*
 
 
