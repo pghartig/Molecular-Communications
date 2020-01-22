@@ -45,8 +45,8 @@ class viterbi_trellis():
                 check1 = node.state[:-1]
                 check2 = previous_state.state[1:]
                 #test for reduced state
-                # if check1 == check2:
-                node.incoming_nodes.append(previous_state)
+                if check1 == check2:
+                    node.incoming_nodes.append(previous_state)
 
     def step_trellis(self, index):
         metrics = self.metric_function(index, self.states)
