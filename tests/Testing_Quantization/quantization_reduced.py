@@ -26,7 +26,7 @@ def test_quantization_reduced():
     seed_generator = 0
     data_gen = None
     channel = None
-    quantization_levels = 2
+    quantization_levels = 3
     for level in range(quantization_levels):
         viterbi_net_performance = []
         classic_performance = []
@@ -50,7 +50,7 @@ def test_quantization_reduced():
             Load in Trained Neural Network and verify that it is acceptable performance
             """
             device = torch.device("cpu")
-            reduced_state = 8
+            reduced_state = 32
             num_inputs_for_nn = 1
             x, y = data_gen.get_labeled_data_reduced_state(reduced_state, quantization_level =level )
             y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown

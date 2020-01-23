@@ -24,34 +24,113 @@
 \newpage
 \tableofcontents
 \newpage
+\section{Notation}
+Expectation
+Conditional Probability 
+Argmax
+Vector Indexing
 
 \section{Introduction}
-Characterizing and obtaining information about communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier in many contexts have enabled vast and effective communication infrastructure, this barrier still limits communication in others. Molecular Communication channels pose a particularly difficult context in which to overcome this barrier as channel characteristics are often non-linear and may be dependent on the specific transmitted information stream.
-In communication contexts, such as wireless, long, "Pilot" symbol-streams are often used to mitigate the difficultly in obtaining channel information by provide real-time information supporting an underlying channel model. The low symbol rate of Molecular Communication channels often makes such strategies impractical. However, the success of this data-driven technique in wireless channels suggest that perhaps an alternative, data-driven method may be viable in the Molecular Communication context. One potential data-driven method for characterizing these channels is a neural network. Neural networks have shown to be an effective tool in data-driven approximating of probability distributions.
+Characterizing and obtaining information about communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier in many contexts have enabled vast and effective communication infrastructure, this barrier still limits communication in others. Molecular Communication channels pose a particularly difficult context in which to overcome this barrier as channel characteristics are often non-linear and may be dependent on the specific transmitted information.
+In communication contexts, such as wireless, "Pilot" symbol-streams are often used to mitigate the difficultly in obtaining channel information by provide real-time information supporting an underlying channel model. The low symbol rate of Molecular Communication channels often makes such strategies impractical. However, the success of this data-driven technique in wireless channels suggest that perhaps an alternative, data-driven method may be viable in the Molecular Communication context. One potential data-driven method for characterizing these channels is a neural network. Neural networks have shown to be an effective tool in data-driven approximating of probability distributions.
 \par
 
-The general communication channel is equivalent to a conditional probability $P(x|y)$, in which $x$ is transmitted information and $y$ is received information.  $P(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes, and random noise added prior to receiving $y$. The communication problem entails optimizing a form of $P(x|y)$ over a set of possible, transmitted information. In general, sub-optimal solutions do not require perfect knowledge of the distribution $P(x|y)$ and may be used when $P(x|y)$ is unknown or impractical to obtain. In this work, a neural network is used to estimate $P(x|y)$.
+The general communication channel is equivalent to a conditional probability $P(x|y)$, in which $x$ is transmitted information and $y$ is received information.  $P(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes, and random noise added prior to receiving $y$. The communication problem entails optimizing a form of $P(x|y)$ over a set of possible, transmitted information $x$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $P(x|y)$ and may be used when $P(x|y)$ is unknown or impractical to obtain. In this work, a neural network is used to estimate $P(x|y)$.
 
-\section{System Model}
+\section{Background}
 
 \subsection{MLSE}
+Consider the particular form of $P(x|y)$ used for detection of the received signal 
+$\underset{x}{\text{argmin}} \; P(y|x) $. This form is referred to as Maximum Likelihood Sequence Estimation (MLSE). In general, such an optimization over a discrete set is exponentially complex in the length of $x$. Information about the communication channel can, however reduce the complexity of this problem. In order to illustrate this reduction, the following example is proposed.
+\par
+Consider the receiver of a communication channel which receives a causal, linear, time invariant combination of a set of the transmitted information. 
+
+\begin{equation}
+r[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]
+\end{equation}
 
 
-\section{Numerical Results}
+The sequence of received symbols $\mathbf{r}$ can be equivalently represented the by trellis:
+
+TODO IMPORT Trellis picture
+in which each time-point k represents a unique set of L transmitted symbols 
+$x[k-l]$ $ \forall l \in {1..L}$. 
+
+Viterbi Algorithm:
+
+For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. 
+
+
+
+In this case, $P(y|x)$ can be rewritten 
+$\prod P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) = \sum
+log(P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) )$
+
+
+** note that using MAP could also be done in future work
+\subsection{ViterbiNet}
+As suggested in the introduction, despite the reduction in complexity offered by the Viterbi Algorithm for MLSE, the individual metrics used each step of the algorithm 
+$P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) $ require knowledge of the channel which may be difficult to obtain. To estimate this distribution using a neural network, Baye's Rule is used. 
+\begin{equation}
+P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) = 
+\frac
+{P(x_{\mathrm{1 ... L}}|y_{\mathrm{i}})P(y_{\mathrm{i}})}
+{P(x_{\mathrm{1 ... L}})}
+\end{equation}
+
+These terms can be interpreted as:
+
+\begin{itemize}
+\item $P(x_{\mathrm{1 ... L}}|y_{\mathrm{i}})$
+: This term can be interpreted as the probability of being in a channel state given the corresponding received symbol from that time point. In the case of a finite number of states, such a probability can be estimated using a neural network for classification of received signals into channel states. 
+\item $P(y_{\mathrm{i}})$
+: This term characterizes the randomness of the channel. As each received signal represents a state of the system to which noise may be added. A representative mixture-model can be estimated using a set of received signal training data. 
+\item $P(x_{\mathrm{1 ... L}})$
+: Assuming the transmitted symbols are equiprobable, this term can be neglected as all states $x_{\mathrm{1 ... L}}$ will have equal probability. 
+
+\end{itemize}
+
+
+
+
+
+
+\section{Simulation Results}
+\subsection{System Model}
+Consider the received signal 
+\begin{equation}
+r[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
+\end{equation}
+
+
+Here the signal to noise ratio (SNR) is 
+$\frac{E\{x[k]\}}{\sigma^2}$
+
+Details of NN architecture and training
+
+Details of Mixture Model training
+
+\subsection{Results}
 Proposed Figures
 \begin{itemize}
 \item ViterbiNet Performance compared to MMSE and classic Viterbi LTI Channel
-\item ViterbiNet Performance compared to MMSE and classic Viterbi non-linear Channel
-\item Reduced ViterbiNet on LTI Channel
-\item Reduced ViterbiNet on non-linear Channel
-\end{itemize}
-\subsection*{ViterbiNet}
+
 	\includegraphics[width=\textwidth,height = 7cm]{results/lti_standard}
+
+\item ViterbiNet Performance compared to MMSE and classic Viterbi non-linear Channel
+
 	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
 
-\subsection*{Reduced State ViterbiNet}
+\item Reduced ViterbiNet on LTI Channel
+
 	\includegraphics[width=\textwidth,height = 7cm]{results/lti_reduced}
-	\includegraphics[width=\textwidth,height = 7cm]{results/quant_reduced}
+
+\item Reduced ViterbiNet on non-linear Channel
+%	\includegraphics[width=\textwidth,height = 7cm]{results/quant_reduced}
+
+\end{itemize}
+\subsection*{ViterbiNet}
+\subsection*{Reduced State ViterbiNet}
 \section{Conclusion}
 
 \newpage

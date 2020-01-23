@@ -173,20 +173,18 @@ def quantizer(input, level):
     :param bits_available:
     :return:
     """
-    check = np.round(input * (pow(10, level)))
-    return np.round(input * (pow(10, level)))
+    return np.around(input, decimals=level)
 
-def correct_quantizer(input, bits_available):
+def base_2_quantizer(input, level, clip_low = None, clip_high = None):
     """
-    Range should be based on expected std of noise and the largest value due to the estimate channel and the known transmit alphabet
+    base 2 quantizer that also introduces clipping
     :param input:
     :param range:
     :param bits_available:
     :return:
     """
-    quantized_vector = []
-    for sample in input.flatten():
-        check = int(sample, base=2)
-        binary_vector = "{0:6b}".format(sample)
-        binary = int(sample)
-    return np.asarray(quantized_vector)
+    test = np.int_(1000*input)
+    check = test & 0b11111100
+    if clip_high == None or clip_low == None:
+        return np
+    return np.round(input * (pow(10, level)))

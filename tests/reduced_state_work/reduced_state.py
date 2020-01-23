@@ -50,7 +50,7 @@ def test_reduced_state():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        reduced_state = 8
+        reduced_state = 4
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)
         x = torch.Tensor(x)

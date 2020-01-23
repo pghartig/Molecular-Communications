@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2019.11.7)  22 JAN 2020 16:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2019.11.7)  23 JAN 2020 17:30
 entering extended mode
 **report.tex
 (report.tex
@@ -380,78 +380,76 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 \tf@toc=\write3
  [1
 
-]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 43.
+] [2]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 84.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 43.
- [2]
-<./figures/results/lti_standard.png, id=19, 462.528pt x 346.896pt>
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 84.
+ [3]
+<./figures/results/lti_standard.png, id=25, 462.528pt x 346.896pt>
 File: ./figures/results/lti_standard.png Graphic file (type png)
 
 <use ./figures/results/lti_standard.png>
 Package pdftex.def Info: ./figures/results/lti_standard.png used on input line 
-49.
+116.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-<./figures/results/quant_standard.png, id=21, 462.528pt x 346.896pt>
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 116--117
+[][] 
+ []
+
+<./figures/results/quant_standard.png, id=27, 462.528pt x 346.896pt>
 File: ./figures/results/quant_standard.png Graphic file (type png)
 
 <use ./figures/results/quant_standard.png>
 Package pdftex.def Info: ./figures/results/quant_standard.png used on input lin
-e 50.
+e 120.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-<./figures/results/lti_reduced.png, id=22, 462.528pt x 346.896pt>
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 120--121
+[][] 
+ []
+
+[4 <./figures/results/lti_standard.png>]
+<./figures/results/lti_reduced.png, id=34, 462.528pt x 346.896pt>
 File: ./figures/results/lti_reduced.png Graphic file (type png)
 
 <use ./figures/results/lti_reduced.png>
-Package pdftex.def Info: ./figures/results/lti_reduced.png used on input line 5
-3.
+Package pdftex.def Info: ./figures/results/lti_reduced.png used on input line 1
+24.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-
-! LaTeX Error: File `results/quant_reduced' not found.
-
-See the LaTeX manual or LaTeX Companion for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.54 ...width,height = 7cm]{results/quant_reduced}
-                                                  
-I could not locate the file with any of these extensions:
-.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 53--55
-
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 124--125
+[][] 
  []
 
-[3 <./figures/results/lti_standard.png> <./figures/results/quant_standard.png>]
-[4 <./figures/results/lti_reduced.png>]
+[5 <./figures/results/quant_standard.png> <./figures/results/lti_reduced.png>]
 No file report.bbl.
 (report.aux) ) 
 Here is how much of TeX's memory you used:
- 2326 strings out of 493671
- 27680 string characters out of 3143859
+ 2318 strings out of 493671
+ 27655 string characters out of 3143859
  85494 words of memory out of 3000000
- 5640 multiletter control sequences out of 15000+200000
- 13009 words of font info for 50 fonts, out of 3000000 for 9000
+ 5642 multiletter control sequences out of 15000+200000
+ 13630 words of font info for 52 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 27i,6n,24p,713b,182s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,7n,24p,707b,191s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx1
-2.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C
-:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program
- Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/Mi
-KTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on report.pdf (6 pages, 175009 bytes).
+2.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Progra
+m Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/M
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9
+/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
+pe1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
+/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
+cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8
+.pfb>
+Output written on report.pdf (7 pages, 225116 bytes).
 PDF statistics:
- 48 PDF objects out of 1000 (max. 8388607)
+ 73 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
