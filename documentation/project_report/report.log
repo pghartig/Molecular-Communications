@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2019.11.7)  23 JAN 2020 17:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2019.11.7)  24 JAN 2020 16:55
 entering extended mode
 **report.tex
 (report.tex
@@ -381,75 +381,89 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
  [1
 
 ] [2]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 84.
+Overfull \hbox (18.0664pt too wide) in paragraph at lines 52--55
+[]\OT1/cmr/m/n/12 In this case, $\OML/cmm/m/it/12 P\OT1/cmr/m/n/12 (\OML/cmm/m/
+it/12 y\OMS/cmsy/m/n/12 j\OML/cmm/m/it/12 x\OT1/cmr/m/n/12 )$ can be rewrit-ten
+ as $[] \OML/cmm/m/it/12 P\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 y[]\OMS/cmsy/m/n/12
+ j\OML/cmm/m/it/12 x[]\OT1/cmr/m/n/12 ) = [] \OML/cmm/m/it/12 log\OT1/cmr/m/n/1
+2 (\OML/cmm/m/it/12 P\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 y[]\OMS/cmsy/m/n/12 j\OM
+L/cmm/m/it/12 x[]\OT1/cmr/m/n/12 ))$ 
+ []
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 100.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 84.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 100.
  [3]
-<./figures/results/lti_standard.png, id=25, 462.528pt x 346.896pt>
+<./figures/results/lti_standard.png, id=32, 462.528pt x 346.896pt>
 File: ./figures/results/lti_standard.png Graphic file (type png)
 
 <use ./figures/results/lti_standard.png>
 Package pdftex.def Info: ./figures/results/lti_standard.png used on input line 
-116.
+137.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-Overfull \hbox (29.39177pt too wide) in paragraph at lines 116--117
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 137--138
 [][] 
  []
 
-<./figures/results/quant_standard.png, id=27, 462.528pt x 346.896pt>
+[4] <./figures/results/quant_standard.png, id=38, 462.528pt x 346.896pt>
 File: ./figures/results/quant_standard.png Graphic file (type png)
 
 <use ./figures/results/quant_standard.png>
 Package pdftex.def Info: ./figures/results/quant_standard.png used on input lin
-e 120.
+e 141.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-Overfull \hbox (29.39177pt too wide) in paragraph at lines 120--121
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 141--142
 [][] 
  []
 
-[4 <./figures/results/lti_standard.png>]
-<./figures/results/lti_reduced.png, id=34, 462.528pt x 346.896pt>
+<./figures/results/lti_reduced.png, id=39, 462.528pt x 346.896pt>
 File: ./figures/results/lti_reduced.png Graphic file (type png)
 
 <use ./figures/results/lti_reduced.png>
 Package pdftex.def Info: ./figures/results/lti_reduced.png used on input line 1
-24.
+45.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-Overfull \hbox (29.39177pt too wide) in paragraph at lines 124--125
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 145--146
 [][] 
  []
 
-[5 <./figures/results/quant_standard.png> <./figures/results/lti_reduced.png>]
+[5 <./figures/results/lti_standard.png> <./figures/results/quant_standard.png>]
+[6 <./figures/results/lti_reduced.png>]
 No file report.bbl.
 (report.aux) ) 
 Here is how much of TeX's memory you used:
- 2318 strings out of 493671
- 27655 string characters out of 3143859
+ 2329 strings out of 493671
+ 27760 string characters out of 3143859
  85494 words of memory out of 3000000
- 5642 multiletter control sequences out of 15000+200000
- 13630 words of font info for 52 fonts, out of 3000000 for 9000
+ 5648 multiletter control sequences out of 15000+200000
+ 15202 words of font info for 58 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  27i,7n,24p,707b,191s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx1
-2.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C
-:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Progra
-m Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmr6.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public
-/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/
-cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy8
-.pfb>
-Output written on report.pdf (7 pages, 225116 bytes).
+0.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Progra
+m Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files/
+MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/MiKTeX 2
+.9/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Program Files/MiKTeX 2.9/fonts/
+type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/pub
+lic/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfo
+nts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cm
+r17.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr6.pfb><C
+:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Program 
+Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Program Files/MiKT
+eX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/f
+onts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type
+1/public/amsfonts/cm/cmsy8.pfb>
+Output written on report.pdf (8 pages, 291388 bytes).
 PDF statistics:
- 73 PDF objects out of 1000 (max. 8388607)
+ 100 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

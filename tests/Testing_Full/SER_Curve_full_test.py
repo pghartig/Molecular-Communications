@@ -31,10 +31,10 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
+        number_symbols = 3000
         channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
@@ -66,11 +66,15 @@ def test_full_integration():
         # test_length = channel_length-1
         # output_layer_size = reduced_state
         output_layer_size = np.power(m, channel_length)
-        N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
+        N, D_in, H1, H2, D_out = number_symbols, 1, 50, 50, output_layer_size
+        # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
+
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
-        dropout_probability = .3
+        dropout_probability = .5
         net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+        # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
+
 
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
@@ -87,7 +91,7 @@ def test_full_integration():
         batch_size = 30
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 300
+        epochs = 500
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -161,12 +165,11 @@ def test_full_integration():
 
     figure, dictionary = plot_symbol_error_rates(SNRs_dB, [classic_performance, linear_mmse_performance, viterbi_net_performance], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
-
     figure.savefig(time_path, format="png")
-
     text_path = "Output/SER_"+f"{time.time()}"+"curves.csv"
     pd.DataFrame.from_dict(dictionary).to_csv(text_path)
     figure.savefig(time_path, format="png")
+
 
     #Plots for NN training information
     plt.figure(2)

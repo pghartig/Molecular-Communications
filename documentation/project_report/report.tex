@@ -40,31 +40,47 @@ The general communication channel is equivalent to a conditional probability $P(
 \section{Background}
 
 \subsection{MLSE}
-Consider the particular form of $P(x|y)$ used for detection of the received signal 
-$\underset{x}{\text{argmin}} \; P(y|x) $. This form is referred to as Maximum Likelihood Sequence Estimation (MLSE). In general, such an optimization over a discrete set is exponentially complex in the length of $x$. Information about the communication channel can, however reduce the complexity of this problem. In order to illustrate this reduction, the following example is proposed.
+Consider the form of $P(x|y)$ used for detection :
+$\underset{x}{\text{argmin}} \; P(y|x) $ . Known as Maximum Likelihood Sequence Estimation (MLSE), in general, such an optimization over the set of all possible $x$ is exponentially complex in the cardinaltiy of $x$ . Information about the communication channel can, however reduce the complexity of this problem. In order to illustrate this reduction, the following example is proposed.
 \par
-Consider the receiver of a communication channel which receives a causal, linear, time invariant combination of a set of the transmitted information. 
+Consider the receiver of a communication channel which receives a causal, linear, and time invariant combination of a set of the transmitted information. 
 
 \begin{equation}
-r[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]
+y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]
 \end{equation}
 
+In this case, $P(y|x)$ can be rewritten as
+$\prod P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) = \sum
+log(P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) )$
 
-The sequence of received symbols $\mathbf{r}$ can be equivalently represented the by trellis:
+The sequence of received symbols $\mathbf{y}$ can be equivalently represented the by trellis:
 
 TODO IMPORT Trellis picture
 in which each time-point k represents a unique set of L transmitted symbols 
 $x[k-l]$ $ \forall l \in {1..L}$. 
 
+
+
 Viterbi Algorithm:
+
+    {\footnotesize
+    \begin{tabbing}
+        {\bf given} $P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall i \in {1..N}$ . \\*[\smallskipamount]
+        Let $\lambda := \lambda^{k-1}$. \\*[\smallskipamount]
+        {\bf for $i = 1..N $} \\
+         \qquad \= {\bf for each state $s$ at time $i$}\\
+        \qquad \qquad \= 1.\ Let $\mathrm{Path}_{s} := \prox_{\lambda g}(x^{k} - \lambda \nabla f(x^{k}))$. \\
+        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
+        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
+        {\bf return} $\underset{s}{\text{argmin}} \; cost[i] $, $x^{k+1}:=z$.
+    \end{tabbing}}
+    \noindent\rule[10pt]{\textwidth}{0.4pt}
+
 
 For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. 
 
 
 
-In this case, $P(y|x)$ can be rewritten 
-$\prod P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) = \sum
-log(P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) )$
 
 
 ** note that using MAP could also be done in future work
@@ -105,6 +121,9 @@ r[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathca
 
 Here the signal to noise ratio (SNR) is 
 $\frac{E\{x[k]\}}{\sigma^2}$
+
+Adding quantization at matched filter (prior to noise being added)
+
 
 Details of NN architecture and training
 
