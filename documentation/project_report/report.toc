@@ -1,9 +1,10 @@
-\contentsline {section}{\numberline {0.1}Notation}{2}
-\contentsline {section}{\numberline {0.2}Introduction}{2}
-\contentsline {section}{\numberline {0.3}Background}{2}
-\contentsline {subsection}{\numberline {0.3.1}MLSE}{2}
-\contentsline {subsection}{\numberline {0.3.2}ViterbiNet}{3}
-\contentsline {section}{\numberline {0.4}Simulation Results}{4}
-\contentsline {subsection}{\numberline {0.4.1}System Model}{4}
-\contentsline {subsection}{\numberline {0.4.2}Results}{4}
-\contentsline {section}{\numberline {0.5}Conclusion}{6}
+\contentsline {section}{\numberline {0.1}Notation}{2}% 
+\contentsline {section}{\numberline {0.2}Introduction}{2}% 
+\contentsline {section}{\numberline {0.3}Background}{2}% 
+\contentsline {subsection}{\numberline {0.3.1}MLSE}{2}% 
+\contentsline {subsection}{\numberline {0.3.2}ViterbiNet}{3}% 
+\contentsline {section}{\numberline {0.4}Simulation Results}{4}% 
+\contentsline {subsection}{\numberline {0.4.1}System Model}{4}% 
+\contentsline {subsection}{\numberline {0.4.2}Results}{4}% 
+\contentsline {section}{\numberline {0.5}Conclusion}{5}% 
+\contentsline {subsection}{\numberline {0.5.1}Future Work}{5}% 

@@ -40,10 +40,10 @@ The general communication channel is equivalent to a conditional probability $P(
 \section{Background}
 
 \subsection{MLSE}
-Consider the form of $P(x|y)$ used for detection :
-$\underset{x}{\text{argmin}} \; P(y|x) $ . Known as Maximum Likelihood Sequence Estimation (MLSE), in general, such an optimization over the set of all possible $x$ is exponentially complex in the cardinaltiy of $x$ . Information about the communication channel can, however reduce the complexity of this problem. In order to illustrate this reduction, the following example is proposed.
+The form of $P(x|y)$ used for detection in this work is
+$\underset{x}{\text{argmin}} \; P(y|x) $ . This optimization, known as Maximum Likelihood Sequence Estimation (MLSE), over the set of all possible $x$ is exponentially complex in the cardinaltiy of $x$ . Information about the communication channel can, however, reduce the complexity of this problem. In order to illustrate this reduction, the following example is proposed.
 \par
-Consider the receiver of a communication channel which receives a causal, linear, and time invariant combination of a set of the transmitted information. 
+Consider the communication channel over which a causal, linear, and time invariant combination of a set of the transmitted information is received. 
 
 \begin{equation}
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]
@@ -51,18 +51,16 @@ y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]
 
 In this case, $P(y|x)$ can be rewritten as
 $\prod P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) = \sum
-log(P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) )$
-
+log(P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) )$.
 The sequence of received symbols $\mathbf{y}$ can be equivalently represented the by trellis:
 
 TODO IMPORT Trellis picture
 in which each time-point k represents a unique set of L transmitted symbols 
-$x[k-l]$ $ \forall l \in {1..L}$. 
-
-
+$x[k-l]$ $ \forall l \in {1..L}$. Due to the finite number of states that channel can be in at a given time, MLSE can be performed using the Viterbi Algorithm over this trellis. 
 
 Viterbi Algorithm:
 
+    \noindent\rule[10pt]{\textwidth}{0.4pt}
     {\footnotesize
     \begin{tabbing}
         {\bf given} $P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall i \in {1..N}$ . \\*[\smallskipamount]
@@ -77,16 +75,12 @@ Viterbi Algorithm:
     \noindent\rule[10pt]{\textwidth}{0.4pt}
 
 
-For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. 
+For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. Note that while Viterbi algorithm does have exponential complexity in the length of the channle (i.e. L), complexity is linear in the length of the sequence. 
 
 
-
-
-
-** note that using MAP could also be done in future work
 \subsection{ViterbiNet}
 As suggested in the introduction, despite the reduction in complexity offered by the Viterbi Algorithm for MLSE, the individual metrics used each step of the algorithm 
-$P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) $ require knowledge of the channel which may be difficult to obtain. To estimate this distribution using a neural network, Baye's Rule is used. 
+$P(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) $ require knowledge of the channel which may be difficult to obtain. To estimate this distribution using a neural network, Baye's Rule is used. 
 \begin{equation}
 P(y_{\mathrm{i}}|x_{\mathrm{1 ... L}}) = 
 \frac
@@ -98,9 +92,17 @@ These terms can be interpreted as:
 
 \begin{itemize}
 \item $P(x_{\mathrm{1 ... L}}|y_{\mathrm{i}})$
-: This term can be interpreted as the probability of being in a channel state given the corresponding received symbol from that time point. In the case of a finite number of states, such a probability can be estimated using a neural network for classification of received signals into channel states. 
+: The probability of being in a channel state given the corresponding received symbol from that time point. In the case of a finite number of states, such a probability can be estimated using a neural network for classification of received signals into channel states. 
+%Picture of NN
+%	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
+
+
 \item $P(y_{\mathrm{i}})$
-: This term characterizes the randomness of the channel. As each received signal represents a state of the system to which noise may be added. A representative mixture-model can be estimated using a set of received signal training data. 
+: The randomness of the channel. As each received signal represents a state of the system to which noise may be added. A representative mixture-model can be estimated using a set of received signal training data. 
+%Picture of MM
+%	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
+
+
 \item $P(x_{\mathrm{1 ... L}})$
 : Assuming the transmitted symbols are equiprobable, this term can be neglected as all states $x_{\mathrm{1 ... L}}$ will have equal probability. 
 
@@ -109,18 +111,19 @@ These terms can be interpreted as:
 
 
 
-
-
 \section{Simulation Results}
 \subsection{System Model}
 Consider the received signal 
 \begin{equation}
-r[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
+y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
 \end{equation}
 
-
-Here the signal to noise ratio (SNR) is 
+with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$
+with signal to noise ratio (SNR) 
 $\frac{E\{x[k]\}}{\sigma^2}$
+
+
+
 
 Adding quantization at matched filter (prior to noise being added)
 
@@ -151,6 +154,8 @@ Proposed Figures
 \subsection*{ViterbiNet}
 \subsection*{Reduced State ViterbiNet}
 \section{Conclusion}
+\subsection{Future Work}
+Discuss forward backward (APP) algorithms that could be implemented.
 
 \newpage
 \bibliography{mc_report}
