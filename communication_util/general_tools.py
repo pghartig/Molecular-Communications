@@ -116,7 +116,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     return fig, data_dict
 
 def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=True):
-    fig = plt.figure(1)
+    fig = plt.figure()
     names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
     data_dict = dict()
     data_dict["SNRs_dB"] = SNRs_dB
@@ -173,6 +173,7 @@ def quantizer(input, level):
     :param bits_available:
     :return:
     """
+    check = np.around(input, decimals=level)
     return np.around(input, decimals=level)
 
 def base_2_quantizer(input, level, clip_low = None, clip_high = None):
@@ -183,8 +184,9 @@ def base_2_quantizer(input, level, clip_low = None, clip_high = None):
     :param bits_available:
     :return:
     """
-    test = np.int_(1000*input)
-    check = test & 0b11111100
+    test = np.int_(10000*input)
+    # check = test & 0b11111100
+    test2 = test/10000
     if clip_high == None or clip_low == None:
-        return np
+        return np.round(input * (pow(10, level)))
     return np.round(input * (pow(10, level)))

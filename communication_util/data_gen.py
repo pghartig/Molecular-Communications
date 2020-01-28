@@ -238,23 +238,29 @@ class training_data_generator:
         tap on the left most index.
         :return:
         """
+        plt.figure()
         self.channel_output = []
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             self.channel_output.append(
                 np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
         self.channel_output = np.flip(np.asarray(self.channel_output))
-
+        plt.subplot(1,3,1)
+        plt.scatter(self.channel_output,self.channel_output)
 
         #   Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
             self.channel_output = quantizer(self.channel_output, quantization_level)
-        # test = np.round(self.channel_output*100)
-        # self.channel_output = self.channel_output.astype('half')
 
+        plt.subplot(1,3,2)
+        plt.scatter(self.channel_output,self.channel_output)
 
         #   adjust noise power to provided SNR parameter. Note symbols should always be normalized to unit power.
         self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
+        plt.subplot(1,3,3)
+        plt.scatter(self.channel_output,self.channel_output)
+        plt.show()
+        pass
 
     def transmit_modulated_signal2(self):
         """

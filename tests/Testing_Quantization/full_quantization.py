@@ -26,7 +26,19 @@ def test_full_quantization():
     seed_generator = 0
     data_gen = None
     channel = None
+
     quantization_levels = 3
+    quantized_input = np.linspace(-1, 1, num = 200)
+    # quantized_output = []
+
+    quant = plt.figure(1)
+    for level in range(quantization_levels):
+        # quantized_output.append(quantizer(quantized_input, level))
+        plt.plot(quantized_input, quantizer(quantized_input, level), label=f"{level}")
+    plt.legend("lower left")
+    # plt.show()
+    quant.savefig("Output/quant.png")
+
     for level in range(quantization_levels):
         viterbi_net_performance = []
         classic_performance = []
@@ -152,10 +164,12 @@ def test_full_quantization():
             classic_performance.append(ser_classic)
             linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
 
-
         viterbi_net_performance_full.append(viterbi_net_performance)
         classic_performance_full.append(classic_performance)
         linear_mmse_performance_full.append(linear_mmse_performance)
+
+
+
 
 
     path = "Output/SER.pickle"
