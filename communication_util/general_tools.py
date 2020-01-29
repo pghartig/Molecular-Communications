@@ -115,6 +115,31 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     # plt.show()
     return fig, data_dict
 
+def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analytic_ser=True):
+    fig = plt.figure(1)
+    names =["Classic Viterbi", "Linear MMSE", "Neural Net Reduced", "Neural Net"]
+    data_dict = dict()
+    data_dict["SNRs_dB"] = SNRs_dB
+    for ind, SER in enumerate(SER_list):
+        plt.plot(SNRs_dB, SER, label=f'{names[ind]}')
+        data_dict[names[ind]]= np.asarray(SER)
+    if analytic_ser==True:
+        #TODO general to other pam schemes
+        SNRs_dB = np.linspace(-5, 10, 100)
+        snrs = np.power(10, SNRs_dB / 10)
+        analytic = 1- norm.cdf(np.sqrt(2 * snrs))
+        plt.plot(SNRs_dB, analytic, label='analytic_ml')
+    plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
+    plt.ylabel("SER")
+    plt.xscale('linear')
+    plt.yscale('log')
+    plt.grid(True)
+    plt.legend(loc='lower left')
+    plt.title(str(info), fontdict={'fontsize': 10})
+    plt.title("Symbol Error Rate vs SNR")
+    # plt.show()
+    return fig, data_dict
+
 def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=True):
     fig = plt.figure()
     names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
@@ -141,7 +166,6 @@ def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,inf
     plt.title("Symbol Error Rate vs SNR")
     # plt.show()
     return fig, data_dict
-
 
 def quant_symbol_error_rates(SNRs_dB, SER_list):
     fig = plt.figure(1)

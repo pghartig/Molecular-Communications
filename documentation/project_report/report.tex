@@ -4,6 +4,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{graphicx}
+\usepackage{float}
 
 \input defs.tex
 \bibliographystyle{alpha}
@@ -25,6 +26,7 @@
 \tableofcontents
 \newpage
 \section{Notation}
+The following notation conventions are used 
 Expectation
 Conditional Probability 
 Argmax
@@ -123,7 +125,16 @@ The resulting signal to noise ratio (SNR) is
 $\frac{E\{x[k]\}}{\sigma^2}$.
 
 
-
+\begin{figure}[H]
+	  \caption{Simulation Channels: LTI Channel}
+	\includegraphics[width=10cm,height = 10cm]{system_model/lti_channel}
+	  \label{fig:LTI Channel}
+\end{figure}
+\begin{figure}[H]
+	  \caption{Simulation Channels: Quantizer}
+	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer}
+	  \label{fig:Quantized Channel}
+\end{figure}
 
 
 
@@ -136,10 +147,28 @@ Details of Mixture Model training
 
 \subsection{Results}
 Proposed Figures
+\begin{figure}[H]
+	  \caption{LTI Channel Performance}
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_normal}
+	  \label{fig:LTI Channel}
+\end{figure}
+
+\begin{figure}[H]
+	  \caption{LTI + Quantized Channel Performance}
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_quantized}
+	  \label{fig:LTI_quant Channel}
+\end{figure}
+
+\begin{figure}[H]
+	  \caption{Reduced State ViterbiNet: LTI Channel}
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_reduced}
+	  \label{fig:reduced_lti}
+\end{figure}
+
 \begin{itemize}
 \item ViterbiNet Performance compared to MMSE and classic Viterbi LTI Channel
 
-	\includegraphics[width=\textwidth,height = 7cm]{results/lti_standard}
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_normal}
 
 \item ViterbiNet Performance compared to MMSE and classic Viterbi non-linear Channel
 

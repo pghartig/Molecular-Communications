@@ -55,6 +55,7 @@ def test_full_quantization():
             # channel[0, [0, 1, 2 ]] = 1, .1, .2
             # channel = np.zeros((1, 1))
             # channel[0, [0]] = 1
+
             data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(level)
@@ -167,9 +168,6 @@ def test_full_quantization():
         viterbi_net_performance_full.append(viterbi_net_performance)
         classic_performance_full.append(classic_performance)
         linear_mmse_performance_full.append(linear_mmse_performance)
-
-
-
 
 
     path = "Output/SER.pickle"
