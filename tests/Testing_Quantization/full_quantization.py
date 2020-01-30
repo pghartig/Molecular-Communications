@@ -153,7 +153,7 @@ def test_full_quantization():
             Compare to Classical Viterbi with full CSI
             """
             # channel= np.round(channel*10)
-            metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
+            metric = gaussian_channel_metric_working_quantized(channel, data_gen.channel_output, level)  # This is a function to be used in the viterbi
             detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
             ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)

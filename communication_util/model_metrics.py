@@ -2,6 +2,8 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 from abc import ABC, abstractclassmethod
+from communication_util.general_tools import *
+
 
 #TODO import ABC
 class metric(ABC):
@@ -35,6 +37,33 @@ class gaussian_channel_metric_working(metric):
             cost = np.linalg.norm((predicted - channel_output))
             costs.append(cost)
         return np.asarray(costs)
+
+
+class gaussian_channel_metric_working_quantized(metric):
+    """
+    returns vector of metrics for incoming state of viterbi with a gaussian channel
+    :param survivor_paths:
+    :param index:
+    :param transmit_alphabet:
+    :param channel_output:
+    :param cir:
+    :return:
+    """
+
+    def __init__(self, csi, received, quantization_level):
+        metric.__init__(self, received)
+        self.parameters = csi
+        self.quantization_level = quantization_level
+
+    def metric(self, index, states):
+        costs = []
+        for state in states:
+            channel_output = self.received[0, index]
+            predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
+            cost = quantizer(np.linalg.norm((predicted - channel_output)), self.quantization_level)
+            costs.append(cost)
+        return np.asarray(costs)
+
 
 class nn_mm_metric(metric):
 
