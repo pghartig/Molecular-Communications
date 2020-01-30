@@ -13,6 +13,7 @@ from communication_util.general_tools import *
 from nn_utilities import models
 import torch.optim as optim
 import pandas as pd
+import copy
 import os
 import time
 
@@ -45,6 +46,10 @@ def test_reduced_compare():
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
+
+        data_gen_clone = copy.deepcopy(data_gen)
+        data_gen_clone_1 = copy.deepcopy(data_gen)
+
 
         """
         Load in Trained Neural Network and verify that it is acceptable performance
@@ -123,10 +128,8 @@ def test_reduced_compare():
         After sending through channel, symbol detection should be performed using something like a matched filter.
         Create new set of test data. 
         """
-        del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
-        data_gen.random_symbol_stream()
-        data_gen.send_through_channel()
+        # This prevents having to regenerate data and ensures that the same sequences are used for testing
+        data_gen = data_gen_clone
 
         metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
@@ -153,15 +156,12 @@ def test_reduced_compare():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-
-        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
-        data_gen.random_symbol_stream()
-        data_gen.send_through_channel()
+        #   Use new cloned data gen for training
+        data_gen = data_gen_clone_1
 
         """
         Load in Trained Neural Network and verify that it is acceptable performance
         """
-        device = torch.device("cpu")
         num_inputs_for_nn = 1
         x, y = data_gen.get_labeled_data()
         y = np.argmax(y, axis=1)
@@ -180,7 +180,6 @@ def test_reduced_compare():
         channel_length = data_gen.CIR_matrix.shape[1]
         # TODO correct to proper value
         output_layer_size = np.power(m, channel_length)
-        # output_layer_size = np.power(m, channel_length)
         N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
@@ -202,7 +201,7 @@ def test_reduced_compare():
         batch_size = 30
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 100
+        epochs = 300
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -239,7 +238,7 @@ def test_reduced_compare():
 
         metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                               metric.metric, reduced_length=output_layer_size, reduced=True)
+                                               metric.metric)
         ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix,
                                                                   channel_length)
 

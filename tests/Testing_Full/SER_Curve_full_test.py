@@ -74,7 +74,7 @@ def test_full_integration():
 
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
-        dropout_probability = .5
+        dropout_probability = .3
         net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
 
