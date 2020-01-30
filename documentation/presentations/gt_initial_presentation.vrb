@@ -1,0 +1,17 @@
+\frametitle{Metrics for $Pr(x_{\mathrm{i-l}}^{\mathrm{i}}|y_{\mathrm{i}})$}
+	\begin{figure}
+		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
+		\newcommand{\x}[2]{$x_#2$}
+		\newcommand{\y}[2]{$\hat{y}_#2$}
+		\newcommand{\hfirst}[2]{\small $h^{(1)}_#2$}
+		\newcommand{\hsecond}[2]{\small $h^{(2)}_#2$}
+		\newcommand{\hthird}[2]{\small $h^{(3)}_#2$}
+		\newcommand{\hfourth}[2]{\small $h^{(4)}_#2$}
+		\inputlayer[count=1, bias=false, title=Received\\, text=\x]
+		\hiddenlayer[count=2, bias=false, title=\\, text=\hthird] \linklayers
+		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
+		\outputlayer[count=4, title=States\\, text=\x] \linklayers
+	    \end{neuralnetwork}
+	\end{figure}
+	%We can take the output of an intermediate layer after training as use it as the input features for a
+	%classification neural network.
