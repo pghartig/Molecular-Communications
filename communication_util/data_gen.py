@@ -404,6 +404,7 @@ class training_data_generator:
         num_clusters = int(pow(2, base_states-1))
         clusters = kmeans(reduced, num_clusters)
         labels = vq(reduced, clusters[0])[0]
+        test = self.reduced_state_mapping()
         centroids = clusters[0]
         # plt.scatter(reduced, reduced)
         # plt.scatter(centroids, centroids)
@@ -442,6 +443,10 @@ class training_data_generator:
         # below check should at least be symmetric
         totals = np.sum(np.asarray(y_list), axis=0)
         return x_list, y_list
+
+    def reduced_state_mapping(self):
+        #   Take training data and cluster the output points
+        x_list, y_list = self.get_labeled_data()
 
     def get_probability(self, input, states):
         """
