@@ -31,7 +31,7 @@ def test_reduced_state():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 1000
+        number_symbols = 5000
         # channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         channel = np.zeros((1, 5))
@@ -50,7 +50,7 @@ def test_reduced_state():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        reduced_state = 4
+        reduced_state = 8
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)
         x = torch.Tensor(x)
@@ -184,14 +184,3 @@ def test_reduced_state():
 
 
     assert True
-
-
-def test_plt_ser():
-    SNRs_dB = np.linspace(-5, 10, 100)
-    snrs = np.power(10, SNRs_dB / 10)
-    q_function = norm.sf
-    SER = q_function(2 * np.sqrt(snrs))
-    plt.plot(SNRs_dB, SER, label='analytic_ml')
-    plt.xscale('linear')
-    plt.yscale('log')
-    plt.show()

@@ -37,7 +37,7 @@ def test_quantization_reduced():
             """
             number_symbols = 2000
             channel = np.zeros((1, 5))
-            channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+            channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
             # channel = np.zeros((1, 3))
             # channel[0, [0, 1, 2 ]] = 1, .1, .2
             # channel = np.zeros((1, 1))
@@ -50,7 +50,7 @@ def test_quantization_reduced():
             Load in Trained Neural Network and verify that it is acceptable performance
             """
             device = torch.device("cpu")
-            reduced_state = 32
+            reduced_state = 8
             num_inputs_for_nn = 1
             x, y = data_gen.get_labeled_data_reduced_state(reduced_state, quantization_level =level )
             y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
@@ -124,7 +124,7 @@ def test_quantization_reduced():
             Create new set of test data. 
             """
             del data_gen
-            data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+            data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(level)
 

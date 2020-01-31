@@ -391,20 +391,21 @@ class training_data_generator:
         base_states = int(np.ceil(np.log2(outputs)))
         states = []
         item = []
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
-        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
+        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
 
         states = np.asarray(states)
         # reduced = np.asarray(states)@self.CIR_matrix.T
-        normalized_channel =self.CIR_matrix[:, 1::]/ np.linalg.norm(self.CIR_matrix[:, 1::])
+        # normalized_channel =self.CIR_matrix[:, 1::]/ np.linalg.norm(self.CIR_matrix[:, 1::])
+        normalized_channel =self.CIR_matrix
         reduced = np.asarray(states)@normalized_channel.T
 
         if quantization_level is not None:
             reduced = quantizer(reduced,quantization_level)
         num_clusters = int(pow(2, base_states-1))
         clusters = kmeans(reduced, num_clusters)
-        labels = vq(reduced, clusters[0])[0]
-        test = self.reduced_state_mapping()
+        # labels = vq(reduced, clusters[0])[0]
+        labels = self.reduced_state_mapping(num_clusters)
         centroids = clusters[0]
         # plt.scatter(reduced, reduced)
         # plt.scatter(centroids, centroids)
@@ -428,7 +429,7 @@ class training_data_generator:
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     #   Get true state of the system
                     symbol = self.symbol_stream_matrix[:,j].flatten()
-                    true_state = self.symbol_stream_matrix[:, j+1: j+self.CIR_matrix.shape[1]].flatten()
+                    true_state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()
                     probability_vec = self.get_probability(true_state, states)
                     # Now find corresponding reduced state cluster number for the true state
                     state = labels[np.argmax(probability_vec)]
@@ -444,9 +445,24 @@ class training_data_generator:
         totals = np.sum(np.asarray(y_list), axis=0)
         return x_list, y_list
 
-    def reduced_state_mapping(self):
+    def reduced_state_mapping(self, num_clusters):
+        """
+        :param num_clusters:
+        :return: a vector indicating a compression of some number of states into a set of clusters
+        """
         #   Take training data and cluster the output points
         x_list, y_list = self.get_labeled_data()
+        clusters = kmeans(x_list, num_clusters)
+        labels = vq(x_list, clusters[0])[0]
+        #   Now go through each of the original number of states and assign this to
+        totals = np.zeros((num_clusters, y_list[0].size))
+        for ind, label in enumerate(labels):
+            for cluster in range(num_clusters):
+                if label ==cluster:
+                    totals[label,:] += y_list[ind]
+                    break
+        #   Now find the cluster into which each of the original states has the majority of labels in
+        return np.argmax(totals, axis=0)
 
     def get_probability(self, input, states):
         """
