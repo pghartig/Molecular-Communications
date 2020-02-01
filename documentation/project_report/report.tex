@@ -120,6 +120,7 @@ Consider the received signal
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
 \end{equation}
 
+<<<<<<< HEAD
 with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
 The resulting signal to noise ratio (SNR) is 
 $\frac{E\{x[k]\}}{\sigma^2}$.
@@ -462,6 +463,11 @@ Viterbi Algorithm:
     \end{tabbing}}
     \noindent\rule[10pt]{\textwidth}{0.4pt}
 
+=======
+with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$
+with signal to noise ratio (SNR) 
+$\frac{E\{x[k]\}}{\sigma^2}$
+>>>>>>> parent of b93eac3... some changes to report
 
 For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. Note that while Viterbi algorithm does have exponential complexity in the length of the channle (i.e. L), complexity is linear in the length of the sequence. 
 
