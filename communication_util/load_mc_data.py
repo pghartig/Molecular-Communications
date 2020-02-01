@@ -79,6 +79,18 @@ def match_filter(measurements, receive_filter, symbol_period):
     plt.title("filtered")
     plt.show()
 
-
 def normalize_vector(vector):
     return (vector - np.average(vector))/np.std(vector)
+
+def send_pulses(modulation_pulse: np.ndarray, symbols: np.ndarray, symbol_period: int):
+    """
+    Will move to data gen class next week when on correct git history. Keep separate for now.
+    :param modulation_pulse:
+    :param symbols:
+    :return:
+    """
+    #   Create resulting stream matrix in advance
+    transmitted = np.zeros((modulation_pulse.size+(symbols.size-1)*symbol_period))
+    for ind, symbol in enumerate(symbols):
+        transmitted[ind*symbol_period:ind*symbol_period+modulation_pulse.size] += symbol*modulation_pulse
+    return transmitted
