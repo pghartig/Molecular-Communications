@@ -69,15 +69,31 @@ def get_pulse(time_vec, measurement):
     ave_impulse_response = normalize_vector(np.average(impulse_responses, 0).flatten())
     plt.plot(ave_impulse_response,"r")
     plt.show()
-    return ave_impulse_response
+    #TODO Decide how to handle negative values here
+    return np.abs(ave_impulse_response)
 
-def match_filter(measurements, receive_filter, symbol_period):
+def match_filter(measurements: np.ndarray, receive_filter: np.ndarray, symbol_period: int, number_symbols: int):
     check = np.convolve(measurements, np.flip(receive_filter))
-    plt.plot(check,'r')
-    # check = np.convolve(measurements, receive_filter)
-    # plt.plot(check,'g')
-    plt.title("filtered")
-    plt.show()
+    # plt.plot(check,'r')
+    # plt.title("filtered")
+    # plt.show()
+    detected_symbols = []
+    for symbol_ind in range(number_symbols):
+        incoming_samples = measurements[symbol_ind*symbol_period:symbol_ind*symbol_period + receive_filter.size]
+        sample = receive_filter@incoming_samples
+        detected_symbols.append(sample)
+    detected_symbols = np.asarray(detected_symbols)
+    return detected_symbols
+
+def impulse_response_from_oversamples(oversampled : np.ndarray, symbol_period):
+    length = int(np.ceil(oversampled.size/symbol_period))
+    impulse_response = np.zeros(length)
+    for tap in range(length):
+        if (tap+1)*symbol_period <= oversampled.size:
+            impulse_response[tap] = np.sum(oversampled[tap*symbol_period:(tap+1)*symbol_period])
+        else:
+            impulse_response[tap] = np.sum(oversampled[tap*symbol_period::])
+    return impulse_response
 
 def normalize_vector(vector):
     return (vector - np.average(vector))/np.std(vector)
