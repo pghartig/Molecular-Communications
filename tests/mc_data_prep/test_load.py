@@ -12,7 +12,7 @@ def test_load():
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
     pulse_shape = get_pulse(train_time, train_measurement)
-    symbol_period = 100
+    symbol_period = 15
     stream = np.random.randint(0, 2, (50))
     # stream = np.array((1,1,1,0,0,1,0,1,1,0)) #Train Sequence
     transmit_signal = send_pulses(pulse_shape, stream, symbol_period)

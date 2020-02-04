@@ -58,9 +58,9 @@ def get_pulse(time_vec, measurement):
             if exceed_threshold.size> index+symbol_period_estimate:
                 impulse = measurement[index-30:index+int(symbol_period_estimate)]
                 impulse_responses.append(impulse)
-                plt.plot(impulse)
+                # plt.plot(impulse)
         previous = value
-    plt.show()
+    # plt.show()
     impulse_responses = np.vstack(impulse_responses)
     Rxx = impulse_responses.T@impulse_responses
     eigen_values, eigen_vectors = np.linalg.eigh(Rxx)

@@ -56,7 +56,7 @@ class training_data_generator:
         self.modulated_convolved_signal_function_sampled = []
         self.modulated_channel_output = []
         self.receive_filter = None
-        self.demodulated_symbols = np.zeros(symbol_stream_shape)
+        # self.demodulated_symbols = np.zeros(symbol_stream_shape)
         self.sampling_period = sampling_period
         self.symbol_period = symbol_period
         self.samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
@@ -107,7 +107,6 @@ class training_data_generator:
             filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=0)
 
     def constellation(self, type, size):
-        # TODO for large tests may want to select dtype
         if type is "QAM":
             points = np.linspace(-1, 1, np.floor(math.log(size, 2)))
             constellation = 1j * np.zeros((points.size, points.size))
@@ -117,6 +116,8 @@ class training_data_generator:
             return constellation.flatten()
         elif type is "ASK":
             return np.linspace(-1, +1, size)
+        elif type is "onOffKey":
+            return np.array((0, 1))
         elif type is "PSK":
             return np.exp(1j * np.linspace(0, 2 * np.pi, size))
         else:
@@ -166,6 +167,31 @@ class training_data_generator:
                 0, self.alphabet.size - 1, shape
             )
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
+
+    def modulate_sampled_pulse(self, modulation_pulse: np.ndarray, symbol_period: int):
+        for stream in range(self.symbol_stream_matrix.shape[0]):
+            symbolStream = self.symbol_stream_matrix[stream,:]
+            transmitted = np.zeros((modulation_pulse.size + (symbolStream.size - 1) * symbol_period))
+            for ind, symbol in enumerate(symbolStream):
+                transmitted[ind * symbol_period:ind * symbol_period + modulation_pulse.size] += symbol * modulation_pulse
+            # plt.plot(transmitted)
+            # plt.show()
+            self.transmit_signal_matrix.append(transmitted)
+
+    def filter_sample_modulated_pulse(self, receive_filter: np.ndarray, symbol_period: int):
+        if self.transmit_signal_matrix is not None:
+            sampled_received_streams = []
+            for stream in self.transmit_signal_matrix:
+                number_symbols = self.symbol_stream_matrix.shape[1]
+                detected_symbols = []
+                for symbol_ind in range(number_symbols):
+                    incoming_samples = stream[symbol_ind * symbol_period:symbol_ind * symbol_period + receive_filter.size]
+                    sample = receive_filter @ incoming_samples
+                    detected_symbols.append(sample)
+                sampled_received_streams.append(np.asarray(detected_symbols))
+            #TODO improve below
+            self.channel_output = np.reshape(np.asarray(detected_symbols), self.symbol_stream_matrix.shape)
+            pass
 
     def modulate_fundamental_pulse(self, fundamental_pulse: sampled_function):
         """
@@ -243,8 +269,9 @@ class training_data_generator:
         # plt.figure()
         self.channel_output = []
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
-            self.channel_output.append(
-                np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
+            self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
+            # self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), np.flip(self.CIR_matrix[bit_streams,:]), mode="full"))
+
         self.channel_output = np.flip(np.asarray(self.channel_output))
         # plt.subplot(1,3,1)
         # plt.scatter(self.channel_output,self.channel_output)
@@ -262,7 +289,6 @@ class training_data_generator:
         # plt.subplot(1,3,3)
         # plt.scatter(self.channel_output,self.channel_output)
         # plt.show()
-        pass
 
     def transmit_modulated_signal2(self):
         """

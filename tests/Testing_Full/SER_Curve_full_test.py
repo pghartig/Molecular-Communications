@@ -31,13 +31,13 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 3000
+        number_symbols = 100
         channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
-        # channel[0, [0]] = 1
+        channel[0, [0]] = 1
         # channel = np.zeros((1, 3))
         # channel[0, [0]] = 1
 
