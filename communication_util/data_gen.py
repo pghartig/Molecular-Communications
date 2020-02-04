@@ -169,16 +169,18 @@ class training_data_generator:
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
 
     def modulate_sampled_pulse(self, modulation_pulse: np.ndarray, symbol_period: int):
+        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
         for stream in range(self.symbol_stream_matrix.shape[0]):
             symbolStream = self.symbol_stream_matrix[stream,:]
             transmitted = np.zeros((modulation_pulse.size + (symbolStream.size - 1) * symbol_period))
             for ind, symbol in enumerate(symbolStream):
                 transmitted[ind * symbol_period:ind * symbol_period + modulation_pulse.size] += symbol * modulation_pulse
+            transmitted += self.noise_parameter[0] + self.noise_parameter[1] * np.random.standard_normal(transmitted.shape)
             # plt.plot(transmitted)
             # plt.show()
             self.transmit_signal_matrix.append(transmitted)
 
-    def filter_sample_modulated_pulse(self, receive_filter: np.ndarray, symbol_period: int):
+    def filter_sample_modulated_pulse(self, receive_filter: np.ndarray, symbol_period: int,  quantization_level=None):
         if self.transmit_signal_matrix is not None:
             sampled_received_streams = []
             for stream in self.transmit_signal_matrix:
@@ -190,7 +192,14 @@ class training_data_generator:
                     detected_symbols.append(sample)
                 sampled_received_streams.append(np.asarray(detected_symbols))
             #TODO improve below
+            # plt.scatter(detected_symbols,detected_symbols)
+            # plt.show()
             self.channel_output = np.reshape(np.asarray(detected_symbols), self.symbol_stream_matrix.shape)
+
+            if quantization_level is not None:
+                self.channel_output = quantizer(self.channel_output, quantization_level)
+
+
 
     def modulate_fundamental_pulse(self, fundamental_pulse: sampled_function):
         """
@@ -487,7 +496,7 @@ class training_data_generator:
         for ind, label in enumerate(labels):
             for cluster in range(num_clusters):
                 if label ==cluster:
-                    totals[label,:] += y_list[ind]
+                    totals[label, :] += y_list[ind]
                     break
         #   Now find the cluster into which each of the original states has the majority of labels in
         return np.argmax(totals, axis=0)

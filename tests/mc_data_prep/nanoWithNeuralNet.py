@@ -32,25 +32,33 @@ def test_nano_data_nerual_net():
     test_input_sequence = 'mc_data/input_string.txt'
     test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
     # For now just making a channel that represents some estimated memory length of the true channel
+    SNRs_dB = np.linspace(10, 10, 1)
+    # SNRs_dB = np.linspace(6, 10,3)
+    SNRs = np.power(10, SNRs_dB/10)
+
     channel = np.zeros((1, 1))
+    channel[0, [0]] = 1
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
     pulse_shape = get_pulse(train_time, train_measurement)
-    number_symbols = 20
-    data_gen = training_data_generator(1, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
+    number_symbols = 1000
+    data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
     data_gen.random_symbol_stream()
-    symbol_period = 200
+    symbol_period = 3
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
 
     # Test for making sure alignment is correct
-    ser = symbol_error_rate_mc_data(data_gen.symbol_stream_matrix.flatten(), data_gen.channel_output.flatten(), channel.size)
+    # ser = symbol_error_rate_mc_data(data_gen.symbol_stream_matrix.flatten(), data_gen.channel_output.flatten(), channel.size)
 
     """
     Load in Trained Neural Network and verify that it is acceptable performance
     """
     device = torch.device("cpu")
+    reduced_state = 4
+    # x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
     x, y = data_gen.get_labeled_data()
+
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
     x = torch.Tensor(x)
     y = torch.Tensor(y)
@@ -63,17 +71,16 @@ def test_nano_data_nerual_net():
     """
     Setup NN and optimizer
     """
-    m = data_gen.alphabet.size
     channel_length = data_gen.CIR_matrix.shape[1]
     # test_length = channel_length-1
     # output_layer_size = reduced_state
-    output_layer_size = np.power(m, channel_length)
+    output_layer_size = np.power(data_gen.alphabet.size, channel_length)
     N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
     # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
 
 
     # net = models.viterbiNet(D_in, H1, H2, D_out)
-    dropout_probability = .3
+    dropout_probability = .5
     net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
     # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
 
@@ -90,7 +97,7 @@ def test_nano_data_nerual_net():
     # criterion = nn.CrossEntropyLoss()
     train_cost_over_epoch = []
     test_cost_over_epoch = []
-    batch_size = 100
+    batch_size = 20
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
     epochs = 1000
@@ -127,9 +134,8 @@ def test_nano_data_nerual_net():
     """
     del data_gen
     number_symbols = 2000
-    data_gen = training_data_generator(1, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
+    data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
     data_gen.random_symbol_stream()
-    symbol_period = 15
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
 

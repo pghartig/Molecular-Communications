@@ -38,8 +38,8 @@ def test_full_integration():
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
-        channel = np.zeros((1, 3))
-        channel[0, [0]] = 1
+        # channel = np.zeros((1, 3))
+        # channel[0, [0]] = 1
 
 
 
