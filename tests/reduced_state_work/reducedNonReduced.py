@@ -46,11 +46,6 @@ def test_reduced_compare():
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
-        #   First Generate data with same noise and channel in order to have similar training on both networks
-        data_gen_clone = copy.deepcopy(data_gen)
-        data_gen_clone_1 = copy.deepcopy(data_gen)
-
-
         """
         Load in Trained Neural Network and verify that it is acceptable performance
         """
@@ -160,8 +155,10 @@ def test_reduced_compare():
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
         #   Use new cloned data gen for training
-        data_gen = data_gen_clone
-
+        del data_gen
+        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
+        data_gen.random_symbol_stream()
+        data_gen.send_through_channel()
 
         """
         Load in Trained Neural Network and verify that it is acceptable performance
@@ -188,6 +185,7 @@ def test_reduced_compare():
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
         dropout_probability = .3
+        del net
         net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
 
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
@@ -235,11 +233,11 @@ def test_reduced_compare():
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
-        metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
+
+        metric = nn_mm_metric(net, mm, data_gen.channel_output)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                               metric.metric)
-        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix,
-                                                                  channel_length)
+                                            metric.metric)
+        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
         """
