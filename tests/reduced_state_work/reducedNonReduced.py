@@ -23,7 +23,7 @@ def test_reduced_compare():
     standard_viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(8, 10, 3)
+    SNRs_dB = np.linspace(-5, 10, 10)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
