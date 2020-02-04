@@ -23,7 +23,7 @@ def test_reduced_compare():
     standard_viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 5)
+    SNRs_dB = np.linspace(8, 10, 3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
@@ -32,16 +32,127 @@ def test_reduced_compare():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
+        number_symbols = 1000
         # channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         channel = np.zeros((1, 5))
         # channel[0, [0]] = 1
         channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        epochs = 300
+        batch_size = 30
+        # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
+        # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
+        # optimizer = optim.SGD(net.parameters(), lr=1e-1)
+
+        """
+        Train NN
+        """
+        criterion = nn.NLLLoss()
+
+        """
+        Generated Testing Data using the same channel as was used for training the mixture model and the nn
+        """
+        #   Use new cloned data gen for training
+        del data_gen
+        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
+        data_gen.random_symbol_stream()
+        data_gen.send_through_channel()
+
+        """
+        Load in Trained Neural Network and verify that it is acceptable performance
+        """
+        num_inputs_for_nn = 1
+        x, y = data_gen.get_labeled_data()
+        y = np.argmax(y, axis=1)
+        x = torch.Tensor(x)
+        y = torch.Tensor(y)
+        train_size = int(.6 * number_symbols)
+        x_train = x[0:train_size, :]
+        x_test = x[train_size::, :]
+        y_train = y[0:train_size]
+        y_test = y[train_size::]
+
+        """
+        Setup NN and optimizer
+        """
+        m = data_gen.alphabet.size
+        channel_length = data_gen.CIR_matrix.shape[1]
+        # TODO correct to proper value
+        output_layer_size = np.power(m, channel_length)
+        N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
+
+        # net = models.viterbiNet(D_in, H1, H2, D_out)
+        dropout_probability = .3
+        # del net
+        net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+        optimizer = optim.Adam(net.parameters(), lr=1e-3)
+
+        # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
+        # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
+
+        """
+        Train NN
+        """
+        criterion = nn.NLLLoss()
+        # criterion = nn.CrossEntropyLoss()
+        train_cost_over_epoch = []
+        test_cost_over_epoch = []
+
+
+        for t in range(epochs):
+            batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
+            x_batch = x_train[(batch_indices)]
+            y_batch = y_train[(batch_indices)]
+            # Add "dropout to prevent overfitting data"
+
+            output = net(x_batch)
+            loss = criterion(output, y_batch.long())
+            train_cost_over_epoch.append(loss)
+            net.zero_grad()
+            loss.backward()
+            optimizer.step()
+            test_batch_indices = np.random.randint(len(y_test), size=(1, batch_size))
+            x_batch_test = x_test[(test_batch_indices)]
+            y_batch_test = y_test[(test_batch_indices)]
+            test_cost_over_epoch.append(criterion(net(x_batch_test), y_batch_test.long()))
+
+        """
+        Train Mixture Model
+        """
+        mixture_model_training_data = data_gen.channel_output.flatten()[0:train_size]
+        num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
+        mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
+        mm = mm.get_probability
+
+        """
+        After sending through channel, symbol detection should be performed using something like a matched filter.
+        Create new set of test data. 
+        """
+        del data_gen
+        data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
+        data_gen.random_symbol_stream()
+        data_gen.send_through_channel()
+
+
+        metric = nn_mm_metric(net, mm, data_gen.channel_output)
+        detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+                                            metric.metric)
+        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+
+
+        """
+        Analyze SER performance
+        """
+        standard_viterbi_net_performance.append(ser_nn)
+
+
+
+
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
+        del data_gen
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
@@ -75,16 +186,9 @@ def test_reduced_compare():
         # net = models.viterbiNet(D_in, H1, H2, D_out)
         dropout_probability = .3
         net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
-
-        # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
-        # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-3)
-        # optimizer = optim.SGD(net.parameters(), lr=1e-1)
 
-        """
-        Train NN
-        """
-        criterion = nn.NLLLoss()
+
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
@@ -151,99 +255,7 @@ def test_reduced_compare():
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
-        """
-        Generated Testing Data using the same channel as was used for training the mixture model and the nn
-        """
-        #   Use new cloned data gen for training
-        del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
-        data_gen.random_symbol_stream()
-        data_gen.send_through_channel()
 
-        """
-        Load in Trained Neural Network and verify that it is acceptable performance
-        """
-        num_inputs_for_nn = 1
-        x, y = data_gen.get_labeled_data()
-        y = np.argmax(y, axis=1)
-        x = torch.Tensor(x)
-        y = torch.Tensor(y)
-        train_size = int(.6 * number_symbols)
-        x_train = x[0:train_size, :]
-        x_test = x[train_size::, :]
-        y_train = y[0:train_size]
-        y_test = y[train_size::]
-
-        """
-        Setup NN and optimizer
-        """
-        m = data_gen.alphabet.size
-        channel_length = data_gen.CIR_matrix.shape[1]
-        # TODO correct to proper value
-        output_layer_size = np.power(m, channel_length)
-        N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
-
-        # net = models.viterbiNet(D_in, H1, H2, D_out)
-        dropout_probability = .3
-        del net
-        net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
-
-        # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
-        # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
-
-        """
-        Train NN
-        """
-        criterion = nn.NLLLoss()
-        # criterion = nn.CrossEntropyLoss()
-        train_cost_over_epoch = []
-        test_cost_over_epoch = []
-
-        for t in range(epochs):
-            batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
-            x_batch = x_train[(batch_indices)]
-            y_batch = y_train[(batch_indices)]
-            # Add "dropout to prevent overfitting data"
-
-            output = net(x_batch)
-            loss = criterion(output, y_batch.long())
-            train_cost_over_epoch.append(loss)
-            net.zero_grad()
-            loss.backward()
-            optimizer.step()
-            test_batch_indices = np.random.randint(len(y_test), size=(1, batch_size))
-            x_batch_test = x_test[(test_batch_indices)]
-            y_batch_test = y_test[(test_batch_indices)]
-            test_cost_over_epoch.append(criterion(net(x_batch_test), y_batch_test.long()))
-
-        """
-        Train Mixture Model
-        """
-        mixture_model_training_data = data_gen.channel_output.flatten()[0:train_size]
-        num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
-        mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
-        mm = mm.get_probability
-
-        """
-        After sending through channel, symbol detection should be performed using something like a matched filter.
-        Create new set of test data. 
-        """
-        del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
-        data_gen.random_symbol_stream()
-        data_gen.send_through_channel()
-
-
-        metric = nn_mm_metric(net, mm, data_gen.channel_output)
-        detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                            metric.metric)
-        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
-
-
-        """
-        Analyze SER performance
-        """
-        standard_viterbi_net_performance.append(ser_nn)
 
     path = "Output/SER.pickle"
     pickle_out = open(path, "wb")
