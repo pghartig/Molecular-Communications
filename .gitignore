@@ -413,7 +413,7 @@ TSWLatexianTemp*
 !documentation/presentations/gt_initial_presentation.pdf
 !documentation/project_report/*
 !documentation/project_report/figures/results*
-*.csv
+
 !*.pdf
 
 
