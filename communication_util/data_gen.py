@@ -404,7 +404,9 @@ class training_data_generator:
             reduced = quantizer(reduced,quantization_level)
         num_clusters = int(pow(2, base_states-1))
         clusters = kmeans(reduced, num_clusters)
+        # Compress states using known CSI
         # labels = vq(reduced, clusters[0])[0]
+        # Compress states using training data
         labels = self.reduced_state_mapping(num_clusters)
         centroids = clusters[0]
         # plt.scatter(reduced, reduced)
