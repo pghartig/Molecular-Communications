@@ -32,16 +32,19 @@ def test_nano_data_nerual_net():
     test_input_sequence = 'mc_data/input_string.txt'
     test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
     # For now just making a channel that represents some estimated memory length of the true channel
-    channel = np.zeros((1, 3))
+    channel = np.zeros((1, 1))
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
     pulse_shape = get_pulse(train_time, train_measurement)
-    number_symbols = 2000
+    number_symbols = 20
     data_gen = training_data_generator(1, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
     data_gen.random_symbol_stream()
-    symbol_period = 100
+    symbol_period = 200
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
+
+    # Test for making sure alignment is correct
+    ser = symbol_error_rate_mc_data(data_gen.symbol_stream_matrix.flatten(), data_gen.channel_output.flatten(), channel.size)
 
     """
     Load in Trained Neural Network and verify that it is acceptable performance
@@ -116,6 +119,7 @@ def test_nano_data_nerual_net():
     num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
     mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
     mm = mm.get_probability
+
 
 
     """

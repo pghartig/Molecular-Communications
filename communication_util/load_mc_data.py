@@ -9,7 +9,7 @@ def load_file(path):
     numpy_raw = raw.as_matrix()
     time = numpy_raw[:, 0]
     susceptability = numpy_raw[:, 1]
-    susceptability = normalize_vector(susceptability)
+    susceptability = susceptability
     return time, susceptability
 
 def get_pulse(time_vec, measurement):
@@ -64,13 +64,13 @@ def get_pulse(time_vec, measurement):
     impulse_responses = np.vstack(impulse_responses)
     Rxx = impulse_responses.T@impulse_responses
     eigen_values, eigen_vectors = np.linalg.eigh(Rxx)
-    max_eigen_vector = - normalize_vector(eigen_vectors[:,eigen_values.size-1])
+    max_eigen_vector = normalize_vector2(eigen_vectors[:,eigen_values.size-1])
     plt.plot(max_eigen_vector,"g")
-    ave_impulse_response = normalize_vector(np.average(impulse_responses, 0).flatten())
-    plt.plot(ave_impulse_response,"r")
+    # ave_impulse_response = normalize_vector2(np.average(impulse_responses, 0).flatten())
+    # plt.plot(ave_impulse_response,"r")
     plt.show()
     #TODO Decide how to handle negative values here
-    return np.abs(ave_impulse_response)
+    return max_eigen_vector
 
 def match_filter(measurements: np.ndarray, receive_filter: np.ndarray, symbol_period: int, number_symbols: int):
     check = np.convolve(measurements, np.flip(receive_filter))
@@ -97,6 +97,9 @@ def impulse_response_from_oversamples(oversampled : np.ndarray, symbol_period):
 
 def normalize_vector(vector):
     return (vector - np.average(vector))/np.std(vector)
+
+def normalize_vector2(vector):
+    return vector/np.linalg.norm(vector)
 
 def send_pulses(modulation_pulse: np.ndarray, symbols: np.ndarray, symbol_period: int):
     """

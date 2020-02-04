@@ -191,7 +191,6 @@ class training_data_generator:
                 sampled_received_streams.append(np.asarray(detected_symbols))
             #TODO improve below
             self.channel_output = np.reshape(np.asarray(detected_symbols), self.symbol_stream_matrix.shape)
-            pass
 
     def modulate_fundamental_pulse(self, fundamental_pulse: sampled_function):
         """
@@ -269,6 +268,7 @@ class training_data_generator:
         # plt.figure()
         self.channel_output = []
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
+            # Note that Numpy's Convolve automatically flips second argument to the function.
             self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
             # self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), np.flip(self.CIR_matrix[bit_streams,:]), mode="full"))
 
