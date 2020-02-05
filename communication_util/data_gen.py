@@ -123,11 +123,14 @@ class training_data_generator:
         else:
             return np.array([1, -1])
 
-    def random_symbol_stream(self):
+    def random_symbol_stream(self, input = None):
         """
         TODO allow for loading in a signal stream
         :return:
         """
+        if input is not None:
+            self.symbol_stream_matrix = np.reshape(input, (self.symbol_stream_matrix.shape[0], input.size))
+            return
         shape = self.symbol_stream_matrix.shape
         if self.seed is not None:
             np.random.seed(self.seed)

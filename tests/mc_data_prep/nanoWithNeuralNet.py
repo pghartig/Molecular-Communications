@@ -27,10 +27,12 @@ def test_nano_data_nerual_net():
     #   Load data from path
     train_path = 'mc_data/5_cm_train.csv'
     test_path = 'mc_data/5_cm_test.csv'
+    true_string = 'mc_data/input_string.csv'
     # train_path = 'mc_data/20_cm_train.csv'
     # test_path = 'mc_data/20_cm_test.csv'
-    test_input_sequence = 'mc_data/input_string.txt'
+    test_input_sequence = 'mc_data/input_string.csv'
     test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
+    true_input_string = np.loadtxt(true_string, delimiter=",")
     # For now just making a channel that represents some estimated memory length of the true channel
     SNRs_dB = np.linspace(10, 10, 1)
     # SNRs_dB = np.linspace(6, 10,3)
@@ -43,8 +45,8 @@ def test_nano_data_nerual_net():
     pulse_shape = get_pulse(train_time, train_measurement)
     number_symbols = 1000
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
-    data_gen.random_symbol_stream()
-    symbol_period = 3
+    data_gen.random_symbol_stream(true_input_string)
+    symbol_period = 10
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
 
@@ -128,16 +130,21 @@ def test_nano_data_nerual_net():
     mm = mm.get_probability
 
 
-
     """
     Create new set of test data. 
     """
+
     del data_gen
     number_symbols = 2000
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
     data_gen.random_symbol_stream()
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
+
+    """
+    Use Test Data 
+    """
+
 
     """
     Evaluate Neural Net Performance
