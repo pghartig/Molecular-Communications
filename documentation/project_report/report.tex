@@ -33,7 +33,7 @@ $p(x|y)$ is the conditional probability of $x$ given $y$.
 $E[x]$ is the expected value of random variable $x$.
 $\underset{x}{\text{argmin}} f(x)$ is the value of variable $x$ which minimizes $f(x)$.
 Vectors  are denoted by bold font $\mathbf{x}$ and are assumed to be column vectors unless noted.
-The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing elements i $\rightarrow$ j of the original vector $\mathbf{x}$.
+The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing elements i $\rightarrow$ j of the original vector $\mathbf{x}$. $|\mathcal{A}|$ is used to denote the cardinality of a set $\mathcal{A}$.
 
 \section{Introduction}
 Characterizing and obtaining information about communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier in many contexts have enabled vast and effective communication infrastructure, this barrier still limits communication in others. Molecular Communication channels pose a particularly difficult context in which to overcome this barrier as channel characteristics are often non-linear and may be dependent on the specific transmitted information.
@@ -60,10 +60,10 @@ y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]
 
 In this case, $p(\mathbf{y}|\mathbf{x})$ can be rewritten 
 \begin{equation}
-\sum log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) )
+\sum_{\mathrm{i=1}}^{\mathrm{N}}log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) )
 \end{equation}
 with independent components in the sum. In this case, problem \eqref{opt_problem} becomes simply finding the minimum path through a trellis (Figure).
-MLSE can thus be performed using the following over the trellis. 
+MLSE can thus be performed using the following algorithm over the trellis. 
 \\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
@@ -83,7 +83,7 @@ MLSE can thus be performed using the following over the trellis.
     \noindent\rule[10pt]{\textwidth}{0.4pt}
 
 
-For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. Note that the Viterbi algorithm is \emph{exponentially} complex in the number of channel states, but\emph{linear} complex in the length N of the transmitted sequence $\mathbf{x}$. 
+For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. Note that the Viterbi algorithm is \emph{exponentially} complex in the number of channel states, but \emph{linearly} complex in the length N of the transmitted sequence $\mathbf{x}$. 
 
 
 \subsection{ViterbiNet}
@@ -115,26 +115,56 @@ These terms can be interpreted as:
 		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
 		\outputlayer[count=4, title=States\\, text=\x] \linklayers
 	    \end{neuralnetwork}
-	\end{figure}
+	    	  	  \caption{State classification Neural Network}
 
+	\end{figure}
 %picture of NN
 %	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
 
 
 \item $p(y_{\mathrm{i}})$
-: The randomness of the channel. As each received signal represents a state of the system to which noise may be added. A representative mixture-model can be estimated using a set of received signal training data. 
+: The probability of the channel being in a given state (including any randomness in the channel state) as well as the probability of the noise. This probability distribution function can be estimated using a mixture-model (Fig. \ref{fig:mm}) based on a set of received signal training data (In this case the same data used to train the neural network). In particular, the Expectation Maximization Algorithm is used with a chosen model for the channel. 
+This term is constant over all states in a given step of the Viterbi algorithm and can therefore be interpretted as a term indicating the importance of the given time point on the total sequence path cost.
 %picture of MM
 %	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
+	\begin{figure}[H]
+	\centering
+	\includegraphics[width=10cm,height = 10cm]{system_model/mm}
+	  \label{fig:mm}
+	  	  \caption{Mixture Model }
+	\end{figure}
 
 
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$
-: Assuming the transmitted symbols are equiprobable, this term can be neglected as all states $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ will have equal probability. 
+: The probability of a given transmitted sequence. This term can be neglected in the case of equiprobable symbols.
 
 \end{itemize}
 
 In summary, the metrics required by the Viterbi algorithm permit use of a neural network and mixture model to estimate the conditional probability distribution function $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$
+\\
+
+    \noindent\rule[16pt]{\textwidth}{0.6pt}
+	Expectation Maximization Algorithm: (TODO Discuss how much derivation is needed here)
+
+    \noindent\rule[10pt]{\textwidth}{0.4pt}
+    {\footnotesize
+    \begin{tabbing}
+        {\bf given} $p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall i \in {1..N}$ . \\*[\smallskipamount]
+        {\bf for $i = 1..N $} \\
+         \qquad \= {\bf for each state $s$ at time $i$}\\
+        \qquad \qquad \= 1.\ Let $\textit{survivor cost}_{s}  += \text{min}\{\text{incoming transition costs}\}$ \\
+%        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
+%        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
+        {\bf return} Symbols corresponding to path of $\underset{s}{\text{argmin}} \; \textit{survivor cost}_{s} $
+    \end{tabbing}}
+    \noindent\rule[10pt]{\textwidth}{0.4pt}
+
+
+
+
+
 \subsection{A Reduced State ViterbiNet}
-While the Viterbi Algorithm complexity complexity scales exponentially in the number of states possible at each step of the algorithm, in some cases this complexity can be reduced without significant degradation of performance. In particular, if the system is such that some states are redundant, these states can be combined. The following example with state redundancy is posed and one potential method of reducing these states is considered. 
+While the Viterbi Algorithm complexity complexity scales exponentially in the number of states possible at each step of the algorithm, in some cases this complexity can be reduced without significant degradation of performance. In particular, if the system is such that some states are redundant, these can be combined. The following relevant example with state redundancy is posed and one potential method of reducing these states is considered. 
 
 A received signal 
 \begin{equation}
@@ -143,35 +173,42 @@ y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathca
 
 with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
 
-In the case of a causal, LTI system with inter-symbol-interference $\mathbf{a} = [.8,0,.02,.4]$ (normalized to have power 1) the received symbols is observed in figure \ref{fig:redundant_channel}. 
+In the case of a causal, LTI system with inter-symbol-interference $\mathbf{a} = [1, 0, .2, .2, .4]$ (with $\|\mathbf{a}\|^2_2 = 1$) the received signal (Fig.\ref{fig:redundant_channel}) has fewer than the potential $2^5$ states. As one of the channel taps is 0, this will have no impact and thus 16 of the potential 32 are removed. Further, as there are two taps with power 0.2 these can only represent 3 states. 
 
 \begin{figure}[H]
-	\includegraphics[width=10cm,height = 10cm]{system_model/lti_channel}
+\centering
+	\includegraphics[width=10cm,height = 10cm]{system_model/channel_output}
 	  \label{fig:redundant_channel}
 	  	  \caption{LTI channel with state redundancy with high SNR}
 \end{figure}
 
-Originally, each step of the Viterbi algorithm would require searching through $2^L$ states. However, the low-power taps of the linear channel as well as the case of very even power taps of the channel result in redundancy. One way to exploit the redundancy is to cluster the original $2^L$ states into a set of $k$ clusters. The following algorithm is proposed for clustering.
+One way to exploit state redundancy is to cluster the original $2^L$ states into a set of $k$ clusters. The K-Means algorithm is proposed for clustering.
+\\
 
-%    \noindent\rule[16pt]{\textwidth}{0.6pt}
-%	K-Means Clustering Algorithm:
-%
-%    \noindent\rule[10pt]{\textwidth}{0.4pt}
-%    {\footnotesize
-%    \begin{tabbing}
-%        {\bf given} training data $y_{\mathrm{i}} \; \forall i \in {1..N}$, num Itr, and integer $K\leq N$. 
-%        \\*[\smallskipamount]
-%        {\bf for $i = 1..\# Itr$} \\
-%         \qquad \= {\bf for $y_{\mathrm{i}}\in {1..N}$\\
-%        \qquad \qquad \= 1.\ Label $y_{\mathrm{i}}$ as closest centroid k. 
-%        {\bf for centroid $k \in {1..K}$} \\
-%        \qquad \qquad \= 1.\ Move centroid $k$ to average of data points labeled $k$
-%        {\bf return} centroid locations
-%    \end{tabbing}}
-%    \noindent\rule[10pt]{\textwidth}{0.4pt}
+    \noindent\rule[16pt]{\textwidth}{0.6pt}
+K-Means Clustering: A method for unsupervised classification
+
+    \noindent\rule[10pt]{\textwidth}{0.4pt}
+    {\footnotesize
+    \begin{tabbing}
+        {\textbf{for} Number of Iterations}\\
+         \qquad \= {\bf for each training point $x_{\mathrm{i}}, \;\mathrm{i}  \in \{1..N\}$}\\
+        \qquad \qquad \= 1.\ Label $x_i$ with index of closest centroid using $\|x_{\mathrm{i}}- \text{closest}\|^2_2$ \\
+        \qquad \= {\bf for centroid $L_{\mathrm{c}}, \;c \in \{1..C\}$}\\
+                \qquad \qquad \= 1.\ Move $L_{\mathrm{c}}$ to average of all training points labeled "c"\\
 
 
-- Need to note that the incoming signal is always kept at the front to preserve the survivor path step in the viterbi algorithm. 
+%        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
+%        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
+        {\bf return} Centroid locations
+    \end{tabbing}}
+    \noindent\rule[10pt]{\textwidth}{0.4pt}
+    
+Given a set of labeled training data, clustering reduces the number of channel states (and thus the Viterbi Algorithm Complexity) from $|\mathcal{A}|$ down to a number of clusters C. Choosing an appropriate number of clusters will influence the performance of the resulting decoder (Have figure showing this).
+A implementation point to note is that after clustering the training data, the number of states must be increased by $|\mathcal{A}|$. The Viterbi algorithm selects a symbol sequence corresponding to a path of state transitions through the trellis. In order to make the correspondence between a unique path and a symbol sequence, each state transition must represent a transmitted symbol. \emph{Each} resulting centroid from the k-means clustering is associated to \emph{each} potential transmit symbol in order to create a "shorter" trellis for which each state transition still represents a transmitted symbol. 
+Cite state reduction paper as motivation. 
+
+Discuss minimum phase representations for channels and why this might be an advantage. 
 
 
 
@@ -199,11 +236,13 @@ Unless noted, the neural network architecture and training are characterized by:
 
 
 \begin{figure}[H]
+\centering
 	  \caption{Simulation Channels: LTI Channel}
 	\includegraphics[width=10cm,height = 10cm]{system_model/lti_channel}
 	  \label{fig:LTI Channel}
 \end{figure}
 \begin{figure}[H]
+\centering
 	  \caption{Simulation Channels: Quantizer}
 	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer}
 	  \label{fig:Quantized Channel}
@@ -230,6 +269,7 @@ $\frac{E\{x[k]\}}{\sigma^2}$.
 
 
 \begin{figure}[H]
+\centering
 	  \caption{Simulation Channels: LTI Channel}
 	\includegraphics[width=10cm,height = 10cm]{system_model/lti_channel}
 	  \label{fig:LTI Channel}

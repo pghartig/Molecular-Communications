@@ -3,9 +3,9 @@
 \contentsline {section}{\numberline {0.3}Background}{3}
 \contentsline {subsection}{\numberline {0.3.1}MLSE}{3}
 \contentsline {subsection}{\numberline {0.3.2}ViterbiNet}{4}
-\contentsline {subsection}{\numberline {0.3.3}A Reduced State ViterbiNet}{5}
-\contentsline {section}{\numberline {0.4}Simulation Results}{6}
-\contentsline {subsection}{\numberline {0.4.1}System Model}{6}
-\contentsline {subsection}{\numberline {0.4.2}Results}{10}
-\contentsline {section}{\numberline {0.5}Conclusion}{15}
-\contentsline {subsection}{\numberline {0.5.1}Future Work}{15}
+\contentsline {subsection}{\numberline {0.3.3}A Reduced State ViterbiNet}{6}
+\contentsline {section}{\numberline {0.4}Simulation Results}{7}
+\contentsline {subsection}{\numberline {0.4.1}System Model}{7}
+\contentsline {subsection}{\numberline {0.4.2}Results}{11}
+\contentsline {section}{\numberline {0.5}Conclusion}{16}
+\contentsline {subsection}{\numberline {0.5.1}Future Work}{16}

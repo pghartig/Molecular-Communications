@@ -11,10 +11,13 @@ plt.scatter(data3,data, label='viterbi net')
 plt.scatter(data2,data, label='viterbi net')
 plt.scatter(data2,data3, label='viterbi net')
 plt.scatter(data4,data, label='viterbi net')
+plt.scatter(data4,data, label='viterbi net')
+plt.ylabel("Img")
+plt.xlabel("Real")
+
+
 
 plt.title("Gaussian Mixture Model", fontdict={'fontsize':10} )
-path = "Output/SER_curves.png"
-plt.savefig(path, format="png")
 time_path = "Output/em_figure.png"
-plt.savefig(time_path, format="png")
+# plt.savefig(time_path, format="png")
 plt.show()

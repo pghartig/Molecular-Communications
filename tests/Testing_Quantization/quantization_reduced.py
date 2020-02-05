@@ -20,7 +20,7 @@ def test_quantization_reduced():
     viterbi_net_performance_full = []
     classic_performance_full = []
     linear_mmse_performance_full = []
-    SNRs_dB = np.linspace(10, 10, 4)
+    SNRs_dB = np.linspace(8, 10, 2)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -50,7 +50,7 @@ def test_quantization_reduced():
             Load in Trained Neural Network and verify that it is acceptable performance
             """
             device = torch.device("cpu")
-            reduced_state = 16
+            reduced_state = 32
             num_inputs_for_nn = 1
             x, y = data_gen.get_labeled_data_reduced_state(reduced_state, quantization_level=level)
             y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
@@ -115,6 +115,7 @@ def test_quantization_reduced():
             """
             mixture_model_training_data = data_gen.channel_output.flatten()[0:train_size]
             num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
+            num_sources = reduced_state
             mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
             mm = mm.get_probability
 
@@ -140,7 +141,7 @@ def test_quantization_reduced():
             Compare to Classical Viterbi with full CSI
             """
             # channel= np.round(channel*10)
-            metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
+            metric = gaussian_channel_metric_working_quantized(channel, data_gen.channel_output, level)  # This is a function to be used in the viterbi
             detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
             ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)

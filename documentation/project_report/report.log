@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2019.11.7)  5 FEB 2020 11:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2019.11.7)  5 FEB 2020 15:24
 entering extended mode
 **report.tex
 (report.tex
@@ -874,103 +874,121 @@ Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
 Missing character: There is no ; in font nullfont!
-[4] <./figures/system_model/lti_channel.png, id=40, 462.528pt x 345.4506pt>
+<./figures/system_model/mm.png, id=37, 462.528pt x 345.4506pt>
+File: ./figures/system_model/mm.png Graphic file (type png)
+
+<use ./figures/system_model/mm.png>
+Package pdftex.def Info: ./figures/system_model/mm.png used on input line 132.
+(pdftex.def)             Requested size: 284.54124pt x 284.53639pt.
+ [4]
+Underfull \hbox (badness 10000) in paragraph at lines 143--145
+
+ []
+
+[5 <./figures/system_model/mm.png>]
+<./figures/system_model/channel_output.png, id=47, 462.528pt x 345.4506pt>
+File: ./figures/system_model/channel_output.png Graphic file (type png)
+
+<use ./figures/system_model/channel_output.png>
+Package pdftex.def Info: ./figures/system_model/channel_output.png used on inpu
+t line 180.
+(pdftex.def)             Requested size: 284.54124pt x 284.53639pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 185--187
+
+ []
+
+[6 <./figures/system_model/channel_output.png>] [7]
+
+LaTeX Warning: Citation `kingma2014adam' on page 8 undefined on input line 231.
+
+
+<./figures/system_model/lti_channel.png, id=56, 462.528pt x 345.4506pt>
 File: ./figures/system_model/lti_channel.png Graphic file (type png)
 
 <use ./figures/system_model/lti_channel.png>
 Package pdftex.def Info: ./figures/system_model/lti_channel.png used on input l
-ine 149.
-(pdftex.def)             Requested size: 284.54124pt x 284.53639pt.
- [5 <./figures/system_model/lti_channel.png>]
-
-LaTeX Warning: Citation `kingma2014adam' on page 6 undefined on input line 194.
-
-
-File: ./figures/system_model/lti_channel.png Graphic file (type png)
-<use ./figures/system_model/lti_channel.png>
-Package pdftex.def Info: ./figures/system_model/lti_channel.png used on input l
-ine 203.
+ine 241.
 (pdftex.def)             Requested size: 284.54124pt x 284.53639pt.
 
-<./figures/system_model/quantizer.png, id=47, 462.528pt x 346.896pt>
+<./figures/system_model/quantizer.png, id=57, 462.528pt x 346.896pt>
 File: ./figures/system_model/quantizer.png Graphic file (type png)
 
 <use ./figures/system_model/quantizer.png>
 Package pdftex.def Info: ./figures/system_model/quantizer.png used on input lin
-e 208.
+e 247.
 (pdftex.def)             Requested size: 284.54124pt x 284.54124pt.
- [6] [7]
+ [8 <./figures/system_model/lti_channel.png>]
 File: ./figures/system_model/lti_channel.png Graphic file (type png)
-
-<use ./figures/system_model/lti_channel.png>
+ <use ./figures/system_model/lti_channel.png>
 Package pdftex.def Info: ./figures/system_model/lti_channel.png used on input l
-ine 234.
+ine 274.
 (pdftex.def)             Requested size: 284.54124pt x 284.53639pt.
 File: ./figures/system_model/quantizer.png Graphic file (type png)
 
 <use ./figures/system_model/quantizer.png>
 Package pdftex.def Info: ./figures/system_model/quantizer.png used on input lin
-e 239.
+e 279.
 (pdftex.def)             Requested size: 284.54124pt x 284.54124pt.
- [8 <./figures/system_model/quantizer.png>] [9] <./figures/results/lti_normal.p
-ng, id=62, 462.528pt x 346.896pt>
+ [9 <./figures/system_model/quantizer.png>] [10] <./figures/results/lti_normal.
+png, id=69, 462.528pt x 346.896pt>
 File: ./figures/results/lti_normal.png Graphic file (type png)
 
 <use ./figures/results/lti_normal.png>
-Package pdftex.def Info: ./figures/results/lti_normal.png used on input line 25
+Package pdftex.def Info: ./figures/results/lti_normal.png used on input line 29
 6.
 (pdftex.def)             Requested size: 390.01707pt x 284.54124pt.
- [10]
-<./figures/results/lti_quantized.png, id=66, 462.528pt x 346.896pt>
+ [11]
+<./figures/results/lti_quantized.png, id=74, 462.528pt x 346.896pt>
 File: ./figures/results/lti_quantized.png Graphic file (type png)
 
 <use ./figures/results/lti_quantized.png>
 Package pdftex.def Info: ./figures/results/lti_quantized.png used on input line
- 262.
+ 302.
 (pdftex.def)             Requested size: 390.01707pt x 284.54124pt.
- [11 <./figures/results/lti_normal.png>] <./figures/results/lti_reduced.png, id
-=72, 462.528pt x 346.896pt>
+ [12 <./figures/results/lti_normal.png>] <./figures/results/lti_reduced.png, id
+=79, 462.528pt x 346.896pt>
 File: ./figures/results/lti_reduced.png Graphic file (type png)
 
 <use ./figures/results/lti_reduced.png>
-Package pdftex.def Info: ./figures/results/lti_reduced.png used on input line 2
-68.
+Package pdftex.def Info: ./figures/results/lti_reduced.png used on input line 3
+08.
 (pdftex.def)             Requested size: 390.01707pt x 284.54124pt.
- [12 <./figures/results/lti_quantized.png>]
+ [13 <./figures/results/lti_quantized.png>]
 File: ./figures/results/lti_normal.png Graphic file (type png)
  <use ./figures/results/lti_normal.png>
-Package pdftex.def Info: ./figures/results/lti_normal.png used on input line 27
+Package pdftex.def Info: ./figures/results/lti_normal.png used on input line 31
 5.
 (pdftex.def)             Requested size: 390.01707pt x 284.54124pt.
 
-Overfull \hbox (29.39177pt too wide) in paragraph at lines 275--276
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 315--316
 [][] 
  []
 
-[13 <./figures/results/lti_reduced.png>]
-<./figures/results/quant_standard.png, id=81, 462.528pt x 346.896pt>
+[14 <./figures/results/lti_reduced.png>]
+<./figures/results/quant_standard.png, id=88, 462.528pt x 346.896pt>
 File: ./figures/results/quant_standard.png Graphic file (type png)
 
 <use ./figures/results/quant_standard.png>
 Package pdftex.def Info: ./figures/results/quant_standard.png used on input lin
-e 279.
+e 319.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-Overfull \hbox (29.39177pt too wide) in paragraph at lines 279--280
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 319--320
 [][] 
  []
 
 File: ./figures/results/lti_reduced.png Graphic file (type png)
 <use ./figures/results/lti_reduced.png>
-Package pdftex.def Info: ./figures/results/lti_reduced.png used on input line 2
-83.
+Package pdftex.def Info: ./figures/results/lti_reduced.png used on input line 3
+23.
 (pdftex.def)             Requested size: 390.01707pt x 199.16722pt.
 
-Overfull \hbox (29.39177pt too wide) in paragraph at lines 283--284
+Overfull \hbox (29.39177pt too wide) in paragraph at lines 323--324
 [][] 
  []
 
-[14 <./figures/results/quant_standard.png>] [15]
+[15 <./figures/results/quant_standard.png>] [16]
 No file report.bbl.
 (report.aux)
 
@@ -981,10 +999,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 15852 strings out of 493671
- 320108 string characters out of 3143859
- 403444 words of memory out of 3000000
- 18866 multiletter control sequences out of 15000+200000
+ 15862 strings out of 493671
+ 320456 string characters out of 3143859
+ 403457 words of memory out of 3000000
+ 18875 multiletter control sequences out of 15000+200000
  19150 words of font info for 71 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
  62i,9n,72p,814b,1266s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -1005,9 +1023,9 @@ ublic/amsfonts/cm/cmsy7.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/ams
 fonts/cm/cmsy8.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/
 cmti10.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmti12.p
 fb>
-Output written on report.pdf (17 pages, 406945 bytes).
+Output written on report.pdf (18 pages, 450744 bytes).
 PDF statistics:
- 145 PDF objects out of 1000 (max. 8388607)
+ 152 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 43 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 53 words of extra memory for PDF output out of 10000 (max. 10000000)
 
