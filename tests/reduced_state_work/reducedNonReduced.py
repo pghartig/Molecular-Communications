@@ -32,12 +32,14 @@ def test_reduced_compare():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 1000
+        number_symbols = 5000
         # channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
         channel = np.zeros((1, 5))
         # channel[0, [0]] = 1
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
+
         epochs = 300
         batch_size = 30
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
@@ -162,7 +164,7 @@ def test_reduced_compare():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        reduced_state = 4
+        reduced_state = 32
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)
         x = torch.Tensor(x)

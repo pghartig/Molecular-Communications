@@ -282,22 +282,27 @@ class training_data_generator:
             # self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), np.flip(self.CIR_matrix[bit_streams,:]), mode="full"))
 
         self.channel_output = np.flip(np.asarray(self.channel_output))
-        # plt.subplot(1,3,1)
-        # plt.scatter(self.channel_output,self.channel_output)
+        fig_main = plt.figure()
+        no_noise = fig_main.add_subplot(1, 3, 1)
+        no_noise.set_title("Pre-Noise")
+        no_noise.scatter(self.channel_output, self.channel_output)
 
         #   Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
             self.channel_output = quantizer(self.channel_output, quantization_level)
 
-        # plt.subplot(1,3,2)
-        # plt.scatter(self.channel_output,self.channel_output)
+        quantized = fig_main.add_subplot(1, 3, 2)
+        quantized.set_title("Quantized")
+        quantized.scatter(self.channel_output, self.channel_output)
+
 
         #   adjust noise power to provided SNR parameter. Note symbols should always be normalized to unit power.
         self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
-        # plt.subplot(1,3,3)
-        # plt.scatter(self.channel_output,self.channel_output)
-        # plt.show()
+        noised = fig_main.add_subplot(1, 3, 3)
+        noised.set_title("Noise Added")
+        noised.scatter(self.channel_output, self.channel_output)
+        plt.show()
 
     def transmit_modulated_signal2(self):
         """
@@ -409,6 +414,8 @@ class training_data_generator:
         item = []
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
         states = np.asarray(states)
+        # plt.scatter(self.channel_output.flatten(), self.channel_output.flatten())
+        # plt.show()
         if self.channel_output is not None:
             j=0
             for i in range(self.channel_output.shape[1]):
@@ -457,7 +464,8 @@ class training_data_generator:
         item_final = []
         get_combinatoric_list(self.alphabet, base_states, states_final, item_final)
         states_reduced = np.asarray(states_reduced)
-
+        # plt.scatter(self.channel_output.flatten(), self.channel_output.flatten())
+        # plt.show()
         if self.channel_output is not None:
             j=0
             #   Go create training example from each channel output
@@ -492,6 +500,10 @@ class training_data_generator:
         clusters = kmeans(x_list, num_clusters)
         labels = vq(x_list, clusters[0])[0]
         #   Now go through each of the original number of states and assign this to
+        centroids = clusters[0]
+        plt.scatter(x_list, x_list)
+        plt.scatter(centroids, centroids)
+        plt.show()
         totals = np.zeros((num_clusters, y_list[0].size))
         for ind, label in enumerate(labels):
             for cluster in range(num_clusters):

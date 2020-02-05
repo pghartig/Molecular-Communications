@@ -20,7 +20,7 @@ def test_quantization_reduced():
     viterbi_net_performance_full = []
     classic_performance_full = []
     linear_mmse_performance_full = []
-    SNRs_dB = np.linspace(-5, 10, 4)
+    SNRs_dB = np.linspace(10, 10, 4)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -50,9 +50,9 @@ def test_quantization_reduced():
             Load in Trained Neural Network and verify that it is acceptable performance
             """
             device = torch.device("cpu")
-            reduced_state = 8
+            reduced_state = 16
             num_inputs_for_nn = 1
-            x, y = data_gen.get_labeled_data_reduced_state(reduced_state, quantization_level =level )
+            x, y = data_gen.get_labeled_data_reduced_state(reduced_state, quantization_level=level)
             y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
             x = torch.Tensor(x)
             y = torch.Tensor(y)
@@ -133,7 +133,7 @@ def test_quantization_reduced():
             metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
             detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
-            ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+            ser_nn = symbol_error_rate_channel_compensated_NN_reduced(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
             """

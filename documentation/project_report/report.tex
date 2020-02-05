@@ -3,8 +3,9 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage{graphicx}
+\usepackage{graphicx, neuralnetwork}
 \usepackage{float}
+
 
 \input defs.tex
 \bibliographystyle{alpha}
@@ -27,7 +28,7 @@
 \newpage
 \section{Notation}
 The following notation is used throughout this work.
-$p(x)$ is the probability of $x$.
+$p(x)$ is the probability of an event $x$.
 $p(x|y)$ is the conditional probability of $x$ given $y$.
 $E[x]$ is the expected value of random variable $x$.
 $\underset{x}{\text{argmin}} f(x)$ is the value of variable $x$ which minimizes $f(x)$.
@@ -44,23 +45,26 @@ The general communication channel is equivalent to a conditional probability $p(
 \section{Background}
 
 \subsection{MLSE}
-The form of $p(x|y)$ used for detection in this work is
-$\underset{x}{\text{argmin}} \; p(y|x) $ . This optimization over the set of all possible $x$, known as Maximum Likelihood Sequence Estimation (MLSE), is exponentially complex in the cardinality of $x$ . Information about the communication channel can, however, reduce the complexity of this problem. In order to illustrate this reduction, the following example is proposed.
+The form of $p(x|y)$ used as a detection objective function in this work 
+\begin{equation}\label{opt_problem}
+\underset{x \in \textit{$\mathcal{A}$}}{\text{argmin}} \; p(y|x)
+\end{equation}
+is known as Maximum Likelihood Sequence Estimation (MLSE).
+This optimization over the set of all possible $x \in \mathcal{A}$ is exponentially complex in the cardinality of $x$, or as considered here, the number of the transmitted symbols. Additional information about the communication channel can, however, reduce this complexity. In order to illustrate, the following example is posed.
 \par
-Consider the communication channel over which a causal, linear, and time invariant combination ($\mathbf{a}$) of a set of the transmitted information ($\mathbf{x}$) is received ($\mathbf{y}$). 
+Consider the communication channel from which each received symbol in the sequence $\mathbf{y}$ is a causal, linear, and time invariant combination of a set of the transmitted symbol sequence $\mathbf{x}$ with coeffients $\mathbf{a}$. 
 
 \begin{equation}
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]
 \end{equation}
 
-In this case, $p(\mathbf{y}|\mathbf{x})$ can be rewritten as
-$\prod p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) = \sum
-log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) )$.
-The sequence of received symbols $\mathbf{y}$ can be equivalently represented the by trellis:
-
-TODO IMpORT Trellis picture
-in which each time-point k represents a unique set of L transmitted symbols 
-$x[k-l]$ $ \forall l \in {1..L}$. Due to the finite number of states that channel can be in at a given time, MLSE can be performed using the Viterbi Algorithm over this trellis. 
+In this case, $p(\mathbf{y}|\mathbf{x})$ can be rewritten 
+\begin{equation}
+\sum log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) )
+\end{equation}
+with independent components in the sum. In this case, problem \eqref{opt_problem} becomes simply finding the minimum path through a trellis (Figure).
+MLSE can thus be performed using the following over the trellis. 
+\\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
 	Viterbi Algorithm:
@@ -71,19 +75,19 @@ $x[k-l]$ $ \forall l \in {1..L}$. Due to the finite number of states that channe
         {\bf given} $p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall i \in {1..N}$ . \\*[\smallskipamount]
         {\bf for $i = 1..N $} \\
          \qquad \= {\bf for each state $s$ at time $i$}\\
-        \qquad \qquad \= 1.\ Let $\mathrm{path}_{s} := \prox_{\lambda g}(x^{k} - \lambda \nabla f(x^{k}))$. \\
-        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
-        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
-        {\bf return} $\underset{s}{\text{argmin}} \; cost[i] $, $x^{k+1}:=z$.
+        \qquad \qquad \= 1.\ Let $\textit{survivor cost}_{s}  += \text{min}\{\text{incoming transition costs}\}$ \\
+%        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
+%        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
+        {\bf return} Symbols corresponding to path of $\underset{s}{\text{argmin}} \; \textit{survivor cost}_{s} $
     \end{tabbing}}
     \noindent\rule[10pt]{\textwidth}{0.4pt}
 
 
-For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. Note that while the Viterbi algorithm does have \emph{exponential} complexity in the length of the channle (L), it has \emph{linear} complexity in the length N of the transmitted sequence $\mathbf{x}$. 
+For finite state, causal channels, MLSE reduces to the Viterbi Algorithm. Note that the Viterbi algorithm is \emph{exponentially} complex in the number of channel states, but\emph{linear} complex in the length N of the transmitted sequence $\mathbf{x}$. 
 
 
 \subsection{ViterbiNet}
-As suggested in the introduction, despite the reduction in complexity offered by the Viterbi Algorithm for MLSE, the individual metrics used in each step of the algorithm 
+Despite the reduction in complexity offered by the Viterbi Algorithm for MLSE, the individual metrics used in each step of the algorithm 
 $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) $ require knowledge of the channel which may be difficult to obtain. To estimate this distribution using a neural network, Baye's Rule is used. 
 \begin{equation}
 p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) = 
@@ -96,7 +100,23 @@ These terms can be interpreted as:
 
 \begin{itemize}
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})$
-: The probability of being in a channel state given the corresponding received symbol from that time point. In the case of a finite number of states, such a probability can be estimated using a neural network for classification of received signals into channel states. 
+: The probability of being in channel state $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ given the corresponding received symbol from that time point $y_{\mathrm{i}}$. If the number of states is finite, such a probability can be estimated using a neural network for classification of received signals into channel states. 
+	\begin{figure}[H]
+	\centering
+		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
+		\newcommand{\x}[2]{$x_#2$}
+		\newcommand{\y}[2]{$\hat{y}_#2$}
+		\newcommand{\hfirst}[2]{\small $h^{(1)}_#2$}
+		\newcommand{\hsecond}[2]{\small $h^{(2)}_#2$}
+		\newcommand{\hthird}[2]{\small $h^{(3)}_#2$}
+		\newcommand{\hfourth}[2]{\small $h^{(4)}_#2$}
+		\inputlayer[count=1, bias=false, title=Received\\, text=\x]
+		\hiddenlayer[count=2, bias=false, title=\\, text=\hthird] \linklayers
+		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
+		\outputlayer[count=4, title=States\\, text=\x] \linklayers
+	    \end{neuralnetwork}
+	\end{figure}
+
 %picture of NN
 %	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
 
@@ -126,29 +146,29 @@ with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.
 In the case of a causal, LTI system with inter-symbol-interference $\mathbf{a} = [.8,0,.02,.4]$ (normalized to have power 1) the received symbols is observed in figure \ref{fig:redundant_channel}. 
 
 \begin{figure}[H]
-	\includegraphics[width=10cm,height = 10cm]{system_model/redundant_channel}
+	\includegraphics[width=10cm,height = 10cm]{system_model/lti_channel}
 	  \label{fig:redundant_channel}
 	  	  \caption{LTI channel with state redundancy with high SNR}
 \end{figure}
 
 Originally, each step of the Viterbi algorithm would require searching through $2^L$ states. However, the low-power taps of the linear channel as well as the case of very even power taps of the channel result in redundancy. One way to exploit the redundancy is to cluster the original $2^L$ states into a set of $k$ clusters. The following algorithm is proposed for clustering.
 
-    \noindent\rule[16pt]{\textwidth}{0.6pt}
-	K-Means Clustering Algorithm:
-
-    \noindent\rule[10pt]{\textwidth}{0.4pt}
-    {\footnotesize
-    \begin{tabbing}
-        {\bf given} training data $y_{\mathrm{i}} \; \forall i \in {1..N}$, num Itr, and integer $K\leq N$. 
-        \\*[\smallskipamount]
-        {\bf for $i = 1..\# Itr$} \\
-         \qquad \= {\bf for $y_{\mathrm{i}}\in {1..N}$\\
-        \qquad \qquad \= 1.\ Label $y_{\mathrm{i}}$ as closest centroid k. 
-        {\bf for centroid $k \in {1..K}$} \\
-        \qquad \qquad \= 1.\ Move centroid $k$ to average of data points labeled $k$
-        {\bf return} centroid locations
-    \end{tabbing}}
-    \noindent\rule[10pt]{\textwidth}{0.4pt}
+%    \noindent\rule[16pt]{\textwidth}{0.6pt}
+%	K-Means Clustering Algorithm:
+%
+%    \noindent\rule[10pt]{\textwidth}{0.4pt}
+%    {\footnotesize
+%    \begin{tabbing}
+%        {\bf given} training data $y_{\mathrm{i}} \; \forall i \in {1..N}$, num Itr, and integer $K\leq N$. 
+%        \\*[\smallskipamount]
+%        {\bf for $i = 1..\# Itr$} \\
+%         \qquad \= {\bf for $y_{\mathrm{i}}\in {1..N}$\\
+%        \qquad \qquad \= 1.\ Label $y_{\mathrm{i}}$ as closest centroid k. 
+%        {\bf for centroid $k \in {1..K}$} \\
+%        \qquad \qquad \= 1.\ Move centroid $k$ to average of data points labeled $k$
+%        {\bf return} centroid locations
+%    \end{tabbing}}
+%    \noindent\rule[10pt]{\textwidth}{0.4pt}
 
 
 - Need to note that the incoming signal is always kept at the front to preserve the survivor path step in the viterbi algorithm. 
