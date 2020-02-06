@@ -28,7 +28,6 @@ def symbol_error_rate(detected_symbols, input_symbols,channel_length):
 def symbol_error_rate_mc_data(detected_symbols, input_symbols, pre_pad = 0):
     detected_array = np.asarray(detected_symbols[pre_pad::])
     input = input_symbols.astype('int32').flatten()[:detected_array.size]
-
     test1 = np.max(np.convolve(detected_array,input))
     test2 = np.max(np.convolve(detected_array,np.flip(input)))
     ser = np.sum(np.not_equal(detected_array, input)) / detected_array.size

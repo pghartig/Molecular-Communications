@@ -196,7 +196,7 @@ class training_data_generator:
                     incoming_samples = stream[symbol_ind * symbol_period:symbol_ind * symbol_period + receive_filter.size]
                     #   Test with normalizing the incoming sample vector to prevent scaling issues
                     incoming_samples = normalize_vector2(incoming_samples)
-                    sample = receive_filter @ incoming_samples
+                    sample = receive_filter[:incoming_samples.size] @ incoming_samples
                     detected_symbols.append(sample)
                 sampled_received_streams.append(np.asarray(detected_symbols))
             #TODO improve below
