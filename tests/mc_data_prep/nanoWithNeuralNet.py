@@ -34,19 +34,19 @@ def test_nano_data_nerual_net():
     test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
     true_input_string = np.loadtxt(true_path, delimiter=",")
     # For now just making a channel that represents some estimated memory length of the true channel
-    SNRs_dB = np.linspace(10, 10, 1)
+    SNRs_dB = np.linspace(1, 1, 1)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
 
-    channel = np.zeros((1, 1))
+    channel = np.zeros((1, 5))
     channel[0, [0]] = 1
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
-    # plt.plot(test_measurement)
-    # plt.show()
+    plt.plot(test_measurement)
+    plt.show()
     pulse_shape = get_pulse(train_time, train_measurement)
     #   Train with a random symbol stream generated from the training set pulse
-    number_symbols = 1000
+    number_symbols = 5000
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
     data_gen.random_symbol_stream()
     # 5
@@ -86,7 +86,7 @@ def test_nano_data_nerual_net():
 
 
     # net = models.viterbiNet(D_in, H1, H2, D_out)
-    dropout_probability = .5
+    dropout_probability = .3
     net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
     # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
 

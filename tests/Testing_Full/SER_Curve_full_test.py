@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 5)
+    SNRs_dB = np.linspace(0, 16, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -31,9 +31,9 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 1000
+        number_symbols = 10000
         channel = np.zeros((1, 5))
-        channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
         # channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
         # channel[0, [0, 1, 2, 3]] = .8, 0, .02, .4
@@ -95,10 +95,10 @@ def test_full_integration():
         # criterion = nn.CrossEntropyLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 30
+        batch_size = 50
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 500
+        epochs = 1000
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -130,7 +130,7 @@ def test_full_integration():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 100000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 

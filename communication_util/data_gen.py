@@ -289,10 +289,10 @@ class training_data_generator:
 
         self.channel_output = np.flip(np.asarray(self.channel_output))
 
-        fig_main = plt.figure()
-        no_noise = fig_main.add_subplot(1, 1, 1)
-        no_noise.set_title("Channel Output")
-        no_noise.scatter(self.channel_output, self.channel_output)
+        # fig_main = plt.figure()
+        # no_noise = fig_main.add_subplot(1, 1, 1)
+        # no_noise.set_title("Channel Output")
+        # no_noise.scatter(self.channel_output, self.channel_output)
 
         #   Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
@@ -309,7 +309,7 @@ class training_data_generator:
         # noised = fig_main.add_subplot(1, 3, 3)
         # noised.set_title("Noise Added")
         # noised.scatter(self.channel_output, self.channel_output)
-        plt.show()
+        # plt.show()
 
     def transmit_modulated_signal2(self):
         """
@@ -446,7 +446,7 @@ class training_data_generator:
         states = np.asarray(states)
         # reduced = np.asarray(states)@self.CIR_matrix.T
         # normalized_channel =self.CIR_matrix[:, 1::]/ np.linalg.norm(self.CIR_matrix[:, 1::])
-        normalized_channel =self.CIR_matrix
+        normalized_channel = self.CIR_matrix
         reduced = np.asarray(states)@normalized_channel.T
 
         if quantization_level is not None:
@@ -508,8 +508,8 @@ class training_data_generator:
         labels = vq(x_list, clusters[0])[0]
         #   Now go through each of the original number of states and assign this to
         centroids = clusters[0]
-        plt.scatter(x_list, x_list)
-        plt.scatter(centroids, centroids)
+        # plt.scatter(x_list, x_list)
+        # plt.scatter(centroids, centroids)
         # plt.show()
         totals = np.zeros((num_clusters, y_list[0].size))
         for ind, label in enumerate(labels):

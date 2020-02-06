@@ -3,18 +3,20 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
-\usepackage{graphicx, neuralnetwork}
+\usepackage{graphicx, neuralnetwork,tikz}
 \usepackage{float}
+\usetikzlibrary{positioning}
 
 
 \input defs.tex
 \bibliographystyle{alpha}
 \graphicspath{ {./figures/} }
-
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
 
 \title{Neural Network Based Decoding over Molecular Communication Channels}
-\author{peter Hartig}
+\author{Peter Hartig}
 
 \begin{document}
 \maketitle
@@ -44,7 +46,7 @@ The general communication channel is equivalent to a conditional probability $p(
 
 \section{Background}
 
-\subsection{MLSE}
+\subsection{MLSE and the Viterbi Algoithm}
 The form of $p(x|y)$ used as a detection objective function in this work 
 \begin{equation}\label{opt_problem}
 \underset{x \in \textit{$\mathcal{A}$}}{\text{argmin}} \; p(y|x)
@@ -63,7 +65,7 @@ In this case, $p(\mathbf{y}|\mathbf{x})$ can be rewritten
 \sum_{\mathrm{i=1}}^{\mathrm{N}}log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) )
 \end{equation}
 with independent components in the sum. In this case, problem \eqref{opt_problem} becomes simply finding the minimum path through a trellis (Figure).
-MLSE can thus be performed using the following algorithm over the trellis. 
+MLSE can thus be performed using the following algorithm over the trellis (TODO add figure here). 
 \\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
@@ -100,7 +102,7 @@ These terms can be interpreted as:
 
 \begin{itemize}
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})$
-: The probability of being in channel state $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ given the corresponding received symbol from that time point $y_{\mathrm{i}}$. If the number of states is finite, such a probability can be estimated using a neural network for classification of received signals into channel states. 
+: The probability of being in channel state $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ given the corresponding received symbol from that time point $y_{\mathrm{i}}$. If the number of states is finite, such a probability can be estimated using a neural network for classification of received signals into channel states. The output of such a network is a probability distribution over the possible states for a received symbol. 
 	\begin{figure}[H]
 	\centering
 		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
@@ -210,20 +212,37 @@ Cite state reduction paper as motivation.
 
 Discuss minimum phase representations for channels and why this might be an advantage. 
 
+\subsection{The Molecular Communication Channel}
+Provide necessary background for any nano-particle data shown in results. 
 
 
-\section{Simulation Results}
-\subsection{System Model}
-Consider the received signal 
+
+\section{Results}
+\subsection{Simulation Details}
+\subsubsection{System Model}
+Verification of the implementation and integration of the algorithms described above is based on the following system model.
+
+%\begin{tikzpicture}[node distance=2cm]
+%\node (start) [process] {Symbol Stream};
+%\node (channel) [process, right = of start] {Channel};
+%\draw [arrow] (start) -- (channel);
+%
+%\end{tikzpicture}
+
+
 \begin{equation}
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
 \end{equation}
 
-with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
+with $x[k] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
 The resulting signal to noise ratio (SNR) is 
 $\frac{E\{x[k]\}}{\sigma^2}$.
 
-Unless noted, the neural network architecture and training are characterized by:
+
+\subsubsection{Algorithm Parameters}
+The parameters for the various algorithms used in this work are detailed below
+\begin{itemize}
+\item \textbf{Neural Network}
 \begin{itemize}
 \item Architecture: 4 layers {1, 100, 50, $M^L$}
 \item Training Data Examples: 5000
@@ -233,7 +252,18 @@ Unless noted, the neural network architecture and training are characterized by:
 \item Backpropogation Updates (Epochs): 300
 \item Loss Function: Cross Entropy
 \end{itemize}
+\item \textbf{Expectation Maximization Algorithm}
+\begin{itemize}
+\item Training Data Examples: 5000
+\end{itemize}
+\item \textbf{K-Means Algorithm (For Reduced State ViterbiNet)}
+\begin{itemize}
+\item Training Data Examples: 5000
+\end{itemize}
+\end{itemize}
 
+
+\subsection{Simulation Results}
 
 \begin{figure}[H]
 \centering

@@ -1,11 +1,15 @@
 \contentsline {section}{\numberline {0.1}Notation}{2}
 \contentsline {section}{\numberline {0.2}Introduction}{2}
 \contentsline {section}{\numberline {0.3}Background}{3}
-\contentsline {subsection}{\numberline {0.3.1}MLSE}{3}
+\contentsline {subsection}{\numberline {0.3.1}MLSE and the Viterbi Algoithm}{3}
 \contentsline {subsection}{\numberline {0.3.2}ViterbiNet}{4}
 \contentsline {subsection}{\numberline {0.3.3}A Reduced State ViterbiNet}{6}
-\contentsline {section}{\numberline {0.4}Simulation Results}{7}
-\contentsline {subsection}{\numberline {0.4.1}System Model}{7}
-\contentsline {subsection}{\numberline {0.4.2}Results}{11}
-\contentsline {section}{\numberline {0.5}Conclusion}{16}
-\contentsline {subsection}{\numberline {0.5.1}Future Work}{16}
+\contentsline {subsection}{\numberline {0.3.4}The Molecular Communication Channel}{7}
+\contentsline {section}{\numberline {0.4}Results}{7}
+\contentsline {subsection}{\numberline {0.4.1}Simulation Details}{7}
+\contentsline {subsubsection}{System Model}{7}
+\contentsline {subsubsection}{Algorithm Parameters}{8}
+\contentsline {subsection}{\numberline {0.4.2}Simulation Results}{9}
+\contentsline {subsection}{\numberline {0.4.3}Results}{12}
+\contentsline {section}{\numberline {0.5}Conclusion}{17}
+\contentsline {subsection}{\numberline {0.5.1}Future Work}{17}

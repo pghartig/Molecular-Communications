@@ -50,7 +50,7 @@ def get_pulse(time_vec, measurement):
             cur_length += 1
         previous = value
     symbol_period_estimate = np.average(lengths)
-    symbol_period_estimate = np.median(lengths)
+    # symbol_period_estimate = np.median(lengths)
     impulse_responses = []
     training_data_size = 10
     for index, value in enumerate(exceed_threshold):
