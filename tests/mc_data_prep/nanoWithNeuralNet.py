@@ -27,12 +27,12 @@ def test_nano_data_nerual_net():
     #   Load data from path
     train_path = 'mc_data/5_cm_train.csv'
     test_path = 'mc_data/5_cm_test.csv'
-    true_string = 'mc_data/input_string.csv'
+    true_path = 'mc_data/input_string.csv'
     # train_path = 'mc_data/20_cm_train.csv'
     # test_path = 'mc_data/20_cm_test.csv'
     test_input_sequence = 'mc_data/input_string.csv'
     test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
-    true_input_string = np.loadtxt(true_string, delimiter=",")
+    true_input_string = np.loadtxt(true_path, delimiter=",")
     # For now just making a channel that represents some estimated memory length of the true channel
     SNRs_dB = np.linspace(10, 10, 1)
     # SNRs_dB = np.linspace(6, 10,3)
@@ -42,11 +42,14 @@ def test_nano_data_nerual_net():
     channel[0, [0]] = 1
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
+    plt.plot(test_measurement)
+    plt.show()
     pulse_shape = get_pulse(train_time, train_measurement)
+    #   Train with a random symbol stream generated from the training set pulse
     number_symbols = 1000
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
     data_gen.random_symbol_stream()
-    symbol_period = 10
+    symbol_period = 5
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
 
@@ -138,7 +141,7 @@ def test_nano_data_nerual_net():
     number_symbols = 400
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
     data_gen.random_symbol_stream(true_input_string)
-    data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
+    data_gen.provide_transmitted_matrix(test_measurement)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
 
     """
@@ -152,7 +155,7 @@ def test_nano_data_nerual_net():
     metric = nn_mm_metric(net, mm, data_gen.channel_output)
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                             metric.metric)
-    ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+    ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, pre_pad=10)
 
     viterbi_net_performance.append(ser_nn)
 

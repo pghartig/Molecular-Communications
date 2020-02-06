@@ -6,7 +6,7 @@ import logging as log
 from communication_util.general_tools import get_combinatoric_list
 from communication_util.pulse_shapes import  *
 from communication_util.general_tools import quantizer as quantizer
-from communication_util.load_mc_data import normalize_vector
+from communication_util.load_mc_data import *
 
 
 class training_data_generator:
@@ -183,6 +183,9 @@ class training_data_generator:
             # plt.show()
             self.transmit_signal_matrix.append(transmitted)
 
+    def provide_transmitted_matrix(self, provided_received):
+        self.transmit_signal_matrix.append(provided_received)
+
     def filter_sample_modulated_pulse(self, receive_filter: np.ndarray, symbol_period: int,  quantization_level=None):
         if self.transmit_signal_matrix is not None:
             sampled_received_streams = []
@@ -191,6 +194,8 @@ class training_data_generator:
                 detected_symbols = []
                 for symbol_ind in range(number_symbols):
                     incoming_samples = stream[symbol_ind * symbol_period:symbol_ind * symbol_period + receive_filter.size]
+                    #   Test with normalizing the incoming sample vector to prevent scaling issues
+                    incoming_samples = normalize_vector2(incoming_samples)
                     sample = receive_filter @ incoming_samples
                     detected_symbols.append(sample)
                 sampled_received_streams.append(np.asarray(detected_symbols))
@@ -201,8 +206,6 @@ class training_data_generator:
 
             if quantization_level is not None:
                 self.channel_output = quantizer(self.channel_output, quantization_level)
-
-
 
     def modulate_fundamental_pulse(self, fundamental_pulse: sampled_function):
         """
