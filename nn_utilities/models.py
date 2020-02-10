@@ -18,8 +18,8 @@ class viterbiNet(nn.Module):
         x = torch.tanh(self.fc1(x))
         x = F.relu(self.fc2(x))
         # x = self.fc3(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
+        # x = self.fc3(x)
         x = F.log_softmax(self.fc3(x))
-        # x = F.softmax(self.fc3(x))
         return x
 
 class viterbiNet_dropout(nn.Module):
@@ -39,9 +39,10 @@ class viterbiNet_dropout(nn.Module):
         x = torch.tanh(self.fc1(x))
         x = self.drop_out(x)
         x = F.relu(self.fc2(x))
+        x = self.drop_out(x)
+        # x = self.fc3(x)
         # x = self.fc3(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
         x = F.log_softmax(self.fc3(x))
-        # x = F.softmax(self.fc3(x))
         return x
 
 class deeper_viterbiNet(nn.Module):
@@ -62,9 +63,9 @@ class deeper_viterbiNet(nn.Module):
         x = F.tanh(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = F.relu(self.fc3(x))
-        # x = self.fc4(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
+        x = self.fc4(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
         # x = F.log_softmax(self.fc4(x))
-        x = F.softmax(self.fc4(x))
+        # x = F.softmax(self.fc4(x))
 
 
         return x

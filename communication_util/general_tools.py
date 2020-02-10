@@ -3,7 +3,14 @@ import matplotlib.pyplot as plt
 import time
 from scipy.stats import norm
 
-
+def slicer(received_sequence, true_sequence, alphabet, channel_length):
+    channel_length += -1
+    detected = []
+    for symbol in received_sequence:
+        detected.append(np.sign(symbol))
+    detected = np.asarray(detected[channel_length:])
+    ser = np.sum(np.not_equal(detected, true_sequence)) / true_sequence.size
+    return ser
 def get_combinatoric_list(alpabet, item_length, item_list, item):
     for i in range(alpabet.size):
         new = list(item)

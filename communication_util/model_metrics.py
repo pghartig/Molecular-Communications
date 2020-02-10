@@ -5,7 +5,6 @@ from abc import ABC, abstractclassmethod
 from communication_util.general_tools import *
 
 
-#TODO import ABC
 class metric(ABC):
     def __init__(self,received):
         self.received = np.flip(received)
