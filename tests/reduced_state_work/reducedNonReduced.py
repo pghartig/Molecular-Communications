@@ -23,7 +23,7 @@ def test_reduced_compare():
     standard_viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(-5, 10, 10)
+    SNRs_dB = np.linspace(0, 40, 10)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
@@ -35,10 +35,12 @@ def test_reduced_compare():
         number_symbols = 5000
         # channel = np.zeros((1, 5))
         # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel = np.zeros((1, 5))
+        # # channel[0, [0]] = 1
+        # # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
+        # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         channel = np.zeros((1, 5))
-        # channel[0, [0]] = 1
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-        channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
+        channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
 
         epochs = 300
         batch_size = 30
@@ -164,7 +166,7 @@ def test_reduced_compare():
         """
         device = torch.device("cpu")
         num_inputs_for_nn = 1
-        reduced_state = 32
+        reduced_state = 8
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)
         x = torch.Tensor(x)
@@ -202,8 +204,6 @@ def test_reduced_compare():
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
             y_batch = y_train[(batch_indices)]
-            # Add "dropout to prevent overfitting data"
-
             output = net(x_batch)
             loss = criterion(output, y_batch.long())
             train_cost_over_epoch.append(loss)

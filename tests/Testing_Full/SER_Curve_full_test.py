@@ -31,7 +31,7 @@ def test_full_integration():
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 10000
+        number_symbols = 5000
         channel = np.zeros((1, 5))
         channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
         # channel = np.zeros((1, 5))
@@ -42,8 +42,7 @@ def test_full_integration():
         # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
         # channel = np.zeros((1, 1))
         # channel[0, [0]] = 1
-        # channel = np.zeros((1, 3))
-        # channel[0, [0]] = 1
+
 
 
 
