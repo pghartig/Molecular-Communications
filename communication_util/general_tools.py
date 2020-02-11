@@ -3,7 +3,14 @@ import matplotlib.pyplot as plt
 import time
 from scipy.stats import norm
 
-
+def slicer(received_sequence, true_sequence, alphabet, channel_length):
+    channel_length += -1
+    detected = []
+    for symbol in received_sequence:
+        detected.append(np.sign(symbol))
+    detected = np.asarray(detected[channel_length:])
+    ser = np.sum(np.not_equal(detected, true_sequence)) / true_sequence.size
+    return ser
 def get_combinatoric_list(alpabet, item_length, item_list, item):
     for i in range(alpabet.size):
         new = list(item)
@@ -16,7 +23,7 @@ def get_combinatoric_list(alpabet, item_length, item_list, item):
 def symbol_error_rate(detected_symbols, input_symbols,channel_length):
     detected_array = np.asarray(detected_symbols)
     # This is a key step to ensuring the detected symbols are aligned properly
-    t = input_symbols.flatten()
+    t = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array,t))
     test2 = np.argmax(np.convolve(detected_array,t))
     detected_array = np.flip(detected_array)
@@ -25,13 +32,20 @@ def symbol_error_rate(detected_symbols, input_symbols,channel_length):
     ser = np.sum(np.not_equal(check2[:check1.size], check1)) / check1.size
     return ser
 
+def symbol_error_rate_mc_data(detected_symbols, input_symbols, pre_pad = 0):
+    detected_array = np.asarray(detected_symbols[pre_pad::])
+    input = input_symbols.astype('int32').flatten()[:detected_array.size]
+    test1 = np.max(np.convolve(detected_array,input))
+    test2 = np.max(np.convolve(detected_array,np.flip(input)))
+    ser = np.sum(np.not_equal(detected_array, input)) / detected_array.size
+    return ser
+
 def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channel_length):
     channel_length -= 1
     detected_array = np.flip(np.asarray(detected_symbols))
     # This is a key step to ensuring the detected symbols are aligned properly
     detected = np.flip(detected_array[channel_length:input_symbols.shape[1]])
     input = np.flip(input_symbols)
-    test = np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
     return np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
 
 def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,channel_length):
@@ -42,10 +56,9 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     :param channel_length:
     :return:
     """
-    #TODO Notes The returned survivor path should be this long if channel is longer than 1.
     detected_array = np.asarray(detected_symbols)
     # This is a key step to ensuring the detected symbols are aligned properly
-    t = input_symbols.flatten()
+    t = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array,t))
     test2 = np.argmax(np.convolve(detected_array,t))
     detected_array = np.flip(detected_array)
@@ -55,8 +68,6 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     ratio_test2 = np.sum(check2)
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     return ser
-
-
 
 def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_symbols,channel_length):
     """

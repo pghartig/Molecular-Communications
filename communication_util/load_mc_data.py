@@ -9,7 +9,7 @@ def load_file(path):
     numpy_raw = raw.as_matrix()
     time = numpy_raw[:, 0]
     susceptability = numpy_raw[:, 1]
-    susceptability = normalize_vector(susceptability)
+    susceptability = susceptability
     return time, susceptability
 
 def get_pulse(time_vec, measurement):
@@ -50,7 +50,7 @@ def get_pulse(time_vec, measurement):
             cur_length += 1
         previous = value
     symbol_period_estimate = np.average(lengths)
-    symbol_period_estimate = np.median(lengths)
+    # symbol_period_estimate = np.median(lengths)
     impulse_responses = []
     training_data_size = 10
     for index, value in enumerate(exceed_threshold):
@@ -58,27 +58,58 @@ def get_pulse(time_vec, measurement):
             if exceed_threshold.size> index+symbol_period_estimate:
                 impulse = measurement[index-30:index+int(symbol_period_estimate)]
                 impulse_responses.append(impulse)
-                plt.plot(impulse)
+                # plt.plot(impulse)
         previous = value
-    plt.show()
+    # plt.show()
     impulse_responses = np.vstack(impulse_responses)
     Rxx = impulse_responses.T@impulse_responses
     eigen_values, eigen_vectors = np.linalg.eigh(Rxx)
-    max_eigen_vector = - normalize_vector(eigen_vectors[:,eigen_values.size-1])
-    plt.plot(max_eigen_vector,"g")
-    ave_impulse_response = normalize_vector(np.average(impulse_responses, 0).flatten())
-    plt.plot(ave_impulse_response,"r")
-    plt.show()
-    return ave_impulse_response
+    max_eigen_vector = normalize_vector2(eigen_vectors[:,eigen_values.size-1])
+    # plt.plot(max_eigen_vector,"g")
+    ave_impulse_response = normalize_vector2(np.average(impulse_responses, 0).flatten())
+    # plt.plot(ave_impulse_response,"r")
+    # plt.show()
+    #TODO Decide how to handle negative values here
+    return max_eigen_vector
 
-def match_filter(measurements, receive_filter, symbol_period):
+def match_filter(measurements: np.ndarray, receive_filter: np.ndarray, symbol_period: int, number_symbols: int):
     check = np.convolve(measurements, np.flip(receive_filter))
-    plt.plot(check,'r')
-    # check = np.convolve(measurements, receive_filter)
-    # plt.plot(check,'g')
-    plt.title("filtered")
-    plt.show()
+    # plt.plot(check,'r')
+    # plt.title("filtered")
+    # plt.show()
+    detected_symbols = []
+    for symbol_ind in range(number_symbols):
+        incoming_samples = measurements[symbol_ind*symbol_period:symbol_ind*symbol_period + receive_filter.size]
+        sample = receive_filter@incoming_samples
+        detected_symbols.append(sample)
+    detected_symbols = np.asarray(detected_symbols)
+    return detected_symbols
 
+def impulse_response_from_oversamples(oversampled : np.ndarray, symbol_period):
+    length = int(np.ceil(oversampled.size/symbol_period))
+    impulse_response = np.zeros(length)
+    for tap in range(length):
+        if (tap+1)*symbol_period <= oversampled.size:
+            impulse_response[tap] = np.sum(oversampled[tap*symbol_period:(tap+1)*symbol_period])
+        else:
+            impulse_response[tap] = np.sum(oversampled[tap*symbol_period::])
+    return impulse_response
 
 def normalize_vector(vector):
     return (vector - np.average(vector))/np.std(vector)
+
+def normalize_vector2(vector):
+    return vector/np.linalg.norm(vector)
+
+def send_pulses(modulation_pulse: np.ndarray, symbols: np.ndarray, symbol_period: int):
+    """
+    Will move to data gen class next week when on correct git history. Keep separate for now.
+    :param modulation_pulse:
+    :param symbols:
+    :return:
+    """
+    #   Create resulting stream matrix in advance
+    transmitted = np.zeros((modulation_pulse.size+(symbols.size-1)*symbol_period))
+    for ind, symbol in enumerate(symbols):
+        transmitted[ind*symbol_period:ind*symbol_period+modulation_pulse.size] += symbol*modulation_pulse
+    return transmitted

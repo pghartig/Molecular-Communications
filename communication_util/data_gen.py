@@ -6,7 +6,7 @@ import logging as log
 from communication_util.general_tools import get_combinatoric_list
 from communication_util.pulse_shapes import  *
 from communication_util.general_tools import quantizer as quantizer
-from communication_util.load_mc_data import normalize_vector
+from communication_util.load_mc_data import *
 
 
 class training_data_generator:
@@ -56,7 +56,7 @@ class training_data_generator:
         self.modulated_convolved_signal_function_sampled = []
         self.modulated_channel_output = []
         self.receive_filter = None
-        self.demodulated_symbols = np.zeros(symbol_stream_shape)
+        # self.demodulated_symbols = np.zeros(symbol_stream_shape)
         self.sampling_period = sampling_period
         self.symbol_period = symbol_period
         self.samples_per_symbol_period = int(np.floor(self.symbol_period / self.sampling_period))
@@ -107,7 +107,6 @@ class training_data_generator:
             filter.return_samples(samples_per_symbol_period, self.sampling_period, start_index=0)
 
     def constellation(self, type, size):
-        # TODO for large tests may want to select dtype
         if type is "QAM":
             points = np.linspace(-1, 1, np.floor(math.log(size, 2)))
             constellation = 1j * np.zeros((points.size, points.size))
@@ -117,16 +116,21 @@ class training_data_generator:
             return constellation.flatten()
         elif type is "ASK":
             return np.linspace(-1, +1, size)
+        elif type is "onOffKey":
+            return np.array((0, 1))
         elif type is "PSK":
             return np.exp(1j * np.linspace(0, 2 * np.pi, size))
         else:
             return np.array([1, -1])
 
-    def random_symbol_stream(self):
+    def random_symbol_stream(self, input = None):
         """
         TODO allow for loading in a signal stream
         :return:
         """
+        if input is not None:
+            self.symbol_stream_matrix = np.reshape(input, (self.symbol_stream_matrix.shape[0], input.size))
+            return
         shape = self.symbol_stream_matrix.shape
         if self.seed is not None:
             np.random.seed(self.seed)
@@ -166,6 +170,42 @@ class training_data_generator:
                 0, self.alphabet.size - 1, shape
             )
             self.symbol_stream_matrix = self.alphabet[self.symbol_stream_matrix]
+
+    def modulate_sampled_pulse(self, modulation_pulse: np.ndarray, symbol_period: int):
+        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
+        for stream in range(self.symbol_stream_matrix.shape[0]):
+            symbolStream = self.symbol_stream_matrix[stream,:]
+            transmitted = np.zeros((modulation_pulse.size + (symbolStream.size - 1) * symbol_period))
+            for ind, symbol in enumerate(symbolStream):
+                transmitted[ind * symbol_period:ind * symbol_period + modulation_pulse.size] += symbol * modulation_pulse
+            transmitted += self.noise_parameter[0] + self.noise_parameter[1] * np.random.standard_normal(transmitted.shape)
+            # plt.plot(transmitted)
+            # plt.show()
+            self.transmit_signal_matrix.append(transmitted)
+
+    def provide_transmitted_matrix(self, provided_received):
+        self.transmit_signal_matrix.append(provided_received)
+
+    def filter_sample_modulated_pulse(self, receive_filter: np.ndarray, symbol_period: int,  quantization_level=None):
+        if self.transmit_signal_matrix is not None:
+            sampled_received_streams = []
+            for stream in self.transmit_signal_matrix:
+                number_symbols = self.symbol_stream_matrix.shape[1]
+                detected_symbols = []
+                for symbol_ind in range(number_symbols):
+                    incoming_samples = stream[symbol_ind * symbol_period:symbol_ind * symbol_period + receive_filter.size]
+                    #   Test with normalizing the incoming sample vector to prevent scaling issues
+                    incoming_samples = normalize_vector2(incoming_samples)
+                    sample = receive_filter[:incoming_samples.size] @ incoming_samples
+                    detected_symbols.append(sample)
+                sampled_received_streams.append(np.asarray(detected_symbols))
+            #TODO improve below
+            # plt.scatter(detected_symbols,detected_symbols)
+            # plt.show()
+            self.channel_output = np.reshape(np.asarray(detected_symbols), self.symbol_stream_matrix.shape)
+
+            if quantization_level is not None:
+                self.channel_output = quantizer(self.channel_output, quantization_level)
 
     def modulate_fundamental_pulse(self, fundamental_pulse: sampled_function):
         """
@@ -243,26 +283,33 @@ class training_data_generator:
         # plt.figure()
         self.channel_output = []
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
-            self.channel_output.append(
-                np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
+            # Note that Numpy's Convolve automatically flips second argument to the function.
+            self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
+            # self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), np.flip(self.CIR_matrix[bit_streams,:]), mode="full"))
+
         self.channel_output = np.flip(np.asarray(self.channel_output))
-        # plt.subplot(1,3,1)
-        # plt.scatter(self.channel_output,self.channel_output)
+
+        # fig_main = plt.figure()
+        # no_noise = fig_main.add_subplot(1, 1, 1)
+        # no_noise.set_title("Channel Output")
+        # no_noise.scatter(self.channel_output, self.channel_output)
 
         #   Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
             self.channel_output = quantizer(self.channel_output, quantization_level)
 
-        # plt.subplot(1,3,2)
-        # plt.scatter(self.channel_output,self.channel_output)
+        # quantized = fig_main.add_subplot(1, 3, 2)
+        # quantized.set_title("Quantized")
+        # quantized.scatter(self.channel_output, self.channel_output)
+
 
         #   adjust noise power to provided SNR parameter. Note symbols should always be normalized to unit power.
         self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
-        # plt.subplot(1,3,3)
-        # plt.scatter(self.channel_output,self.channel_output)
+        # noised = fig_main.add_subplot(1, 3, 3)
+        # noised.set_title("Noise Added")
+        # noised.scatter(self.channel_output, self.channel_output)
         # plt.show()
-        pass
 
     def transmit_modulated_signal2(self):
         """
@@ -374,6 +421,8 @@ class training_data_generator:
         item = []
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)  # Generate states used below
         states = np.asarray(states)
+        # plt.scatter(self.channel_output.flatten(), self.channel_output.flatten())
+        # plt.show()
         if self.channel_output is not None:
             j=0
             for i in range(self.channel_output.shape[1]):
@@ -391,20 +440,23 @@ class training_data_generator:
         base_states = int(np.ceil(np.log2(outputs)))
         states = []
         item = []
-        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
-        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
+        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
+        get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
 
         states = np.asarray(states)
         # reduced = np.asarray(states)@self.CIR_matrix.T
-        normalized_channel =self.CIR_matrix[:, 1::]/ np.linalg.norm(self.CIR_matrix[:, 1::])
+        # normalized_channel =self.CIR_matrix[:, 1::]/ np.linalg.norm(self.CIR_matrix[:, 1::])
+        normalized_channel = self.CIR_matrix
         reduced = np.asarray(states)@normalized_channel.T
 
         if quantization_level is not None:
             reduced = quantizer(reduced,quantization_level)
         num_clusters = int(pow(2, base_states-1))
         clusters = kmeans(reduced, num_clusters)
-        labels = vq(reduced, clusters[0])[0]
-        test = self.reduced_state_mapping()
+        # Compress states using known CSI
+        # labels = vq(reduced, clusters[0])[0]
+        # Compress states using training data
+        labels = self.reduced_state_mapping(num_clusters)
         centroids = clusters[0]
         # plt.scatter(reduced, reduced)
         # plt.scatter(centroids, centroids)
@@ -419,7 +471,8 @@ class training_data_generator:
         item_final = []
         get_combinatoric_list(self.alphabet, base_states, states_final, item_final)
         states_reduced = np.asarray(states_reduced)
-
+        # plt.scatter(self.channel_output.flatten(), self.channel_output.flatten())
+        # plt.show()
         if self.channel_output is not None:
             j=0
             #   Go create training example from each channel output
@@ -428,7 +481,7 @@ class training_data_generator:
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     #   Get true state of the system
                     symbol = self.symbol_stream_matrix[:,j].flatten()
-                    true_state = self.symbol_stream_matrix[:, j+1: j+self.CIR_matrix.shape[1]].flatten()
+                    true_state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()
                     probability_vec = self.get_probability(true_state, states)
                     # Now find corresponding reduced state cluster number for the true state
                     state = labels[np.argmax(probability_vec)]
@@ -444,9 +497,28 @@ class training_data_generator:
         totals = np.sum(np.asarray(y_list), axis=0)
         return x_list, y_list
 
-    def reduced_state_mapping(self):
+    def reduced_state_mapping(self, num_clusters):
+        """
+        :param num_clusters:
+        :return: a vector indicating a compression of some number of states into a set of clusters
+        """
         #   Take training data and cluster the output points
         x_list, y_list = self.get_labeled_data()
+        clusters = kmeans(x_list, num_clusters)
+        labels = vq(x_list, clusters[0])[0]
+        #   Now go through each of the original number of states and assign this to
+        centroids = clusters[0]
+        # plt.scatter(x_list, x_list)
+        # plt.scatter(centroids, centroids)
+        # plt.show()
+        totals = np.zeros((num_clusters, y_list[0].size))
+        for ind, label in enumerate(labels):
+            for cluster in range(num_clusters):
+                if label ==cluster:
+                    totals[label, :] += y_list[ind]
+                    break
+        #   Now find the cluster into which each of the original states has the majority of labels in
+        return np.argmax(totals, axis=0)
 
     def get_probability(self, input, states):
         """
