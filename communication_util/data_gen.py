@@ -485,8 +485,8 @@ class training_data_generator:
                     # Now find corresponding reduced state cluster number for the true state
                     state = labels[np.argmax(probability_vec)]
                     new_state = states_reduced[state]
-                    # reduced_state = np.append(symbol, new_state)
-                    reduced_state = np.append(new_state, symbol)
+                    reduced_state = np.append(symbol, new_state)
+                    # reduced_state = np.append(new_state, symbol)
                     probability_vec_reduced = self.get_probability(reduced_state, states_final)
                     y_list.append(probability_vec_reduced)
                     # y_list.append(probability_vec)
