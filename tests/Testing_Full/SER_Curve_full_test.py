@@ -84,7 +84,7 @@ def test_full_integration():
 
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
-        optimizer = optim.Adam(net.parameters(), lr=1e-4)
+        optimizer = optim.Adam(net.parameters(), lr=1e-2)
         # optimizer = optim.SGD(net.parameters(), lr=1e-1)
 
         """
@@ -94,10 +94,10 @@ def test_full_integration():
         criterion = nn.NLLLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 10
+        batch_size = 5000
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 5000
+        epochs = 500
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
