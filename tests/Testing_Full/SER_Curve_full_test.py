@@ -50,6 +50,8 @@ def test_full_integration():
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
+        plt.scatter(data_gen.channel_output.flatten(),data_gen.channel_output.flatten())
+        plt.show()
         """
         Load in Trained Neural Network and verify that it is acceptable performance
         """
@@ -77,8 +79,7 @@ def test_full_integration():
 
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
-        dropout_probability = .3
-        net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+        net = models.viterbiNet(D_in, H1, H2, D_out, dropout_probability)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
 
 
@@ -108,13 +109,14 @@ def test_full_integration():
             loss = criterion(output, y_batch.long())
             loss.backward()
             optimizer.step()
+
             test_batch_indices = np.random.randint(len(y_test), size=(1, batch_size))
             x_batch_test = x_test[(test_batch_indices)]
             y_batch_test = y_test[(test_batch_indices)]
             # Setup Accuracy test
             # detached_ouput = output.
             max_state_train = np.argmax(output.detach().numpy(), axis=1)
-            net(x_batch)
+            check = np.not_equal(max_state_train, y_batch.detach().numpy())
             max_state_test = np.argmax(net(x_batch_test).detach().numpy(), axis=1)
             train_cost_over_epoch.append(np.sum(np.not_equal(max_state_train, y_batch.detach().numpy()))/y_batch.size())
             test_cost_over_epoch.append(np.sum(np.not_equal(max_state_test, y_batch_test.detach().numpy()))/y_batch_test.size())
@@ -164,8 +166,8 @@ def test_full_integration():
         """
         Analyze SER performance
         """
-        # linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
-        linear_mmse_performance.append(slicer(data_gen.channel_output.flatten(), data_gen.symbol_stream_matrix, data_gen.alphabet, channel_length))
+        linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+        # linear_mmse_performance.append(slicer(data_gen.channel_output.flatten(), data_gen.symbol_stream_matrix, data_gen.alphabet, channel_length))
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
