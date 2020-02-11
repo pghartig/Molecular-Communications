@@ -21,29 +21,30 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 16, 3)
+    SNRs_dB = np.linspace(10, 16, 2)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
+
+    number_symbols = 5000
+    channel = np.zeros((1, 5))
+    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    # Method used in ViterbiNet Paper
+    channel[0, :] = np.random.randn(channel.size)
+    # channel = np.zeros((1, 5))
+    # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
+    # channel[0, [0, 1, 2, 3]] = .8, 0, .02, .4
+
+    # channel[0, [0, 1, 2, 3, 4]] = 1, .7, .3, .1, .4
+    # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
+    # channel = np.zeros((1, 3))
+    # channel[0, [0]] = 1
     for SNR in SNRs:
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
-        number_symbols = 5000
-        channel = np.zeros((1, 5))
-        # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
-        # Method used in ViterbiNet Paper
-        channel[0, :] = np.random.randn(channel.size)
-        # channel = np.zeros((1, 5))
-        # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
-        # channel[0, [0, 1, 2, 3]] = .8, 0, .02, .4
-
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .7, .3, .1, .4
-        # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
-        # channel = np.zeros((1, 3))
-        # channel[0, [0]] = 1
 
         data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
@@ -83,7 +84,7 @@ def test_full_integration():
 
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
-        optimizer = optim.Adam(net.parameters(), lr=1e-2)
+        optimizer = optim.Adam(net.parameters(), lr=1e-4)
         # optimizer = optim.SGD(net.parameters(), lr=1e-1)
 
         """
@@ -93,10 +94,10 @@ def test_full_integration():
         criterion = nn.NLLLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 500
+        batch_size = 10
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 2000
+        epochs = 5000
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -105,13 +106,19 @@ def test_full_integration():
             net.zero_grad()
             output = net(x_batch)
             loss = criterion(output, y_batch.long())
-            train_cost_over_epoch.append(loss)
             loss.backward()
             optimizer.step()
             test_batch_indices = np.random.randint(len(y_test), size=(1, batch_size))
             x_batch_test = x_test[(test_batch_indices)]
             y_batch_test = y_test[(test_batch_indices)]
-            test_cost_over_epoch.append(criterion(net(x_batch_test), y_batch_test.long()))
+            # Setup Accuracy test
+            # detached_ouput = output.
+            max_state_train = np.argmax(output.detach().numpy(), axis=1)
+            net(x_batch)
+            max_state_test = np.argmax(net(x_batch_test).detach().numpy(), axis=1)
+            train_cost_over_epoch.append(np.sum(np.not_equal(max_state_train, y_batch.detach().numpy()))/y_batch.size())
+            test_cost_over_epoch.append(np.sum(np.not_equal(max_state_test, y_batch_test.detach().numpy()))/y_batch_test.size())
+            # test_cost_over_epoch.append(criterion(net(x_batch_test), y_batch_test.long()))
 
 
         """
@@ -127,7 +134,7 @@ def test_full_integration():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 

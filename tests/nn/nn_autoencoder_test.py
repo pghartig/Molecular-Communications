@@ -21,10 +21,10 @@ def test_auto_encoder():
     Generated Testing Data using the same channel as was used for training the mixture model and the nn
     """
     number_symbols = 5000
-    sources = 16
+    sources = 32
     x  = np.random.randint(sources,size = (number_symbols,1))
     y = x.flatten()
-    x = x + np.random.standard_normal((number_symbols, 1))*.1
+    x = x + np.random.standard_normal((number_symbols, 1))*.01
     x = torch.Tensor(x)
     y = torch.Tensor(y)
     train_size = int(.6 * number_symbols)
@@ -41,8 +41,8 @@ def test_auto_encoder():
     N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, sources
     dropout_probability = .3
     net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
-    # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 10, 100, 10, sources
-    # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
+    # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 50, 50, 50, sources
+    # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
     optimizer = optim.Adam(net.parameters(), lr=1e-3)
     # optimizer = optim.SGD(net.parameters(), lr=1e-1)
 
@@ -54,10 +54,10 @@ def test_auto_encoder():
     train_cost_over_epoch = []
     test_cost_over_epoch = []
     accuracy = []
-    batch_size = 50
+    batch_size = 10
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(3000):
+    for t in range(5000):
         batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
         x_batch = x_train[(batch_indices)]
         y_batch = y_train[(batch_indices)]

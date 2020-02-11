@@ -61,11 +61,14 @@ class deeper_viterbiNet(nn.Module):
 
     def forward(self, x):
         x = F.tanh(self.fc1(x))
+        x = self.drop_out(x)
         x = F.relu(self.fc2(x))
+        x = self.drop_out(x)
         x = F.relu(self.fc3(x))
-        x = self.fc4(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
-        # x = F.log_softmax(self.fc4(x))
-        # x = F.softmax(self.fc4(x))
+        x = self.drop_out(x)
+        # x = self.fc4(x)
+        # Note that the cross entropy function in PyTorch automatically takes softmax
+        x = F.log_softmax(self.fc4(x))
 
 
         return x
