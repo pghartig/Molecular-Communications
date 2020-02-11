@@ -56,15 +56,13 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     :return:
     """
     detected_array = np.asarray(detected_symbols)
+    ratio_test2 = np.sum(detected_array)
     # This is a key step to ensuring the detected symbols are aligned properly
     t = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, t))
-    test2 = np.argmax(np.max(np.convolve(np.flip(detected_array), t)))
-    detected_array = np.flip(detected_array)
-    check1 = detected_array[(channel_length-1):]
-    ratio_test = np.sum(check1)
-    check2 = t[:check1.size]
-    ratio_test2 = np.sum(check2)
+    test2 = np.max(np.convolve(np.flip(detected_array), t))
+    check2 = t[(channel_length-1):]
+    check1 = detected_array[:check2.size]
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     return ser
 

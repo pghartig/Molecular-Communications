@@ -30,9 +30,9 @@ def test_full_integration():
 
     number_symbols = 5000
     channel = np.zeros((1, 5))
-    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
     # Method used in ViterbiNet Paper
-    channel[0, :] = np.random.randn(channel.size)
+    # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))
     # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
     # channel[0, [0, 1, 2, 3]] = .8, 0, .02, .4

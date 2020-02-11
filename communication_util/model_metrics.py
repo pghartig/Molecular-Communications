@@ -9,8 +9,6 @@ class metric(ABC):
     def __init__(self,received):
         #NOTE
         self.received = received
-        # self.received = np.flip(received)
-
 
     @classmethod
     def metric(self, index):
@@ -83,21 +81,16 @@ class nn_mm_metric(metric):
         self.nn = nn
         self.mm = mm
         #TODO
-        # self.received = np.flip(received)
+        self.received = received
         self.nn_input_size = input_length-1
 
     def metric(self, index, state=None):
         # Be careful using the PyTorch parser with scalars
-        torch_input = torch.tensor([self.received[0, index-self.nn_input_size:index+1]]).float()
+        torch_input = torch.tensor([self.received[0, index]]).float()
         nn = self.nn(torch_input).flatten().detach().numpy()
         mm = self.mm(self.received[0, index])
         # return -nn*mm  # Provides metrics for entire column of states
         return - nn    # Need to change sign to align with argmin used in viterbi
 
-    def llr_metric(self, index, states):
-        # Be careful using the PyTorch parser with scalars
-        torch_input = torch.tensor([self.received[0, index-self.nn_input_size:index+1]]).float()
-        nn = self.nn(torch_input).flatten().detach().numpy()
-        mm = self.mm(self.received[0, index])
 
 
