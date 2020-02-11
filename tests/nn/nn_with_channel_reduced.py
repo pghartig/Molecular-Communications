@@ -16,12 +16,12 @@ import os
 import time
 import pandas as pd
 
-def test_nn_channel():
+def test_nn_channel_reduced():
 
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(50, 50, 1)
+    SNRs_dB = np.linspace(15, 15, 1)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -56,7 +56,9 @@ def test_nn_channel():
     Load in Trained Neural Network and verify that it is acceptable performance
     """
     device = torch.device("cpu")
-    x, y = data_gen.get_labeled_data()
+    reduced_state = 32
+    x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
+    # x, y = data_gen.get_labeled_data()
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
     x = torch.Tensor(x)
     y = torch.Tensor(y)
@@ -71,9 +73,8 @@ def test_nn_channel():
     """
     m = data_gen.alphabet.size
     channel_length = data_gen.CIR_matrix.shape[1]
-    # test_length = channel_length-1
-    # output_layer_size = reduced_state
     output_layer_size = np.power(m, channel_length)
+    output_layer_size = reduced_state
     N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
     # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
 

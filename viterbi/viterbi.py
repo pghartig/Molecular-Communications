@@ -47,7 +47,9 @@ class viterbi_trellis():
         for node in self.next_states:
             for previous_state in self.previous_states:
                 check1 = node.state[:-1]
+                check1 = node.state[1:]
                 check2 = previous_state.state[1:]
+                check2 = previous_state.state[:-1]
                 #test for reduced state
                 if reduced == False:
                     if check1 == check2:
@@ -58,7 +60,7 @@ class viterbi_trellis():
     def step_trellis(self, index):
         metrics = self.metric_function(index, self.states)
         for ind, node in enumerate(self.next_states):
-            node.check_smallest_incoming(index, metrics[ind])
+            node.check_smallest_incoming(metrics[ind])
         for ind, node in enumerate(self.next_states):
             self.previous_states[ind].survivor_path = node.survivor_path
             self.previous_states[ind].survivor_path_cost = node.survivor_path_cost
@@ -78,9 +80,8 @@ class viterbi_node():
         self.survivor_path = []
         self.survivor_path_cost = 0
         self.state = state
-        self.state_metric = 0
 
-    def check_smallest_incoming(self, index, state_metric):
+    def check_smallest_incoming(self, state_metric):
         """
         Based on a metric, find the new surviving path going into the next step in the trellis
         :return:
@@ -91,7 +92,7 @@ class viterbi_node():
         survivor_index = np.argmin(np.asarray(incoming_costs))
         survivor_node = self.incoming_nodes[survivor_index]
         # add symbol to survivor path
-        self.survivor_path = survivor_node.survivor_path + [self.state[-1]]
+        self.survivor_path = survivor_node.survivor_path + [self.state[0]]
         self.survivor_path_cost = incoming_costs[survivor_index]
 
 

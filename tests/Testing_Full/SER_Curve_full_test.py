@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 16, 2)
+    SNRs_dB = np.linspace(10, 15, 2)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -116,7 +116,6 @@ def test_full_integration():
             # Setup Accuracy test
             # detached_ouput = output.
             max_state_train = np.argmax(output.detach().numpy(), axis=1)
-            check = np.not_equal(max_state_train, y_batch.detach().numpy())
             max_state_test = np.argmax(net(x_batch_test).detach().numpy(), axis=1)
             train_cost_over_epoch.append(np.sum(np.not_equal(max_state_train, y_batch.detach().numpy()))/y_batch.size())
             test_cost_over_epoch.append(np.sum(np.not_equal(max_state_test, y_batch_test.detach().numpy()))/y_batch_test.size())
