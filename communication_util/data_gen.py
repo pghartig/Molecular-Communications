@@ -285,7 +285,6 @@ class training_data_generator:
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             # Note that Numpy's Convolve automatically flips second argument to the function.
             self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), self.CIR_matrix[bit_streams,:], mode="full"))
-            # self.channel_output.append(np.convolve(np.flip(self.symbol_stream_matrix[bit_streams,:]), np.flip(self.CIR_matrix[bit_streams,:]), mode="full"))
 
         self.channel_output = np.flip(np.asarray(self.channel_output))
 

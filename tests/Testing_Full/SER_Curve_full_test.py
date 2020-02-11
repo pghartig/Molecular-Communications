@@ -50,8 +50,8 @@ def test_full_integration():
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
-        plt.scatter(data_gen.channel_output.flatten(),data_gen.channel_output.flatten())
-        plt.show()
+        # plt.scatter(data_gen.channel_output.flatten(),data_gen.channel_output.flatten())
+        # plt.show()
         """
         Load in Trained Neural Network and verify that it is acceptable performance
         """
@@ -78,8 +78,8 @@ def test_full_integration():
         # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
 
 
-        # net = models.viterbiNet(D_in, H1, H2, D_out)
-        net = models.viterbiNet(D_in, H1, H2, D_out, dropout_probability)
+        net = models.viterbiNet(D_in, H1, H2, D_out)
+        # net = models.viterbiNet(D_in, H1, H2, D_out, dropout_probability)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
 
 
@@ -95,10 +95,10 @@ def test_full_integration():
         criterion = nn.NLLLoss()
         train_cost_over_epoch = []
         test_cost_over_epoch = []
-        batch_size = 5000
+        batch_size = 1000
 
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 500
+        epochs = 900
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]

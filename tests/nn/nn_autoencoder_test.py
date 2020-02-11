@@ -24,7 +24,7 @@ def test_auto_encoder():
     sources = 32
     x = np.random.randint(sources,size = (number_symbols, 1))
     y = x.flatten()
-    x = x + np.random.standard_normal((number_symbols, 1))*.1
+    x = x + np.random.standard_normal((number_symbols, 1))*1
     # plt.scatter(x, x)
     # plt.show()
     x = torch.Tensor(x)
@@ -54,10 +54,10 @@ def test_auto_encoder():
     train_cost_over_epoch = []
     test_cost_over_epoch = []
     accuracy = []
-    batch_size = 300
+    batch_size = 1000
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    for t in range(500):
+    for t in range(900):
         batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
         x_batch = x_train[(batch_indices)]
         y_batch = y_train[(batch_indices)]
