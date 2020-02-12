@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 15, 2)
+    SNRs_dB = np.linspace(0, 15, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -130,12 +130,17 @@ def test_full_integration():
         mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
         mm = mm.get_probability
 
+        """
+        User training data to train MMSE equalizer to then use on the test data
+        """
+        mmse_equalizer = linear_mmse()
+        mmse_equalizer.train_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix, channel.size)
 
         """
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+        data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -165,7 +170,7 @@ def test_full_integration():
         """
         Analyze SER performance
         """
-        linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+        linear_mmse_performance.append(linear_mmse.test_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output))
         # linear_mmse_performance.append(slicer(data_gen.channel_output.flatten(), data_gen.symbol_stream_matrix, data_gen.alphabet, channel_length))
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
