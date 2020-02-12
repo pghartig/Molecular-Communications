@@ -42,15 +42,15 @@ def test_nano_data_nerual_net():
     channel[0, [0]] = 1
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
-    plt.plot(test_measurement)
-    plt.show()
+    # plt.plot(test_measurement)
+    # plt.show()
     pulse_shape = get_pulse(train_time, train_measurement)
     #   Train with a random symbol stream generated from the training set pulse
     number_symbols = 5000
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
     data_gen.random_symbol_stream()
-    # 5
-    symbol_period = 5
+    # 5 is true perdiod
+    symbol_period = 10
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
 
@@ -82,19 +82,10 @@ def test_nano_data_nerual_net():
     # output_layer_size = reduced_state
     output_layer_size = np.power(data_gen.alphabet.size, channel_length)
     N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
-    # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
 
 
-    # net = models.viterbiNet(D_in, H1, H2, D_out)
-    dropout_probability = .3
-    net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
-    # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
-
-
-    # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
-    # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
-    optimizer = optim.Adam(net.parameters(), lr=1e-3)
-    # optimizer = optim.SGD(net.parameters(), lr=1e-1)
+    net = models.viterbiNet(D_in, H1, H2, D_out)
+    optimizer = optim.Adam(net.parameters(), lr=1e-2)
 
     """
     Train NN
@@ -103,26 +94,29 @@ def test_nano_data_nerual_net():
     # criterion = nn.CrossEntropyLoss()
     train_cost_over_epoch = []
     test_cost_over_epoch = []
-    batch_size = 20
+    batch_size = 1000
 
     # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-    epochs = 1000
+    epochs = 900
     for t in range(epochs):
         batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
         x_batch = x_train[(batch_indices)]
         y_batch = y_train[(batch_indices)]
         # Add "dropout to prevent overfitting data"
-
         output = net(x_batch)
         loss = criterion(output, y_batch.long())
-        train_cost_over_epoch.append(loss)
         net.zero_grad()
         loss.backward()
         optimizer.step()
         test_batch_indices = np.random.randint(len(y_test), size=(1, batch_size))
         x_batch_test = x_test[(test_batch_indices)]
         y_batch_test = y_test[(test_batch_indices)]
-        test_cost_over_epoch.append(criterion(net(x_batch_test), y_batch_test.long()))
+        max_state_train = np.argmax(output.detach().numpy(), axis=1)
+        max_state_test = np.argmax(net(x_batch_test).detach().numpy(), axis=1)
+        train_cost_over_epoch.append(np.sum(np.not_equal(max_state_train, y_batch.detach().numpy())) / y_batch.size())
+        test_cost_over_epoch.append(
+            np.sum(np.not_equal(max_state_test, y_batch_test.detach().numpy())) / y_batch_test.size())
+
 
 
     """
@@ -138,20 +132,20 @@ def test_nano_data_nerual_net():
     Create new set of test data. 
     """
     # For comparing generated data to the true test data
-    # del data_gen
-    # number_symbols = 400
-    # data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
-    # data_gen.random_symbol_stream(true_input_string)
-    # data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
-    # data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
-    # generated_output = data_gen.channel_output
-
     del data_gen
+    number_symbols = 400
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
     data_gen.random_symbol_stream(true_input_string)
-    data_gen.provide_transmitted_matrix(test_measurement)
+    data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
-    # plt.scatter(data_gen.channel_output, data_gen.channel_output)
+    generated_output = data_gen.channel_output
+
+    # del data_gen
+    # data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
+    # data_gen.random_symbol_stream(true_input_string)
+    # data_gen.provide_transmitted_matrix(test_measurement)
+    # data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
+    # # plt.scatter(data_gen.channel_output, data_gen.channel_output)
     # plt.scatter(generated_output, generated_output)
     # plt.show()
 
@@ -166,7 +160,9 @@ def test_nano_data_nerual_net():
     metric = nn_mm_metric(net, mm, data_gen.channel_output)
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                             metric.metric)
-    ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, pre_pad=10)
+    # ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, channel_length, pre_pad=10)
+    ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+
 
     viterbi_net_performance.append(ser_nn)
 
