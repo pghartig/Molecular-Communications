@@ -6,10 +6,11 @@
 \contentsline {subsection}{\numberline {0.3.3}A Reduced State ViterbiNet}{6}
 \contentsline {subsection}{\numberline {0.3.4}The Molecular Communication Channel}{8}
 \contentsline {section}{\numberline {0.4}Results}{8}
-\contentsline {subsection}{\numberline {0.4.1}Simulation Details}{8}
-\contentsline {subsubsection}{System Model}{8}
-\contentsline {subsubsection}{Algorithm Parameters}{8}
-\contentsline {subsection}{\numberline {0.4.2}Simulation Results}{9}
-\contentsline {subsection}{\numberline {0.4.3}Results}{12}
-\contentsline {section}{\numberline {0.5}Conclusion}{17}
-\contentsline {subsection}{\numberline {0.5.1}Future Work}{17}
+\contentsline {subsection}{\numberline {0.4.1}A supervised equalization benchmark}{8}
+\contentsline {subsection}{\numberline {0.4.2}Simulation Details}{9}
+\contentsline {subsubsection}{System Model}{9}
+\contentsline {subsubsection}{Algorithm Parameters}{9}
+\contentsline {subsection}{\numberline {0.4.3}Simulation Results}{10}
+\contentsline {subsection}{\numberline {0.4.4}Results}{13}
+\contentsline {section}{\numberline {0.5}Conclusion}{18}
+\contentsline {subsection}{\numberline {0.5.1}Future Work}{18}

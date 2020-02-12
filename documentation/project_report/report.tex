@@ -219,6 +219,35 @@ Provide necessary background for any nano-particle data shown in results.
 
 
 \section{Results}
+\subsection{A supervised equalization benchmark}
+To provide a linear equalization reference to the non-linearity of the proposed neural network, mixture model equalization, the Linear, Minimum, Mean-Squared Error (LMMSE) equalizer is used in the results. 
+The convex and continuously differentiable optimization problem 
+\begin{equation*}\label{mmse}
+\underset{\mathbf{\mathbf{h}} \in \textit{$\mathcal{C}_{lengthx1}$}}{\text{argmin}} \;
+ E[\|x-\mathbf{h}^T\mathbf{y}\|^2],
+\end{equation*}
+can be solved by 
+\begin{equation*}\label{mmse}
+\frac{\partial  E[\|x-\mathbf{h}^T\mathbf{y}\|^2]}{\partial \mathbf{h} } = 0
+\end{equation*}
+to give the optimal LMMSE equalizer
+\begin{equation*}\label{mmse}
+\mathbf{h} = E[\mathbf{R}_{yy}]^{-1}E[\mathbf{r}_{yx}].
+\end{equation*}
+$E[\mathbf{R}_{yy}]$ and $E[\mathbf{r}_{yx}]$ are estimated by
+\begin{equation*}\label{mmse}
+ E[\mathbf{R}_{yy}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
+\mathbf{y}\mathbf{y^{\mathrm{H}}} and
+ \end{equation*}
+\begin{equation*}\label{mmse}
+E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
+\mathbf{y}x
+;
+ \end{equation*}
+ using the same training data as the neural network and mixture model. 
+Note that just as with the neural network, making this estimate requires knowledge (or estimation) of the channel memory length $l$.
+
+
 \subsection{Simulation Details}
 \subsubsection{System Model}
 Verification of the implementation and integration of the algorithms described above is based on the following system model.
@@ -245,7 +274,7 @@ The parameters for the various algorithms used in this work are detailed below
 \begin{itemize}
 \item \textbf{Neural Network}
 \begin{itemize}
-\item Architecture: 4 layers {1, 100, 50, $M^L$}
+\item Architecture: 4 layers {1, 100 (Tanh activation), 50 (relu activation), $M^L$ (Softmax $\rightarrow$ Negative Log-Likelihood)}
 \item Training Data Examples: 5000
 \item Dropout Rate: .5
 \item Neural Network Updates: Adam with step size $10^{-3}$ \cite{kingma2014adam}
