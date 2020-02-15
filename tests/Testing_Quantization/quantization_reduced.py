@@ -37,11 +37,7 @@ def test_quantization_reduced():
             """
             number_symbols = 2000
             channel = np.zeros((1, 5))
-            channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
-            # channel = np.zeros((1, 3))
-            # channel[0, [0, 1, 2 ]] = 1, .1, .2
-            # channel = np.zeros((1, 1))
-            # channel[0, [0]] = 1
+            channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
             data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(level)

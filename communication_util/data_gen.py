@@ -480,7 +480,7 @@ class training_data_generator:
                 if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     #   Get true state of the system
                     symbol = self.symbol_stream_matrix[:,j].flatten()
-                    true_state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()
+                    true_state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten().flatten()
                     probability_vec = self.get_probability(true_state, states)
                     # Now find corresponding reduced state cluster number for the true state
                     state = labels[np.argmax(probability_vec)]

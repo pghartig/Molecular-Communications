@@ -20,24 +20,24 @@ def test_full_quantization():
     viterbi_net_performance_full = []
     classic_performance_full = []
     linear_mmse_performance_full = []
-    SNRs_dB = np.linspace(-5, 10, 4)
+    SNRs_dB = np.linspace(0, 15, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
 
-    quantization_levels = 3
-    quantized_input = np.linspace(-1, 1, num = 200)
-    # quantized_output = []
-
-    quant = plt.figure(1)
-    for level in range(quantization_levels):
-        # quantized_output.append(quantizer(quantized_input, level))
-        plt.plot(quantized_input, quantizer(quantized_input, level), label=f"{level}")
-    plt.legend("lower left")
-    # plt.show()
-    quant.savefig("Output/quant.png")
+    quantization_levels = 2
+    # quantized_input = np.linspace(-1, 1, num = 200)
+    # # quantized_output = []
+    #
+    # quant = plt.figure(1)
+    # for level in range(quantization_levels):
+    #     # quantized_output.append(quantizer(quantized_input, level))
+    #     plt.plot(quantized_input, quantizer(quantized_input, level), label=f"{level}")
+    # plt.legend("lower left")
+    # # plt.show()
+    # quant.savefig("Output/quant.png")
 
     for level in range(quantization_levels):
         viterbi_net_performance = []
@@ -50,7 +50,7 @@ def test_full_quantization():
             number_symbols = 5000
             channel = np.zeros((1, 5))
             # channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04 
-            channel[0, [0, 1, 2, 3, 4]] = 1, .1, .3, .1, .4
+            channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
             # channel = np.zeros((1, 3))
             # channel[0, [0, 1, 2 ]] = 1, .1, .2
             # channel = np.zeros((1, 1))
@@ -86,8 +86,7 @@ def test_full_quantization():
             N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
 
             # net = models.viterbiNet(D_in, H1, H2, D_out)
-            dropout_probability = .3
-            net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+            net = models.viterbiNet(D_in, H1, H2, D_out)
 
             # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
             # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
@@ -101,10 +100,10 @@ def test_full_quantization():
             # criterion = nn.CrossEntropyLoss()
             train_cost_over_epoch = []
             test_cost_over_epoch = []
-            batch_size = 30
+            batch_size = 1000
 
             # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-            epochs = 300
+            epochs = 900
             for t in range(epochs):
                 batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
                 x_batch = x_train[(batch_indices)]
@@ -126,7 +125,8 @@ def test_full_quantization():
             """
             Train Mixture Model
             """
-            mixture_model_training_data = data_gen.channel_output.flatten()[0:train_size]
+            mm_train_size = 1000
+            mixture_model_training_data = data_gen.channel_output.flatten()[0:mm_train_size]
             num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
             mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
             mm = mm.get_probability
@@ -158,12 +158,20 @@ def test_full_quantization():
                                                 metric.metric)
             ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)
 
+            '''
+            Train MMSE
+            '''
+            mmse_equalizer = linear_mmse()
+            mmse_equalizer.train_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output,
+                                           data_gen.symbol_stream_matrix, channel.size)
+
             """
             Analyze SER performance
             """
             viterbi_net_performance.append(ser_nn)
             classic_performance.append(ser_classic)
-            linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+            linear_mmse_performance.append(
+                mmse_equalizer.test_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output))
 
         viterbi_net_performance_full.append(viterbi_net_performance)
         classic_performance_full.append(classic_performance)

@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 15, 10)
+    SNRs_dB = np.linspace(10, 15, 3)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -125,7 +125,8 @@ def test_full_integration():
         """
         Train Mixture Model
         """
-        mixture_model_training_data = data_gen.channel_output.flatten()[0:train_size]
+        mm_train_size = 1000
+        mixture_model_training_data = data_gen.channel_output.flatten()[0:mm_train_size]
         num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
         mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
         mm = mm.get_probability
