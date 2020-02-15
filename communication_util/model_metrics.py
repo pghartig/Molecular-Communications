@@ -89,8 +89,8 @@ class nn_mm_metric(metric):
         torch_input = torch.tensor([self.received[0, index]]).float()
         nn = self.nn(torch_input).flatten().detach().numpy()
         mm = self.mm(self.received[0, index])
-        # return -nn*mm  # Provides metrics for entire column of states
-        return - nn    # Need to change sign to align with argmin used in viterbi
+        return -nn*mm  # Provides metrics for entire column of states
+        # return - nn    # Need to change sign to align with argmin used in viterbi
 
 
 

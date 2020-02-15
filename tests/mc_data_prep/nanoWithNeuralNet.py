@@ -34,11 +34,11 @@ def test_nano_data_nerual_net():
     test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
     true_input_string = np.loadtxt(true_path, delimiter=",")
     # For now just making a channel that represents some estimated memory length of the true channel
-    SNRs_dB = np.linspace(1, 1, 1)
+    SNRs_dB = np.linspace(10, 10, 1)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
 
-    channel = np.zeros((1, 5))
+    channel = np.zeros((1, 3))
     channel[0, [0]] = 1
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
@@ -60,9 +60,6 @@ def test_nano_data_nerual_net():
     """
     Load in Trained Neural Network and verify that it is acceptable performance
     """
-    device = torch.device("cpu")
-    reduced_state = 4
-    # x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
     x, y = data_gen.get_labeled_data()
 
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
@@ -133,9 +130,9 @@ def test_nano_data_nerual_net():
     """
     # For comparing generated data to the true test data
     del data_gen
-    number_symbols = 400
+    number_symbols = 1000
     data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
-    data_gen.random_symbol_stream(true_input_string)
+    data_gen.random_symbol_stream()
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
     generated_output = data_gen.channel_output
@@ -160,7 +157,7 @@ def test_nano_data_nerual_net():
     metric = nn_mm_metric(net, mm, data_gen.channel_output)
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                             metric.metric)
-    # ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, channel_length, pre_pad=10)
+    # ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, channel_length, pre_pad=6)
     ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 

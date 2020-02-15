@@ -137,7 +137,7 @@ def test_full_quantization():
             Create new set of test data. 
             """
             del data_gen
-            data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+            data_gen = training_data_generator(symbol_stream_shape=(1, 10000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(level)
 

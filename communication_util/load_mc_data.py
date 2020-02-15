@@ -66,10 +66,10 @@ def get_pulse(time_vec, measurement):
     eigen_values, eigen_vectors = np.linalg.eigh(Rxx)
     max_eigen_vector = eigen_vectors[:,eigen_values.size-1]
     max_eigen_vector_normalized = normalize_vector2(max_eigen_vector)
-    plt.plot(max_eigen_vector_normalized, "g")
+    # plt.plot(max_eigen_vector_normalized, "g")
     ave_impulse_response = normalize_vector2(np.average(impulse_responses, 0).flatten())
     # plt.plot(ave_impulse_response,"r")
-    plt.show()
+    # plt.show()
     #TODO Decide how to handle negative values here
     check = np.min(max_eigen_vector)
     return max_eigen_vector_normalized
