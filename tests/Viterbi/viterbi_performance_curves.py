@@ -27,7 +27,7 @@ def test_viterbi():
     seed_generator = 0
     data_gen = None
     channel = None
-    number_symbols = 20000
+    number_symbols = 5000
     channel = np.zeros((1, 5))
     # Method used in comparison on MATLAB
     channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
