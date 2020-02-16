@@ -204,11 +204,11 @@ and estimate the individual terms as:
 	\end{figure}
 
 \item $p(y_{\mathrm{i}}) = \sum_{s \in \textit{$\mathcal{S}$}}p(s,y_{\mathrm{i}})$
-: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Fig. \ref{fig:mm}) based on training data of received signals (In this case the same data used to train the neural network) and a model for channel noise. The Expectation Maximization Algorithm (CITE) is used with a chosen model for the channel states and noise. 
+: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Fig. \ref{fig:mm}) based on training data of received signals (In this case the same data used to train the neural network) and a model for channel noise. The Expectation Maximization Algorithm  (CITE) is used with a chosen model for the channel states and noise. 
 \\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
-	Expectation Maximization Algorithm: (TODO Discuss how much derivation is needed here)
+	Expectation Maximization Algorithm for Gaussian Mixture Model: (TODO Discuss how much derivation is needed here)
 
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     {\footnotesize
@@ -222,7 +222,7 @@ and estimate the individual terms as:
         {\bf return} Symbols corresponding to path of $\underset{s}{\text{argmin}} \; \textit{survivor cost}_{s} $
     \end{tabbing}}
     \noindent\rule[10pt]{\textwidth}{0.4pt}
-As $p(y_{\mathrm{i}})$ is constant over all states in a given step of the Viterbi algorithm, this  may be interpreted as a weighting factor for the cost of one received symbol in the total path cost. (More detail on this or enough?)
+As $p(y_{\mathrm{i}})$ is constant over all states in a given step of the Viterbi algorithm, this term in the Baye's decomposition may be interpreted as a weighting factor for the cost of one received symbol in the total path cost. (More detail on this or enough?)
 
 
 %picture of MM
@@ -231,12 +231,13 @@ As $p(y_{\mathrm{i}})$ is constant over all states in a given step of the Viterb
 	\centering
 	\includegraphics[width=10cm,height = 10cm]{system_model/mm}
 	  \label{fig:mm}
-	  	  \caption{Mixture Model }
+	  	  \caption{Mixture of complex, Gaussian sources  }
 	\end{figure}
 
 
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$
 : The probability of a given transmitted sequence can be neglected in the case of equiprobable symbols.
+TODO discuss case for reduced states as these may no longer be equiprobable.
 
 \end{itemize}
 
@@ -247,23 +248,23 @@ In summary, the metrics $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i
 
 
 \subsection{A Reduced State ViterbiNet}
-While the Viterbi Algorithm complexity complexity scales exponentially in the number of states possible in each step of the algorithm, in some cases this complexity can be reduced without significant degradation of performance. In particular, if the system is such that some states are redundant, these can be combined. The following relevant example with state redundancy is posed and one potential method of reducing the number of states is considered. 
+While the Viterbi Algorithm complexity scales exponentially in the number of states possible in each step of the algorithm, in some cases this complexity can be reduced without significant degradation of performance. In particular, if the system is such that some states are redundant, these can be combined. The following, relevant example with state redundancy is posed and one potential method of reducing the number of states is considered. 
 
-The received signal is
+Consider a received signal
 \begin{equation}
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
 \end{equation}
 
 with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
 
-In the case of a causal, LTI system with inter-symbol-interference characterized by $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$), the received signal (Fig.\ref{fig:redundant_channel}) has fewer than the potential $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}| =2^5$ states. As one of the channel taps is 0, this will have no impact and thus 16 of the potential 32 are removed. Further, as there are two taps of value 0.2, these can represent only 3 states rather than the expected 4 states. 
+In the case of a causal, LTI system with inter-symbol-interference characterized by $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$), the received signal (Fig.\ref{fig:redundant_channel}) has fewer than the potential $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}| =2^5$ states. As one of the channel taps is 0, this will have no impact and thus 16 of the potential 32 states are removed. Further, as there are two taps of value 0.2, these together represent only 3 states rather than 4. 
 
-\begin{figure}[H]
-\centering
-	\includegraphics[width=10cm,height = 10cm]{system_model/channel_output}
-	  \label{fig:redundant_channel}
-	  	  \caption{LTI channel with state redundancy with high SNR}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%	\includegraphics[width=10cm,height = 10cm]{system_model/channel_output}
+%	  \label{fig:redundant_channel}
+%	  	  \caption{LTI channel with state redundancy with high SNR}
+%\end{figure}
 
 One way to exploit state redundancy is to cluster the original states $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$  states into a set of $k$ clusters using training data. The K-Means algorithm is proposed as one such method.
 \\
@@ -274,22 +275,22 @@ K-Means Clustering: A method for unsupervised classification
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     {\footnotesize
     \begin{tabbing}
-        {\textbf{for} Number of Iterations}\\
-         \qquad \= {\bf for each training point $x_{\mathrm{i}}, \;\mathrm{i}  \in \{1..N\}$}\\
-        \qquad \qquad \= 1.\ Label $x_i$ with index of closest centroid using $\|x_{\mathrm{i}}- \text{closest}\|^2_2$ \\
-        \qquad \= {\bf for centroid $L_{\mathrm{c}}, \;c \in \{1..C\}$}\\
-                \qquad \qquad \= 1.\ Move $L_{\mathrm{c}}$ to average of all training points labeled "c"\\
+    {\bf given} initial location $L_c, \forall \;c  \in \{1..K\}$ of K centroids.\\
+        {\textbf{for} Number of Iterations}.\\
+         \qquad \= {\bf for each training data point $x_{\mathrm{i}}, \;\mathrm{i}  \in \{1..N\}$}\\
+        \qquad \qquad \= 1.\ Label $x_i$ with the index c of the closest centroid using $\|x_{\mathrm{i}}- \text{L}_c\|^2_2$. \\
+        \qquad \= {\bf for centroid $L_c, \forall \;c  \in \{1..K\}$}\\
+                \qquad \qquad \= 1.\ Move $L_{\mathrm{c}}$ to the average location of all training points with label .c\\
 
 
 %        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
 %        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
-        {\bf return} Centroid locations
+        {\bf return} Centroid locations.
     \end{tabbing}}
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     
 Choosing an appropriate number of clusters will influence the performance of the resulting decoder (Have figure showing this).
-A implementation point to note is that after clustering the training data, the number of states must be increased by $|\mathcal{A}_{\mathrm{i}}|$. The Viterbi algorithm selects a symbol sequence corresponding to a path of state transitions through the trellis. In order to make the correspondence between a unique path and a symbol sequence, each state transition must represent a transmitted symbol. \emph{Each} resulting centroid from the k-means clustering is associated to \emph{each} potential transmit symbol in order to create a "shorter" trellis for which each state transition still represents a transmitted symbol. 
-Cite state reduction paper as motivation. 
+\par An implementation point to note is that after clustering the training data, the number of states must be increased by $|\mathcal{A}_{\mathrm{i}}|$. The Viterbi algorithm selects a symbol sequence corresponding to a path of state transitions through the trellis. In order to make the correspondence between a unique path and a symbol sequence, each state transition must represent a transmitted symbol. \emph{Each} resulting centroid from the k-means clustering is associated to \emph{each} potential transmit symbol in order to create a "shorter" trellis for which each state transition still represents a transmitted symbol. 
 
 Discuss minimum phase representations for channels and why this might be an advantage. 
 
@@ -300,8 +301,10 @@ Provide necessary background for any nano-particle data shown in results.
 
 \section{Results}
 \subsection{A supervised equalization benchmark}
-To provide a linear equalization reference to the non-linearity of the proposed neural network, mixture model equalization, the Linear, Minimum, Mean-Squared Error (LMMSE) equalizer is used in the results. 
+To provide a linear equalization reference to the non-linearity of the proposed neural network, mixture model equalization, the Linear Minimum Mean-Squared Error (LMMSE) equalizer derived below is used in the results. 
+\par
 The convex and continuously differentiable optimization problem 
+
 \begin{equation*}\label{mmse}
 \underset{\mathbf{\mathbf{h}} \in \textit{$\mathcal{C}_{lengthx1}$}}{\text{argmin}} \;
  E[\|x-\mathbf{h}^T\mathbf{y}\|^2],
@@ -314,11 +317,12 @@ to give the optimal LMMSE equalizer
 \begin{equation*}\label{mmse}
 \mathbf{h} = E[\mathbf{R}_{yy}]^{-1}E[\mathbf{r}_{yx}].
 \end{equation*}
-$E[\mathbf{R}_{yy}]$ and $E[\mathbf{r}_{yx}]$ are estimated by
+$E[\mathbf{R}_{yy}]$ and $E[\mathbf{r}_{yx}]$ are estimated used
 \begin{equation*}\label{mmse}
  E[\mathbf{R}_{yy}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
-\mathbf{y}\mathbf{y^{\mathrm{H}}} and
+\mathbf{y}\mathbf{y^{\mathrm{H}}} 
  \end{equation*}
+ and
 \begin{equation*}\label{mmse}
 E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
 \mathbf{y}x
@@ -330,7 +334,7 @@ Note that just as with the neural network, making this estimate requires knowled
 
 \subsection{Simulation Details}
 \subsubsection{System Model}
-Verification of the implementation and integration of the algorithms described above is based on the following system model.
+Verification of the implementation and integration of the algorithms described above is performed using the following system model.
 
 %\begin{tikzpicture}[node distance=2cm]
 %\node (start) [process] {Symbol Stream};
@@ -341,16 +345,19 @@ Verification of the implementation and integration of the algorithms described a
 
 
 \begin{equation}
-y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
+y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k].
 \end{equation}
 
-with $x[k] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
-The resulting signal to noise ratio (SNR) is 
-$\frac{E\{x[k]\}}{\sigma^2}$.
+With $x[k] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
+The signal to noise ratio (SNR) is defined as 
+
+\begin{equation}
+text{SNR} = \frac{E\{x[k]\}}{\sigma^2}.
+\end{equation}
 
 
 \subsubsection{Algorithm Parameters}
-The parameters for the various algorithms used in this work are detailed below
+The parameters for the various algorithms used in this work are detailed below.
 \begin{itemize}
 \item \textbf{Neural Network}
 \begin{itemize}
@@ -365,6 +372,8 @@ The parameters for the various algorithms used in this work are detailed below
 \item \textbf{Expectation Maximization Algorithm}
 \begin{itemize}
 \item Training Data Examples: 5000
+\item Mixture Model Sources: Gaussian
+\item Number of Sources: Number of channel states
 \end{itemize}
 \item \textbf{K-Means Algorithm (For Reduced State ViterbiNet)}
 \begin{itemize}
@@ -374,6 +383,12 @@ The parameters for the various algorithms used in this work are detailed below
 
 
 \subsection{Simulation Results}
+\subsubsection{Channel Types}
+The evaluate the ability of the Neural Network to estimate the channel using training data, we use three different channels are increasing harshness. 
+LTI
+Quantized (non-linear)
+Nano-Particle (Will also need to example system model for this as we no longer have white noise)
+
 
 \begin{figure}[H]
 \centering
@@ -470,8 +485,8 @@ proposed Figures
 \subsection*{Reduced State ViterbiNet}
 \section{Conclusion}
 \subsection{Future Work}
-Discuss forward backward (App) algorithms that could be implemented.
+Discuss forward backward (App) algorithms that could be implemented. Reference new paper by same authors
 
 \newpage
-\bibliography{mc_report}
+\bibliography{bibliography}
 \end{document}
