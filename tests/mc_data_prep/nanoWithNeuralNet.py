@@ -129,19 +129,19 @@ def test_nano_data_nerual_net():
     Create new set of test data. 
     """
     # For comparing generated data to the true test data
-    del data_gen
-    number_symbols = 1000
-    data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
-    data_gen.random_symbol_stream()
-    data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
-    data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
+    # del data_gen
+    # number_symbols = 1000
+    # data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
+    # data_gen.random_symbol_stream()
+    # data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
+    # data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
     generated_output = data_gen.channel_output
 
-    # del data_gen
-    # data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
-    # data_gen.random_symbol_stream(true_input_string)
-    # data_gen.provide_transmitted_matrix(test_measurement)
-    # data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
+    del data_gen
+    data_gen = training_data_generator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
+    data_gen.random_symbol_stream(true_input_string)
+    data_gen.provide_transmitted_matrix(test_measurement)
+    data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
     # # plt.scatter(data_gen.channel_output, data_gen.channel_output)
     # plt.scatter(generated_output, generated_output)
     # plt.show()

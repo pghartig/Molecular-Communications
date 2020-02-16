@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{report}
+\documentclass[12pt,a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -14,6 +14,23 @@
 \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
+\tikzstyle{state}=[shape=circle,draw=blue!30,fill=blue!10]
+\tikzstyle{observation}=[shape=rectangle,draw=orange!30,fill=orange!10]
+\tikzstyle{lightedge}=[<-, dashed]
+\tikzstyle{mainstate}=[state, thick]
+\tikzstyle{mainedge}=[<-, thick]
+\tikzstyle{block} = [draw,rectangle,thick,minimum height=2em,minimum width=2em]
+\tikzstyle{sum} = [draw,circle,inner sep=0mm,minimum size=2mm]
+\tikzstyle{connector} = [->,thick]
+\tikzstyle{line} = [thick]
+\tikzstyle{branch} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black]
+\tikzstyle{guide} = []
+\tikzstyle{snakeline} = [connector, decorate, decoration={pre length=0.2cm,
+                         post length=0.2cm, snake, amplitude=.4mm,
+                         segment length=2mm},thick, magenta, ->]
+
+
+
 
 \title{Neural Network Based Decoding over Molecular Communication Channels}
 \author{Peter Hartig}
@@ -22,7 +39,7 @@
 \maketitle
 
 \begin{abstract}
-
+Estimation of the distribution function characterizing a communication channel is considered. Pilot symbol sequences may be used to estimate an unknown distribution function or when the function is difficult to parameterize. This work focuses using pilot sequences to train a neural network and mixture model whose output supplies the necessary metrics for the Viterbi algorithm. We investigate the detection performance for estimation of non-linear channels. A proposal is then made to reduce the complexity of the resulting detection using unsuperised clustering of channel states for the Viterbi algorithm. 
 \end{abstract}
 
 \newpage
@@ -33,26 +50,28 @@ The following notation is used throughout this work.
 $p(x)$ is the probability of an event $x$.
 $p(x|y)$ is the conditional probability of $x$ given $y$.
 $E[x]$ is the expected value of a random variable $x$.
+
+Vectors  are denoted by bold font ($\mathbf{x}$) and are assumed column vectors.
+The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing elements i $\rightarrow$ j of $\mathbf{x}$. $|\mathcal{A}|$ denotes the cardinality of the set $\mathcal{A}$.
 $\underset{x}{\text{argmin}} f(x)$ is the value of variable $x$ which minimizes $f(x)$.
-Vectors  are denoted by bold font $\mathbf{x}$ and are assumed to be column vectors.
-The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing the subset i $\rightarrow$ j of the original vector $\mathbf{x}$. $|\mathcal{A}|$ denotes the cardinality of the set $\mathcal{A}$.
 
 \section{Introduction}
-Characterizing and obtaining information about the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in other contexts. One such context is the Molecular Communication channel which may be non-linear, time variant, and dependent on the specific transmitted information.
-Communication contexts, such as wireless, use "pilot" symbol-streams to mitigate the difficultly in obtaining channel information by providing real-time information supporting an underlying channel model. The low symbol rate of Molecular Communication channels often makes such strategies impractical. However, the success of this data-driven technique in wireless channels suggest that perhaps an alternative, data-driven method may be successful for the Molecular Communication channel. One potential data-driven method for characterizing these channels is a neural network. Neural networks have shown to be an effective tool in data-driven approximating of probability distributions.
+Characterizing and obtaining information about the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the Molecular Communication channel which may be non-linear, time variant, and dependent on the specific transmitted information.
+\par
+Communication contexts, such as wireless, use "pilot" symbol-streams obtain channel information to parameterize a chosen channel model. The overhead of transmitting pilot sequences is, however, incompatible with the low symbol rate (and relative coherence time?) of Molecular Communication channels. The success of this data-driven technique in wireless channels suggest that perhaps an alternative, data-driven method may be successful for detection over Molecular Communication channels. One potential data-driven method for characterizing these channels is a neural network. Neural networks have shown to be an effective tool in data-driven approximation of probability distributions.
 \par
 
-The general communication channel is equivalent to a conditional probability $p(x|y)$, with transmitted information $x$ and received information $y$.  $p(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes, and random noise added prior to receiving $y$. The communication problem entails form of the optimization $\underset{x\in\mathcal{A}}{\text{argmin}} f(x)$, in which $\mathcal{A}$ is the set of possible $x$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $p(x|y)$ and may be used when $p(x|y)$ is unknown or impractical to obtain. In this work, a neural network supported estimate of $p(x|y)$ is investigated.
+The general communication channel is equivalent to a conditional probability $p(x|y)$, with transmitted information $x$ and received information $y$.  $p(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes. The communication problem entails a form of the optimization $\underset{x\in\mathcal{A}}{\text{argmin}} \; p(x|y)$, in which $\mathcal{A}$ is the set of possible $x$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $p(x|y)$ and may be used when $p(x|y)$ is unknown or impractical to obtain. This work investigates a neural network estimate of $p(x|y)$.
 
 \section{Background}
 
 \subsection{MLSE and the Viterbi Algoithm}
-In this work, we use the form of $p(x|y)$  below as a detection objective function. The optimization problem
+The optimization problem
 \begin{equation}\label{opt_problem}
 \underset{x \in \textit{$\mathcal{A}$}}{\text{argmin}} \; p(y|x),
 \end{equation}
- is also known as Maximum Likelihood Sequence Estimation (MLSE).
-The size of the search space $|\mathcal{A}_{\mathrm{1}}^{\mathrm{N}}|$ is grows exponentially in the length of $x$, the number of the transmitted symbols. Additional information about the communication channel can, however, reduce this complexity. In order to illustrate, the following example is posed.
+ is also known as Maximum Likelihood Sequence Estimation (MLSE). 
+The size of the search space $|\mathcal{A}_{\mathrm{1}}^{\mathrm{N}}|$ is grows exponentially in the length of $x$, the number of the transmitted symbols. Additional information about the communication channel reduce this complexity as illustrated in the following example.
 \par
 Consider the communication channel from which each received symbol in the sequence $\mathbf{y}$ is a causal, linear, and time invariant combination of a set of the transmitted symbol sequence $\mathbf{x}$ with coeffients $\mathbf{a}$. 
 
@@ -60,12 +79,72 @@ Consider the communication channel from which each received symbol in the sequen
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l].
 \end{equation}
 
-In this case, $p(\mathbf{y}|\mathbf{x})$ can be rewritten as 
+$p(\mathbf{y}|\mathbf{x})$ can be rewritten as 
 \begin{equation}
 \sum_{\mathrm{i=1}}^{\mathrm{N}}log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ).
 \end{equation}
-Noting that terms in the sum are independent, problem \eqref{opt_problem} becomes simply finding the shortest path through a trellis with edges weighted with  $log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) )$ (Figure of trellis).
-For finite state, causal channels, MLSE reduces to the Viterbi Algorithm.  (TODO add figure here). 
+Noting that terms in this sum are independent, and that the set of possible transmitted sequences $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ is equivalent to a set of channel states, problem \eqref{opt_problem} is equivalent finding the shortest path through a trellis  with edges weighted by $log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}))$. Fig \ref{trellis} is the trellis with $\mathcal{A}=\{0,1\}$ and $L=2$.
+
+\begin{figure}[H]\label{trellis}
+\begin{center}
+\begin{tikzpicture}[]
+% 1st column
+\node               at (-1.5,5) {$s_1=00$};
+\node               at (-1.5,4) {$s_2=01$};
+\node               at (-1.5,3) {$s_3=10$};
+\node               at (-1.5,2) {$s_4=11$};
+\node[mainstate] (s1_1) at (0,5) {$s_1$};
+\node[state] (s2_1) at (0,4) {$s_2$};
+\node[state] (s3_1) at (0,3) {$s_3$};
+\node[state] (s4_1) at (0,2) {$s_4$};
+%\node at (0,1) {Node1};
+% 2nd column
+\node[mainstate] (s1_2) at (2,5) {$s_1$}
+    edge[mainedge] (s1_1);
+\node[mainstate] (s2_2) at (2,4) {$s_2$}
+     edge[lightedge] (s1_1);
+
+\node[state] (s3_2) at (2,3) {$s_3$};
+
+\node[state] (s4_2) at (2,2) {$s_4$};
+
+%\node at (2,1) {Node2};
+% 3rd column
+%\node               at (4,6) {$t=2$};
+\node[mainstate] (s1_3) at (4,5) {$s_1$}
+    edge[mainedge]  (s1_2);
+
+\node[mainstate] (s2_3) at (4,4) {$s_2$}
+    edge[lightedge] (s1_2);
+
+\node[mainstate] (s3_3) at (4,3) {$s_3$}
+    edge[mainedge] (s2_2);    
+\node[mainstate] (s4_3) at (4,2) {$s_4$}
+    edge[lightedge] (s2_2);
+%\node at (4,1) {Node3};
+% 4th column
+%\node               at (6,6) {$t=3$};
+\node[mainstate] (s1_4) at (6,5) {$s_1$}
+    edge[mainedge]  (s1_3)
+    edge[mainedge]  (s3_3);
+\node[mainstate] (s2_4) at (6,4) {$s_2$}
+    edge[lightedge] (s1_3)
+    edge[lightedge] (s3_3);
+\node[mainstate] (s3_4) at (6,3) {$s_3$}
+    edge[mainedge] (s2_3)
+    edge[mainedge] (s4_3);
+\node[mainstate] (s4_4) at (6,2) {$s_4$}
+    edge[lightedge] (s2_3)
+    edge[lightedge] (s4_3);
+%\node at (6,1) {Node4};
+
+\end{tikzpicture}
+	\end{center}
+	\caption{MLSE decoding for $\mathcal{A}=\{0,1\}$ and $L=2$}
+\end{figure}
+
+
+For finite state, causal channels, MLSE reduces to the Viterbi Algorithm over a trellis of states.
 \\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
@@ -77,7 +156,7 @@ For finite state, causal channels, MLSE reduces to the Viterbi Algorithm.  (TODO
         {\bf given} $p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall i \in {1..N}$ . \\*[\smallskipamount]
         {\bf for $i = 1..N $} \\
          \qquad \= {\bf for each state $s \in \mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}$}\\
-        \qquad \qquad \= 1.\ Let $\textit{survivor cost}_{s}  += \text{min}\{\text{incoming transition costs}\}$ \\
+        \qquad \qquad \= 1.\ Let $\textit{cost}_{s}^{\text{i}} = -log(p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}})) + \underset{s}{\text{min}} \{incoming\;\textit{cost}_{s}^{\text{i-1}}\}$ \\
 %        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
 %        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
         {\bf return} Symbols corresponding to path of $\underset{s}{\text{argmin}} \; \textit{survivor cost}_{s} $
@@ -85,24 +164,28 @@ For finite state, causal channels, MLSE reduces to the Viterbi Algorithm.  (TODO
     \noindent\rule[10pt]{\textwidth}{0.4pt}
 
 
-Note that the Viterbi algorithm is \emph{exponentially} complex in the number of channel states $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$, but \emph{linearly} complex in the length of the transmitted sequence $\mathbf{x}$. 
+Note that the Viterbi algorithm is \emph{exponentially} complex in the number of channel states $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$, but \emph{linearly} complex in the length of the transmitted sequence $\mathbf{x}$ ($N$ in the algorithm above). 
 
 
 \subsection{ViterbiNet}
-Despite the reduction in complexity offered by the Viterbi Algorithm for MLSE, the individual metrics used in each step of the algorithm 
-$p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) $ require knowledge of the channel probability distribution which may be difficult to obtain. To estimate this distribution using a neural network, Baye's Rule is used. 
+Despite the reduction in complexity offered by the Viterbi Algorithm for MLSE, the individual metrics used in each step of the algorithm,
+\begin{gather*}
+p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})\;\forall\; \mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}} \in
+|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|,
+\end{gather*} require knowledge of the channel probability distribution. This may be difficult or costly to obtain. Instead, we decompose using Baye's theorem,
 \begin{equation}
 p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) = 
 \frac
 {p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})p(y_{\mathrm{i}})}
-{p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})}.
+{p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})},
 \end{equation}
-
+and estimate the individual terms as:
 
 \begin{itemize}
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})$
-: The probability of being in channel state $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ given the corresponding received symbol $y_{\mathrm{i}}$. If the number of states is finite, such a probability can be estimated using a neural network for classification. The output of such a network is a probability distribution over the possible states of the channel for a received symbol. 
-	\begin{figure}[H]
+: The probability of being in channel state $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ given the corresponding received symbol $y_{\mathrm{i}}$. If the number of states is finite, the probability mass function over $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}} \in
+|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$ can be estimated using a neural network for classification as in Fig. \ref{nn}. 
+	\begin{figure}[H]\label{nn}
 	\centering
 		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
 		\newcommand{\x}[2]{$x_#2$}
@@ -119,12 +202,9 @@ p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) =
 	    	  	  \caption{State classification Neural Network}
 
 	\end{figure}
-%picture of NN
-%	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
-
 
 \item $p(y_{\mathrm{i}}) = \sum_{s \in \textit{$\mathcal{S}$}}p(s,y_{\mathrm{i}})$
-: The joint probability of channel state $s$ and the received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Fig. \ref{fig:mm}) based on training data of received signals (In this case the same data used to train the neural network). In particular, the Expectation Maximization Algorithm (CITE) is used with a chosen model for the channel states and noise. 
+: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Fig. \ref{fig:mm}) based on training data of received signals (In this case the same data used to train the neural network) and a model for channel noise. The Expectation Maximization Algorithm (CITE) is used with a chosen model for the channel states and noise. 
 \\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
