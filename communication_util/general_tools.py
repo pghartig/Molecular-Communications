@@ -108,9 +108,9 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
         data_dict[names[ind]]= np.asarray(SER)
     if analytic_ser==True:
         #TODO general to other pam schemes
-        SNRs_dB = np.linspace(-5, 10, 100)
+        SNRs_dB = np.linspace(0, 15, 500)
         snrs = np.power(10, SNRs_dB / 10)
-        analytic = 1- norm.cdf(np.sqrt(2 * snrs))
+        analytic = 1 - norm.cdf(np.sqrt(2 * snrs))
         plt.plot(SNRs_dB, analytic, label='analytic_ml')
     plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
     plt.ylabel("SER")
@@ -118,8 +118,8 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     plt.yscale('log')
     plt.grid(True)
     plt.legend(loc='lower left')
-    plt.title(str(info), fontdict={'fontsize': 10})
-    plt.title("Symbol Error Rate vs SNR")
+    # plt.title(str(info), fontdict={'fontsize': 10})
+    # plt.title("Symbol Error Rate vs SNR")
     # plt.show()
     return fig, data_dict
 
@@ -143,12 +143,12 @@ def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analyti
     plt.yscale('log')
     plt.grid(True)
     plt.legend(loc='lower left')
-    plt.title(str(info), fontdict={'fontsize': 10})
-    plt.title("Symbol Error Rate vs SNR")
+    # plt.title(str(info), fontdict={'fontsize': 10})
+    # plt.title("Symbol Error Rate vs SNR")
     # plt.show()
     return fig, data_dict
 
-def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=True):
+def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=False):
     fig = plt.figure()
     names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
     data_dict = dict()
@@ -159,7 +159,7 @@ def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,inf
             data_dict[f"{names[ind]}_{level}"] = np.asarray(SER[level])
     if analytic_ser==True:
         #TODO general to other pam schemes
-        SNRs_dB = np.linspace(-5, 10, 100)
+        SNRs_dB = np.linspace(0, 15, 100)
         snrs = np.power(10, SNRs_dB / 10)
         q_function = norm.cdf
         SER = 1- q_function(np.sqrt(2 * snrs))
@@ -170,8 +170,8 @@ def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,inf
     plt.yscale('log')
     plt.grid(True)
     plt.legend(loc='lower left')
-    plt.title(str(info), fontdict={'fontsize': 10})
-    plt.title("Symbol Error Rate vs SNR")
+    # plt.title(str(info), fontdict={'fontsize': 10})
+    # plt.title("Symbol Error Rate vs SNR")
     # plt.show()
     return fig, data_dict
 

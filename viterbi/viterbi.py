@@ -20,16 +20,16 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
         trellis = viterbi_trellis(transmit_alphabet, states, metric_function, reduced=True)
 
     # step through channel output
-    times_list = []
-    t0 = time.clock()
+    # times_list = []
+    # t0 = time.clock()
     for index in range(channel_output.shape[1]):
         # Need to prevent stepping until there are sufficient metrics for the input to the NN
         if index>=channel_length-1 and index<= channel_output.shape[1] - (channel_length):
-            t1 = time.clock()
+            # t1 = time.clock()
             trellis.step_trellis(index)
-            times_list.append(time.clock()-t1)
-    check1 = np.average(np.asarray(times_list[::900]))
-    check = time.clock()-t0
+            # times_list.append(time.clock()-t1)
+    # check1 = np.average(np.asarray(times_list[::900]))
+    # check = time.clock()-t0
     return trellis.return_survivor()
 
 

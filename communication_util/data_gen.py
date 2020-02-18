@@ -280,29 +280,34 @@ class training_data_generator:
         tap on the left most index.
         :return:
         """
-        # plt.figure()
         self.channel_output = []
         for bit_streams in range(self.symbol_stream_matrix.shape[0]):
             # Note that Numpy's Convolve automatically flips second argument to the function.
             self.channel_output.append(np.convolve(self.symbol_stream_matrix[bit_streams,:], np.flip(self.CIR_matrix[bit_streams,:]), mode="full"))
         self.channel_output = np.asarray(self.channel_output)
 
-
+        # plt.figure()
         # fig_main = plt.figure()
-        # no_noise = fig_main.add_subplot(1, 1, 1)
+        # no_noise = fig_main.add_subplot(1, 3, 1)
         # no_noise.set_title("Channel Output")
         # no_noise.scatter(self.channel_output, self.channel_output)
 
-        #   Quantize before adding noise to ensure noise profile is not changed
+
+
+        # Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
             self.channel_output = quantizer(self.channel_output, quantization_level)
+            # quantized_input = np.linspace(-4, 4, num=200)
+            # plt.figure()
+            # plt.plot(quantized_input, quantizer(quantized_input, quantization_level), 'r', label='Quantization Function')
+            # plt.scatter(self.channel_output, self.channel_output, label="Quantized Output")
+            # plt.legend(loc='upper left')
 
         # quantized = fig_main.add_subplot(1, 3, 2)
         # quantized.set_title("Quantized")
         # quantized.scatter(self.channel_output, self.channel_output)
 
 
-        #   adjust noise power to provided SNR parameter. Note symbols should always be normalized to unit power.
         self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
         # noised = fig_main.add_subplot(1, 3, 3)

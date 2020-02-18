@@ -1,4 +1,4 @@
-\begin{thebibliography}{KB14}
+\begin{thebibliography}{SEFG19}
 
 \bibitem[KB14]{kingma2014adam}
 Diederik~P Kingma and Jimmy Ba.
@@ -9,5 +9,12 @@ Diederik~P Kingma and Jimmy Ba.
 Andrew Ng.
 \newblock Cs229 lecture notes.
 \newblock {\em CS229 Lecture notes}, 1(1), 2000.
+
+\bibitem[SEFG19]{shlezinger2019viterbinet}
+Nir Shlezinger, Yonina~C Eldar, Nariman Farsad, and Andrea~J Goldsmith.
+\newblock Viterbinet: Symbol detection using a deep learning based viterbi
+  algorithm.
+\newblock In {\em 2019 IEEE 20th International Workshop on Signal Processing
+  Advances in Wireless Communications (SPAWC)}, pages 1--5. IEEE, 2019.
 
 \end{thebibliography}

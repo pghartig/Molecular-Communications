@@ -22,22 +22,13 @@ def test_full_quantization():
     linear_mmse_performance_full = []
     SNRs_dB = np.linspace(0, 15, 10)
     # SNRs_dB = np.linspace(6, 10,3)
-    SNRs =  np.power(10, SNRs_dB/10)
+    SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
 
     quantization_levels = 2
-    # quantized_input = np.linspace(-1, 1, num = 200)
-    # # quantized_output = []
-    #
-    # quant = plt.figure(1)
-    # for level in range(quantization_levels):
-    #     # quantized_output.append(quantizer(quantized_input, level))
-    #     plt.plot(quantized_input, quantizer(quantized_input, level), label=f"{level}")
-    # plt.legend("lower left")
-    # # plt.show()
-    # quant.savefig("Output/quant.png")
+
 
     for level in range(quantization_levels):
         viterbi_net_performance = []
@@ -85,12 +76,11 @@ def test_full_quantization():
             num_inputs_for_nn=1
             N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_nn, 100, 50, output_layer_size
 
-            # net = models.viterbiNet(D_in, H1, H2, D_out)
             net = models.viterbiNet(D_in, H1, H2, D_out)
 
             # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
             # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
-            optimizer = optim.Adam(net.parameters(), lr=1e-3)
+            optimizer = optim.Adam(net.parameters(), lr=1e-2)
             # optimizer = optim.SGD(net.parameters(), lr=1e-1)
 
             """
@@ -133,11 +123,10 @@ def test_full_quantization():
 
 
             """
-            After sending through channel, symbol detection should be performed using something like a matched filter.
             Create new set of test data. 
             """
             del data_gen
-            data_gen = training_data_generator(symbol_stream_shape=(1, 10000), SNR=SNR, plot=True, channel=channel)
+            data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(level)
 
@@ -177,6 +166,17 @@ def test_full_quantization():
         classic_performance_full.append(classic_performance)
         linear_mmse_performance_full.append(linear_mmse_performance)
 
+
+    # quantized_input = np.linspace(-1, 1, num = 200)
+    # # quantized_output = []
+    #
+    # quant = plt.figure()
+    # for level in range(quantization_levels):
+    #     # quantized_output.append(quantizer(quantized_input, level))
+    #     plt.plot(quantized_input, quantizer(quantized_input, level), label=f"{level}")
+    # plt.legend("lower left")
+    # # plt.show()
+    # quant.savefig("Output/quant.png")
 
     path = "Output/SER.pickle"
     pickle_out = open(path, "wb")

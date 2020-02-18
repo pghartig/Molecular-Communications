@@ -85,9 +85,9 @@ In this case,
 \begin{equation*}
 p(\mathbf{y}|\mathbf{x})=\sum_{\mathrm{i=1}}^{\mathrm{N}}log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ).
 \end{equation*}
-Noting that terms in this sum are independent, and that the set of possible transmitted sequences $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ is equivalent to a set of channel states, problem \eqref{opt_problem} is equivalent finding the shortest path through a trellis  with edges weighted by $log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}))$ as in figure \ref{trellis}.
+Noting that terms in this sum are independent, and that the set of possible transmitted sequences $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ is equivalent to a set of channel states, problem \eqref{opt_problem} is equivalent finding the shortest path through a trellis  with edges weighted by $log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}))$ as in figure \ref{fig:trellis}.
 
-\begin{figure}[H]\label{trellis}
+\begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[]
 % 1st column
@@ -143,6 +143,7 @@ Noting that terms in this sum are independent, and that the set of possible tran
 \end{tikzpicture}
 	\end{center}
 	\caption{MLSE decoding for $\mathcal{A}=\{0,1\}$ and $L=2$}
+	\label{fig:trellis}
 \end{figure}
 
 
@@ -184,8 +185,8 @@ and estimate the individual terms as:
 \begin{itemize}
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})$
 : The probability of being in channel state $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ given the corresponding received symbol $y_{\mathrm{i}}$. If the number of states is finite, the probability mass function over $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}} \in
-|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$ can be estimated using a neural network for classification as in Fig. \ref{nn}. 
-	\begin{figure}[H]\label{nn}
+|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$ can be estimated using a neural network for classification as in figure \ref{nn}. 
+	\begin{figure}[H]
 	\centering
 		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
 		\newcommand{\x}[2]{$x_#2$}
@@ -200,11 +201,11 @@ and estimate the individual terms as:
 		\outputlayer[count=4, title=States\\, text=\x] \linklayers
 	    \end{neuralnetwork}
 	    	  	  \caption{State classification Neural Network}
-
+\label{nn}
 	\end{figure}
 
 \item $p(y_{\mathrm{i}}) = \sum_{s \in \textit{$\mathcal{S}$}}p(s,y_{\mathrm{i}})$
-: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Fig. \ref{fig:mm}) based on training data of received signals (in this case the same data used to train the neural network) and a model for channel noise. The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. 
+: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (figure \ref{fig:mm}) based on training data of received signals (in this case the same data used to train the neural network) and a model for channel noise. The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. 
 In the case of Gaussian noise used here, the states are modeled as a mixture of Gaussians.
 %\\
 %
@@ -228,13 +229,13 @@ In the case of Gaussian noise used here, the states are modeled as a mixture of 
 
 %picture of MM
 %	\includegraphics[width=\textwidth,height = 7cm]{results/quant_standard}
-	\begin{figure}[H]
-	\centering
-	\includegraphics[width=10cm,height = 10cm]{system_model/mm}
-	  \label{fig:mm}
-	  	  \caption{Mixture of complex, Gaussian sources  }
-	\end{figure}
 
+\begin{figure}[H]
+\centering
+	\includegraphics[width=\textwidth,height = 10cm]{system_model/mm}
+	  	  \caption{Mixture of complex, Gaussian sources  }
+	  \label{fig:mm}
+\end{figure}
 
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$
 : The probability of a given transmitted sequence can be neglected in the case of equiprobable symbols.
@@ -386,17 +387,10 @@ We first evaluate the detector performance using the Linear Time Invariant chann
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k].
 \end{equation*}
 with impulse response $a[l] = ...$.
-\begin{figure}[H]
-\centering
-	\includegraphics[width=10cm,height = 10cm]{system_model/lti_channel}
-		  \caption{Simulation Channels: LTI Channel}
-	  \label{fig:LTI Channel}
-\end{figure}
-
+Simulation results are shown in fig \ref{fig:LTI performance}
 \begin{figure}[H]
 	\includegraphics[width=\textwidth,height = 10cm]{results/lti_normal}
 		  \caption{Detection performance over LTI channel with AWGN}
-
 	  \label{fig:LTI performance}
 \end{figure}
 
@@ -406,39 +400,39 @@ To evaluate decoder performance in the non-linear channel setting, we apply a qu
 \begin{equation*}
 y[k] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]) + n[k].
 \end{equation*}
- Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figures \ref{fig:Quantizer} and \ref{fig:Quantized Output} depict the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in figure \ref{fig:Quantized performance}.
+ Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in figure \ref{fig:Quantized performance}.
 
 \begin{figure}[H]
 \centering
-	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer}
+	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer_overlay}
 			  \caption{Simulation Channels: LTI Channel}
-	  \label{fig:Quantized Channel}
+	  \label{fig:Quantized Overlay}
 \end{figure}
 
 \begin{figure}[H]
-	\includegraphics[width=\textwidth,height = 10cm]{results/lti_normal}
+	\includegraphics[width=\textwidth,height = 10cm]{results/quantized_before_noise}
 		  \caption{Detection performance over LTI channel with AWGN and quantization}
 	  \label{fig:Quantized performance}
 \end{figure}
 
 
 \subsubsection{Molecular Communication Channel}
-
-\begin{figure}[H]
-\centering
-	  \caption{Simulation Channels: LTI Channel}
-	\includegraphics[width=10cm,height = 10cm]{system_model/lti_channel}
-	  \label{fig:LTI Channel}
-\end{figure}
-\begin{figure}[H]
-	  \caption{Simulation Channels: Quantizer}
-	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer}
-	  \label{fig:Quantized Channel}
-\end{figure}
+Lastly, the performance of the neural network based detector is evaluated data collected from a molecular communication channel. ... Explain if there are any results to report. 
 
 \section{Conclusion}
+The proposed detection method from \cite{shlezinger2019viterbinet} is evaluated in  channels for which $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}),$ is unknown. Simulation results indicate that this detector can indeed learn
+$p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$ for non-linear channels. A method for reducing the complexity of the resulting Viterbi Algorithm is also proposed, however the method of state reduction for the channel needs to be further investigated to improve the poor performance observed with the proposed method. 
+
+
 \subsection{Future Work}
-Discuss forward backward (App) algorithms that could be implemented. Reference new paper by same authors
+
+Extensions of specific work: 
+More on reduced state.
+Using other channels and repeat online type of updates for dynamic channels for these more challenging channels. 
+
+
+General method extensions:
+In this work the MLSE is found using the Viterbi Algorithm. The same metrics can also be used in optimizing other performance metrics. In (CITE) these estimate metrics have been used to minimize bit error rate using the BCJR algorithm. Extend to other applications of factor graphs. 
 
 \newpage
 \bibliography{report_bib}{}

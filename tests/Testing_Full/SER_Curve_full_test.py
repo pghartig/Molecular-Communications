@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 15, 3)
+    SNRs_dB = np.linspace(0, 15, 15)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -71,8 +71,8 @@ def test_full_integration():
         """
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
-        reduce = channel_length-2
-        output_layer_size = np.power(m, reduce)
+        # channel_length = channel_length-2
+        output_layer_size = np.power(m, channel_length)
         num_states = output_layer_size
         N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
         # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
@@ -152,7 +152,7 @@ def test_full_integration():
         metric = nn_mm_metric(net, mm, data_gen.channel_output)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
-        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length-1)
+        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
         """
