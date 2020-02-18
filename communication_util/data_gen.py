@@ -433,47 +433,27 @@ class training_data_generator:
                     j+=1
         return x_list, y_list
 
-    def get_labeled_data_reduced_state(self, outputs, quantization_level=None):
+    def get_labeled_data_reduced_state(self, outputs):
         x_list = []
         y_list = []
         base_states = int(np.ceil(np.log2(outputs)))
         states = []
         item = []
-        # get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1] - 1, states, item)
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
-
         states = np.asarray(states)
-        # reduced = np.asarray(states)@self.CIR_matrix.T
-        # normalized_channel =self.CIR_matrix[:, 1::]/ np.linalg.norm(self.CIR_matrix[:, 1::])
-        normalized_channel = self.CIR_matrix
-        reduced = np.asarray(states)@normalized_channel.T
-
-        if quantization_level is not None:
-            reduced = quantizer(reduced,quantization_level)
-        num_clusters = int(pow(2, base_states-1))
-        clusters = kmeans(reduced, num_clusters)
-        # Compress states using known CSI
-        # labels = vq(reduced, clusters[0])[0]
         # Compress states using training data
+        num_clusters = int(pow(2, base_states-1))
         labels = self.reduced_state_mapping(num_clusters)
-        centroids = clusters[0]
-        # plt.scatter(reduced, reduced)
-        # plt.scatter(centroids, centroids)
-        # plt.show()
         states_reduced = []
         item_reduced = []
         get_combinatoric_list(self.alphabet, base_states-1, states_reduced, item_reduced)
         states_reduced = np.asarray(states_reduced)
-
-
         states_final = []
         item_final = []
         get_combinatoric_list(self.alphabet, base_states, states_final, item_final)
         states_reduced = np.asarray(states_reduced)
-        # plt.scatter(self.channel_output.flatten(), self.channel_output.flatten())
-        # plt.show()
         if self.channel_output is not None:
-            j=0
+            j = 0
             #   Go create training example from each channel output
             for i in range(self.channel_output.shape[1]):
                 #   Take care of causality of creating training sets and unused output symbols

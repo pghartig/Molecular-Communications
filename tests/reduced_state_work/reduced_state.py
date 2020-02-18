@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(20, 20, 2)
+    SNRs_dB = np.linspace(10, 50, 4)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -56,7 +56,7 @@ def test_full_integration():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        reduced_state = 12
+        reduced_state = 32
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
@@ -72,9 +72,7 @@ def test_full_integration():
         """
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
-        # test_length = channel_length-1
         output_layer_size = reduced_state
-        # output_layer_size = np.power(m, channel_length)
         N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
         net = models.viterbiNet(D_in, H1, H2, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-2)
@@ -161,7 +159,6 @@ def test_full_integration():
         Analyze SER performance
         """
         linear_mmse_performance.append(mmse_equalizer.test_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output))
-        # linear_mmse_performance.append(slicer(data_gen.channel_output.flatten(), data_gen.symbol_stream_matrix, data_gen.alphabet, channel_length))
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
