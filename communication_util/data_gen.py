@@ -297,11 +297,14 @@ class training_data_generator:
         # Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
             self.channel_output = quantizer(self.channel_output, quantization_level)
-            # quantized_input = np.linspace(-4, 4, num=200)
+            quantized_input = np.linspace(-4, 4, num=200)
             # plt.figure()
             # plt.plot(quantized_input, quantizer(quantized_input, quantization_level), 'r', label='Quantization Function')
             # plt.scatter(self.channel_output, self.channel_output, label="Quantized Output")
+            # plt.axvline(c='grey', lw=1)
+            # plt.axhline(c='grey', lw=1)
             # plt.legend(loc='upper left')
+            # plt.show()
 
         # quantized = fig_main.add_subplot(1, 3, 2)
         # quantized.set_title("Quantized")

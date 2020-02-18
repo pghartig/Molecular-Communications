@@ -41,7 +41,7 @@
 \maketitle
 
 \begin{abstract}
-Estimation of the distribution function characterizing a communication channel is considered. Pilot symbol sequences may be used to estimate an unknown distribution function or when the function is difficult to parameterize. This work focuses using pilot sequences to train a neural network and mixture model whose output supplies the necessary metrics for the Viterbi algorithm. We investigate the detection performance for estimation of non-linear channels. A proposal is then made to reduce the complexity of the resulting detection using unsuperised clustering of channel states for the Viterbi algorithm. 
+Estimation of the distribution function characterizing a communication channel is investigated. Pilot symbol sequences may be used to estimate an unknown distribution function or when the function is difficult to parameterize. This work focuses on using pilot sequences to train a neural network and mixture model whose output supplies the necessary metrics for the Viterbi algorithm. We investigate the detection performance for estimation of non-linear channels. A proposal is then made to reduce the complexity of the resulting detection using unsuperised clustering of channel states for the Viterbi algorithm. 
 \end{abstract}
 
 \newpage
@@ -55,7 +55,7 @@ $E[x]$ is the expected value of a random variable $x$.
 
 Vectors  are denoted by bold font ($\mathbf{x}$) and are assumed column vectors.
 The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing elements i $\rightarrow$ j of $\mathbf{x}$. $|\mathcal{A}|$ denotes the cardinality of the set $\mathcal{A}$.
-$\underset{x}{\text{argmin}} f(x)$ is the value of variable $x$ which minimizes $f(x)$.
+$\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimizes $f(x)$.
 
 \section{Introduction}
 Characterizing and obtaining information about the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the Molecular Communication channel which may be non-linear, time variant, and dependent on the specific transmitted information.
@@ -400,12 +400,12 @@ To evaluate decoder performance in the non-linear channel setting, we apply a qu
 \begin{equation*}
 y[k] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]) + n[k].
 \end{equation*}
- Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in figure \ref{fig:Quantized performance}.
+ Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in figure \ref{fig:Quantized performance}. Notice that this is essentially a reduction of the original channel states as there is now redundancy that was not previously present. 
 
 \begin{figure}[H]
 \centering
 	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer_overlay}
-			  \caption{Simulation Channels: LTI Channel}
+			  \caption{Quantized output of LTI channel overlayed on the applied quantization function. TODO decide on axis titles }
 	  \label{fig:Quantized Overlay}
 \end{figure}
 
@@ -429,7 +429,7 @@ $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$ for non-linear chan
 Extensions of specific work: 
 More on reduced state.
 Using other channels and repeat online type of updates for dynamic channels for these more challenging channels. 
-
+Learning channel changes in cases for which coherence time is shorter than updates to network made by pilot symbols. 
 
 General method extensions:
 In this work the MLSE is found using the Viterbi Algorithm. The same metrics can also be used in optimizing other performance metrics. In (CITE) these estimate metrics have been used to minimize bit error rate using the BCJR algorithm. Extend to other applications of factor graphs. 
