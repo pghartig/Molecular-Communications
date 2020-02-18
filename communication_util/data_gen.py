@@ -433,6 +433,28 @@ class training_data_generator:
                     j+=1
         return x_list, y_list
 
+    def get_labeled_data_test(self):
+        x_list = []
+        y_list = []
+        states = []
+        item = []
+        length = self.CIR_matrix.shape[1]-2
+        get_combinatoric_list(self.alphabet, length, states, item)  # Generate states used below
+        states = np.asarray(states)
+        # plt.scatter(self.channel_output.flatten(), self.channel_output.flatten())
+        # plt.show()
+        if self.channel_output is not None:
+            j=0
+            for i in range(self.channel_output.shape[1]):
+                if (i >= self.CIR_matrix.shape[1]-1 and i < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
+                    state = self.symbol_stream_matrix[:, j: j+length].flatten()
+                    probability_vec = self.get_probability(state, states)
+                    x_list.append(self.channel_output[:, i].flatten())
+                    y_list.append(probability_vec)
+                    j+=1
+        return x_list, y_list
+
+
     def get_labeled_data_reduced_state(self, outputs):
         x_list = []
         y_list = []

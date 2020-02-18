@@ -71,9 +71,9 @@ def test_full_integration():
         """
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
-        # test_length = channel_length-1
-        # output_layer_size = reduced_state
-        output_layer_size = np.power(m, channel_length)
+        reduce = channel_length-2
+        output_layer_size = np.power(m, reduce)
+        num_states = output_layer_size
         N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
         # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
 
@@ -128,6 +128,7 @@ def test_full_integration():
         mm_train_size = 1000
         mixture_model_training_data = data_gen.channel_output.flatten()[0:mm_train_size]
         num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
+        num_sources = num_states
         mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
         mm = mm.get_probability
 
@@ -151,7 +152,7 @@ def test_full_integration():
         metric = nn_mm_metric(net, mm, data_gen.channel_output)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
-        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length-1)
 
 
         """

@@ -1,3 +1,13 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{KB14}
+
+\bibitem[KB14]{kingma2014adam}
+Diederik~P Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock {\em arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem[Ng00]{ng2000cs229}
+Andrew Ng.
+\newblock Cs229 lecture notes.
+\newblock {\em CS229 Lecture notes}, 1(1), 2000.
 
 \end{thebibliography}

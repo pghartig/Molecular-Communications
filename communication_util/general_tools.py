@@ -205,7 +205,6 @@ def quantizer(input, level):
     :param bits_available:
     :return:
     """
-    check = np.around(input, decimals=level)
     return np.around(input, decimals=level)
 
 def base_2_quantizer(input, level, clip_low = None, clip_high = None):

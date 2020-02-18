@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 50, 4)
+    SNRs_dB = np.linspace(50, 50, 4)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -31,6 +31,7 @@ def test_full_integration():
     number_symbols = 5000
     channel = np.zeros((1, 5))
     channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    channel[0, [0, 1, 2, 3, 4]] = 0, 0, 0.688, 0.460, 0.227
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))
@@ -56,7 +57,7 @@ def test_full_integration():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        reduced_state = 32
+        reduced_state = 16
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
