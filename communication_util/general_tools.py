@@ -3,15 +3,16 @@ import matplotlib.pyplot as plt
 import time
 from scipy.stats import norm
 
-def slicer(received_sequence, true_sequence, alphabet, channel_length):
-    channel_length += -1
-    detected = []
-    for symbol in received_sequence:
-        detected.append(np.sign(symbol))
-    detected = np.asarray(detected[channel_length:])
-    ser = np.sum(np.not_equal(detected, true_sequence)) / true_sequence.size
-    return ser
 def get_combinatoric_list(alpabet, item_length, item_list, item):
+    """
+    TODO Consider refactor before final commit
+    Used to generate a list of potential states for a given length and symbol alphabet
+    :param alpabet:
+    :param item_length:
+    :param item_list:
+    :param item:
+    :return:
+    """
     for i in range(alpabet.size):
         new = list(item)
         new.append(alpabet[i])
@@ -21,9 +22,18 @@ def get_combinatoric_list(alpabet, item_length, item_list, item):
             item_list.append(new)
 
 def symbol_error_rate(detected_symbols, input_symbols,channel_length):
+    """
+    A function to return the symbol error rate. Note that there a many version of this functionality to
+    accomodate the different equalizers which may require that the alignment is setup differently.
+    :param detected_symbols:
+    :param input_symbols:
+    :param channel_length:
+    :return:
+    """
     detected_array = np.asarray(detected_symbols)
     # This is a key step to ensuring the detected symbols are aligned properly
     t = input_symbols.flatten().astype('int32')
+    # This is a userful way of checking equalizer performance before alignment is correct
     test1 = np.max(np.convolve(detected_array,t))
     test3 = np.max(np.convolve(np.flip(detected_array),t))
     check2 = t[(channel_length-1):]
@@ -32,6 +42,15 @@ def symbol_error_rate(detected_symbols, input_symbols,channel_length):
     return ser
 
 def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, pre_pad = 0):
+    """
+    A function to return the symbol error rate. Note that there a many version of this functionality to
+    accomodate the different equalizers which may require that the alignment is setup differently.
+    :param detected_symbols:
+    :param input_symbols:
+    :param channel_length:
+    :param pre_pad:
+    :return:
+    """
     detected_array = np.asarray(detected_symbols[pre_pad::])
     detected_array += (detected_array == 0)*-1
     input = input_symbols.flatten()
@@ -45,6 +64,14 @@ def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, p
     return ser
 
 def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channel_length):
+    """
+    A function to return the symbol error rate. Note that there a many version of this functionality to
+    accomodate the different equalizers which may require that the alignment is setup differently.
+    :param detected_symbols:
+    :param input_symbols:
+    :param channel_length:
+    :return:
+    """
     channel_length -= 1
     detected_array = np.flip(np.asarray(detected_symbols))
     # This is a key step to ensuring the detected symbols are aligned properly
@@ -54,8 +81,8 @@ def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channe
 
 def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,channel_length):
     """
-    The first symbol the viterbi detects is the l-1 symbol in the stream. where l is the channel impulse response length.
-    :param detected_symbols:
+    A function to return the symbol error rate. Note that there a many version of this functionality to
+    accomodate the different equalizers which may require that the alignment is setup differently.     :param detected_symbols:
     :param input_symbols:
     :param channel_length:
     :return:
@@ -73,8 +100,8 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
 
 def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_symbols,channel_length):
     """
-    The first symbol the viterbi detects is the l-1 symbol in the stream. where l is the channel impulse response length.
-    :param detected_symbols:
+    A function to return the symbol error rate. Note that there a many version of this functionality to
+    accomodate the different equalizers which may require that the alignment is setup differently.     :param detected_symbols:
     :param input_symbols:
     :param channel_length:
     :return:
@@ -90,6 +117,13 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     return ser
 
 def symbol_error_rate_sampled(detected_symbols, input_symbols):
+    """
+    A function to return the symbol error rate. Note that there a many version of this functionality to
+    accomodate the different equalizers which may require that the alignment is setup differently.
+    :param detected_symbols:
+    :param input_symbols:
+    :return:
+    """
     # ignore last symbols since there is extra from the convolution
     array = np.asarray(detected_symbols)
     ser = np.sum(np.logical_not(np.equal(array, input_symbols))) / array.size
