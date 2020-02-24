@@ -111,6 +111,6 @@ def test_belief_propogation():
 
     # data_gen.add_channel_uncertainty()
 
-    metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
+    metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
     graph = factor_graph(metric)
     graph.iterate_message_passing()

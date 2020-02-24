@@ -51,7 +51,7 @@ def test_viterbi_quantization():
         quant_ser = []
         for level in range(4):
             quantized_output = base_2_quantizer(data_gen.channel_output, 5)
-            metric = gaussian_channel_metric_working(channel, quantized_output)
+            metric = GaussianChannelMetric(channel, quantized_output)
             detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, quantized_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
             ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)

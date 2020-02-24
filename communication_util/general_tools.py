@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import time
 from scipy.stats import norm
 
+
 def get_combinatoric_list(alpabet, item_length, item_list, item):
     """
     TODO Consider refactor before final commit
@@ -20,6 +21,7 @@ def get_combinatoric_list(alpabet, item_length, item_list, item):
             get_combinatoric_list(alpabet, item_length - 1, item_list, new)
         if item_length == 1:
             item_list.append(new)
+
 
 def symbol_error_rate(detected_symbols, input_symbols,channel_length):
     """
@@ -40,6 +42,7 @@ def symbol_error_rate(detected_symbols, input_symbols,channel_length):
     check1 = detected_array[:check2.size]
     ser = np.sum(np.not_equal(check2[:check1.size], check1)) / check1.size
     return ser
+
 
 def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, pre_pad = 0):
     """
@@ -63,6 +66,7 @@ def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, p
     ser = np.sum(np.not_equal(detected_array, input)) / detected_array.size
     return ser
 
+
 def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
@@ -78,6 +82,7 @@ def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channe
     detected = np.flip(detected_array[channel_length:input_symbols.shape[1]])
     input = np.flip(input_symbols)
     return np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
+
 
 def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,channel_length):
     """
@@ -98,6 +103,7 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     return ser
 
+
 def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_symbols,channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
@@ -116,6 +122,7 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     ser = np.sum(np.not_equal(flat_input, detected_array)) /detected_array.size
     return ser
 
+
 def symbol_error_rate_sampled(detected_symbols, input_symbols):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
@@ -129,10 +136,22 @@ def symbol_error_rate_sampled(detected_symbols, input_symbols):
     ser = np.sum(np.logical_not(np.equal(array, input_symbols))) / array.size
     return ser
 
+
 def random_channel():
     return np.random.randn()
 
-def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
+
+def plot_symbol_error_rates(SNRs_dB, SER_list, info, analytic_ser=True):
+    """
+    Variations of plotting the symbol error rates.
+    Because there was enough variety in the types of testing, just allowing for configuration via parameters would have
+    been more effort and unwieldy so instead there are one-offs for the different types of results plotted.
+    :param SNRs_dB:
+    :param SER_list:
+    :param info:
+    :param analytic_ser:
+    :return:
+    """
     fig = plt.figure(1)
     names = ["Classic Viterbi", "Linear MMSE", "Neural Net"]
     data_dict = dict()
@@ -157,7 +176,18 @@ def plot_symbol_error_rates(SNRs_dB, SER_list,info, analytic_ser=True):
     # plt.show()
     return fig, data_dict
 
+
 def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analytic_ser=True):
+    """
+    Variations of plotting the symbol error rates.
+    Because there was enough variety in the types of testing, just allowing for configuration via parameters would have
+    been more effort and unwieldy so instead there are one-offs for the different types of results plotted.
+    :param SNRs_dB:
+    :param SER_list:
+    :param info:
+    :param analytic_ser:
+    :return:
+    """
     fig = plt.figure(1)
     names =["Classic Viterbi", "Linear MMSE", "Neural Net Reduced", "Neural Net"]
     data_dict = dict()
@@ -182,7 +212,18 @@ def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analyti
     # plt.show()
     return fig, data_dict
 
+
 def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,info, analytic_ser=False):
+    """
+    Variations of plotting the symbol error rates.
+    Because there was enough variety in the types of testing, just allowing for configuration via parameters would have
+    been more effort and unwieldy so instead there are one-offs for the different types of results plotted.
+    :param SNRs_dB:
+    :param SER_list:
+    :param info:
+    :param analytic_ser:
+    :return:
+    """
     fig = plt.figure()
     names =["Classic Viterbi", "Linear MMSE", "Neural Net"]
     data_dict = dict()
@@ -209,7 +250,18 @@ def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,inf
     # plt.show()
     return fig, data_dict
 
+
 def quant_symbol_error_rates(SNRs_dB, SER_list):
+    """
+    Variations of plotting the symbol error rates.
+    Because there was enough variety in the types of testing, just allowing for configuration via parameters would have
+    been more effort and unwieldy so instead there are one-offs for the different types of results plotted.
+    :param SNRs_dB:
+    :param SER_list:
+    :param info:
+    :param analytic_ser:
+    :return:
+    """
     fig = plt.figure(1)
     for ind in range(SER_list.shape[0]):
         plt.plot(SNRs_dB, SER_list[ind,:], label=f" {ind}")
@@ -223,7 +275,14 @@ def quant_symbol_error_rates(SNRs_dB, SER_list):
     # plt.show()
     return fig
 
+
 def threshold_detector(alphabet, output):
+    """
+    To use for memoryless channels with Gaussian noise
+    :param alphabet:
+    :param output:
+    :return:
+    """
     detected_symbols = []
     for stream in range(output.shape[0]):
         for received_symbol in output[stream, :]:
@@ -231,15 +290,16 @@ def threshold_detector(alphabet, output):
             detected_symbols.append(detected)
     return detected_symbols
 
+
 def quantizer(input, level):
     """
-    Range should be based on expected std of noise and the largest value due to the estimate channel and the known transmit alphabet
+    An easy implementation of quantization in which the decimals are truncated to a selection place.
     :param input:
-    :param range:
-    :param bits_available:
+    :param level: The number of decimal positions to round to.
     :return:
     """
     return np.around(input, decimals=level)
+
 
 def base_2_quantizer(input, level, clip_low = None, clip_high = None):
     """

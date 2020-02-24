@@ -154,7 +154,7 @@ def test_nano_data_nerual_net():
     """
     Evaluate Neural Net Performance
     """
-    metric = nn_mm_metric(net, mm, data_gen.channel_output)
+    metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                             metric.metric)
     # ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, channel_length, pre_pad=6)

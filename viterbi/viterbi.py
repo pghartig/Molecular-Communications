@@ -15,9 +15,9 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
     item = []
     get_combinatoric_list(transmit_alphabet, reduced_length, states, item)
     if reduced is False:
-        trellis = viterbi_trellis(transmit_alphabet, states, metric_function)
+        trellis = ViterbiTrellis(transmit_alphabet, states, metric_function)
     else:
-        trellis = viterbi_trellis(transmit_alphabet, states, metric_function, reduced=True)
+        trellis = ViterbiTrellis(transmit_alphabet, states, metric_function, reduced=True)
 
     # step through channel output
     # times_list = []
@@ -33,11 +33,21 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
     return trellis.return_survivor()
 
 
-class viterbi_trellis():
+class ViterbiTrellis:
     """
-    Note that in order to prevent keeping a large trellis in memory, the nodes are reused in each step.
+    A structure for performing the viterbi algorithm.
     """
     def __init__(self, alphabet, states, metric_function, reduced=False):
+        """
+        Constructor of trellis.
+        Note that the reduced metric below affects how the states of the channel are connected. In this case we allow
+        connections between all states becaues the corresponence between state and transmit symbols is no longer
+        one-to-one.
+        :param alphabet:
+        :param states: The number of states to use in each step of the trellis
+        :param metric_function: The function taking received symbols as input to provide a conditional probability
+        :param reduced: Flag indicating if the trellis is for a reduced state system
+        """
         self.states = states
         self.alphabet = alphabet
         self.previous_states = []
@@ -46,27 +56,28 @@ class viterbi_trellis():
         self.setup_trellis(reduced)
 
     def setup_trellis(self, reduced=False):
-        # create the trellis structure for a single step in the trellis
+        #   Create the trellis structure for a single step in the trellis
         for state in self.states:
-            self.previous_states.append(viterbi_node(state))
-            self.next_states.append(viterbi_node(state))
-        # make connections between the nodes in the trellis
+            self.previous_states.append(ViterbiNode(state))
+            self.next_states.append(ViterbiNode(state))
+        #   Make connections between the nodes in the trellis
         for node in self.next_states:
             for previous_state in self.previous_states:
-                check1 = node.state[:-1]
                 check1 = node.state[1:]
-                check2 = previous_state.state[1:]
                 check2 = previous_state.state[:-1]
-                #test for reduced state
-                if reduced == False:
+                if not reduced:
                     if check1 == check2:
                         node.incoming_nodes.append(previous_state)
-                if reduced == True:
+                if reduced:
                     node.incoming_nodes.append(previous_state)
 
     def step_trellis(self, index):
+        """
+        Extend the survivor path of each node by 1 using the received symbol from 1 time point.
+        :param index:
+        :return:
+        """
         metrics = self.metric_function(index, self.states)
-        #TODO replace with lighter weight version not requiring whole output
         for ind, node in enumerate(self.next_states):
             node.check_smallest_incoming(metrics[ind])
         for ind, node in enumerate(self.next_states):
@@ -74,6 +85,11 @@ class viterbi_trellis():
             self.previous_states[ind].survivor_path_cost = node.survivor_path_cost
 
     def return_survivor(self):
+        """
+        After stepping through all received symbols, return the symbol string corresponding to
+        the lowest cost survivor path.
+        :return:
+        """
         costs = []
         for path in self.previous_states:
             costs.append(path.survivor_path_cost)
@@ -82,7 +98,10 @@ class viterbi_trellis():
         return survivor.survivor_path
 
 
-class viterbi_node():
+class ViterbiNode:
+    """
+    Building block for the viteri algorithm implements in ViterbiTrellis
+    """
     def __init__(self, state):
         self.incoming_nodes = []
         self.survivor_path = []

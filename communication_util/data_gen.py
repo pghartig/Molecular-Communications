@@ -47,10 +47,14 @@ def get_probability_vector(input, states):
     return np.asarray(metrics)
 
 
-def visualize(data, c, name = None):
+def visualize(data, c, name=None):
     for channels in range(data.shape[0]):
         plt.title(str(name), fontdict={'fontsize': 10})
         plt.stem(data[channels, :], linefmt=c)
+
+
+def normalize_vector2(vector):
+    return vector/np.linalg.norm(vector)
 
 
 class CommunicationDataGenerator:

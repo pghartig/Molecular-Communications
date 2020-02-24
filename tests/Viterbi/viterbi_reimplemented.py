@@ -17,7 +17,7 @@ def test_viterbi_new_gaussian():
 
     # detect with Viterbi
     # notice that this assumes perfect CSI at receiver
-    metric = gaussian_channel_metric_working(channel, data_gen.channel_output)
+    metric = GaussianChannelMetric(channel, data_gen.channel_output)
     detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
     ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)

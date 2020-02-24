@@ -76,7 +76,7 @@ def test_full_integration():
     """
 
     #   !! Make sure channel output gets flipped here!!
-    metric = nn_mm_metric(neural_net, mm, data_gen.channel_output, input_length=num_inputs_for_training_data)  # This is a function to be used in the viterbi
+    metric = NeuralNetworkMixtureModelMetric(neural_net, mm, data_gen.channel_output, input_length=num_inputs_for_training_data)  # This is a function to be used in the viterbi
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
     ser_nn = symbol_error_rate(detected_nn, data_gen.symbol_stream_matrix)
@@ -86,7 +86,7 @@ def test_full_integration():
     Compare to Classical Viterbi with full CSI
     """
 
-    metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
+    metric = GaussianChannelMetric(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
     detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
     ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix)
