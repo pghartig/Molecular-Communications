@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.data_gen import *
@@ -63,7 +63,7 @@ def test_viterbi():
         """
         Analyze SER performance
         """
-        linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+        linear_mmse_performance.append(LinearMMSE(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix, channel.size))
         classic_performance.append(ser_classic)
 
     viterbi_net_performance = linear_mmse_performance

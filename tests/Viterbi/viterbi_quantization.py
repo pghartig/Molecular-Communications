@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.data_gen import *

@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.data_gen import *
@@ -78,7 +78,7 @@ def test_nn_channel():
     # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
 
 
-    net = models.viterbiNet(D_in, H1, H2, D_out)
+    net = models.ViterbiNet(D_in, H1, H2, D_out)
     # net = models.viterbiNet(D_in, H1, H2, D_out, dropout_probability)
     # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
 

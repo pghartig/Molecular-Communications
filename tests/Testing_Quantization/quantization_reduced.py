@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 from communication_util.Equalization.supervise_equalization import *
 import pickle
@@ -70,7 +70,7 @@ def test_quantization_reduced():
 
             # net = models.viterbiNet(D_in, H1, H2, D_out)
             dropout_probability = .3
-            net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+            net = models.ViterbiNetDropout(D_in, H1, H2, D_out, dropout_probability)
 
             # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
             # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
@@ -147,7 +147,7 @@ def test_quantization_reduced():
             """
             viterbi_net_performance.append(ser_nn)
             classic_performance.append(ser_classic)
-            linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+            linear_mmse_performance.append(LinearMMSE(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix, channel.size))
 
 
         viterbi_net_performance_full.append(viterbi_net_performance)

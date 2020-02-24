@@ -57,7 +57,7 @@ def test_belief_propogation():
 
     # net = models.viterbiNet(D_in, H1, H2, D_out)
     dropout_probability = .6
-    net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+    net = models.ViterbiNetDropout(D_in, H1, H2, D_out, dropout_probability)
 
     # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
     # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)

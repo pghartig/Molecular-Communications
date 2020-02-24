@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.data_gen import *
@@ -75,7 +75,7 @@ def test_full_integration():
         channel_length = data_gen.CIR_matrix.shape[1]
         output_layer_size = reduced_state
         N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
-        net = models.viterbiNet(D_in, H1, H2, D_out)
+        net = models.ViterbiNet(D_in, H1, H2, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-2)
 
 
@@ -123,7 +123,7 @@ def test_full_integration():
         """
         User training data to train MMSE equalizer to then use on the test data
         """
-        mmse_equalizer = linear_mmse()
+        mmse_equalizer = LinearMMSE()
         mmse_equalizer.train_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix, channel.size)
 
         """

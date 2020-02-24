@@ -73,7 +73,7 @@ def test_viterbi_net_class():
     N, D_in, H1, H2, D_out = number_symbols, num_inputs_for_training_data, 100, 50, np.power(m, channel_length)
 
 
-    net = models.viterbiNet(D_in, H1, H2, D_out)
+    net = models.ViterbiNet(D_in, H1, H2, D_out)
     #TODO use better optimizer
     optimizer = optim.SGD(net.parameters(), lr=1e-2)
     optimizer = optim.Adam(net.parameters(), lr=1e-2)

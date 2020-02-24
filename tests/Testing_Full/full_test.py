@@ -3,7 +3,7 @@ Full Test for using the mixture model and neural network to provide metrics to b
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 import pickle
 from communication_util.data_gen import *
 from viterbi.viterbi import *
@@ -66,7 +66,7 @@ def test_full_integration():
     mm_pickle_in = open(path, "rb")
 
     model = pickle.load(mm_pickle_in)
-    mm = mixture_model(mu=model[0], sigma_square=model[1], alpha=model[2])
+    mm = MixtureModel(mu=model[0], sigma_square=model[1], alpha=model[2])
     mm = mm.get_probability
     mm_pickle_in.close()
 
