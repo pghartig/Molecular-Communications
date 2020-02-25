@@ -1,40 +1,58 @@
+"""
+This test generates the symbol error rate curves over various SNR for comparing the performance of different decoding scemes.
+"""
+
+import pickle
 from communication_util.data_gen import *
-from viterbi.viterbi import *
-from communication_util.error_rates import *
-import matplotlib.pyplot as plt
+from communication_util.general_tools import *
+from communication_util.Equalization.supervise_equalization import *
+import time
+import pandas as pd
 
+def test_analytic():
+    classic_performance = []
+    SNRs_dB = np.linspace(0, 10, 15)
+    SNRs = np.power(10, SNRs_dB/10)
+    data_gen = None
+    number_symbols = 100000
+    channel = np.zeros((1, 1))
+    channel[0, [0]] = 1
+    for SNR in SNRs:
+        """
+        Generated Testing Data using the same channel as was used for training the mixture model and the nn
+        """
 
-def test_performance_plot():
-    """
-    TODO add logs here for plotting in dB
-    :return:
-    """
-    performance = []
-    SNRs = np.linspace(1, 2, 10)
-    seed_generator = 0
-    for SRN in SNRs:
-        channel = np.zeros((1, 8))
-        channel[0, [0, 3, 4, 5]] = 1, 0.5, 0.1, 0.2
-        data_gen = training_data_generator(
-            seed=seed_generator, SNR=SRN, channel=channel, plot=False
-        )
-        # data_gen = training_data_generator(plot=True)
-
-        data_gen.setup_channel(shape=None)
+        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
-        # detect with Viterbi
-        detected = viterbi_output(
-            data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix
-        )
-        # check WER
-        ser = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
-        performance.append(ser)
-    plt.figure
-    plt.plot(SNRs, performance)
-    plt.savefig(
-        "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/SER.png",
-        format="png",
-    )
-    plt.show()
+
+        """
+        Compare to Classical Viterbi with full CSI
+        """
+        # channel= np.round(channel*10)
+        detected_thresholder = threshold_detector(data_gen.alphabet, np.flip(data_gen.channel_output))
+        channel_length = 1
+        ser_classic = symbol_error_rate(detected_thresholder, data_gen.symbol_stream_matrix, channel_length)
+
+        """
+        Evaluate performance with linear MMSE
+        """
+
+
+        """
+        Analyze SER performance
+        """
+
+        classic_performance.append(ser_classic)
+
+
+    figure, dictionary = plot_symbol_error_rates(SNRs_dB, [classic_performance], data_gen.get_info_for_plot())
+    time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
+    figure.savefig(time_path, format="png")
+    text_path = "Output/SER_"+f"{time.time()}"+"curves.csv"
+    pd.DataFrame.from_dict(dictionary).to_csv(text_path)
+    figure.savefig(time_path, format="png")
+
+
+
