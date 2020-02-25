@@ -10,7 +10,7 @@
 
 \input defs.tex
 \bibliographystyle{alpha}
-\graphicspath{ {./figures/} }
+\graphicspath{ {./molecular communications/} }
 \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
@@ -93,7 +93,7 @@ For this channel,
 \underset{\mathbf{x}\in\mathcal{A}}{\text{argmin}} \; p(\mathbf{y}|\mathbf{x})=
 \underset{\mathbf{x}\in\mathcal{A}}{\text{argmin}} \; \sum_{\mathrm{i=1}}^{\mathrm{N}}\text{log}(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ).
 \end{equation*}
-Noting that individual terms of the sum are statistically independent, and that the set of possible transmitted sequences $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ is equivalent to a set of channel states, problem \eqref{opt_problem} is equivalent finding the shortest path through a trellis  with edges weighted by $\text{log}(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}))$, as in figure \ref{fig:trellis}.
+Noting that individual terms of the sum are statistically independent, and that the set of possible transmitted sequences $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ is equivalent to a set of channel states, problem \eqref{opt_problem} is equivalent finding the shortest path through a trellis  with edges weighted by $\text{log}(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}))$, as in molecular communication \ref{fig:trellis}.
 (TODO: Does this figure need further explanation?)
 
 \begin{figure}[H]
@@ -172,7 +172,7 @@ For finite state, causal channels, MLSE reduces to the Viterbi Algorithm over a 
         \qquad \qquad \= 1.\ Let $\text{cost}_{s}^{\text{i}} = -\text{log}(p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}})) + \underset{s}{\text{min}} \{\text{incoming costs}_{s}^{\text{i-1}}\}$ \\
 %        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
 %        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
-        {\bf return} detected transmission $\hat{\mathbf{x}}$ corresponding to trellis path of $\underset{s}{\text{argmin}} \; \textit{cost}_{s}^N $
+        {\bf return} detected transmission $\hat{\mathbf{x}}$ corresponding to trellis path of $\underset{s}{\text{argmin}} \; \text{cost}_{s}^N $
     \end{tabbing}}
     \noindent\rule[10pt]{\textwidth}{0.4pt}
 
@@ -182,7 +182,7 @@ Note that the Viterbi algorithm is \emph{exponentially} complex in the number of
 
 \subsection{ViterbiNet}
 Despite the reduction in MLSE complexity using the Viterbi Algorithm, the metrics $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ,$ used in each step of the algorithm,
- require knowledge of the channel probability distribution. This may be difficult or costly to obtain. Decomposed using Baye's theorem, we can instead estimate the individual terms of
+ require knowledge of the channel probability distribution. This may be difficult or costly to obtain. By decomposing with Bayes' theorem, we can instead estimate the individual terms of
 \begin{equation*}
 p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) = 
 \frac
@@ -193,7 +193,7 @@ p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) =
 \begin{itemize}
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})$
 : The probability of being in channel state $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ given the corresponding received symbol $y_{\mathrm{i}}$. If the number of states is finite, the probability mass function over $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}} \in
-|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$ can be estimated using a neural network for classification as in figure \ref{nn}. 
+|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$ can be estimated using a neural network for classification as in Figure \ref{nn}. 
 	\begin{figure}[H]
 	\centering
 		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
@@ -213,7 +213,7 @@ p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) =
 	\end{figure}
 
 \item $p(y_{\mathrm{i}}) = \sum_{s \in \textit{$\mathcal{S}$}}p(s,y_{\mathrm{i}})$
-: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (figure \ref{fig:mm}) based on a model for channel noise and training data of received signals (in this case the same data used to train the neural network). The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. In the case of Gaussian noise used here, the states are modeled as a mixture of Gaussians. Constant over all states in a given step of the Viterbi algorithm, $p(y_{\mathrm{i}})$ may be interpreted as a weighting factor for the cost of a received symbol relative to other symbols in the path. (TODO: More detail on this or enough?)
+: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Figure \ref{fig:mm}) based on a model for channel noise and training data of received signals (in this case the same data used to train the neural network). The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. In the case of Gaussian noise used here, the states are modeled as a mixture of Gaussians. Constant over all states in a given step of the Viterbi algorithm, $p(y_{\mathrm{i}})$ may be interpreted as a weighting factor for the cost of a received symbol relative to other symbols in the path. (TODO: More detail on this or enough?)
 %\\
 %
 %    \noindent\rule[16pt]{\textwidth}{0.6pt}
@@ -402,7 +402,7 @@ To evaluate decoder performance in the non-linear channel setting, we apply a qu
 \begin{equation*}
 y[\text{k}] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
 \end{equation*}
- Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in figure \ref{fig:Quantized performance}. Notice that this is essentially a reduction of the original channel states as there is now redundancy that was not previously present. 
+ Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in Figure \ref{fig:Quantized performance}. Notice that this is essentially a reduction of the original channel states as there is now redundancy that was not previously present. 
 
 \begin{figure}[H]
 \centering
