@@ -42,7 +42,7 @@ class GaussianChannelMetric(metric):
         for state in states:
             channel_output = self.received[0, index]
             predicted = np.dot(np.asarray(state), self.parameters.T)
-            cost = np.linalg.norm((predicted - channel_output))
+            cost = np.power(np.linalg.norm((predicted - channel_output)), 2)
             costs.append(cost)
         return np.asarray(costs)
 
