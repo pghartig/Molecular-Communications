@@ -16,38 +16,38 @@ import os
 import time
 import pandas as pd
 
-def test_full_integration():
+def test_reduced():
 
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(50, 50, 4)
-    # SNRs_dB = np.linspace(6, 10,3)
+    SNRs_dB = np.linspace(10, 15, 3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
 
     number_symbols = 5000
-    channel = np.zeros((1, 5))
-    channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
-    # channel[0, [0, 1, 2, 3, 4]] = 0, 0, 0.688, 0.460, 0.227
+    # channel = np.zeros((1, 5))
+    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+      # Channel to use for redundancy testing
+    # channel[0, [0, 1, 2, 3, 4]] = 0, 0, 0.688, 0.460, 0.5
+    # channel = np.flip(channel)
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
-    # channel = np.zeros((1, 5))
+    channel = np.zeros((1, 5))
     # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
     # channel[0, [0, 1, 2, 3]] = .8, 0, .02, .4
-
-    # channel[0, [0, 1, 2, 3, 4]] = 1, .7, .3, .1, .4
-    # channel[0, [0, 1, 2, 3, 4]] = 1, .4, .7, .1, .3
     # channel = np.zeros((1, 3))
     # channel[0, [0]] = 1
+    # channel = np.flip(channel)
+
     for SNR in SNRs:
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
 
-        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
+        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -57,7 +57,7 @@ def test_full_integration():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        reduced_state = 16
+        reduced_state = 4
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
@@ -130,7 +130,7 @@ def test_full_integration():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -139,18 +139,19 @@ def test_full_integration():
         """
         metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                            metric.metric, reduced_length= output_layer_size, reduced=True)
-        ser_nn = symbol_error_rate_channel_compensated_NN_reduced(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+                                            metric.metric, reduced_length=output_layer_size, reduced=True)
+        ser_nn = symbol_error_rate_channel_compensated_NN_reduced(detected_nn, data_gen.symbol_stream_matrix,
+                                                                  channel_length)
 
 
         """
         Compare to Classical Viterbi with full CSI
         """
-        # channel= np.round(channel*10)
         metric = GaussianChannelMetric(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
-        detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                            metric.metric)
-        ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)
+        detected_classic = viterbi_setup_with_nodes(data_gen.alphabet,
+                                                    data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+                                                    metric.metric)
+        ser_classic = symbol_error_rate_channel_compensated_NN_reduced(detected_classic, data_gen.symbol_stream_matrix, channel_length)
 
         """
         Evaluate performance with linear MMSE

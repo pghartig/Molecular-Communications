@@ -23,7 +23,7 @@ def get_combinatoric_list(alpabet, item_length, item_list, item):
             item_list.append(new)
 
 
-def symbol_error_rate(detected_symbols, input_symbols,channel_length):
+def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
     accomodate the different equalizers which may require that the alignment is setup differently.
@@ -44,7 +44,8 @@ def symbol_error_rate(detected_symbols, input_symbols,channel_length):
     return ser
 
 
-def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, pre_pad = 0):
+
+def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, pre_pad=0):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
     accomodate the different equalizers which may require that the alignment is setup differently.
@@ -104,21 +105,24 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     return ser
 
 
-def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_symbols,channel_length):
+def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_symbols, channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
-    accomodate the different equalizers which may require that the alignment is setup differently.     :param detected_symbols:
+    accommodate the different equalizers which may require that the alignment is setup differently.
+    :param detected_symbols:
     :param input_symbols:
     :param channel_length:
     :return:
     """
+    channel_length -= 1
     detected_array = np.asarray(detected_symbols)
-    ratio_test2 = np.sum(detected_array)
+    estimate_ratio = np.sum(detected_array)
+    input_ratio = np.sum(input_symbols)
     # This is a key step to ensuring the detected symbols are aligned properly
     flat_input = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, flat_input))
     test2 = np.max(np.convolve(np.flip(detected_array), flat_input))
-    flat_input = flat_input[(flat_input.size-detected_array.size)::]
+    flat_input = flat_input[:(flat_input.size-channel_length)]
     ser = np.sum(np.not_equal(flat_input, detected_array)) /detected_array.size
     return ser
 

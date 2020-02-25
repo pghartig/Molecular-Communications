@@ -503,13 +503,13 @@ class CommunicationDataGenerator:
                     #   Get true state of the system
                     symbol = self.symbol_stream_matrix[:,j].flatten()
                     true_state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten().flatten()
-                    probability_vec = self.get_probability(true_state, states)
+                    probability_vec = get_probability_vector(true_state, states)
                     #   Now find corresponding reduced state cluster number for the true state
                     state = labels[np.argmax(probability_vec)]
                     new_state = states_reduced[state]
                     reduced_state = np.append(symbol, new_state)
                     #   reduced_state = np.append(new_state, symbol)
-                    probability_vec_reduced = self.get_probability(reduced_state, states_final)
+                    probability_vec_reduced = get_probability_vector(reduced_state, states_final)
                     y_list.append(probability_vec_reduced)
                     #   y_list.append(probability_vec)
                     x_list.append(self.channel_output[:, i].flatten())
