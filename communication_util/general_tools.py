@@ -32,13 +32,14 @@ def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     :param channel_length:
     :return:
     """
-    detected_array = np.asarray(detected_symbols)
+    channel_length -= 1
+    detected_array = np.flip(np.asarray(detected_symbols))
     # This is a key step to ensuring the detected symbols are aligned properly
-    t = input_symbols.flatten().astype('int32')
-    # This is a userful way of checking equalizer performance before alignment is correct
-    test1 = np.max(np.convolve(detected_array,t))
-    test3 = np.max(np.convolve(np.flip(detected_array),t))
-    check2 = t[(channel_length-1):]
+    input_symbols = input_symbols.flatten().astype('int32')
+    # This is a useful way of checking equalizer performance before alignment is correct
+    test1 = np.max(np.convolve(detected_array, input_symbols))
+    test3 = np.max(np.convolve(np.flip(detected_array), input_symbols))
+    check2 = input_symbols[:(input_symbols.size-channel_length)]
     check1 = detected_array[:check2.size]
     ser = np.sum(np.not_equal(check2[:check1.size], check1)) / check1.size
     return ser
@@ -95,7 +96,6 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     """
     detected_array = np.asarray(detected_symbols)
     ratio_test2 = np.sum(detected_array)
-    # This is a key step to ensuring the detected symbols are aligned properly
     t = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, t))
     test2 = np.max(np.convolve(np.flip(detected_array), t))
@@ -118,7 +118,6 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     detected_array = np.asarray(detected_symbols)
     estimate_ratio = np.sum(detected_array)
     input_ratio = np.sum(input_symbols)
-    # This is a key step to ensuring the detected symbols are aligned properly
     flat_input = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, flat_input))
     test2 = np.max(np.convolve(np.flip(detected_array), flat_input))
@@ -165,7 +164,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list, info, analytic_ser=True):
         data_dict[names[ind]]= np.asarray(SER)
     if analytic_ser==True:
         #TODO general to other pam schemes
-        SNRs_dB = np.linspace(0, 15, 500)
+        SNRs_dB = np.linspace(0, 10, 500)
         snrs = np.power(10, SNRs_dB / 10)
         analytic = 1 - norm.cdf(np.sqrt(2 * snrs))
         plt.plot(SNRs_dB, analytic, label='analytic_ml')
@@ -201,7 +200,7 @@ def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analyti
         data_dict[names[ind]]= np.asarray(SER)
     if analytic_ser==True:
         #TODO general to other pam schemes
-        SNRs_dB = np.linspace(-5, 10, 100)
+        SNRs_dB = np.linspace(0, 10, 100)
         snrs = np.power(10, SNRs_dB / 10)
         analytic = 1- norm.cdf(np.sqrt(2 * snrs))
         plt.plot(SNRs_dB, analytic, label='analytic_ml')
@@ -238,7 +237,7 @@ def plot_quantized_symbol_error_rates(quantization_levels, SNRs_dB, SER_list,inf
             data_dict[f"{names[ind]}_{level}"] = np.asarray(SER[level])
     if analytic_ser==True:
         #TODO general to other pam schemes
-        SNRs_dB = np.linspace(0, 15, 100)
+        SNRs_dB = np.linspace(0, 10, 100)
         snrs = np.power(10, SNRs_dB / 10)
         q_function = norm.cdf
         SER = 1- q_function(np.sqrt(2 * snrs))
