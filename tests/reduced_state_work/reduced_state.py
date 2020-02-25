@@ -31,13 +31,13 @@ def test_reduced():
     channel = np.zeros((1, 5))
     # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
       # Channel to use for redundancy testing
-    channel[0, [0, 1, 2, 3, 4]] = 0, 0, 0.688, 0.460, 0.5
+    # channel[0, [0, 1, 2, 3, 4]] = 0, 0, 0.688, 0.460, 0.5
     # channel = np.flip(channel)
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))
     # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
-    # channel[0, [0, 1, 2, 3]] = .8, 0, .02, .4
+    channel[0, [0, 1, 2, 3]] = .8, 0, .2, .7
     # channel = np.zeros((1, 3))
     # channel[0, [0]] = 1
     # channel = np.flip(channel)
@@ -57,7 +57,7 @@ def test_reduced():
         Load in Trained Neural Network and verify that it is acceptable performance
         """
         device = torch.device("cpu")
-        reduced_state = 16
+        reduced_state = 8
         x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
