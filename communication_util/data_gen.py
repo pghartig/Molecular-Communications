@@ -6,10 +6,9 @@ import logging as log
 from communication_util.general_tools import get_combinatoric_list
 from communication_util.pulse_shapes import  *
 from communication_util.general_tools import quantizer as quantizer
-from communication_util.load_mc_data import *
 
 
-def constellation(constellation_type, size):
+def constellation_selection(constellation_type, size):
     """
     Allows for selecting the transmit symbol constellation.
     :param constellation_type:
@@ -84,7 +83,7 @@ class CommunicationDataGenerator:
         self.terminated = False
         self.plot = plot
         self.channel_output = []
-        self.alphabet = constellation(constellation, constellation_size)
+        self.alphabet = constellation_selection(constellation, constellation_size)
         self.seed = seed
 
         """
@@ -462,7 +461,7 @@ class CommunicationDataGenerator:
                 if (self.CIR_matrix.shape[1]-1 <= i
                         < self.symbol_stream_matrix.shape[1] - self.CIR_matrix.shape[1] + 1):
                     state = self.symbol_stream_matrix[:, j: j+self.CIR_matrix.shape[1]].flatten()
-                    probability_vec = self.get_probability(state, states)
+                    probability_vec = get_probability_vector(state, states)
                     x_list.append(self.channel_output[:, i].flatten())
                     y_list.append(probability_vec)
                     j += 1

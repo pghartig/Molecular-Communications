@@ -21,13 +21,12 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(0, 15, 15)
+    SNRs_dB = np.linspace(10, 15, 3)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
-
     number_symbols = 5000
     channel = np.zeros((1, 5))
     channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
@@ -46,7 +45,7 @@ def test_full_integration():
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
 
-        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
+        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -75,18 +74,8 @@ def test_full_integration():
         output_layer_size = np.power(m, channel_length)
         num_states = output_layer_size
         N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
-        # N, D_in, H1, H2, H3, D_out = number_symbols, 1, 20, 20, 20, output_layer_size
-
-
         net = models.ViterbiNet(D_in, H1, H2, D_out)
-        # net = models.viterbiNet(D_in, H1, H2, D_out, dropout_probability)
-        # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
-
-
-        # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
-        # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-2)
-        # optimizer = optim.SGD(net.parameters(), lr=1e-1)
 
         """
         Train NN
@@ -127,7 +116,6 @@ def test_full_integration():
         """
         mm_train_size = 1000
         mixture_model_training_data = data_gen.channel_output.flatten()[0:mm_train_size]
-        num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
         num_sources = num_states
         mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
         mm = mm.get_probability
@@ -142,7 +130,7 @@ def test_full_integration():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 10000), SNR=SNR, plot=True, channel=channel)
+        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -173,7 +161,6 @@ def test_full_integration():
         Analyze SER performance
         """
         linear_mmse_performance.append(mmse_equalizer.test_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output))
-        # linear_mmse_performance.append(slicer(data_gen.channel_output.flatten(), data_gen.symbol_stream_matrix, data_gen.alphabet, channel_length))
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 
