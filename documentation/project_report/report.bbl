@@ -1,4 +1,4 @@
-\begin{thebibliography}{SEFG19}
+\begin{thebibliography}{SFEG20}
 
 \bibitem[KB14]{kingma2014adam}
 Diederik~P Kingma and Jimmy Ba.
@@ -16,5 +16,9 @@ Nir Shlezinger, Yonina~C Eldar, Nariman Farsad, and Andrea~J Goldsmith.
   algorithm.
 \newblock In {\em 2019 IEEE 20th International Workshop on Signal Processing
   Advances in Wireless Communications (SPAWC)}, pages 1--5. IEEE, 2019.
+
+\bibitem[SFEG20]{shlezinger2020datadriven}
+Nir Shlezinger, Nariman Farsad, Yonina~C. Eldar, and Andrea~J. Goldsmith.
+\newblock Data-driven factor graphs for deep symbol detection, 2020.
 
 \end{thebibliography}

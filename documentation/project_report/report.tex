@@ -41,7 +41,7 @@
 \maketitle
 
 \begin{abstract}
-Estimation of the distribution function characterizing a communication channel is investigated. Pilot symbol sequences may be used to estimate an unknown distribution function or when the function is difficult to parameterize. This work focuses on using pilot sequences to train a neural network and mixture model whose output supplies the necessary metrics for the Viterbi algorithm. We investigate the detection performance for estimation of non-linear channels. A proposal is then made to reduce the complexity of the resulting detection using unsuperised clustering of channel states for the Viterbi algorithm. 
+Estimation of the distribution function characterizing a communication channel is investigated. In this work, pilot symbol sequences are used to train a neural network and mixture model to estimate unknown channel distribution functions. The estimated function is then evaluated using the resulting distribution as a metric for the Viterbi algorithm. We investigate the detection performance for estimation of non-linear channels. A proposal is then made to reduce the complexity of the resulting detection using unsuperised clustering of channel states for the Viterbi algorithm. 
 \end{abstract}
 
 \newpage
@@ -53,39 +53,44 @@ $p(x)$ is the probability of an event $x$.
 $p(x|y)$ is the conditional probability of $x$ given $y$.
 $E[x]$ is the expected value of a random variable $x$.
 
-Vectors  are denoted by bold font ($\mathbf{x}$) and are assumed column vectors.
+Vectors are denoted by bold font lower-case letters ($\mathbf{x}$) and are assumed column vectors.
 The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing elements i $\rightarrow$ j of $\mathbf{x}$. $|\mathcal{A}|$ denotes the cardinality of the set $\mathcal{A}$.
-$\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimizes $f(x)$.
+$\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimizes the function $f(x)$.
 
 \section{Introduction}
-Characterizing and obtaining information about the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the Molecular Communication channel which may be non-linear, time variant, and dependent on the specific transmitted information.
+Characterizing the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the Molecular Communication channel which may be non-linear, time variant, and dependent on the specific transmitted information.
 \par
-Communication contexts, such as wireless, use "pilot" symbol-streams obtain channel information to parameterize a chosen channel model. The overhead of transmitting pilot sequences is, however, incompatible with the low symbol rate (and relative coherence time?) of Molecular Communication channels. The success of this data-driven technique in wireless channels suggest that perhaps an alternative, data-driven method may be successful for detection over Molecular Communication channels. One potential data-driven method for characterizing these channels is a neural network. Neural networks have shown to be an effective tool in data-driven approximation of probability distributions.
+Communication contexts, such as wireless, have successfully used "pilot" symbol-streams, known to the receiver, to estimate channel information. The overhead of transmitting pilot sequences is, however, incompatible with the low symbol rate (and relative coherence time?) of Molecular Communication channels. An alternative data-driven method for characterizing Molecular Communication channels is based on neural networks. Neural networks have shown to be an effective tool in data-driven approximation of probability distributions.
 \par
 
-The general communication channel is equivalent to a conditional probability $p(x|y)$, with transmitted information $x$ and received information $y$.  $p(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes. The communication problem entails a form of the optimization $\underset{x\in\mathcal{A}}{\text{argmin}} \; p(x|y)$, in which $\mathcal{A}$ is the set of possible $x$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $p(x|y)$ and may be used when the true $p(x|y)$ is unknown or impractical to obtain. This work investigates a neural network estimate of $p(x|y)$.
+The general communication channel is equivalent to a conditional probability $p(x|y)$, with transmitted information $x$ and received information $y$.  $p(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes. The resulting communication problem is a form of the optimization
+\begin{equation*}
+\underset{x\in\mathcal{A}}{\text{argmin}} \; p(x|y),
+\end{equation*} in which $\mathcal{A}$ is the set of possible $x$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $p(x|y)$ and may be used when the true $p(x|y)$ is unknown or impractical to obtain. This work investigates a neural network estimate of $p(x|y)$.
 
 \section{Background}
 
 \subsection{MLSE and the Viterbi Algoithm}
 The optimization problem
 \begin{equation}\label{opt_problem}
-\underset{x \in \textit{$\mathcal{A}$}}{\text{argmin}} \; p(y|x),
+\underset{x \in \textit{$\mathcal{A}$}}{\text{argmin}} \; p(\mathbf{y}|\mathbf{x}),
 \end{equation}
- with transmitted information $x$ and received information $y$, is also known as Maximum Likelihood Sequence Estimation (MLSE). 
-The size of the search space $|\mathcal{A}|$ is grows exponentially in the length of $x$, the number of the transmitted symbols. Additional information about the communication channel can reduce the complexity of this search as illustrated in the following example.
+ with transmitted information vector $\mathbf{x}$ and received information vector $\mathbf{y}$, is known as Maximum Likelihood Sequence Estimation (MLSE). 
+The size of the search space $|\mathcal{A}|$ grows exponentially in the length of $\mathbf{x}$, the number of the transmitted symbols. Additional information about the communication channel can reduce the complexity of this search as illustrated in the following example.
 \par
-Consider the communication channel for which each received symbol in the sequence $\mathbf{y}$ is a causal, linear, and time invariant (LTI) combination of a set of the transmitted symbol sequence $\mathbf{x}$ with coeffients $\mathbf{a}$. 
+Consider the communication channel for which each received symbol in the sequence $\mathbf{y}$ is a causal, linear, and time invariant (LTI) combination of a set of the transmitted symbol sequence $\mathbf{x}$ weighted by coeffients $\mathbf{a}$. 
 
 \begin{equation*}
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l].
 \end{equation*}
 
-In this case,
+For this channel,
 \begin{equation*}
-p(\mathbf{y}|\mathbf{x})=\sum_{\mathrm{i=1}}^{\mathrm{N}}log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ).
+\underset{\mathbf{x}\in\mathcal{A}}{\text{argmin}} \; p(\mathbf{y}|\mathbf{x})=
+\underset{\mathbf{x}\in\mathcal{A}}{\text{argmin}} \; \sum_{\mathrm{i=1}}^{\mathrm{N}}log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ).
 \end{equation*}
-Noting that terms in this sum are independent, and that the set of possible transmitted sequences $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ is equivalent to a set of channel states, problem \eqref{opt_problem} is equivalent finding the shortest path through a trellis  with edges weighted by $log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}))$ as in figure \ref{fig:trellis}.
+Noting that individual terms of the sum are statistically independent, and that the set of possible transmitted sequences $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ is equivalent to a set of channel states, problem \eqref{opt_problem} is equivalent finding the shortest path through a trellis  with edges weighted by $log(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}))$, as in figure \ref{fig:trellis}.
+(TODO: Does this figure need further explanation?)
 
 \begin{figure}[H]
 \begin{center}
@@ -142,7 +147,8 @@ Noting that terms in this sum are independent, and that the set of possible tran
 
 \end{tikzpicture}
 	\end{center}
-	\caption{MLSE decoding for $\mathcal{A}=\{0,1\}$ and $L=2$}
+	\caption{MLSE decoding for $\mathcal{A}=\{0,1\}$ and $L=2$. Each state $s_1 ... \; s_4$ represents a possible
+	$\mathbf{x}_{\mathrm{i-L+1}}$.}
 	\label{fig:trellis}
 \end{figure}
 
@@ -151,18 +157,18 @@ For finite state, causal channels, MLSE reduces to the Viterbi Algorithm over a 
 \\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
-	Viterbi Algorithm:
+	Viterbi Algorithm: (TODO: Decide if this is clear enough)
 
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     {\footnotesize
     \begin{tabbing}
-        {\bf given} $p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall i \in {1..N}$ . \\*[\smallskipamount]
-        {\bf for $i = 1..N $} \\
+        {\bf given} $p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall  \;i \in {1..N}$. \\*[\smallskipamount]
+        {\bf for $i = 1...N $} \\
          \qquad \= {\bf for each state $s \in \mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}$}\\
-        \qquad \qquad \= 1.\ Let $\textit{cost}_{s}^{\text{i}} = -log(p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}})) + \underset{s}{\text{min}} \{incoming\;\textit{cost}_{s}^{\text{i-1}}\}$ \\
+        \qquad \qquad \= 1.\ Let $\textit{cost}_{s}^{\text{i}} = -log(p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}})) + \underset{s}{\text{min}} \{\textit{incoming costs}_{s}^{\text{i-1}}\}$ \\
 %        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
 %        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
-        {\bf return} Symbols corresponding to path of $\underset{s}{\text{argmin}} \; \textit{survivor cost}_{s} $
+        {\bf return} detected transmission $\hat{\mathbf{x}}$ corresponding to trellis path of $\underset{s}{\text{argmin}} \; \textit{cost}_{s}^N $
     \end{tabbing}}
     \noindent\rule[10pt]{\textwidth}{0.4pt}
 
@@ -171,16 +177,14 @@ Note that the Viterbi algorithm is \emph{exponentially} complex in the number of
 
 
 \subsection{ViterbiNet}
-Despite the reduction in complexity offered by the Viterbi Algorithm for MLSE, the individual metrics used in each step of the algorithm,
-$p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}),$
- require knowledge of the channel probability distribution. This may be difficult or costly to obtain. Instead, we decompose using Baye's theorem,
+Despite the reduction in MLSE complexity using the Viterbi Algorithm, the metrics $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ,$ used in each step of the algorithm,
+ require knowledge of the channel probability distribution. This may be difficult or costly to obtain. Decomposed using Baye's theorem, we can instead estimate the indivual terms of
 \begin{equation*}
 p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) = 
 \frac
 {p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})p(y_{\mathrm{i}})}
-{p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})},
+{p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})}.
 \end{equation*}
-and estimate the individual terms as:
 
 \begin{itemize}
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}|y_{\mathrm{i}})$
@@ -189,8 +193,8 @@ and estimate the individual terms as:
 	\begin{figure}[H]
 	\centering
 		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
-		\newcommand{\x}[2]{$x_#2$}
-		\newcommand{\y}[2]{$\hat{y}_#2$}
+		\newcommand{\x}[2]{$y_#2$}
+		\newcommand{\y}[2]{$s_#2$}
 		\newcommand{\hfirst}[2]{\small $h^{(1)}_#2$}
 		\newcommand{\hsecond}[2]{\small $h^{(2)}_#2$}
 		\newcommand{\hthird}[2]{\small $h^{(3)}_#2$}
@@ -198,15 +202,14 @@ and estimate the individual terms as:
 		\inputlayer[count=1, bias=false, title=Received\\, text=\x]
 		\hiddenlayer[count=2, bias=false, title=\\, text=\hthird] \linklayers
 		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
-		\outputlayer[count=4, title=States\\, text=\x] \linklayers
+		\outputlayer[count=4, title=States\\, text=\y] \linklayers
 	    \end{neuralnetwork}
-	    	  	  \caption{State classification Neural Network}
+	    	  	  \caption{State classification Neural Network.}
 \label{nn}
 	\end{figure}
 
 \item $p(y_{\mathrm{i}}) = \sum_{s \in \textit{$\mathcal{S}$}}p(s,y_{\mathrm{i}})$
-: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (figure \ref{fig:mm}) based on training data of received signals (in this case the same data used to train the neural network) and a model for channel noise. The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. 
-In the case of Gaussian noise used here, the states are modeled as a mixture of Gaussians.
+: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (figure \ref{fig:mm}) based on a model for channel noise and training data of received signals (in this case the same data used to train the neural network). The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. In the case of Gaussian noise used here, the states are modeled as a mixture of Gaussians. Constant over all states in a given step of the Viterbi algorithm, $p(y_{\mathrm{i}})$ may be interpreted as a weighting factor for the cost of a received symbol relative to other symbols in the path. (TODO: More detail on this or enough?)
 %\\
 %
 %    \noindent\rule[16pt]{\textwidth}{0.6pt}
@@ -224,7 +227,6 @@ In the case of Gaussian noise used here, the states are modeled as a mixture of 
 %        {\bf return} Symbols corresponding to path of $\underset{s}{\text{argmin}} \; \textit{survivor cost}_{s} $
 %    \end{tabbing}}
 %    \noindent\rule[10pt]{\textwidth}{0.4pt}
-\par As $p(y_{\mathrm{i}})$ is constant over all states in a given step of the Viterbi algorithm, this term in the Baye's decomposition may be interpreted as a weighting factor for the cost of one received symbol in the total path cost. (More detail on this or enough?)
 
 
 %picture of MM
@@ -233,16 +235,17 @@ In the case of Gaussian noise used here, the states are modeled as a mixture of 
 \begin{figure}[H]
 \centering
 	\includegraphics[width=\textwidth,height = 10cm]{system_model/mm}
-	  	  \caption{Mixture of complex, Gaussian sources  }
+	  	  \caption{A mixture of complex, Gaussian sources that can be estimate using the Expectation Maximization algorithm}
 	  \label{fig:mm}
 \end{figure}
 
 \item $p(\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$
-: The probability of a given transmitted sequence can be neglected in the case of equiprobable symbols.
+: The probability of a given transmitted sequence can be neglected for equiprobable transmit symbols.
 
 \end{itemize}
 
 In summary, the metrics $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$ required by the Viterbi algorithm can be estimated using a neural network and a mixture model.
+
 
 
 
@@ -258,7 +261,7 @@ y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathca
 
 with $x[k-l] \in \{ -1, +1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
 
-In the case of a causal, LTI system with inter-symbol-interference characterized by $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$), the received signal (Fig.\ref{fig:redundant_channel}) has fewer than the potential $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}| =2^5$ states. As one of the channel taps is 0, this will have no impact and thus 16 of the potential 32 states are removed. Further, as there are two taps of value 0.2, these together represent only 3 states rather than 4. 
+In the case of a causal, LTI system with inter-symbol-interference characterized by $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$), the received signal (Fig.\ref{fig:redundant_channel}) has fewer than the potential $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}| =2^5$ states as defined above. As one of the channel taps is 0, this will have no impact and thus 16 of the potential 32 states are removed. Further, as there are two taps of value 0.2, these together represent only 3 states rather than 4. 
 
 %\begin{figure}[H]
 %\centering
@@ -291,9 +294,9 @@ K-Means Clustering Algorithm: A method for unsupervised classification
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     
 Choosing an appropriate number of clusters will influence the performance of the resulting decoder (Have figure showing this).
-\par An implementation point to note is that after clustering the training data, the number of states must be increased by $|\mathcal{A}_{\mathrm{i}}|$. The Viterbi algorithm selects a symbol sequence corresponding to a path of state transitions through the trellis. In order to make the correspondence between a unique path and a symbol sequence, each state transition must represent a transmitted symbol. \emph{Each} resulting centroid from the k-means clustering is associated to \emph{each} potential transmit symbol in order to create a "shorter" trellis for which each state transition still represents a transmitted symbol. 
+\par An implementation point to note is that after clustering the training data into K states, the number of states must be increased to $(|\mathcal{A}_{\mathrm{i}}|)\text{K}$. In the above example 2K. The Viterbi algorithm selects a symbol sequence corresponding to a path of state transitions through the trellis. In order to make the correspondence between a unique path and a symbol sequence, each state transition must represent a transmitted symbol. \emph{Each} resulting centroid from the k-means clustering is associated to \emph{each} potential transmit symbol in order to create a "shorter" trellis for which each state transition still represents a transmitted symbol. 
 
-Discuss minimum phase representations for channels and why this might be an advantage. 
+(TODO:Discuss minimum phase representations for channels and why this might be an advantage?)
 
 \subsection{The Molecular Communication Channel}
 Provide necessary background for any nano-particle data shown in results. 
@@ -304,34 +307,33 @@ Provide necessary background for any nano-particle data shown in results.
 \subsection{A supervised equalization benchmark}
 The Linear Minimum Mean-Squared Error (LMMSE) equalizer derived below is used provide a linear equalization reference to the non-linearity of the proposed neural network, mixture model equalization.
 \par
-The convex and continuously differentiable optimization problem 
+Given an estimate of channel memory length L, the convex and continuously differentiable optimization problem 
 
 \begin{equation*}\label{mmse}
-\underset{\mathbf{\mathbf{h}} \in \textit{$\mathcal{C}_{lengthx1}$}}{\text{argmin}} \;
+\underset{\mathbf{\mathbf{h}} \in \textit{$\mathcal{C}^{\text{L}}$}}{\text{argmin}} \;
  E[\|x-\mathbf{h}^T\mathbf{y}\|^2],
 \end{equation*}\
-minimizing the squared error of the linearly detected symbol $\mathbf{h}^T\mathbf{y}$ and true symbol $x$ 
-is solved using
+minimizes the squared error of the linearly detected symbol $\mathbf{h}^T\mathbf{y}$ and true symbol $x$.
+Using
 \begin{equation*}\label{mmse}
 \frac{\partial  E[\|x-\mathbf{h}^T\mathbf{y}\|^2]}{\partial \mathbf{h} } = 0
 \end{equation*}
-to give the optimal LMMSE equalizer
+the optimal LMMSE equalizer is
 \begin{equation*}\label{mmse}
 \mathbf{h} = E[\mathbf{R}_{yy}]^{-1}E[\mathbf{r}_{yx}].
 \end{equation*}
 $E[\mathbf{R}_{yy}]$ and $E[\mathbf{r}_{yx}]$ are estimated by
 \begin{equation*}\label{mmse}
  E[\mathbf{R}_{yy}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
-\mathbf{y}\mathbf{y^{\mathrm{H}}} 
+\mathbf{y^{\text{i}}_{\text{i-L+1}}}\mathbf{y^{\text{i}}_{\text{i-L+1}}}^H
  \end{equation*}
  and
 \begin{equation*}\label{mmse}
 E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
-\mathbf{y}x
+\mathbf{y^{\text{i}}_{\text{i-L+1}}}x_{\text{i}}
 ;
  \end{equation*}
  using the same training data as the neural network and mixture model. 
-Note that just as with the neural network, making this estimate requires knowledge (or estimation) of the channel memory length $L$.
 
 
 \subsection{Simulation Details}
@@ -346,14 +348,14 @@ Verification and further testing of the implementation and integration of the al
 %\end{tikzpicture}
 
 \begin{equation*}
-y[k] = f(\mathbf{x}) + n[k].
+y[\text{k}] = f_{\text{k}}(\mathbf{x}) + n[\text{k}].
 \end{equation*}
-With $x[k] \in \{ -1, +1\}$, independent $n[k]\sim \mathcal{N}(0,1)$ and 
+With $x[\text{k}] \in \{ -1, +1\}$, independent $n[\text{k}]\sim \mathcal{N}(0,1)$ and 
 \begin{equation*}
-\text{SNR} = \frac{E\{|x[k]|^2\}}{\sigma^2}.
+\text{SNR} = \frac{E\{|x[\text{k}]|^2\}}{\sigma^2}.
 \end{equation*}
 
-Note that each received signal $y[k] $ is potentially a function of all input symbols (assume causality?). Decoding performance for realizations of the channel function $f()$ will be evaluated. 
+Note that each received signal $y[\text{k}] $ is potentially a function of all input symbols (assume causality?). Decoding performance for different values of the channel function $f_{\text{k}}()$ are evaluated. 
 
 \subsubsection{Algorithm Parameters}
 The parameters for the algorithms used in this work are detailed below.
@@ -384,7 +386,7 @@ The parameters for the algorithms used in this work are detailed below.
 We first evaluate the detector performance using the Linear Time Invariant channel
 
 \begin{equation*}
-y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k].
+y[\text{k}] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l] + n[\text{k}].
 \end{equation*}
 with impulse response $a[l] = ...$.
 Simulation results are shown in fig \ref{fig:LTI performance}
@@ -398,7 +400,7 @@ Simulation results are shown in fig \ref{fig:LTI performance}
 
 To evaluate decoder performance in the non-linear channel setting, we apply a quantizer, $Q()$ to the output of the previous LTI + AWGN channel.
 \begin{equation*}
-y[k] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]) + n[k].
+y[\text{k}] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
 \end{equation*}
  Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in figure \ref{fig:Quantized performance}. Notice that this is essentially a reduction of the original channel states as there is now redundancy that was not previously present. 
 
@@ -420,11 +422,10 @@ y[k] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l]) + n[k].
 Lastly, the performance of the neural network based detector is evaluated data collected from a molecular communication channel. ... Explain if there are any results to report. 
 
 \section{Conclusion}
-The proposed detection method from \cite{shlezinger2019viterbinet} is evaluated in  channels for which $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}),$ is unknown. Simulation results indicate that this detector can indeed learn
-$p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$ for non-linear channels. A method for reducing the complexity of the resulting Viterbi Algorithm is also proposed, however the method of state reduction for the channel needs to be further investigated to improve the poor performance observed with the proposed method. 
-
-
-\subsection{Future Work}
+The proposed detection method from \cite{shlezinger2019viterbinet} is evaluated in channels for which $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}),$ is unknown and non-linear. Simulation results indicate that this detector can successfully learn
+$p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$ for non-linear channels. A method for reducing the complexity of the resulting Viterbi Algorithm is also proposed, however the method of state reduction for the channel needs to be further investigated to improve the poor performance observed. 
+\par 
+In this work the MLSE is found using the Viterbi Algorithm. The same metrics can also be used in optimizing other performance metrics. In \cite{shlezinger2020datadriven} these estimate metrics have been used for minimize bit error rate estimation using the BCJR algorithm. 
 
 Extensions of specific work: 
 More on reduced state.
@@ -432,7 +433,7 @@ Using other channels and repeat online type of updates for dynamic channels for 
 Learning channel changes in cases for which coherence time is shorter than updates to network made by pilot symbols. 
 
 General method extensions:
-In this work the MLSE is found using the Viterbi Algorithm. The same metrics can also be used in optimizing other performance metrics. In (CITE) these estimate metrics have been used to minimize bit error rate using the BCJR algorithm. Extend to other applications of factor graphs. 
+
 
 \newpage
 \bibliography{report_bib}{}
