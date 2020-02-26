@@ -6,11 +6,13 @@
 \usepackage{graphicx, neuralnetwork,tikz}
 \usepackage{float}
 \usetikzlibrary{positioning}
-
-
 \input defs.tex
-\bibliographystyle{alpha}
-\graphicspath{ {./molecular communications/} }
+%\usepackage[style=numeric]{biblatex}
+%\bibliographystyle{alpha}
+\graphicspath{ {./figures/} }
+\usepackage{cite}
+
+
 \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
 \tikzstyle{arrow} = [thick,->,>=stealth]
 
@@ -61,23 +63,33 @@ $\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimiz
 (TODO Introduce the MC channel completely in this section)
 
 \par
-Characterizing the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the molecular communication channel which may be non-linear, time variant, and dependent on the specific transmitted information \cite{jamali2019channel}.
-\par
-Communication contexts, such as wireless, have successfully used "pilot" symbol-streams, known to the receiver, to estimate channel information. The overhead of transmitting pilot sequences is, however, incompatible with the low symbol rate (and relative coherence time?) of molecular communication channels. An alternative data-driven method for characterizing molecular communication channels is based on neural networks. Neural networks have shown to be an effective tool in data-driven approximation of probability distributions (TODO cite).
-\par
-
-The general communication channel is equivalent to a conditional probability $p(\mathbf{x}|\mathbf{y})$, with transmitted information $\mathbf{x}$ and received information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}.  $p(\mathbf{x}|\mathbf{y})$ takes into account the (potentially random) channel through which the information $\mathbf{x}$ passes in reaching the receiver. Detecting the most probable transmitted information from the received information is formalized as
+The general communication channel is equivalent to a conditional probability distribution function (pdf) $p(\mathbf{x}|\mathbf{y})$ which takes into account the (potentially random) channel though which the information $\mathbf{x}$ passes to reach the receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence, known as Maximum A-Posteriori Sequence Estimation, is formalized as
 \begin{equation*}
 \underset{x\in\mathcal{A}}{\text{argmin}} \; p(\mathbf{x}|\mathbf{y}),
-\end{equation*} in which $\mathcal{A}$ is the set of all possible transmitted information $\mathbf{x}$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain (TODO CITE). This work investigates a neural network estimate of $p(\mathbf{x}|\mathbf{y})$.
+\end{equation*} with $\mathcal{A}$ being the set of possible transmitted sequences $\mathbf{x}$. In general, sub-optimal solutions to this problem do not require perfect knowledge of the distribution $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
+
+\par
+Some communication contexts, including wireless, have successfully used "pilot" symbol-streams to estimate the pdf $p(\mathbf{x}|\mathbf{y})$ \cite{van1995channel}. The receiver is informed of symbol sequence prior to receiving the pilot sequence sent through the channel. The receiver may then compare the received pilot signal to the ground truth to obtain information about the channel and estimate the pdf $p(\mathbf{x}|\mathbf{y})$.
+The use of pilot sequences typically relies on some pre-selected channel model whose parameters are determined using the pilot sequence. For example, if the channel is assumed to be and LTI system with additive white gaussian noise (AWGN) at the receiver, the pilot sequences may be used to find the linear mean-square error estimation of the channel (CITE or reference to below). (Discuss a rate/robustness trade-off in the model?). In some cases, however, a precise channel model may not be available. This work investigates the parameterization of a very general form of $p(\mathbf{x}|\mathbf{y})$ using a neural network based channel model.
+% As no information is communicated from transmitter to receiver in this process, the use pilot sequences is not feasible for all channels. If the estimate of $p(\mathbf{x}|\mathbf{y})$ derived from pilot symbols does not offer sufficient, relevant channel information when subsequent symbols with real information are transmitted, this will not offer any benefit. Additionally, the resource overhead of sending symbols without information may not be tolerated in some contexts.
+\par
+Characterizing the pdf of communication channels is a fundamental barrier to communication. While both optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the molecular communication channel.
 
 
+\par
+Molecular communication channels...
+Formalizing these effects mathematically the resulting channel may be non-linear, time-variant, and dependent upon the transmitted information \cite{jamali2019channel}. 
+Now go into relevant details for the simulations done here. 
+.
+\par
 
-(TODO Develop MAP vs MLSE here)
+
 
 \section{Background}
-The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven distribution estimation is then incorporated into the algorithm. 
+The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven, neural network based model is then incorporated into the algorithm. 
 \subsection{MLSE and the Viterbi Algorithm}
+(TODO Develop MAP vs MLSE here)
+
 The optimization problem
 
 \begin{equation}\label{opt_problem}
@@ -322,7 +334,7 @@ Using
 \begin{equation*}\label{mmse}
 \frac{\partial  E[\|x-\mathbf{h}^T\mathbf{y}\|^2]}{\partial \mathbf{h} } = 0
 \end{equation*}
-the optimal LMMSE equalizer is
+the optimal LMMSE equalizer is \cite{proakis1988introduction}
 \begin{equation*}\label{mmse}
 \mathbf{h} = E[\mathbf{R}_{yy}]^{-1}E[\mathbf{r}_{yx}].
 \end{equation*}
@@ -441,4 +453,5 @@ General method extensions:
 
 \newpage
 \bibliography{report_bib}{}
+\bibliographystyle{plain}
 \end{document}

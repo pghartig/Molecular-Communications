@@ -1,15 +1,15 @@
-\contentsline {section}{\numberline {0.1}Notation}{2}% 
-\contentsline {section}{\numberline {0.2}Introduction}{2}% 
-\contentsline {section}{\numberline {0.3}Background}{3}% 
-\contentsline {subsection}{\numberline {0.3.1}MLSE and the Viterbi Algorithm}{3}% 
-\contentsline {subsection}{\numberline {0.3.2}ViterbiNet}{4}% 
-\contentsline {subsection}{\numberline {0.3.3}A Reduced State ViterbiNet}{6}% 
-\contentsline {section}{\numberline {0.4}Results}{7}% 
-\contentsline {subsection}{\numberline {0.4.1}A supervised equalization benchmark}{7}% 
-\contentsline {subsection}{\numberline {0.4.2}Simulation Details}{8}% 
-\contentsline {subsubsection}{System Model}{8}% 
-\contentsline {subsubsection}{Algorithm Parameters}{8}% 
-\contentsline {subsection}{\numberline {0.4.3}Simulation Results}{9}% 
-\contentsline {subsubsection}{LTI + Quantizer Channel}{9}% 
-\contentsline {subsubsection}{molecular communication Channel}{9}% 
-\contentsline {section}{\numberline {0.5}Conclusion}{10}% 
+\contentsline {section}{\numberline {0.1}Notation}{2}
+\contentsline {section}{\numberline {0.2}Introduction}{2}
+\contentsline {section}{\numberline {0.3}Background}{3}
+\contentsline {subsection}{\numberline {0.3.1}MLSE and the Viterbi Algorithm}{3}
+\contentsline {subsection}{\numberline {0.3.2}ViterbiNet}{5}
+\contentsline {subsection}{\numberline {0.3.3}A Reduced State ViterbiNet}{6}
+\contentsline {section}{\numberline {0.4}Results}{8}
+\contentsline {subsection}{\numberline {0.4.1}A supervised equalization benchmark}{8}
+\contentsline {subsection}{\numberline {0.4.2}Simulation Details}{8}
+\contentsline {subsubsection}{System Model}{8}
+\contentsline {subsubsection}{Algorithm Parameters}{9}
+\contentsline {subsection}{\numberline {0.4.3}Simulation Results}{9}
+\contentsline {subsubsection}{LTI + Quantizer Channel}{10}
+\contentsline {subsubsection}{molecular communication Channel}{12}
+\contentsline {section}{\numberline {0.5}Conclusion}{12}
