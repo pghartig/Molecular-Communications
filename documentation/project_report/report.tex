@@ -63,24 +63,23 @@ $\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimiz
 (TODO Introduce the MC channel completely in this section)
 
 \par
-The general communication channel is equivalent to a conditional probability distribution function (pdf) $p(\mathbf{x}|\mathbf{y})$ which takes into account the (potentially random) channel though which the information $\mathbf{x}$ passes to reach the receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence, known as Maximum A-Posteriori Sequence Estimation, is formalized as
+The general communication channel is equivalent to a conditional probability distribution function (pdf) $p(\mathbf{x}|\mathbf{y})$ which takes into account the (potentially random) channel though which the information $\mathbf{x}$ passes to reach a receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence, known as Maximum A-Posteriori Sequence Estimation, is formalized as
 \begin{equation*}
 \underset{x\in\mathcal{A}}{\text{argmin}} \; p(\mathbf{x}|\mathbf{y}),
-\end{equation*} with $\mathcal{A}$ being the set of possible transmitted sequences $\mathbf{x}$. In general, sub-optimal solutions to this problem do not require perfect knowledge of the distribution $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
+\end{equation*} with $\mathcal{A}$ being the set of possible transmitted sequences $\mathbf{x}$. In general, sub-optimal solutions to this problem do not require perfect knowledge of the pdf $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
 
 \par
 Some communication contexts, including wireless, have successfully used "pilot" symbol-streams to estimate the pdf $p(\mathbf{x}|\mathbf{y})$ \cite{van1995channel}. The receiver is informed of symbol sequence prior to receiving the pilot sequence sent through the channel. The receiver may then compare the received pilot signal to the ground truth to obtain information about the channel and estimate the pdf $p(\mathbf{x}|\mathbf{y})$.
-The use of pilot sequences typically relies on some pre-selected channel model whose parameters are determined using the pilot sequence. For example, if the channel is assumed to be and LTI system with additive white gaussian noise (AWGN) at the receiver, the pilot sequences may be used to find the linear mean-square error estimation of the channel (CITE or reference to below). (Discuss a rate/robustness trade-off in the model?). In some cases, however, a precise channel model may not be available. This work investigates the parameterization of a very general form of $p(\mathbf{x}|\mathbf{y})$ using a neural network based channel model.
-% As no information is communicated from transmitter to receiver in this process, the use pilot sequences is not feasible for all channels. If the estimate of $p(\mathbf{x}|\mathbf{y})$ derived from pilot symbols does not offer sufficient, relevant channel information when subsequent symbols with real information are transmitted, this will not offer any benefit. Additionally, the resource overhead of sending symbols without information may not be tolerated in some contexts.
-\par
-Characterizing the pdf of communication channels is a fundamental barrier to communication. While both optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the molecular communication channel.
-
-
+The use of pilot sequences typically relies on some pre-selected channel model whose parameters are determined using the pilot sequence. For example, if the channel is assumed to be and LTI system with additive white gaussian noise (AWGN) at the receiver, the pilot sequences may be used to find the linear mean-square error estimation of the channel (CITE or reference to below). (Discuss a rate/robustness trade-off in the model?). In some cases, however, a precise channel model may not be available. This work investigates the parameterization of a very general form of $p(\mathbf{x}|\mathbf{y})$ using a neural network based channel model. In particular, the estimate of $p(\mathbf{x}|\mathbf{y})$ for molecular communication channels in investigated.
 \par
 Molecular communication channels...
 Formalizing these effects mathematically the resulting channel may be non-linear, time-variant, and dependent upon the transmitted information \cite{jamali2019channel}. 
 Now go into relevant details for the simulations done here. 
-.
+
+% As no information is communicated from transmitter to receiver in this process, the use pilot sequences is not feasible for all channels. If the estimate of $p(\mathbf{x}|\mathbf{y})$ derived from pilot symbols does not offer sufficient, relevant channel information when subsequent symbols with real information are transmitted, this will not offer any benefit. Additionally, the resource overhead of sending symbols without information may not be tolerated in some contexts.
+
+
+
 \par
 
 
