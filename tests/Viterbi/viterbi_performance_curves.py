@@ -21,7 +21,7 @@ def test_viterbi():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 14, 2)
+    SNRs_dB = np.linspace(3, 14, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -30,11 +30,11 @@ def test_viterbi():
     number_symbols = 10000
     channel = np.zeros((1, 5))
     # Method used in comparison on MATLAB
-    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
     # channel = np.zeros((1, 2))
-    # channel[0, [0, 1]] = 0.1, 0.460
+    # channel[0, [0]] = 1
     # Method used in ViterbiNet Paper
-    channel[0, :] = np.random.randn(channel.size)
+    # channel[0, :] = np.random.randn(channel.size)
     for SNR in SNRs:
         """
         Generated Testing Data using the same channel as was used for training the mixture model and the nn

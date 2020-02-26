@@ -121,6 +121,7 @@ class CommunicationDataGenerator:
             self.CIR_matrix = np.zeros((channel.shape))
             self.channel_shape = channel.shape
             for ind in range(channel.shape[0]):
+                # self.CIR_matrix[ind, :] = channel
                 self.CIR_matrix[ind, :] = channel/np.linalg.norm(channel)
         else:
             self.CIR_matrix = np.ones((1, 1))
@@ -351,7 +352,7 @@ class CommunicationDataGenerator:
             quantized.scatter(self.channel_output, self.channel_output)
 
         #   Add AWGN with pre-selected noise power
-        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / self.SNR))
+        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / (self.SNR*2)))
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
         if plot==True:
             noised = fig_main.add_subplot(1, 3, 3)

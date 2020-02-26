@@ -165,7 +165,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list, info, analytic_ser=True):
         #TODO general to other pam schemes
         SNRs_dB = np.linspace(0, 10, 500)
         snrs = np.power(10, SNRs_dB / 10)
-        analytic = 1 - norm.cdf(np.sqrt(snrs))
+        analytic = 1 - norm.cdf(np.sqrt(2*snrs))
         plt.plot(SNRs_dB, analytic, label='analytic_ml')
     plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
     plt.ylabel("SER")
@@ -201,9 +201,9 @@ def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analyti
         #TODO general to other pam schemes
         SNRs_dB = np.linspace(0, 10, 100)
         snrs = np.power(10, SNRs_dB / 10)
-        analytic = 1- norm.cdf(np.sqrt( snrs))
+        analytic = 1 - norm.cdf(np.sqrt(2*snrs))
         plt.plot(SNRs_dB, analytic, label='analytic_ml')
-    plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
+    plt.xlabel(r'$10\text{log}(E[x]/\sigma^2_n$) [dB]')
     plt.ylabel("SER")
     plt.xscale('linear')
     plt.yscale('log')
