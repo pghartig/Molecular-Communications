@@ -1,4 +1,4 @@
-\documentclass[12pt,a4paper]{article}
+\documentclass[12pt,a4paper]{report}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
@@ -41,7 +41,7 @@
 \maketitle
 
 \begin{abstract}
-Estimation of the distribution function characterizing a communication channel is investigated. In this work, pilot symbol sequences are used to train a neural network and mixture model to estimate unknown channel distribution functions. The estimated function is then evaluated using the resulting distribution as a metric for the Viterbi algorithm. We investigate the detection performance for estimation of non-linear channels. A proposal is then made to reduce the complexity of the resulting detection using unsupervised clustering of channel states for the Viterbi algorithm. 
+Estimation of the probability distribution function characterizing a communication channel is investigated. In this work, pilot symbol sequences are used to train a neural network and mixture model to estimate unknown channel probability distribution functions. The estimated function is then evaluated using the resulting distribution as a metric for the Viterbi algorithm. In particular, the detection performance is investigated for non-linear channels relevant for the molecular communications domain. A proposal is then made to reduce the complexity of the resulting detection using a clustering of channel states for the Viterbi algorithm. 
 \end{abstract}
 
 \newpage
@@ -59,15 +59,19 @@ $\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimiz
 
 \section{Introduction}
 (TODO Introduce the MC channel completely in this section)
-Characterizing the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the molecular communication channel which may be non-linear, time variant, and dependent on the specific transmitted information (TODO CITE).
+
 \par
-Communication contexts, such as wireless, have successfully used "pilot" symbol-streams, known to the receiver, to estimate channel information. The overhead of transmitting pilot sequences is, however, incompatible with the low symbol rate (and relative coherence time?) of molecular communication channels. An alternative data-driven method for characterizing molecular communication channels is based on neural networks. Neural networks have shown to be an effective tool in data-driven approximation of probability distributions (TODO CITE).
+Characterizing the probability distribution governing communication channels is a fundamental barrier to communication. While optimal and sub-optimal strategies for overcoming this barrier have enabled vast and effective communication infrastructure, this barrier still limits communication in many contexts. One such context is the molecular communication channel which may be non-linear, time variant, and dependent on the specific transmitted information \cite{jamali2019channel}.
+\par
+Communication contexts, such as wireless, have successfully used "pilot" symbol-streams, known to the receiver, to estimate channel information. The overhead of transmitting pilot sequences is, however, incompatible with the low symbol rate (and relative coherence time?) of molecular communication channels. An alternative data-driven method for characterizing molecular communication channels is based on neural networks. Neural networks have shown to be an effective tool in data-driven approximation of probability distributions (TODO cite).
 \par
 
-The general communication channel is equivalent to a conditional probability $p(x|y)$, with transmitted information $x$ and received information $y$ (TODO CITE).  $p(x|y)$ takes into account the (potentially random) channel through which the information $x$ passes. Detecting the most probable transmitted information from the received information is formalized as
+The general communication channel is equivalent to a conditional probability $p(\mathbf{x}|\mathbf{y})$, with transmitted information $\mathbf{x}$ and received information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}.  $p(\mathbf{x}|\mathbf{y})$ takes into account the (potentially random) channel through which the information $\mathbf{x}$ passes in reaching the receiver. Detecting the most probable transmitted information from the received information is formalized as
 \begin{equation*}
-\underset{x\in\mathcal{A}}{\text{argmin}} \; p(x|y),
-\end{equation*} in which $\mathcal{A}$ is the set of all possible transmitted information $x$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $p(x|y)$ and may be used when the true $p(x|y)$ is unknown or impractical to obtain (TODO CITE). This work investigates a neural network estimate of $p(x|y)$.
+\underset{x\in\mathcal{A}}{\text{argmin}} \; p(\mathbf{x}|\mathbf{y}),
+\end{equation*} in which $\mathcal{A}$ is the set of all possible transmitted information $\mathbf{x}$. In general, sub-optimal solutions do not require perfect knowledge of the distribution $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain (TODO CITE). This work investigates a neural network estimate of $p(\mathbf{x}|\mathbf{y})$.
+
+
 
 (TODO Develop MAP vs MLSE here)
 
@@ -213,7 +217,7 @@ p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) =
 	\end{figure}
 
 \item $p(y_{\mathrm{i}}) = \sum_{s \in \textit{$\mathcal{S}$}}p(s,y_{\mathrm{i}})$
-: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Figure \ref{fig:mm}) based on a model for channel noise and training data of received signals (in this case the same data used to train the neural network). The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. In the case of Gaussian noise used here, the states are modeled as a mixture of Gaussians. Constant over all states in a given step of the Viterbi algorithm, $p(y_{\mathrm{i}})$ may be interpreted as a weighting factor for the cost of a received symbol relative to other symbols in the path. (TODO: More detail on this or enough?)
+: The joint probability of channel state $s$ and received signal $y_{\mathrm{i}}$ marginalized over all channel states $\mathcal{S}$. For the case of the LTI channel above, each state $s$ corresponds to a possible symbol sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$. This probability distribution function can be estimated using a mixture-model (Figure \ref{fig:mm}) based on a model for channel noise and training data of received signals (in this case the same data used to train the neural network). The Expectation Maximization Algorithm \cite{ng2000cs229} is used with a chosen model for the channel states and noise. In the case of Gaussian noise, as used here, each state is modeled as a Gaussians. As $p(y_{\mathrm{i}})$ is constant over all states in a given step of the Viterbi algorithm, it may be interpreted as a weighting factor for the cost of a received symbol relative to other symbols in the path. (TODO: More detail on this or enough?)
 %\\
 %
 %    \noindent\rule[16pt]{\textwidth}{0.6pt}
@@ -398,7 +402,7 @@ Simulation results are shown in fig \ref{fig:LTI performance}
 
 \subsubsection{LTI + Quantizer Channel}
 
-To evaluate decoder performance in the non-linear channel setting, we apply a quantizer, $Q()$ to the output of the previous LTI + AWGN channel.
+To evaluate decoder performance in the non-linear channel setting, we apply a quantizer, $Q()$, to the output of the previous LTI + AWGN channel.
 \begin{equation*}
 y[\text{k}] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
 \end{equation*}
