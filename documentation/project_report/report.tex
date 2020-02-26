@@ -43,7 +43,7 @@
 \maketitle
 
 \begin{abstract}
-Estimation of the probability distribution function characterizing a communication channel is investigated. In this work, pilot symbol sequences are used to train a neural network and mixture model to estimate unknown channel probability distribution functions. The estimated function is then evaluated using the resulting distribution as a metric for the Viterbi algorithm. In particular, the detection performance is investigated for non-linear channels relevant for the molecular communications domain. A proposal is then made to reduce the complexity of the resulting detection using a clustering of channel states for the Viterbi algorithm. 
+Estimation of the probability distribution function characterizing a communication channel is investigated. In this work, pilot symbol sequences are used to train a neural network to estimate unknown channel probability distribution functions. The estimated function is then evaluated using the resulting distribution as a metric for the Viterbi algorithm. In particular, the detection performance is investigated for non-linear channels relevant to the molecular communications domain. A proposal is then made to reduce the complexity of the resulting detection scheme using a clustering of channel states for the Viterbi algorithm. The neural network based estimation is evaluated in simulations and shown to be effective in detection for non-linear channels (TODO Finalize for results shown). 
 \end{abstract}
 
 \newpage
@@ -70,11 +70,10 @@ The general communication channel is equivalent to a conditional probability dis
 
 \par
 Some communication contexts, including wireless, have successfully used "pilot" symbol-streams to estimate the pdf $p(\mathbf{x}|\mathbf{y})$ \cite{van1995channel}. The receiver is informed of symbol sequence prior to receiving the pilot sequence sent through the channel. The receiver may then compare the received pilot signal to the ground truth to obtain information about the channel and estimate the pdf $p(\mathbf{x}|\mathbf{y})$.
-The use of pilot sequences typically relies on some pre-selected channel model whose parameters are determined using the pilot sequence. For example, if the channel is assumed to be and LTI system with additive white gaussian noise (AWGN) at the receiver, the pilot sequences may be used to find the linear mean-square error estimation of the channel (CITE or reference to below). (Discuss a rate/robustness trade-off in the model?). In some cases, however, a precise channel model may not be available. This work investigates the parameterization of a very general form of $p(\mathbf{x}|\mathbf{y})$ using a neural network based channel model. In particular, the estimate of $p(\mathbf{x}|\mathbf{y})$ for molecular communication channels in investigated.
+The use of pilot sequences typically relies on some pre-selected channel model whose parameters are determined using the pilot sequence. For example, if the channel is assumed to be and LTI system with additive white gaussian noise (AWGN) at the receiver, the pilot sequences may be used to find the linear mean-square error estimation of the channel (CITE or reference to below). (Discuss a rate/robustness trade-off in the model?). In some cases, however, a precise channel model may not be available. In this work, we investigate the parameterization of a very general form of $p(\mathbf{x}|\mathbf{y})$ using a neural network based channel model. In previous work, neural network based estimation of the channel has shown to be an effective method for detection with incomplete channel information for linear, time-invariant channels \cite{shlezinger2019viterbinet} \cite{shlezinger2020datadriven}.
+ Extending on this, we look to estimate $p(\mathbf{x}|\mathbf{y})$ for channels in the molecular communication domain.
 \par
-Molecular communication channels...
-Formalizing these effects mathematically the resulting channel may be non-linear, time-variant, and dependent upon the transmitted information \cite{jamali2019channel}. 
-Now go into relevant details for the simulations done here. 
+Molecular communication channels can be difficult to characterize due to non-linearity, randomness and dependence upon the transmitted information. For a thorough review and mathematical formulation of molecular communication channels and their applications see \cite{jamali2019channel}. 
 
 % As no information is communicated from transmitter to receiver in this process, the use pilot sequences is not feasible for all channels. If the estimate of $p(\mathbf{x}|\mathbf{y})$ derived from pilot symbols does not offer sufficient, relevant channel information when subsequent symbols with real information are transmitted, this will not offer any benefit. Additionally, the resource overhead of sending symbols without information may not be tolerated in some contexts.
 
@@ -82,11 +81,44 @@ Now go into relevant details for the simulations done here.
 
 \par
 
+\section{System Model}
 
+A system model is now developed as a consistent communication system framework to be used in the remainder of this work.
+A transmitter is assumed to send a sequence of information $\mathbf{x}$ over a channel . At the receiver, the sequence of $\mathbf{y}$ is detected. 
+
+\begin{figure}[H]
+\begin{tikzpicture}[node distance=2cm]
+\node (transmitter) [process] {Transmitter: $\mathbf{x}$};
+\node (channel) [process, right = of transmitter] {Channel};
+\node (receiver) [process, right = of channel] {Receiver: $\mathbf{y}$};
+\draw [arrow] (transmitter) -- (channel);
+\draw [arrow] (channel) -- (receiver);
+\end{tikzpicture}
+\end{figure}
+
+The components of the vector $\mathbf{y}$ are described by 
+\begin{equation*}
+y[\text{k}] = f_{\text{k}}(\mathbf{x}) + n[\text{k}],
+\end{equation*}
+with $x[\text{k}] \in \{ -1, +1\}$ and independent $n[\text{k}]\sim \mathcal{N}(0,1).$
+Allowing for $f_{\text{k}}()$ to be a general and potentially random function, each received symbol $y[\text{k}]$ is a function of all input information $\mathbf{x}$.
+Note that by assuming $n[\text{k}]$ independent, a filtering of the modulated information $\mathbf{x}$ is 
+TODO discuss modulation and filtering assumptions that area made. 
+
+
+\begin{equation*}
+\text{SNR} = \frac{E\{|x[\text{k}]|^2\}}{\sigma^2}.
+\end{equation*}
 
 \section{Background}
 The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven, neural network based model is then incorporated into the algorithm. 
 \subsection{MLSE and the Viterbi Algorithm}
+
+Selecting the most probable transmitted information sequence based on the received information sequence, known as Maximum A-Posteriori Sequence Estimation, is formalized as
+\begin{equation*}
+\underset{x\in\mathcal{A}}{\text{argmin}} \; p(\mathbf{x}|\mathbf{y}),
+\end{equation*} with $\mathcal{A}$ being the set of possible transmitted sequences $\mathbf{x}$.
+
 (TODO Develop MAP vs MLSE here)
 
 The optimization problem
