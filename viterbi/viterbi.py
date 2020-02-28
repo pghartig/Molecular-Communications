@@ -30,6 +30,8 @@ def viterbi_setup_with_nodes(transmit_alphabet, channel_output, channel_length, 
             # times_list.append(time.clock()-t1)
     # check1 = np.average(np.asarray(times_list[::900]))
     # check = time.clock()-t0
+    if reduced:
+        return trellis.return_survivor(reduced=True)
     return trellis.return_survivor()
 
 
@@ -57,9 +59,9 @@ class ViterbiTrellis:
 
     def setup_trellis(self, reduced=False):
         #   Create the trellis structure for a single step in the trellis
-        for state in self.states:
-            self.previous_states.append(ViterbiNode(state))
-            self.next_states.append(ViterbiNode(state))
+        for ind, state in enumerate(self.states):
+            self.previous_states.append(ViterbiNode(state, ind))
+            self.next_states.append(ViterbiNode(state, ind))
         #   Make connections between the nodes in the trellis
         for node in self.next_states:
             for previous_state in self.previous_states:
@@ -82,9 +84,10 @@ class ViterbiTrellis:
             node.check_smallest_incoming(metrics[ind])
         for ind, node in enumerate(self.next_states):
             self.previous_states[ind].survivor_path = node.survivor_path
+            self.previous_states[ind].survivor_states = node.survivor_states
             self.previous_states[ind].survivor_path_cost = node.survivor_path_cost
 
-    def return_survivor(self):
+    def return_survivor(self, reduced=False):
         """
         After stepping through all received symbols, return the symbol string corresponding to
         the lowest cost survivor path.
@@ -95,6 +98,8 @@ class ViterbiTrellis:
             costs.append(path.survivor_path_cost)
         survivor_index = np.argmin(np.asarray(costs))
         survivor = self.previous_states[survivor_index]
+        if reduced:
+            return survivor.survivor_states
         return survivor.survivor_path
 
 
@@ -102,11 +107,13 @@ class ViterbiNode:
     """
     Building block for the viteri algorithm implements in ViterbiTrellis
     """
-    def __init__(self, state):
+    def __init__(self, state, index):
         self.incoming_nodes = []
         self.survivor_path = []
+        self.survivor_states = []
         self.survivor_path_cost = 0
         self.state = state
+        self.state_ind = index
 
     def check_smallest_incoming(self, state_metric):
         """
@@ -119,6 +126,7 @@ class ViterbiNode:
         survivor_index = np.argmin(np.asarray(incoming_costs))
         survivor_node = self.incoming_nodes[survivor_index]
         # add symbol to survivor path
+        self.survivor_states = survivor_node.survivor_states + [self.state_ind]
         self.survivor_path = survivor_node.survivor_path + [self.state[0]]
         self.survivor_path_cost = incoming_costs[survivor_index]
 

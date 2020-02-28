@@ -39,7 +39,7 @@ def test_full_integration():
         Generated Testing Data using the same channel as was used for training the mixture model and the nn
         """
 
-        data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
+        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 
@@ -48,7 +48,7 @@ def test_full_integration():
         """
         device = torch.device("cpu")
         reduced_state = 8
-        x, y = data_gen.get_labeled_data_reduced_state(reduced_state)
+        x, y, states_reduced, states_original, totals = data_gen.get_labeled_data_reduced_state(reduced_state)
         y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x = torch.Tensor(x)
         y = torch.Tensor(y)
@@ -88,7 +88,7 @@ def test_full_integration():
         test_cost_over_epoch = []
         batch_size = 1000
         # If training is perfect, then NN should be able to perfectly predict the class to which a test set belongs and thus the loss (KL Divergence) should be zero
-        epochs = 900
+        epochs = 500
         for t in range(epochs):
             batch_indices = np.random.randint(len(y_train), size=(1, batch_size))
             x_batch = x_train[(batch_indices)]
@@ -133,7 +133,7 @@ def test_full_integration():
         Create new set of test data. 
         """
         del data_gen
-        data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
         data_gen.send_through_channel()
 

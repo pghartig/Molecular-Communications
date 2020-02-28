@@ -487,11 +487,11 @@ class CommunicationDataGenerator:
         get_combinatoric_list(self.alphabet, self.CIR_matrix.shape[1], states, item)
         states = np.asarray(states)
         #   Compress states using training data
-        num_clusters = int(pow(2, base_states-1))
-        labels = self.reduced_state_mapping(num_clusters)
+        num_clusters = int(pow(2, base_states))
+        labels, totals = self.reduced_state_mapping(num_clusters)
         states_reduced = []
         item_reduced = []
-        get_combinatoric_list(self.alphabet, base_states-1, states_reduced, item_reduced)
+        get_combinatoric_list(self.alphabet, base_states, states_reduced, item_reduced)
         states_reduced = np.asarray(states_reduced)
         states_final = []
         item_final = []
@@ -510,8 +510,8 @@ class CommunicationDataGenerator:
                     #   Now find corresponding reduced state cluster number for the true state
                     state = labels[np.argmax(probability_vec)]
                     new_state = states_reduced[state]
-                    reduced_state = np.append(symbol, new_state)
-                    #   reduced_state = np.append(new_state, symbol)
+                    reduced_state = new_state
+                    # reduced_state = np.append(symbol, new_state)
                     probability_vec_reduced = get_probability_vector(reduced_state, states_final)
                     y_list.append(probability_vec_reduced)
                     #   y_list.append(probability_vec)
@@ -519,7 +519,7 @@ class CommunicationDataGenerator:
                     j += 1
         #   Please leave commented line below. It is a useful check for detected symbol frequency.
         # totals = np.sum(np.asarray(y_list), axis=0)
-        return x_list, y_list
+        return x_list, y_list, states_reduced, states, totals
 
     def reduced_state_mapping(self, num_clusters):
         """
@@ -544,7 +544,7 @@ class CommunicationDataGenerator:
                     totals[label, :] += y_list[ind]
                     break
         #   Now find the cluster into which each of the original states has the majority of labels in
-        return np.argmax(totals, axis=0)
+        return np.argmax(totals, axis=0), totals
 
     def plot_setup(self, save=False):
         """

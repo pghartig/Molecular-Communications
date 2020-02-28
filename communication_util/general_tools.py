@@ -120,8 +120,7 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     flat_input = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, flat_input))
     test2 = np.max(np.convolve(np.flip(detected_array), flat_input))
-    flat_input = flat_input[:(flat_input.size-channel_length)]
-    ser = np.sum(np.not_equal(flat_input, detected_array)) /detected_array.size
+    ser = np.sum(np.not_equal(flat_input, detected_array[:flat_input.size])) /detected_array.size
     return ser
 
 
@@ -166,7 +165,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list, info, analytic_ser=True):
         SNRs_dB = np.linspace(0, 10, 500)
         snrs = np.power(10, SNRs_dB / 10)
         analytic = 1 - norm.cdf(np.sqrt(2*snrs))
-        plt.plot(SNRs_dB, analytic, label='analytic_ml')
+        plt.plot(SNRs_dB, analytic, label='Analytic')
     plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
     plt.ylabel("SER")
     plt.xscale('linear')
@@ -202,16 +201,13 @@ def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analyti
         SNRs_dB = np.linspace(0, 10, 100)
         snrs = np.power(10, SNRs_dB / 10)
         analytic = 1 - norm.cdf(np.sqrt(2*snrs))
-        plt.plot(SNRs_dB, analytic, label='analytic_ml')
-    plt.xlabel(r'$10\text{log}(E[x]/\sigma^2_n$) [dB]')
+        plt.plot(SNRs_dB, analytic, label='Analytic')
+    plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
     plt.ylabel("SER")
     plt.xscale('linear')
     plt.yscale('log')
     plt.grid(True)
     plt.legend(loc='lower left')
-    # plt.title(str(info), fontdict={'fontsize': 10})
-    # plt.title("Symbol Error Rate vs SNR")
-    # plt.show()
     return fig, data_dict
 
 
@@ -317,3 +313,41 @@ def base_2_quantizer(input, level, clip_low = None, clip_high = None):
     if clip_high == None or clip_low == None:
         return np.round(input * (pow(10, level)))
     return np.round(input * (pow(10, level)))
+
+
+def get_symbol_probabilities(totals, states, symbol_alphabet):
+    """
+
+    :param totals:
+    :param states:
+    :param symbol_alphabet:
+    :return:
+    """
+    #   For each of the reduced states, find the probability of a previous transmissions being a certain symbol
+    output = np.zeros((totals.shape[0], states.shape[1], symbol_alphabet.size))
+    for reduced_state_ind in range(totals.shape[0]):
+        state_labels = totals[reduced_state_ind, :]
+        percentages = state_labels/np.sum(state_labels)
+        for original_state_ind in range(totals.shape[1]):
+            if percentages[original_state_ind]>0:
+                original_state = states[original_state_ind, :]
+                for memory_index, original_state_symbol in enumerate(original_state):
+                    for symbol_ind, symbol in enumerate(symbol_alphabet):
+                        if original_state_symbol == symbol:
+                            output[reduced_state_ind, memory_index, symbol_ind] += percentages[original_state_ind]
+    return output
+
+
+def get_symbols_from_probabilities(state_path, probabilities, alphabet):
+    output = np.zeros((alphabet.size, (len(state_path)+probabilities.shape[1])))
+    output = np.ones((alphabet.size, (len(state_path) + probabilities.shape[1])))
+    for ind, state in enumerate(state_path):
+        #   Get symbol memory probabilities
+        # probability_matrix = np.flip(probabilities[state, :, :].T, axis=1)
+        probability_matrix = probabilities[state, :, :].T
+        output[:, ind:(ind + probability_matrix.shape[1])] *= probability_matrix
+        # output[:, ind:(ind + probability_matrix.shape[1])] += probability_matrix
+        #   Now insert this into a final array
+    #   Now find most probable symbol
+    most_likely_symbol_ind = alphabet[np.argmax(output, axis=0)]
+    return most_likely_symbol_ind

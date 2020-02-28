@@ -97,8 +97,8 @@ class NeuralNetworkMixtureModelMetric(metric):
         nn = self.nn(torch_input).flatten().detach().numpy()
         mm = self.mm(self.received[0, index])
         #   Need to change sign to align with argmin used in viterbi
-        return -nn*mm
-        # return - nn
+        # return -nn*mm
+        return - nn
 
 
 
