@@ -63,21 +63,15 @@ $\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimiz
 
 \section{Introduction}
 
-The general communication channel is equivalent to a conditional probability distribution function (pdf). The channel pdf $p(\mathbf{x}|\mathbf{y})$ takes into account the (potentially random) channel though which the transmitted information $\mathbf{x}$ passes to reach a receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence is known as Maximum A-Posteriori Sequence Estimation. In general, sub-optimal solutions to this estimation problem do not require perfect knowledge of the pdf $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
+The general communication channel is equivalent to a conditional probability distribution function (pdf). The channel pdf $p(\mathbf{x}|\mathbf{y})$ takes into account the (potentially random) channel though which the transmitted information $\mathbf{x}$ passes to reach a receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence is known as maximum a posteriori (MAP) sequence estimation. In general, sub-optimal solutions to this estimation problem do not require perfect knowledge of the pdf $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
 
 \par
-Some communication contexts, including wireless, have successfully used "pilot" symbol-streams to estimate the pdf $p(\mathbf{x}|\mathbf{y})$ \cite{van1995channel}. The receiver is informed of a symbol sequence prior to receiving that same sequence sent through the channel. The receiver may then compare the received signal to the known ground truth to obtain information about the channel and estimate the channel $p(\mathbf{x}|\mathbf{y})$.
-The use of pilot sequences typically relies on some pre-selected channel model with parameters determined using the pilot sequence. For example, if the channel is assumed to be a noiseless LTI system, the pilot sequences may be used to find the exact impulse response of the channel (CITE or reference to below). In some cases, however, a precise channel model may not be available. In this work, we investigate the parameterization of a very general form of $p(\mathbf{x}|\mathbf{y})$ using a neural network based channel model. In previous work, neural network based estimation of the channel has shown to be an effective method for detection with incomplete channel information for linear, time-invariant channels \cite{shlezinger2019viterbinet} \cite{shlezinger2020datadriven}.
+Some communication contexts, including wireless, have successfully used "pilot" symbol-streams to estimate the pdf $p(\mathbf{x}|\mathbf{y})$ \cite{van1995channel}. The receiver is informed of a symbol sequence prior to receiving that same sequence sent through the channel. The receiver may then compare the received signal with the known ground truth to estimate the channel $p(\mathbf{x}|\mathbf{y})$.
+The use of pilot sequences typically relies on some pre-selected channel model with parameters determined using the pilot sequence. For example, if the channel is assumed to be a noiseless, linear and time-invariant (LTI) system, the pilot sequences may be used to find the exact impulse response of the channel (CITE or reference to below). In some cases, however, a precise channel model may not be available. This work investigates the parameterization of a very general channel model for $p(\mathbf{x}|\mathbf{y})$ using a neural network. In previous work, neural network based estimation of the channel has shown to be an effective method for detection with incomplete channel information for linear, time-invariant channels \cite{shlezinger2019viterbinet} \cite{shlezinger2020datadriven}.
  Extending on this, we look to estimate $p(\mathbf{x}|\mathbf{y})$ for channels in the molecular communication domain.
- We also look to exploit any redundancy in the pdf $p(\mathbf{x}|\mathbf{y})$ in order to reduce the complexity of the resulting detection algorithm. (TODO Remove if not working)
+ We also look to exploit any redundancy in the pdf $p(\mathbf{x}|\mathbf{y})$ in order to reduce the complexity of the resulting detection algorithm.
 \par
-Molecular communication channels can be difficult to characterize due to non-linearity, randomness and dependence upon the transmitted information. As a result molecular communication channels are good candidates for testing this estimation technique. For a thorough review and mathematical formulation of molecular communication channels and their applications see \cite{jamali2019channel}. 
-\par
-
-(Discuss a rate/robustness trade-off in the model?)
-% As no information is communicated from transmitter to receiver in this process, the use pilot sequences is not feasible for all channels. If the estimate of $p(\mathbf{x}|\mathbf{y})$ derived from pilot symbols does not offer sufficient, relevant channel information when subsequent symbols with real information are transmitted, this will not offer any benefit. Additionally, the resource overhead of sending symbols without information may not be tolerated in some contexts.
-
-
+Molecular communication channels can be difficult to characterize due to their non-linear and random components that may depend upon the transmitted information. As a result, molecular communication channels are good candidates for testing this estimation technique. For a thorough review and mathematical formulation of molecular communication channels and their applications see \cite{jamali2019channel}. 
 
 \par
 
@@ -107,19 +101,17 @@ y[\text{k}] = f_{\text{k}}(\mathbf{x}) + n[\text{k}],
 with independent $n[\text{k}]\sim \mathcal{N}(0,1).$
 Allowing for $f_{\text{k}}()$ to be a general and potentially random function, each received symbol $y[\text{k}]$ is a function of all input information $\mathbf{x}$.
 
-By assuming all $n[\text{k}]$ to be independent, an orthogonal filtering of the modulated information $\mathbf{x}$ at the receiver is implied. As a result the signal to noise ratio (SNR) is defined using ... (Square root nyquist can be assumed for continuous time receiver filter)
-TODO discuss modulation and filtering assumptions that are made. 
-
-Is it okay for the SNR to be defined as the energy at the receiver and not at the transmitter?
+By assuming all $n[\text{k}]$ to be independent, an orthogonal filtering of the modulated information $\mathbf{x}$ at the receiver is implied. We define the signal to noise ratio (SNR) at the receiver as 
 
 \begin{equation*}
 \text{SNR} = \frac{E\{|x[\text{k}]|^2\}}{\sigma^2}.
 \end{equation*}
+
+(Square root nyquist can be assumed for continuous time receiver filter)
+
 \par
-
-Now describe specific cases of the channel function. 
-
-In the first communication channel $f_{\text{k}}(\mathbf{x}) + n[\text{k}]$ considered each $y[\text{k}]$ is a causal, linear, and time-invariant (LTI) combination of the transmitted sequence $[x[\text{k}], x[\text{k}-1]... x[\text{K}-\text{L}+1]]$ weighted by coefficients $[a[0], a[1].. . [\text{L}-1]]$. 
+	We now consider specific cases for the function $f_{\text{k}}()$.
+In the first communication channel $f_{\text{k}}(\mathbf{x}) + n[\text{k}]$ considered, each $y[\text{k}]$ is a causal, linear, and time-invariant (LTI) combination of the transmitted sequence $[x[\text{k}], x[\text{k}-1]... x[\text{K}-\text{L}+1]]$ weighted by coefficients $[a[0], a[1].. . [\text{L}-1]]$. 
 \begin{equation*}
 y[k] = \sum_{\mathrm{\text{l}=0}}^{\mathrm{\text{L}-1}} a[\text{l}]x[\text{k}-\text{l}].
 \end{equation*}
@@ -127,60 +119,57 @@ y[k] = \sum_{\mathrm{\text{l}=0}}^{\mathrm{\text{L}-1}} a[\text{l}]x[\text{k}-\t
 \par 
 We also consider the case in which the received output from an arbitrary communication channel is quantized giving
 \begin{equation*}
-y[\text{k}] = Q(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
+y[\text{k}] = \text{Quant}(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
 \end{equation*}
- with $Q()$ is defined by 
-\[Q(x) = 
+ with
+\[\text{Quant}(x) = 
 \begin{cases}
-floor(x)\\
-\text{upper saturation level}\\
-\text{lower saturation level}
-\begin{cases}
-]\ 
- 
+\text{sign}(x)\text{floor}(\frac{x}{\text{step size}})& \text{lower saturation level} \leq x \leq \text{upper saturation level}\\
+\text{upper saturation level} & x \geq \text{upper saturation level}\\
+\text{lower saturation level} & x \leq \text{lower saturation level}
+\end{cases}
+\]
+ for 
+ \text{step size} $=\text{floor}(|\text{upper saturation level}- \text{lower saturation level}|)$
  
 \section{Background}
-The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven, neural network based model is then incorporated into the optimization algorithm. 
+The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven, neural network based pdf is then incorporated into the optimization algorithm. 
 Extending on the neural network based detector, a method to further reduce the algorithm complexity is then considered. Lastly, a linear equalizer is derived to be used as a reference in the simulation results. 
 \subsection{MLSE and the Viterbi Algorithm}
+Rather than considering only the transmitted symbols for the MAP problem described above, let us instead consider a system in which a sequence $\mathbf{y}$ is received from a channel which may take on a set of states $\{s_1, s_2... s_{\text{L}}\} = \mathcal{S}$. With knowledge of the potential states $\{s_1, s_2... s_{\text{L}}\}$ but not the sequence of realized states $[s[1], s[2]... s[\text{N}]]$ corresponding to $[y[1], y[2]... y[\text{N}]]$, the MAP problem is restated as
 
-Selecting the most probable transmitted information sequence based on the received information sequence is known as Maximum A-Posteriori Sequence Estimation and is formalized as
 \begin{equation*}
-\underset{x\in\mathcal{A}^N}{\text{argmax}} \; p(\mathbf{x}|\mathbf{y}),
+\underset{\mathbf{s}\in\mathcal{S}^N}{\text{argmax}} \; p(\mathbf{s}|\mathbf{y}).
 \end{equation*} 
 
-with $\mathcal{A}^N$ being the set of possible transmitted sequences $\mathbf{x}$.
 Using Bayes' theorem, we can equivalently use 
 \begin{equation*}
-p(\mathbf{x}|\mathbf{y}) = 
+p(\mathbf{s}|\mathbf{y}) = 
 \frac
-{p(\mathbf{y}|\mathbf{x})p(\mathbf{x})}
+{p(\mathbf{y}|\mathbf{s})p(\mathbf{s})}
 {p(\mathbf{y})}.
 \end{equation*}
-If all $x\in\mathcal{A}^N$ are selected with equal probability, as is commonly assumed to maximize information entropy for finite $|\mathcal{A}|$, the term $p(\mathbf{x})$ can be removed without effect. Similarly, because the term $p(\mathbf{y})$ is independent of $\mathbf{x}$ it can also be removed without effect. The resulting optimization problem
+The term $p(\mathbf{y})$ is independent of $\mathbf{s}$ so it is removed without effect. The resulting optimization problem
 \begin{equation}\label{opt_problem}
-\underset{x\in\mathcal{A}^N}{\text{argmax}}\; p(\mathbf{y}|\mathbf{x}),
+\underset{x\in\mathcal{A}^N}{\text{argmax}}\; p(\mathbf{y}|\mathbf{s})p(\mathbf{s})
 \end{equation}
-known as Maximum Likelihood Sequence Estimation (MLSE), will be used in the remainder.
-Noting that the size of the search space $|\mathcal{A}^N|$ grows exponentially in $N$, the number of transmitted symbols, a method for reducing the search complexity is introduced. 
+will be used in the remainder.
+Noting that the size of the search space $|\mathcal{S}^N|$ grows exponentially in $N$, the number of received symbols, a method for reducing the search complexity is now introduced. 
 \par
-Consider the communication channel for which each $y[\text{k}]$ is a causal, linear, and time-invariant (LTI) combination of the transmitted sequence $[x[\text{k}], x[\text{k}-1]... x[\text{K}-\text{L}+1]]$ weighted by coefficients $[a[0], a[1].. . [\text{L}-1]]$. 
-\begin{equation*}
-y[k] = \sum_{\mathrm{\text{l}=0}}^{\mathrm{\text{L}-1}} a[\text{l}]x[\text{k}-\text{l}].
-\end{equation*}
+For the LTI communication channel described in the system model section, each state $s_i$ represents a possible transmitted sequence $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ and $ \mathcal{A}^{\text{n}} \sim \mathcal{S}^{\text{n}}$. If all symbols in $\mathcal{A}$ are selected with equal probability, as is commonly assumed to maximize information entropy for finite $|\mathcal{A}|$, the term $p(\mathbf{x})$ can be removed from problem \ref{opt_problem} without effect. 
 For this channel,
-\begin{equation*}
-\underset{\mathbf{x}\in\mathcal{A}^N}{\text{argmax}} \; p(\mathbf{y}|\mathbf{x})=
-\underset{\mathbf{x}\in\mathcal{A}^N}{\text{argmin}} \; \sum_{\mathrm{i=1}}^{\mathrm{N}} -\text{log}(p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) ),
-\end{equation*}
-in which individual terms of the sum are statistically independent. This channel can be equivalently represented by 
-the set of states $\{s_1, s_2,.. s_{\text{L}}\}$ with each state $s_{\text{l}}$ representing one of the possible $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}} \in \mathcal{A}^{\text{L}}$. The entire sequence $[y[1]... y[\text{N}]]$ is then
-  represented by repeating these states N times with all states $s_{\text{i}}^{\text{k}}$ in time k connected to all states $s_{\text{j}}^{\text{k+1}}$ in time k$+1$
+\begin{gather*}
+\underset{\mathbf{s}\in\mathcal{S}^N}{\text{argmax}} \; p(\mathbf{y}|\mathbf{s})=
+\underset{\mathbf{s}\in\mathcal{S}^N}{\text{argmin}} \; \sum_{\mathrm{i=1}}^{\mathrm{N}} -\text{log}(p(y[\mathrm{i}]|\mathbf{s}_{\mathrm{i-L+1}}^{\mathrm{i}}) p(\mathbf{s}_{\text{l}}^{\text{k+1}}|\mathbf{s}_{\text{j}}^{\text{k}}))=\\
+\underset{\mathbf{x}\in\mathcal{A}^N}{\text{argmin}} \; \sum_{\mathrm{i=1}}^{\mathrm{N}} -\text{log}(p(y[\mathrm{i}]|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}) p(\mathbf{x}_{\text{l}}^{\text{k+1}}|\mathbf{x}_{\text{j}}^{\text{k}}))
+\end{gather*}
+in which individual terms of the sums are statistically independent. The optimization problem is equivalently
+  represented by repeating these these L states, N times with all states $s_{\text{i}}^{\text{k}}, \; i = 1... \;L$ in time k connected to all states $s_{\text{i}}^{\text{k+1}}, \; i = 1... \;L$ in time k$+1$
 %  It is important to note that for a specific time point $y[\text{k}]$,
 %   each state $s_{\text{l}}$ implies a specific transmit symbol $x[k]$ in that time point. Edges between states in k and k$+1$ are made only if $x[\text{k}]= x[\text{k-1}]$ for the $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ represented by $s_{\text{i}}^{\text{k}}$ and $s_{\text{j}}^{\text{k+1}}$. 
    by an edge weighted with
 \begin{equation*}
--\text{log}(p(s_{\text{l}}^{\text{k+1}}|s_{\text{j}}^{\text{k}})p(y[\text{k}+1]|s_{\text{l}}^{\text{k+1}})).
+-\text{log}(p(y[\text{k}+1]|\mathbf{s}_{\text{l}}^{\text{k+1}})p(\mathbf{s}_{\text{l}}^{\text{k+1}}|\mathbf{s}_{\text{j}}^{\text{k}})).
 \end{equation*}   
 This is illustrated in the following example. 
    \par
@@ -191,7 +180,7 @@ y[\text{k}] =  a[\text{0}]x[\text{k}] + a[\text{1}]x[\text{k}-1] + n[\text{k}],
 with $n[\text{k}] \sim \mathcal{N}(0,1)$.
 The resulting state graph (or trellis) is depicted in Figure \ref{fig:trellis}. 
 Again assuming equiprobable 
-$\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}} \in \mathcal{A}^{\text{L}}$, the value of $p(s_{\text{j}}^{\text{k+1}}|s_{\text{i}}^{\text{k}})$ for connected states $s_{\text{j}}^{\text{k+1}}$ and $s_{\text{j}}^{\text{k}}$ is either some constant c ($0<$c$\leq1$) or 0, depending on whether or not $x[\text{k}]= x[\text{k-1}]$ for the $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ represented by $s_{\text{j}}^{\text{k+1}}$ and $s_{\text{j}}^{\text{k}}$(Too confusing). For clarity all edges for which $p(s_{\text{j}}^{\text{k+1}}|s_{\text{i}}^{\text{k}})=0$ have been removed. Therefore the shown edges into state $s_{\text{i}}^{\text{k+1}}$ are weighted by
+$\mathbf{x}_{\mathrm{i-1}}^{\mathrm{i}} \in \mathcal{A}^{\text{L}}$, the value of $p(s_{\text{j}}^{\text{k+1}}|s_{\text{i}}^{\text{k}})$ for connected states $s_{\text{j}}^{\text{k+1}}$ and $s_{\text{j}}^{\text{k}}$ is either some constant c ($0<$ c $\leq1$) or 0, depending on whether or not $x[\text{k}]= x[\text{k-1}]$ for the $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$ represented by $s_{\text{j}}^{\text{k+1}}$ and $s_{\text{j}}^{\text{k}}$(Too confusing). For clarity all edges for which $p(s_{\text{j}}^{\text{k+1}}|s_{\text{i}}^{\text{k}})=0$ have been removed in Figure \ref{fig:trellis}. Therefore the edges into state $s_{\text{i}}^{\text{k+1}}$ are weighted by
 $-\text{log}(p(y[\text{k}+1]|s_{\text{j}}^{\text{k+1}})$. The solution to problem \ref{opt_problem} corresponds to the minimum cost path through all N sets of states which can be found using the Viterib algorithm. 
 \\
 
@@ -203,7 +192,7 @@ $-\text{log}(p(y[\text{k}+1]|s_{\text{j}}^{\text{k+1}})$. The solution to proble
     \begin{tabbing}
         {\bf given} $p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}}) \; \forall  \;i \in {1..N}$. \\*[\smallskipamount]
         {\bf for $i = 1...N $} \\
-         \qquad \= {\bf for each state $s \in \mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}$}\\
+         \qquad \= {\bf for each state $s \in \mathcal{S}$}\\
         \qquad \qquad \= 1.\ Let $\text{cost}_{s}^{\text{i}} = -\text{log}(p(y_{\mathrm{i}}|x_{\mathrm{i-L+1}}^{\mathrm{i}})) + \underset{s}{\text{min}} \{\text{incoming costs}_{s}^{\text{i-1}}\}$ \\
 %        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
 %        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
@@ -276,7 +265,11 @@ $-\text{log}(p(y[\text{k}+1]|s_{\text{j}}^{\text{k+1}})$. The solution to proble
 
 The Viterbi Algorithm  computes the MLSE for any finite state, causal channels (REMOVE?).
 
-Note that the Viterbi algorithm is \emph{linearly} complex in the length of the transmitted sequence $\mathbf{x}$ ($N$ in the algorithm above) but \emph{exponentially} complex in the number of channel states ($|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}|$ for the LTI channel above). 
+Note that the Viterbi algorithm is \emph{linearly} complex in the length of the sequence $\mathbf{s}$ ($N$ in the algorithm above) but \emph{exponentially} complex in the number of channel states ($|\mathcal{S}|$ for the LTI channel above). 
+\par
+The above model allows channels whose state is based upon transmitted symbols to be represented using a trellis. This model also allows for some types of channel randomness \emph{independent} of the transmitted symbols to be represented. 
+
+Lastly, this model can also represent the case in which a channel $s[k]$ does not unique identify a symbol $x[k]$ that was transmitted in the corresponding time index. While this case requires additional tools to ultimately arrive at a unique transmit sequence $mathbf{x}$ it may also reduce the complexity of the corresponding Viterbi algorithm. 
 \par
 In the remainder of this work, we consider the case in which the  channel state is determined entirely by $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$, as was the case for the LTI channel. By adding additional states, this same approach can be extended to channel with random components independent of the input $\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}$.
 
@@ -414,7 +407,7 @@ An important implementation consideration for this clustering approach is now di
 \par 
 Clearly an appropriate number of clusters will influence the performance of the resulting decoder (Have figure showing this).
 
-\subsection{A supervised equalization benchmark}
+\subsection{Equalization benchmark}
 The Linear Minimum Mean-Squared Error (LMMSE) equalizer derived below is used provide a linear equalization reference to the non-linearity of the proposed neural network, mixture model equalization.
 \par
 Given an estimate of channel memory length L, the convex and continuously differentiable optimization problem 
@@ -444,8 +437,15 @@ E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
 ;
  \end{equation*}
  using the same training data as the neural network and mixture model. 
+ 
+\par
+In the results below, the theoretical symbol error rate curve  is also included as a reference and is defined by 
 
-
+\begin{equation*}\label{mmse}
+E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
+\mathbf{y^{\text{i}}_{\text{i-L+1}}}x_{\text{i}},
+ \end{equation*}
+ in which 
 
 
 
@@ -481,11 +481,14 @@ The neural network used in this simulation was implemented using the PyTorch mac
 \item Training Data Examples: 5000 (CHECK)
 \item Equalizer Channel Memory: Always provided with the true channel memory length. 
 \end{itemize}
+
 \end{itemize}
 
 
 \subsection{Simulation Results}
-We first evaluate the detector performance using the Linear Time Invariant channel
+The following section evaluates the performance of the equalizers described in this work using simulations
+\par
+We first evaluate the detector performance using the Linear Time-Invariant channel
 
 \begin{equation*}
 y[\text{k}] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l] + n[\text{k}].
@@ -500,9 +503,9 @@ Simulation results are shown in fig \ref{fig:LTI performance}
 
 \subsubsection{LTI + Quantizer Channel}
 
-To evaluate decoder performance in the non-linear channel setting, we apply a quantizer, $Q()$, to the output of the previous LTI + AWGN channel.
+To evaluate decoder performance in the non-linear channel setting, we apply a quantizer, $\text{Quant}()$, to the output of the previous LTI + AWGN channel.
 \begin{equation*}
-y[\text{k}] = Q(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
+y[\text{k}] = text{Quant}(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
 \end{equation*}
  Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in Figure \ref{fig:Quantized performance}. Notice that this is essentially a reduction of the original channel states as there is now redundancy that was not previously present. 
 
