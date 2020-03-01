@@ -3,49 +3,51 @@
 \citation{van1995channel}
 \citation{shlezinger2019viterbinet}
 \citation{shlezinger2020datadriven}
-\citation{jamali2019channel}
 \@writefile{toc}{\contentsline {section}{\numberline {0.1}Notation}{2}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {0.2}Introduction}{2}\protected@file@percent }
+\citation{jamali2019channel}
 \@writefile{toc}{\contentsline {section}{\numberline {0.3}System Model}{3}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The point to point communication system.}}{3}\protected@file@percent }
 \newlabel{fig:model}{{1}{3}}
-\@writefile{toc}{\contentsline {section}{\numberline {0.4}Background}{4}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.1}MLSE and the Viterbi Algorithm}{4}\protected@file@percent }
-\newlabel{opt_problem}{{1}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces MLSE decoding for $\mathcal  {A}=\{0,1\}$ and $L=2$. Each state $s_1 ... \tmspace  +\thickmuskip {.2777em} s_4$ represents a possible $\mathbf  {x}_{\mathrm  {i-L+1}}$.}}{6}\protected@file@percent }
-\newlabel{fig:trellis}{{2}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Quantizer with 20 quantization levels, lower saturation levels $= -5$ and upper saturation levels $= +5$}}{5}\protected@file@percent }
+\newlabel{fig:Quantized Overlay}{{2}{5}}
+\@writefile{toc}{\contentsline {section}{\numberline {0.4}Background}{5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.1}MLSE and the Viterbi Algorithm}{5}\protected@file@percent }
+\newlabel{opt_problem}{{1}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces MLSE decoding for $\mathcal  {A}=\{0,1\}$ and $L=2$. Each state $s_1 ... \tmspace  +\thickmuskip {.2777em} s_4$ represents a possible $\mathbf  {x}_{\mathrm  {i-L+1}}$.}}{7}\protected@file@percent }
+\newlabel{fig:trellis}{{3}{7}}
 \citation{Goodfellow-et-al-2016}
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.2}ViterbiNet}{7}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A neural network architecture for classification of received symbols into four channel states.}}{7}\protected@file@percent }
-\newlabel{nn}{{3}{7}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.2}ViterbiNet}{8}\protected@file@percent }
 \citation{ng2000cs229}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces A mixture of complex, Gaussian sources that can be estimate using the Expectation Maximization algorithm}}{8}\protected@file@percent }
-\newlabel{fig:mm}{{4}{8}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.3}A Reduced State ViterbiNet}{9}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces A fully-connect, feed-forward neural network architecture for classification of received symbols $y[\text  {k}]$ into four channel states.}}{9}\protected@file@percent }
+\newlabel{nn}{{4}{9}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A mixture of complex, Gaussian sources that can be estimate using the Expectation Maximization algorithm}}{10}\protected@file@percent }
+\newlabel{fig:mm}{{5}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.3}A Reduced State ViterbiNet}{10}\protected@file@percent }
 \citation{proakis1988introduction}
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.4}Equalization benchmark}{10}\protected@file@percent }
-\newlabel{mmse}{{0.4.4}{10}}
-\newlabel{mmse}{{0.4.4}{10}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {0.4.4}Equalization benchmark}{12}\protected@file@percent }
+\newlabel{mmse}{{0.4.4}{12}}
+\newlabel{mmse}{{0.4.4}{12}}
+\newlabel{mmse}{{0.4.4}{12}}
+\newlabel{mmse}{{0.4.4}{13}}
+\newlabel{mmse}{{0.4.4}{13}}
+\newlabel{mmse}{{0.4.4}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {0.5}Results}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {0.5.1}Simulation Details}{13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Implementation Details}{13}\protected@file@percent }
 \citation{kingma2014adam}
-\newlabel{mmse}{{0.4.4}{11}}
-\newlabel{mmse}{{0.4.4}{11}}
-\newlabel{mmse}{{0.4.4}{11}}
-\newlabel{mmse}{{0.4.4}{11}}
-\@writefile{toc}{\contentsline {section}{\numberline {0.5}Results}{11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.5.1}Simulation Details}{11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{Implementation Details}{11}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {0.5.2}Simulation Results}{12}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Detection performance over LTI channel with AWGN}}{13}\protected@file@percent }
-\newlabel{fig:LTI performance}{{5}{13}}
-\@writefile{toc}{\contentsline {subsubsection}{LTI + Quantizer Channel}{13}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Quantized output of LTI channel overlayed on the applied quantization function. TODO decide on axis titles }}{14}\protected@file@percent }
-\newlabel{fig:Quantized Overlay}{{6}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {0.5.2}Simulation Results}{14}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Detection performance over LTI channel with AWGN}}{15}\protected@file@percent }
+\newlabel{fig:LTI performance}{{6}{15}}
+\@writefile{toc}{\contentsline {subsubsection}{LTI + Quantizer Channel}{15}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Quantized output of LTI channel overlayed on the applied quantization function. TODO decide on axis titles }}{16}\protected@file@percent }
+\newlabel{fig:Quantized Overlay}{{7}{16}}
 \citation{shlezinger2019viterbinet}
 \citation{shlezinger2020datadriven}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Detection performance over LTI channel with AWGN and quantization}}{15}\protected@file@percent }
-\newlabel{fig:Quantized performance}{{7}{15}}
-\@writefile{toc}{\contentsline {subsubsection}{molecular communication Channel}{15}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {0.6}Conclusion}{15}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Detection performance over LTI channel with AWGN and quantization}}{17}\protected@file@percent }
+\newlabel{fig:Quantized performance}{{8}{17}}
+\@writefile{toc}{\contentsline {subsubsection}{molecular communication Channel}{17}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {0.6}Conclusion}{17}\protected@file@percent }
 \bibdata{report_bib}
 \bibcite{cover2012elements}{1}
 \bibcite{Goodfellow-et-al-2016}{2}
