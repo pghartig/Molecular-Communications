@@ -27,8 +27,10 @@ def test_reduced_full():
     seed_generator = 0
     data_gen = None
     channel = None
-    quantization_level = 0
     # quantization_level = None
+    quantization_level = 0
+    noise_levels = None
+    # noise_levels = 2
 
     number_symbols = 5000
     channel = np.zeros((1, 5))
@@ -49,7 +51,7 @@ def test_reduced_full():
 
         data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
-        data_gen.send_through_channel(quantization_level)
+        data_gen.send_through_channel(quantization_level, noise_levels=noise_levels)
 
         # plt.scatter(data_gen.channel_output.flatten(),data_gen.channel_output.flatten())
         # plt.show()
@@ -202,9 +204,9 @@ def test_reduced_full():
         for reps in range(10):
 
             del data_gen
-            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
-            data_gen.send_through_channel(quantization_level)
+            data_gen.send_through_channel(quantization_level, noise_levels=noise_levels)
 
             """
             Evaluate Reduced Neural Net Performance

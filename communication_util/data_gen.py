@@ -307,8 +307,9 @@ class CommunicationDataGenerator:
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function, noise=False)
 
-    def send_through_channel(self, quantization_level=None, plot=False):
+    def send_through_channel(self, quantization_level=None, plot=False, noise_levels=False):
         """
+        TODO generalize channel as a class through which a signal is sent.
         This function simulates passing the transmitted signal through an LTI channel.
         IMPORTANT: The output of this function is in the sample order as input. This is key for proper detection.
         Note that given the numpy convolution default, the impulse response should be provided with the longest delay
@@ -343,6 +344,13 @@ class CommunicationDataGenerator:
             noised.scatter(self.channel_output, self.channel_output)
             plt.show()
 
+        if noise_levels is not None:
+            #   Temporary way of setting noise average
+            self.noise_parameter[0] = 1
+            #   Generate a noise floor that is added randomly to certain received symbols
+            self.channel_output += self.noise_parameter[0]*np.random.random_integers(0, noise_levels,
+                                                             self.symbol_stream_matrix.shape)
+
         #   Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
             self.channel_output = quantizer(self.channel_output, quantization_level)
@@ -354,6 +362,11 @@ class CommunicationDataGenerator:
             # plt.axhline(c='grey', lw=1)
             # plt.legend(loc='upper left')
             # plt.show()
+
+
+
+
+
         if plot==True:
             quantized = fig_main.add_subplot(1, 3, 2)
             quantized.set_title("Quantized")
