@@ -349,7 +349,7 @@ class CommunicationDataGenerator:
             self.noise_parameter[0] = 1
             #   Generate a noise floor that is added randomly to certain received symbols
             self.channel_output += self.noise_parameter[0]*np.random.random_integers(0, noise_levels,
-                                                             self.symbol_stream_matrix.shape)
+                                                             self.channel_output.shape)
 
         #   Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:

@@ -29,8 +29,8 @@ def test_reduced_full():
     channel = None
     # quantization_level = None
     quantization_level = 0
-    noise_levels = None
-    # noise_levels = 2
+    # noise_levels = None
+    noise_levels = 2
 
     number_symbols = 5000
     channel = np.zeros((1, 5))
