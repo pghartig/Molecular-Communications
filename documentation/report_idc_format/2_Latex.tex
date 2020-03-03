@@ -1,66 +1,3 @@
-\documentclass[12pt,a4paper]{report}
-\usepackage[utf8]{inputenc}
-\usepackage{amsmath}
-\usepackage{amsfonts}
-\usepackage{amssymb}
-\usepackage{graphicx, neuralnetwork,tikz}
-\usepackage{float}
-\usetikzlibrary{positioning}
-\input defs.tex
-%\usepackage[style=numeric]{biblatex}
-%\bibliographystyle{alpha}
-\usepackage{url}
-\graphicspath{ {./figures/} }
-\usepackage{cite}
-
-
-\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
-\tikzstyle{arrow} = [thick,->,>=stealth]
-
-\tikzstyle{state}=[shape=circle,draw=blue!30,fill=blue!10]
-\tikzstyle{observation}=[shape=rectangle,draw=orange!30,fill=orange!10]
-\tikzstyle{lightedge}=[<-, dashed]
-\tikzstyle{mainstate}=[state, thick]
-\tikzstyle{mainedge}=[<-, thick]
-\tikzstyle{block} = [draw,rectangle,thick,minimum height=2em,minimum width=2em]
-\tikzstyle{sum} = [draw,circle,inner sep=0mm,minimum size=2mm]
-\tikzstyle{connector} = [->,thick]
-\tikzstyle{line} = [thick]
-\tikzstyle{branch} = [circle,inner sep=0pt,minimum size=1mm,fill=black,draw=black]
-\tikzstyle{guide} = []
-\tikzstyle{snakeline} = [connector, decorate, decoration={pre length=0.2cm,
-                         post length=0.2cm, snake, amplitude=.4mm,
-                         segment length=2mm},thick, magenta, ->]
-
-
-
-
-\title{Neural Network Based Sequence Detection over Molecular Mommunication Channels}
-\author{Peter Hartig}
-%Remove this penaltiy if hyphenation is okay. 
-%\hyphenpenalty=10000
-
-\begin{document}
-\maketitle
-
-\begin{abstract}
-Estimation of the probability distribution function characterizing a communication channel is investigated. In this work, pilot symbol sequences are used to train a neural network to estimate unknown channel probability distribution functions. The estimated function is then evaluated as a metric for the Viterbi algorithm. In particular, the detection performance is investigated for channels relevant to the molecular communications domain. A proposal is then made to reduce the complexity of the resulting detection scheme using a second supervised learning method. The neural network based estimation is tested in simulations and shown to be effective in detection for (DESCRIBE CHANNELS) channels. 
-\end{abstract}
-
-\newpage
-\tableofcontents
-\newpage
-\section{Notation}
-This section details the notation is throughout this work.
-$p(x)$ is the probability of an event $x$.
-$p(x|y)$ is the conditional probability of $x$ given $y$.
-$E[x]$ is the expected value of a random variable .
-$x \sim \mathcal{N}(0,1)$ denotes a random variable $x$ whose probability distribution is Gaussian with mean 0 and variance 1. 
-
-Vectors are denoted by bold font lower-case letters ($\mathbf{x}$) and are assumed column vectors.
-The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing the elements i through j of $\mathbf{x}$. Sets are denoted using upper-case calligraphic letters ($\mathcal{A}$) and the cardinality of a set $\mathcal{A}$ is denoted by $|\mathcal{A}|$.
-$\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimizes the function $f(x)$.
-
 \section{Introduction}
 
 The general communication channel is equivalent to a conditional probability distribution function (pdf). The channel pdf $p(\mathbf{x}|\mathbf{y})$ takes into account the (potentially random) channel though which the transmitted information $\mathbf{x}$ passes to reach a receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence is known as maximum a posteriori (MAP) sequence estimation. In general, sub-optimal solutions to this estimation problem do not require perfect knowledge of the pdf $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
@@ -519,7 +456,7 @@ Simulation results are shown in fig \ref{fig:LTI performance}
 
 To evaluate decoder performance in the non-linear channel setting, we apply a quantizer, $\text{Quant}()$, to the output of the previous LTI + AWGN channel.
 \begin{equation*}
-y[\text{k}] = text{Quant}(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
+y[\text{k}] = \text{Quant}(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
 \end{equation*}
  Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in Figure \ref{fig:Quantized performance}. Notice that this is essentially a reduction of the original channel states as there is now redundancy that was not previously present. 
 
@@ -553,8 +490,3 @@ Learning channel changes in cases for which coherence time is shorter than updat
 
 General method extensions:
 
-
-\newpage
-\bibliography{report_bib}{}
-%\bibliographystyle{plain}
-\end{document}
