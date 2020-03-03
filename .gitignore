@@ -414,7 +414,8 @@ TSWLatexianTemp*
 !documentation/project_report/*
 !documentation/project_report/figures/results*
 !documentation/project_report/figures**
-
+!documentation/project_report/figures**
+!documentation/report_idc_format/graphics**
 !*.pdf
 
 
