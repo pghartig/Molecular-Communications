@@ -22,32 +22,7 @@ class metric(ABC):
         """
         pass
 
-
 class GaussianChannelMetric(metric):
-    """
-    Metric for LTI AWGN Channel
-    :param survivor_paths:
-    :param index:
-    :param transmit_alphabet:
-    :param channel_output:
-    :param cir:
-    :return:
-    """
-    def __init__(self, csi, received):
-        metric.__init__(self, received)
-        self.parameters = csi
-
-    def metric(self, index, states):
-        costs = []
-        for state in states:
-            channel_output = self.received[0, index]
-            predicted = np.dot(np.asarray(state), self.parameters.T)
-            cost = np.power(np.linalg.norm((predicted - channel_output)), 2)
-            costs.append(cost)
-        return np.asarray(costs)
-
-
-class GaussianChannelMetricQuantized(metric):
     """
     Metric for LTI AWGN Channel with quantization
     :param survivor_paths:
@@ -68,8 +43,11 @@ class GaussianChannelMetricQuantized(metric):
         for state in states:
             channel_output = self.received[0, index]
             predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
-            cost = quantizer(np.linalg.norm((predicted - channel_output)), self.quantization_level)
-            costs.append(cost)
+            if self.quantization_level is not None:
+                cost = quantizer(np.linalg.norm((predicted - channel_output)), self.quantization_level)
+                costs.append(cost)
+            else:
+                costs.append(np.linalg.norm((predicted - channel_output)))
         return np.asarray(costs)
 
 

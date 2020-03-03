@@ -46,15 +46,14 @@ By assuming all $n[\text{k}]$ to be independent, an orthogonal filtering of the 
 	We now consider specific cases for the function $f_{\text{k}}()$ that will later be used in describing the detection methods. 
 	\par
 In the first communication channel $f_{\text{k}}(\mathbf{x}) + n[\text{k}]$ considered, each $y[\text{k}]$ is a causal, linear, and time-invariant (LTI) combination of the transmitted sequence $[x[\text{k}], x[\text{k}-1]... x[\text{K}-\text{L}+1]]$ weighted by coefficients $[a[0], a[1].. . [\text{L}-1]]$. 
-\begin{equation*}
+\begin{equation}\label{lti_channel}
 y[k] = \sum_{\mathrm{\text{l}=0}}^{\mathrm{\text{L}-1}} a[\text{l}]x[\text{k}-\text{l}].
-\end{equation*}
-
+\end{equation}
 \par 
 We also consider the case in which the received output from an arbitrary communication channel is quantized giving
-\begin{equation*}
+\begin{equation}\label{lti_quantized_channel}
 y[\text{k}] = \text{Quant}(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
-\end{equation*}
+\end{equation}
  with
 \[\text{Quant}(x) = 
 \begin{cases}
@@ -120,13 +119,14 @@ y[\text{k}] =  a[\text{0}]x[\text{k}] + a[\text{1}]x[\text{k}-1] + n[\text{k}],
 \end{equation*}
 with $n[\text{k}] \sim \mathcal{N}(0,1)$.
 The resulting state graph (or trellis) is depicted in Figure \ref{fig:trellis}. 
+\input{trellis_fig}
 Again assuming equiprobable 
 $x[\text{k}] \in \mathcal{A}$, the value of $p(s_{\text{j}}[\text{k+1}]|s_{\text{i}}[\text{k}])$ for connected states $s_{\text{j}}[\text{k+1}]$ and $s_{\text{j}}[\text{k}]$ is  0, if the channel memory represented by $s_{\text{j}}[\text{k+1}]$ and $s_{\text{j}}[\text{k}]$ contradicts. $p(s_{\text{j}}[\text{k+1}]|s_{\text{i}}[\text{k}])$  is some constant c ($0<$ c $\leq1$) if these states agree on the channel memory. For clarity, all edges for which $p(s_{\text{j}}[\text{k+1}]|s_{\text{i}}[\text{k}])=0$ have been removed in Figure \ref{fig:trellis}. Therefore the edges into state $s_{\text{i}}[\text{k+1}]$ are weighted by
 $-\text{log}(p(y[\text{k}+1]|s_{\text{j}}[\text{k+1}])$. The solution to problem \ref{opt_problem} corresponds to the minimum cost path through all N sets of states which can be found using the Viteribi algorithm. 
 \\
 
     \noindent\rule[16pt]{\textwidth}{0.6pt}
-	Viterbi Algorithm: (TODO: Decide if this is clear enough)
+	Viterbi Algorithm
 
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     {\footnotesize
@@ -143,65 +143,7 @@ $-\text{log}(p(y[\text{k}+1]|s_{\text{j}}[\text{k+1}])$. The solution to problem
 
 
 
-\begin{figure}[H]
-\begin{center}
-\begin{tikzpicture}[]
-% 1st column
-\node               at (-1.5,5) {$s_1=00$};
-\node               at (-1.5,4) {$s_2=01$};
-\node               at (-1.5,3) {$s_3=10$};
-\node               at (-1.5,2) {$s_4=11$};
-\node[mainstate] (s1_1) at (0,5) {$s_1$};
-\node[state] (s2_1) at (0,4) {$s_2$};
-\node[state] (s3_1) at (0,3) {$s_3$};
-\node[state] (s4_1) at (0,2) {$s_4$};
-%\node at (0,1) {Node1};
-% 2nd column
-\node[mainstate] (s1_2) at (2,5) {$s_1$}
-    edge[mainedge] (s1_1);
-\node[mainstate] (s2_2) at (2,4) {$s_2$}
-     edge[lightedge] (s1_1);
 
-\node[state] (s3_2) at (2,3) {$s_3$};
-
-\node[state] (s4_2) at (2,2) {$s_4$};
-
-%\node at (2,1) {Node2};
-% 3rd column
-%\node               at (4,6) {$t=2$};
-\node[mainstate] (s1_3) at (4,5) {$s_1$}
-    edge[mainedge]  (s1_2);
-
-\node[mainstate] (s2_3) at (4,4) {$s_2$}
-    edge[lightedge] (s1_2);
-
-\node[mainstate] (s3_3) at (4,3) {$s_3$}
-    edge[mainedge] (s2_2);    
-\node[mainstate] (s4_3) at (4,2) {$s_4$}
-    edge[lightedge] (s2_2);
-%\node at (4,1) {Node3};
-% 4th column
-%\node               at (6,6) {$t=3$};
-\node[mainstate] (s1_4) at (6,5) {$s_1$}
-    edge[mainedge]  (s1_3)
-    edge[mainedge]  (s3_3);
-\node[mainstate] (s2_4) at (6,4) {$s_2$}
-    edge[lightedge] (s1_3)
-    edge[lightedge] (s3_3);
-\node[mainstate] (s3_4) at (6,3) {$s_3$}
-    edge[mainedge] (s2_3)
-    edge[mainedge] (s4_3);
-\node[mainstate] (s4_4) at (6,2) {$s_4$}
-    edge[lightedge] (s2_3)
-    edge[lightedge] (s4_3);
-%\node at (6,1) {Node4};
-
-\end{tikzpicture}
-	\end{center}
-	\caption{MLSE decoding for $\mathcal{A}=\{0,1\}$ and $L=2$. Each state $s_1 ... \; s_4$ represents a possible
-	$\left[x[\mathrm{i-L+1}]...x[\mathrm{i}]\right]$.}
-	\label{fig:trellis}
-\end{figure}
 
 Note that the Viterbi algorithm is \emph{linearly} complex in the length of the sequence $\mathbf{s}$ ($N$ in the algorithm above) but \emph{exponentially} complex in the number of channel states $|\mathcal{S}|$. 
 \par
@@ -238,7 +180,7 @@ $s_{\text{i}}[\text{k}] \sim \left[x[\mathrm{i-L+1}]...x[\mathrm{i}]\right]$ (th
 
 	\begin{figure}[H]
 	\centering
-		\begin{neuralnetwork}[height=4.5, nodespacing=20mm, layerspacing=24mm]
+		\begin{neuralnetwork}[height=4.5, nodespacing=20mm, layerspacing=26mm]
 		\newcommand{\x}[2]{$y[\text{k}]$}
 		\newcommand{\y}[2]{$p(s_{#2}[\text{k}]|y[\text{k}])$}
 		\newcommand{\hfirst}[2]{ $h^{(1)}_#2$}
@@ -375,8 +317,7 @@ $E[\mathbf{R}_{yy}]$ and $E[\mathbf{r}_{yx}]$ are estimated by
  and
 \begin{equation*}\label{mmse}
 E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
-\mathbf{y^{\text{i}}_{\text{i-L+1}}}x_{\text{i}}
-;
+\mathbf{y^{\text{i}}_{\text{i-L+1}}}x_{\text{i}},
  \end{equation*}
  using the same training data as the neural network and mixture model. 
  
@@ -384,26 +325,18 @@ E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
 One interesting note to make in comparing this equalizer with the neural network based equalizer is the amount of training data needed. In the case of the noiseless LTI system, a linear estimator for the channel requires only L training examples to form a deterministic system of equations and learn the channel perfectly. In contrast the neural network will generally have many edge weights and would therefore require more training data. The need for a larger training data set comes with the added potential to learn more complicated channels with the neural network than with the LMMSE equalizer.
  
 \par
-In the results below, the theoretical symbol error rate curve is also included as a reference.
-For all of the tests below, an anti-podal BPSK scheme is simulated. The probability of a decision error for the memoryless AWGN channel with SNR 
+In the results below, the theoretical symbol error rate curve for the  memoryless, AWGN channel is also included as a reference.For all of the tests below, an anti-podal BPSK $\mathcal{A}= \{-1, +1\}$ scheme is simulated giving  \cite{proakis1988introduction}
 \begin{equation*}\label{mmse}
-E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
-\mathbf{y^{\text{i}}_{\text{i-L+1}}}x_{\text{i}}.
+p(\text{symbol error}) = \frac{1}{\sqrt{\pi \sigma_{\text{Noise}}}}
+\int_{-\infty}^{0}exp\left[-\frac{(r-\sqrt{E_b})^2}{\sigma_{\text{Noise}}} \right]
  \end{equation*}
-
-is \cite{proakis1988introduction} 
-
-\begin{equation*}\label{mmse}
-E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
-\mathbf{y^{\text{i}}_{\text{i-L+1}}}x_{\text{i}}.
- \end{equation*}
-
+with r as the received signal and $E_b$ being the energy per bit at the receiver. 
 
 
 \section{Results}
 
 \subsection{Simulation Details}
-The following simulations are performed using only real-valued transmit symbols, channels and noise. As a result, an SNR adjustment factor of 3dB has been used in order to align well-know results with other sources. 
+The following simulations are performed using only real-valued transmit symbols, channels and noise. As a result, an SNR adjustment factor of 3dB has been used in order to align with well-know results from other sources. 
 \subsubsection{Implementation Details}
 This section defines relevant information for implementation of the simulation used to generate the results below.
 \begin{itemize}
@@ -412,7 +345,7 @@ The neural network used in this simulation was implemented using the PyTorch mac
 \begin{itemize}
 \item Architecture: 4 layers {1, 100 (Tanh activation), 50 (relu activation), $M^L$ (Softmax $\rightarrow$ Negative Log-Likelihood)}
 \item Training Data Examples: 5000
-\item Neural Network Updates: Admm \cite{kingma2014adam} with step size $10^{-2}$ 
+\item Neural Network Updates: Adam \cite{kingma2014adam} with step size $10^{-2}$ 
 \item Batch Size: 1000 
 \item Backpropogation Updates (Epochs): 900
 \item Loss Function: Cross Entropy
@@ -423,13 +356,13 @@ The neural network used in this simulation was implemented using the PyTorch mac
 \item Mixture Model Source Types: Gaussian
 \item Number of Sources: The number of channel states for specific simulation
 \end{itemize}
-\item \textbf{K-Means Algorithm (For Reduced State ViterbiNet)}
+\item \textbf{k-Means Algorithm (For Reduced State ViterbiNet)}
 \begin{itemize}
 \item Training Data Examples: 5000
 \end{itemize}
 \item \textbf{Linear Minimum Mean-Squared Error (LMMSE) equalizer}
 \begin{itemize}
-\item Training Data Examples: 5000 (CHECK)
+\item Training Data Examples: 5000
 \item Equalizer Channel Memory: Always provided with the true channel memory length. 
 \end{itemize}
 
@@ -439,54 +372,47 @@ The neural network used in this simulation was implemented using the PyTorch mac
 \subsection{Simulation Results}
 The following section evaluates the performance of the equalizers described in this work using simulations
 \par
-We first evaluate the detector performance using the Linear Time-Invariant channel
-
-\begin{equation*}
-y[\text{k}] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l] + n[\text{k}].
-\end{equation*}
+We first evaluate the detector performance using Linear Time-Invariant channels as defined in equation \eqref{lti_channel}. In order to compare the performance of the reduced state equalizer, we consider cases with channel redundancy (Fig. \ref{fig:LTI performance}) and without channel redundancy (Fig. \ref{fig:LTI performance redundant}). 
 with impulse response $a[l] = ...$.
-Simulation results are shown in fig \ref{fig:LTI performance}
 \begin{figure}[H]
-	\includegraphics[width=\textwidth,height = 10cm]{results/lti_normal}
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_8_reduced}
 		  \caption{Detection performance over LTI channel with AWGN}
 	  \label{fig:LTI performance}
 \end{figure}
-
-\subsubsection{LTI + Quantizer Channel}
-
-To evaluate decoder performance in the non-linear channel setting, we apply a quantizer, $\text{Quant}()$, to the output of the previous LTI + AWGN channel.
-\begin{equation*}
-y[\text{k}] = \text{Quant}(\sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[\text{k}-l]) + n[\text{k}].
-\end{equation*}
- Here we evaluate performance under two levels of quantization severity: rounding channel output down to a given number of decimal places . Figure \ref{fig:Quantized Overlay} depicts the quantizer and its impact on the received symbols from the LTI channel. The resulting performance is seen in Figure \ref{fig:Quantized performance}. Notice that this is essentially a reduction of the original channel states as there is now redundancy that was not previously present. 
-
 \begin{figure}[H]
-\centering
-	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer_overlay}
-			  \caption{Quantized output of LTI channel overlayed on the applied quantization function. TODO decide on axis titles }
-	  \label{fig:Quantized Overlay}
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_8_reduced_redundant}
+		  \caption{Detection performance over LTI channel with AWGN}
+	  \label{fig:LTI performance redundant}
 \end{figure}
 
+\par
+We next consider the same LTI channels above with the receiver quantizer defined in equation \eqref{lti_quantized_channel} and plotted in \ref{fig:Quantized Overlay}.
+
 \begin{figure}[H]
-	\includegraphics[width=\textwidth,height = 10cm]{results/quantized_before_noise}
-		  \caption{Detection performance over LTI channel with AWGN and quantization}
-	  \label{fig:Quantized performance}
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_8_reduced}
+		  \caption{Detection performance over quantized LTI channel with AWGN}
+	  \label{fig:LTI performance}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[width=\textwidth,height = 10cm]{results/lti_8_reduced_redundant}
+		  \caption{Detection performance over quantized LTI channel with AWGN}
+	  \label{fig:LTI performance redundant}
 \end{figure}
 
-
-\subsubsection{molecular communication Channel}
-Lastly, the performance of the neural network based detector is evaluated data collected from a molecular communication channel. ... Explain if there are any results to report. 
 
 \section{Conclusion}
-The proposed detection method from \cite{shlezinger2019viterbinet} is evaluated in channels for which $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}),$ is unknown and non-linear. Simulation results indicate that this detector can successfully learn
+In this work, a framework is developed to define the class of channels for channel estimation based on the previous work of \cite{shlezinger2019viterbinet} can be applied. The methods used in \cite{shlezinger2019viterbinet} are then extended in order to learn channels with addition types of randomness as well as offer potential complexity reductions in the resulting Viterbi Algorithm. 
+ In the simulation work, the results of \cite{shlezinger2019viterbinet} are extended to a non-linear channel. The proposed methods for complexity reduction are also simulated.
+ \par 
+ In future work, applying this general framework to related algorithms should be explored. In particular, the methods of \cite{shlezinger2019viterbinet} which were extended to include other communication detection 
+
+ is evaluated in channels for which $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}}),$ is unknown and non-linear. Simulation results indicate that this detector can successfully learn
 $p(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-L+1}}^{\mathrm{i}})$ for non-linear channels. A method for reducing the complexity of the resulting Viterbi Algorithm is also proposed, however the method of state reduction for the channel needs to be further investigated to improve the poor performance observed. 
 \par 
 In this work the MLSE is found using the Viterbi Algorithm. The same metrics can also be used in optimizing other performance metrics. In \cite{shlezinger2020datadriven} these estimate metrics have been used for minimize bit error rate estimation using the BCJR algorithm. 
 
-Extensions of specific work: 
+TODO Extensions of specific work: 
 More on reduced state.
 Using other channels and repeat online type of updates for dynamic channels for these more challenging channels. 
 Learning channel changes in cases for which coherence time is shorter than updates to network made by pilot symbols. 
-
-General method extensions:
 

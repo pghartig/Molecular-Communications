@@ -42,6 +42,8 @@ def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     check2 = input_symbols[:(input_symbols.size-channel_length)]
     check1 = detected_array[:check2.size]
     ser = np.sum(np.not_equal(check2[:check1.size], check1)) / check1.size
+    #temp for causal indexing issue
+    # ser = test2 / check1.size
     return ser
 
 
@@ -64,7 +66,7 @@ def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, p
     test2 = np.max(np.convolve(detected_array, input))
     input = input[(channel_length+1)::]
     input = input[:detected_array.size]
-    ser = np.sum(np.not_equal(detected_array, input)) / detected_array.size
+    ser = np.sum(np.not_equal(detected_array[:input.size], input)) / detected_array.size
     return ser
 
 
@@ -101,6 +103,8 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     check2 = t[(channel_length-1):]
     check1 = detected_array[:check2.size].astype('int32')
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
+    # correct for indexing problem
+    # ser = test2 / check1.size
     return ser
 
 
@@ -114,13 +118,15 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     :return:
     """
     channel_length -= 1
-    detected_array = np.asarray(detected_symbols)
+    detected_array = np.asarray(detected_symbols).astype('int32')
     estimate_ratio = np.sum(detected_array)
     input_ratio = np.sum(input_symbols)
     flat_input = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, flat_input))
     test2 = np.max(np.convolve(np.flip(detected_array), flat_input))
     ser = np.sum(np.not_equal(flat_input, detected_array[:flat_input.size])) /detected_array.size
+    # correct for indexing problem
+    # ser = test2 / detected_array.size
     return ser
 
 
@@ -166,7 +172,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list, info, analytic_ser=True):
         snrs = np.power(10, SNRs_dB / 10)
         analytic = 1 - norm.cdf(np.sqrt(2*snrs))
         plt.plot(SNRs_dB, analytic, label='Analytic')
-    plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
+    plt.xlabel(r'10log$(E[x]/\sigma^2_n$) [dB]')
     plt.ylabel("SER")
     plt.xscale('linear')
     plt.yscale('log')
@@ -178,7 +184,7 @@ def plot_symbol_error_rates(SNRs_dB, SER_list, info, analytic_ser=True):
     return fig, data_dict
 
 
-def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analytic_ser=True):
+def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list, info, analytic_ser=True):
     """
     Variations of plotting the symbol error rates.
     Because there was enough variety in the types of testing, just allowing for configuration via parameters would have
@@ -190,7 +196,7 @@ def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analyti
     :return:
     """
     fig = plt.figure(1)
-    names =["Classic Viterbi", "Linear MMSE", "Neural Net Reduced", "Neural Net"]
+    names =["Classic Viterbi", "Linear MMSE",  "Neural Net", "Neural Net Reduced"]
     data_dict = dict()
     data_dict["SNRs_dB"] = SNRs_dB
     for ind, SER in enumerate(SER_list):
@@ -202,7 +208,7 @@ def plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, SER_list,info, analyti
         snrs = np.power(10, SNRs_dB / 10)
         analytic = 1 - norm.cdf(np.sqrt(2*snrs))
         plt.plot(SNRs_dB, analytic, label='Analytic')
-    plt.xlabel(r'$10log(E[x]/\sigma^2_n$) [dB]')
+    plt.xlabel(r'10log$(E[x]/\sigma^2_n$) [dB]')
     plt.ylabel("SER")
     plt.xscale('linear')
     plt.yscale('log')

@@ -176,8 +176,9 @@ def test_full_integration():
 
 
     figure, dictionary = plot_quantized_symbol_error_rates_nn_compare(SNRs_dB, [classic_performance,
-                                                                                linear_mmse_performance, viterbi_net_reduced_performance,
-                                                                                viterbi_net_performance], data_gen.get_info_for_plot())
+                                                                                linear_mmse_performance, viterbi_net_performance,
+                                                                                viterbi_net_reduced_performance
+                                                                                ], data_gen.get_info_for_plot())
     time_path = "Output/SER_"+f"{time.time()}"+"curves.png"
 
     figure.savefig(time_path, format="png")

@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 15, 5)
+    SNRs_dB = np.linspace(0, 15, 15)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -132,38 +132,46 @@ def test_full_integration():
         """
         Create new set of test data. 
         """
-        del data_gen
-        data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
-        data_gen.random_symbol_stream()
-        data_gen.send_through_channel()
+        ser_nn = []
+        ser_classic = []
+        ser_lmmse = []
 
-        """
-        Evaluate Neural Net Performance
-        """
-        metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
-        detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                            metric.metric)
-        ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+        for reps in range(5):
+            del data_gen
+            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+            data_gen.random_symbol_stream()
+            data_gen.send_through_channel()
+
+            """
+            Evaluate Neural Net Performance
+            """
+            metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
+            detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+                                                metric.metric)
+            ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
-        """
-        Compare to Classical Viterbi with full CSI
-        """
-        # channel= np.round(channel*10)
-        metric = GaussianChannelMetric(channel, np.flip(data_gen.channel_output))  # This is a function to be used in the viterbi
-        detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                            metric.metric)
-        ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)
+            """
+            Compare to Classical Viterbi with full CSI
+            """
+            metric = GaussianChannelMetric(channel, np.flip(data_gen.channel_output))  # This is a function to be used in the viterbi
+            detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+                                                metric.metric)
+            ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)
 
-        """
-        Evaluate performance with linear MMSE
-        """
+            """
+            Evaluate performance with linear MMSE
+            """
+            ser_lmmse.append(mmse_equalizer.test_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output))
 
+        ser_nn = np.average(ser_nn)
+        ser_classic = np.average(ser_classic)
+        ser_lmmse = np.average(ser_lmmse)
 
         """
         Analyze SER performance
         """
-        linear_mmse_performance.append(mmse_equalizer.test_equalizer(data_gen.symbol_stream_matrix, data_gen.channel_output))
+        linear_mmse_performance.append(ser_lmmse)
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 

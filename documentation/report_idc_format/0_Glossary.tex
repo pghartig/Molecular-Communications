@@ -7,11 +7,7 @@
 %%
 \begin{acronym}[\glossaryfirstcolumnlength]
  \acro{AWGN}{Additive White Gaussian Noise}
- \acro{CTAN}{Comprehensive \TeX{} Archive Network}
- \acro{DFT}[\ensuremath{\mathrm{DFT}}]{Diskrete Fourier Transformation}
- \acro{GSM}{Global System for Mobile Communications}
  \acro{SNR}[\ensuremath{\mathrm{SNR}}]{Signal-to-Noise Ratio}
- \acro{TLA}{Three Letter Acronym}
 \end{acronym}
 %%
 %% -----no empty line here------------------------------------------
@@ -19,53 +15,64 @@
 \addsec{\operatorsname}
 %
 \begin{symbollist}{\glossaryfirstcolumnlength}
-  \sym{$(\cdot)^*$}{Konjugiert komplex}
-  \sym{$(\cdot)^{-1}$}{Matrix Inversion}
-  \sym{$(\cdot)^T$}{Matrix Transponierung}
-  \sym{$(\cdot)^H$}{Hermitesche Matrix, konjugiert transponierte Matrix}
-  \sym{$||\cdot||$}{Euklidsche Norm}
-  \sym{$\ast$}{Faltung}
-  \sym{$E\{\cdot\}$}{Erwartungswert}
+  \sym{$(\cdot)^*$}{Complex Conjugate}
+  \sym{$(\cdot)^{-1}$}{Matrix Inverse}
+  \sym{$(\cdot)^T$}{Matrix Transpose}
+  \sym{$(\cdot)^H$}{Matrix Hermetian (Matrix Conjugate Transpose)}
+  \sym{$||\cdot||$}{Euclidean Norm}
+  \sym{$E\{\cdot\}$}{Expectation}
 \end{symbollist}
 %%
 %% -----no empty line here------------------------------------------
 %%
-\addsec{\symbolsname}
+%\addsec{\symbolsname}
 %
-\begin{symbollist}{\glossaryfirstcolumnlength}
+%\begin{symbollist}{\glossaryfirstcolumnlength}
+
 %% -A-
 %% -B-
-  \sym{$B$}{Bandbreite [\si{\Hz}]}
+%  \sym{$B$}{Bandbreite [\si{\Hz}]}
 %% -C-
-  \sym{$c_0$}{Lichtgeschwindigkeit [\si[per=frac,fraction=frac]{\meter\per\second}]}
+%  \sym{$c_0$}{Lichtgeschwindigkeit [\si[per=frac,fraction=frac]{\meter\per\second}]}
 %% -D-
 %% -E-
 %% -F-
-  \sym{$f$}{Frequenz [\si{\Hz}]}
+%  \sym{$f$}{Frequenz [\si{\Hz}]}
 %% -G-
 %% -H-
 %% -I,J-
-  \sym{$\lmat{I}$}{Einheitsmatrix}
-  \sym{$J(\cdot)$}{Kostenfunktion}
+%  \sym{$\lmat{I}$}{Einheitsmatrix}
+%  \sym{$J(\cdot)$}{Kostenfunktion}
 %% -K-
-  \sym{$k$}{Zeit- bzw. Symbolindex}
+%  \sym{$k$}{Zeit- bzw. Symbolindex}
 %% -L-
-  \sym{$\Lambda$}{Metrik}
+%  \sym{$\Lambda$}{Metrik}
 %% -M-
 %% -N-
 %% -O-
 %% -P-
-  \sym{$\varphi(\cdot)$}{Auto- bzw. Kreuzkorrelationsfunktion}
+%  \sym{$\varphi(\cdot)$}{Auto- bzw. Kreuzkorrelationsfunktion}
 %% -Q-
 %% -R-
-  \sym{$r(t),\,r[k]$}{Empfangssignal im Zeitbereich (zeitkontinuierlich, zeitdiskret)}
+%  \sym{$r(t),\,r[k]$}{Empfangssignal im Zeitbereich (zeitkontinuierlich, zeitdiskret)}
 %% -S-
-  \sym{$s(t),\,s[k]$}{Sendesignal im Zeitbereich (zeitkontinuierlich, zeitdiskret)}
-  \sym{$\sigma^2$}{Varianz (äquivalent zu Leistung)}
+%  \sym{$s(t),\,s[k]$}{Sendesignal im Zeitbereich (zeitkontinuierlich, zeitdiskret)}
+%  \sym{$\sigma^2$}{Varianz (ï¿½quivalent zu Leistung)}
 %% -T-
-  \sym{$t$}{Zeit [\si{\second}]}
+%  \sym{$t$}{Zeit [\si{\second}]}
 %% -U,V,W-
 %% -X,Y,Z-
 %%
-\end{symbollist}
+%\end{symbollist}
+\addsec{Notation}
+The following notation is used through the following work. \par
+$p(x)$ is the probability of an event $x$.
+$p(x|y)$ is the conditional probability of $x$ given $y$.
+$E[x]$ is the expected value of a random variable .
+$x \sim \mathcal{N}(0,1)$ denotes a random variable $x$ whose probability distribution is Gaussian with mean 0 and variance 1. 
+
+Vectors are denoted by bold font lower-case letters ($\mathbf{x}$) and are assumed column vectors.
+The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing the elements i through j of $\mathbf{x}$. Sets are denoted using upper-case calligraphic letters ($\mathcal{A}$) and the cardinality of a set $\mathcal{A}$ is denoted by $|\mathcal{A}|$.
+$\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimizes the function $f(x)$.
+
 \clearpage

@@ -334,6 +334,14 @@ class CommunicationDataGenerator:
             no_noise.scatter(self.channel_output, self.channel_output)
 
 
+        #   Add AWGN with pre-selected noise power
+        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / (self.SNR*2)))
+        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
+        if plot==True:
+            noised = fig_main.add_subplot(1, 3, 3)
+            noised.set_title("Noise Added")
+            noised.scatter(self.channel_output, self.channel_output)
+            plt.show()
 
         #   Quantize before adding noise to ensure noise profile is not changed
         if quantization_level is not None:
@@ -350,15 +358,6 @@ class CommunicationDataGenerator:
             quantized = fig_main.add_subplot(1, 3, 2)
             quantized.set_title("Quantized")
             quantized.scatter(self.channel_output, self.channel_output)
-
-        #   Add AWGN with pre-selected noise power
-        self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / (self.SNR*2)))
-        self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
-        if plot==True:
-            noised = fig_main.add_subplot(1, 3, 3)
-            noised.set_title("Noise Added")
-            noised.scatter(self.channel_output, self.channel_output)
-            plt.show()
 
     def transmit_modulated_signal2(self):
         """

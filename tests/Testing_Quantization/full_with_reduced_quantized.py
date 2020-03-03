@@ -27,17 +27,18 @@ def test_reduced_full():
     seed_generator = 0
     data_gen = None
     channel = None
-    quantization_level = 0
-    # quantization_level = None
 
     number_symbols = 5000
     channel = np.zeros((1, 5))
-    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
       # Channel to use for redundancy testing
+    # channel[0, [0, 1, 2, 3, 4]] = 0, 0, 0.688, 0.460, 0.5
+    # channel = np.flip(channel)
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))
-    channel[0, [0, 1, 2, 3, 4]] = .9, 0, .0, .8, .7
+    # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
+    # channel[0, [0, 1, 2, 3]] = .8, 0, .2, .8
     # channel = np.zeros((1, 3))
     # channel[0, [0]] = 1
     # channel = np.flip(channel)
@@ -49,7 +50,7 @@ def test_reduced_full():
 
         data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
-        data_gen.send_through_channel(quantization_level)
+        data_gen.send_through_channel()
 
         # plt.scatter(data_gen.channel_output.flatten(),data_gen.channel_output.flatten())
         # plt.show()
@@ -199,12 +200,12 @@ def test_reduced_full():
         ser_classic = []
         ser_lmmse = []
 
-        for reps in range(10):
+        for reps in range(5):
 
             del data_gen
-            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
-            data_gen.send_through_channel(quantization_level)
+            data_gen.send_through_channel()
 
             """
             Evaluate Reduced Neural Net Performance
@@ -232,8 +233,7 @@ def test_reduced_full():
             """
             Compare to Classical Viterbi with full CSI
             """
-            # metric = GaussianChannelMetric(channel,  np.flip(data_gen.channel_output))  # This is a function to be used in the viterbi
-            metric = GaussianChannelMetric(channel,  np.flip(data_gen.channel_output), quantization_level)  # This is a function to be used in the viterbi
+            metric = GaussianChannelMetric(channel,  np.flip(data_gen.channel_output))  # This is a function to be used in the viterbi
             detected_classic = viterbi_setup_with_nodes(data_gen.alphabet,
                                                         data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                         metric.metric)
