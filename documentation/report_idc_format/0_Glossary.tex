@@ -23,8 +23,10 @@
   \sym{$(\cdot)^H$}{Matrix Hermetian (Matrix Conjugate Transpose)}
   \sym{$||\cdot||$}{Euclidean Norm}
   \sym{$E\{\cdot\}$}{Expectation}
+  \sym{$p(\cdot)$}{Probability}
+  \sym{$p(\cdot|\cdot)$}{Conditional Probability}
   \sym{sign$(\cdot)$}Sign Operator
-    \sym{floor$(\cdot)$}Floor Operator
+  \sym{floor$(\cdot)$}Floor Operator
 
 \end{symbollist}
 %%
@@ -70,14 +72,18 @@
 %%
 %\end{symbollist}
 \addsec{Notation}
-The following notation is used through the following work. \par
-$p(x)$ is the probability of an event $x$.
-$p(x|y)$ is the conditional probability of $x$ given $y$.
-$E[x]$ is the expected value of a random variable .
-$x \sim \mathcal{N}(0,1)$ denotes a random variable $x$ whose probability distribution is Gaussian with mean 0 and variance 1. 
-
+%
+The following notation is used through this work. \par
+\begin{itemize}
+\item 
 Vectors are denoted by bold font lower-case letters ($\mathbf{x}$) and are assumed column vectors.
-The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing the elements i through j of $\mathbf{x}$. Sets are denoted using upper-case calligraphic letters ($\mathcal{A}$) and the cardinality of a set $\mathcal{A}$ is denoted by $|\mathcal{A}|$.
-$\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimizes the function $f(x)$.
+\item 
+The $x \sim \mathcal{N}(0,1)$ denotes a random variable $x$ whose probability distribution is Gaussian with mean 0 and variance 1.
+\item 
+The vector $\mathbf{x}_{\mathrm{i}}^{\mathrm{j}}$ denotes a vector containing the elements i through j of $\mathbf{x}$.
+\item Sets are denoted using upper-case calligraphic letters ($\mathcal{A}$).
+\item The cardinality of a set $\mathcal{A}$ is denoted by $|\mathcal{A}|$.
+\item $\underset{x}{\text{argmin}} \; f(x)$ is the value of variable $x$ which minimizes the function $f(x)$.
+\end{itemize}
 
 \clearpage

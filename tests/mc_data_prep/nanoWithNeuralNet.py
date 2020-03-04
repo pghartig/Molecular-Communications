@@ -34,11 +34,11 @@ def test_nano_data_nerual_net():
     test_input_sequence = np.loadtxt(test_input_sequence, delimiter=",")
     true_input_string = np.loadtxt(true_path, delimiter=",")
     # For now just making a channel that represents some estimated memory length of the true channel
-    SNRs_dB = np.linspace(15, 15, 1)
+    SNRs_dB = np.linspace(5, 5, 1)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
 
-    channel = np.zeros((1, 3))
+    channel = np.zeros((1, 8))
     channel[0, [0]] = 1
     train_time, train_measurement = load_file(train_path)
     test_time, test_measurement = load_file(test_path)
@@ -50,7 +50,7 @@ def test_nano_data_nerual_net():
     data_gen = CommunicationDataGenerator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel=channel)
     data_gen.random_symbol_stream()
     # 5 is true perdiod
-    symbol_period = 50
+    symbol_period = 5
     data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
 
@@ -61,7 +61,8 @@ def test_nano_data_nerual_net():
     Load in Trained Neural Network and verify that it is acceptable performance
     """
     reduced_state = 4
-    x, y, states_reduced, states_original, totals = data_gen.get_labeled_data_reduced_state(reduced_state)
+    # x, y, states_reduced, states_original, totals = data_gen.get_labeled_data_reduced_state(reduced_state)
+    x, y = data_gen.get_labeled_data()
     y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
     x = torch.Tensor(x)
     y = torch.Tensor(y)
@@ -77,7 +78,7 @@ def test_nano_data_nerual_net():
     channel_length = data_gen.CIR_matrix.shape[1]
     # test_length = channel_length-1
     output_layer_size = reduced_state
-    # output_layer_size = np.power(data_gen.alphabet.size, channel_length)
+    output_layer_size = np.power(data_gen.alphabet.size, channel_length)
     N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, output_layer_size
     net = models.ViterbiNet(D_in, H1, H2, D_out)
     optimizer = optim.Adam(net.parameters(), lr=1e-2)
@@ -128,19 +129,19 @@ def test_nano_data_nerual_net():
     Create new set of test data. 
     """
     # For comparing generated data to the true test data
-    del data_gen
-    number_symbols = 2000
-    data_gen = CommunicationDataGenerator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
-    data_gen.random_symbol_stream()
-    data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
-    data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
-    generated_output = data_gen.channel_output
-
     # del data_gen
+    # number_symbols = 2000
     # data_gen = CommunicationDataGenerator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
-    # data_gen.random_symbol_stream(true_input_string)
-    # data_gen.provide_transmitted_matrix(test_measurement)
+    # data_gen.random_symbol_stream()
+    # data_gen.modulate_sampled_pulse(pulse_shape, symbol_period)
     # data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
+    # generated_output = data_gen.channel_output
+
+    del data_gen
+    data_gen = CommunicationDataGenerator(SNR=SNRs, symbol_stream_shape=(1, number_symbols), constellation="onOffKey", channel= channel)
+    data_gen.random_symbol_stream(true_input_string)
+    data_gen.provide_transmitted_matrix(test_measurement)
+    data_gen.filter_sample_modulated_pulse(pulse_shape, symbol_period)
     # # plt.scatter(data_gen.channel_output, data_gen.channel_output)
     # plt.scatter(generated_output, generated_output)
     # plt.show()
@@ -153,12 +154,16 @@ def test_nano_data_nerual_net():
     """
     Evaluate Neural Net Performance
     """
-    metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
+    # metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
+    metric = NeuralNetworkMixtureModelMetric(net, mm, np.flip(data_gen.channel_output))
+    # detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
+    #                                        metric.metric, reduced_length=reduced_state, reduced=True)
     detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
-                                           metric.metric, reduced_length=reduced_state, reduced=True)
-    symbol_probabilities = get_symbol_probabilities(totals, states_original, data_gen.alphabet)
-    survivor_state_path = get_symbols_from_probabilities(detected_nn, symbol_probabilities, data_gen.alphabet)
-    ser_nn = symbol_error_rate_mc_data(survivor_state_path, data_gen.symbol_stream_matrix, channel_length)
+                                           metric.metric)
+    # symbol_probabilities = get_symbol_probabilities(totals, states_original, data_gen.alphabet)
+    # detected_nn = get_symbols_from_probabilities(detected_nn, symbol_probabilities, data_gen.alphabet)
+    ser_nn = symbol_error_rate_mc_data(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+    # ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
     viterbi_net_performance.append(ser_nn)
 

@@ -58,16 +58,17 @@ def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, p
     :param pre_pad:
     :return:
     """
-    detected_array = np.asarray(detected_symbols[pre_pad::])
+    detected_array = np.flip(np.asarray(detected_symbols))
+    detected_array = detected_array[pre_pad::]
     detected_array += (detected_array == 0)*-1
-    input = input_symbols.flatten()
-    input += (input == 0)*-1
-    test1 = np.argmax(np.max(np.convolve(detected_array, input)))
-    test3 = np.max(np.convolve(np.flip(detected_array), input))
-    test2 = np.max(np.convolve(detected_array, input))
-    input = input[(channel_length+1)::]
-    input = input[:detected_array.size]
-    ser = np.sum(np.not_equal(detected_array[:input.size], input)) / detected_array.size
+    input_symbols = input_symbols.flatten()
+    input_symbols += (input_symbols == 0)*-1
+
+    test3 = np.max(np.convolve(np.flip(detected_array), input_symbols))
+    test2 = np.max(np.convolve(detected_array, input_symbols))
+    input_symbols = input_symbols[(channel_length+1)::]
+    input_symbols = input_symbols[:detected_array.size]
+    ser = np.sum(np.not_equal(detected_array[:input_symbols.size], input_symbols)) / detected_array.size
     return ser
 
 
