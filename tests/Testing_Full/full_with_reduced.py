@@ -22,13 +22,13 @@ def test_reduced_full():
     viterbi_net_reduced_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(30, 30, 2)
+    SNRs_dB = np.linspace(15, 15, 1)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
     quantization_level = None
-    # quantization_level = 1
+    quantization_level = 0
     noise_levels = None
     # noise_levels = 2
 
@@ -36,7 +36,6 @@ def test_reduced_full():
     channel = np.zeros((1, 5))
     # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
     channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
-
       # Channel to use for redundancy testing
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
@@ -46,7 +45,6 @@ def test_reduced_full():
     # channel[0, [0, 1, 2]] = .9, .8, .7
     # channel = np.zeros((1, 3))
     # channel[0, [0]] = 1
-    # channel = np.flip(channel)
 
     for SNR in SNRs:
         """
@@ -208,15 +206,14 @@ def test_reduced_full():
         for reps in range(2):
 
             del data_gen
-            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
+            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 100), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(quantization_level, noise_levels=noise_levels)
 
             """
             Evaluate Reduced Neural Net Performance
             """
-            metric = NeuralNetworkMixtureModelMetric(net_reduced, mm_reduced, data_gen.channel_output)
-            # metric = NeuralNetworkMixtureModelMetric(net_reduced, mm_reduced, np.flip(data_gen.channel_output))
+            metric = NeuralNetworkMixtureModelMetric(net_reduced, mm_reduced, np.flip(data_gen.channel_output))
             detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric, reduced_length=reduced_state, reduced=True)
             symbol_probabilities = get_symbol_probabilities(totals, states_original, data_gen.alphabet)
@@ -230,8 +227,6 @@ def test_reduced_full():
             """
 
             metric = NeuralNetworkMixtureModelMetric(net, mm, np.flip(data_gen.channel_output))
-            # metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
-
             detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
             ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
@@ -242,7 +237,6 @@ def test_reduced_full():
             Compare to Classical Viterbi with full CSI
             """
             metric = GaussianChannelMetric(channel,  np.flip(data_gen.channel_output), quantization_level)  # This is a function to be used in the viterbi
-            # metric = GaussianChannelMetric(channel, data_gen.channel_output, quantization_level)  # This is a function to be used in the viterbi
             detected_classic = viterbi_setup_with_nodes(data_gen.alphabet,
                                                         data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                         metric.metric)
@@ -280,4 +274,14 @@ def test_reduced_full():
     figure.savefig(time_path, format="png")
 
 
-
+    plt.figure(2)
+    plt.plot(test_cost_over_epoch_reduced, label='Test Error R')
+    plt.plot(train_cost_over_epoch_reduced, label='Train Error R')
+    plt.plot(test_cost_over_epoch, label='Test Error')
+    plt.plot(train_cost_over_epoch, label='Train Error')
+    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
+    plt.xlabel("Epoch")
+    plt.ylabel("Error")
+    plt.legend(loc='upper right')
+    path = f"Output/Neural_Network{time.time()}_Convergence.png"
+    plt.savefig(path, format="png")

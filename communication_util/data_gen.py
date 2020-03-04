@@ -345,7 +345,7 @@ class CommunicationDataGenerator:
 
         if noise_levels is not None:
             #   Temporary way of setting noise average
-            self.noise_parameter[0] = 1
+            self.noise_parameter[0] = 10
             #   Generate a noise floor that is added randomly to certain received symbols
             self.channel_output += self.noise_parameter[0]*np.random.random_integers(0, noise_levels,
                                                              self.channel_output.shape)

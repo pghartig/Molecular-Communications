@@ -44,7 +44,7 @@ def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     check2 = check2[:check1.size]
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     # correct for indexing problem
-    ser = 1-test3 / input_symbols.size
+    # ser = 1-test3 / input_symbols.size
     return ser
 
 
@@ -119,17 +119,17 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     :return:
     """
     channel_length -= 1
-    detected_array = np.asarray(detected_symbols).astype('int32')
+    detected_array = np.flip(np.asarray(detected_symbols)).astype('int32')
     estimate_ratio = np.sum(detected_array)
     input_ratio = np.sum(input_symbols)
     input_symbols = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, input_symbols))
     test2 = np.max(np.convolve(np.flip(detected_array), input_symbols))
-    # input_symbols = input_symbols[:detected_array.size]
     detected_array = detected_array[:input_symbols.size]
+    input_symbols = input_symbols[:detected_array.size]
     ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
-    # ser = 1-test2 / detected_array.size
+    ser = 1-test2 / detected_array.size
     return ser
 
 
@@ -355,10 +355,9 @@ def get_symbols_from_probabilities(state_path, probabilities, alphabet):
     output = np.ones((alphabet.size, (len(state_path) + probabilities.shape[1])))
     for ind, state in enumerate(state_path):
         #   Get symbol memory probabilities
-        # probability_matrix = np.flip(probabilities[state, :, :].T, axis=1)
         probability_matrix = probabilities[state, :, :].T
+        probability_matrix = np.flip(probability_matrix, axis=1)
         output[:, ind:(ind + probability_matrix.shape[1])] *= probability_matrix
-        # output[:, ind:(ind + probability_matrix.shape[1])] += probability_matrix
         #   Now insert this into a final array
     #   Now find most probable symbol
     most_likely_symbol_ind = alphabet[np.argmax(output, axis=0)]

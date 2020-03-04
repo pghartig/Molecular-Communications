@@ -72,6 +72,7 @@ y[\text{k}] = \text{Quant}(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
 			  \caption{A Quantization function with with 11 levels of quantization, lower saturation level -0.5 and upper saturation level 0.5. }
 	  \label{fig:Quantized Overlay}
 \end{figure}
+In this work, the upper and lower saturation levels are chosen based on the set of training data such that no received symbols are clipped to the saturation level.
  
 \section{Background}
 The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven, neural network-based estimator is then incorporated into the optimization algorithm. 
