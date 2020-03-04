@@ -307,7 +307,7 @@ class CommunicationDataGenerator:
         num_samples = self.samples_per_symbol_period*self.symbol_stream_matrix.shape[1]
         self.modulated_signal_function_sampled = self._sample_function(num_samples, self.modulated_signal_function, noise=False)
 
-    def send_through_channel(self, quantization_level=None, plot=False, noise_levels=False):
+    def send_through_channel(self, quantization_level=None, plot=False, noise_levels=None):
         """
         TODO generalize channel as a class through which a signal is sent.
         This function simulates passing the transmitted signal through an LTI channel.
@@ -363,14 +363,12 @@ class CommunicationDataGenerator:
             # plt.legend(loc='upper left')
             # plt.show()
 
-
-
-
-
         if plot==True:
             quantized = fig_main.add_subplot(1, 3, 2)
             quantized.set_title("Quantized")
             quantized.scatter(self.channel_output, self.channel_output)
+
+
 
     def transmit_modulated_signal2(self):
         """

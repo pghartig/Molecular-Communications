@@ -335,7 +335,7 @@ with r as the received signal and $E_b$ being the energy per bit at the receiver
 
 \subsection{Simulation Details}
 The following simulations are performed using only real-valued transmit symbols, channels and noise. As a result, an SNR adjustment factor of 3dB has been used in order to align with well-know results from other sources. 
-\subsubsection{Implementation Details}
+\subsubsection{Implementation Details}\label{implementation_details}
 This section defines relevant information for implementation of the simulation used to generate the results below.
 \begin{itemize}
 \item \textbf{Neural Network}
@@ -368,10 +368,9 @@ The neural network used in this simulation was implemented using the PyTorch mac
 
 
 \subsection{Simulation Results}
-The following section evaluates the performance of the equalizers described in this work using simulations
+The following section evaluates the performance of the equalizers described in this work using simulations details in \ref{implementation_details}
 \par
-We first evaluate the detector performance using linear, time-tnvariant channels as defined in equation \eqref{lti_channel}. In order to compare the performance of the reduced state equalizer, we consider cases with channel redundancy (Fig. \ref{fig:LTI performance}) and without channel redundancy (Fig. \ref{fig:LTI performance redundant}). 
-with impulse response $a[l] = ...$.
+We first evaluate the detector performance using LTI channels as defined in equation \eqref{lti_channel}. In order to compare the performance of the reduced state equalizer, we consider two cases. One LTI channel with state redundancy (Fig. \ref{fig:LTI performance}) and one without channel state redundancy (Fig. \ref{fig:LTI performance redundant}). 
 \begin{figure}[H]
 	\includegraphics[width=\textwidth,height = 10cm]{results/lti_8_reduced}
 		  \caption{Detection performance over LTI channel with AWGN}

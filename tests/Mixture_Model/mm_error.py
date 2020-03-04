@@ -37,8 +37,10 @@ def test_mm():
         plt.scatter(mus*np.ones(mu.size), mu2, c='Orange')
     plt.xlabel("Real")
     plt.ylabel("Img")
-    plt.legend(loc='upper left')
-    plt.show()
+    plt.legend(loc='lower left', prop={"size":12})
+    # plt.show()
+    path = f"Output/mixture_model.png"
+    plt.savefig(path, format="png")
     # plt.scatter(self.channel_output, self.channel_output, label="Quantized Output")
     # plt.axvline(c='grey', lw=1)
     # plt.axhline(c='grey', lw=1)

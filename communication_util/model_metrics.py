@@ -33,7 +33,7 @@ class GaussianChannelMetric(metric):
     :return:
     """
 
-    def __init__(self, csi, received, quantization_level):
+    def __init__(self, csi, received, quantization_level=None):
         metric.__init__(self, received)
         self.parameters = csi
         self.quantization_level = quantization_level

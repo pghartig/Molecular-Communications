@@ -22,24 +22,26 @@ def test_reduced_full():
     viterbi_net_reduced_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(0, 15, 15)
+    SNRs_dB = np.linspace(10, 15, 2)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
-    # quantization_level = None
-    quantization_level = 0
-    # noise_levels = None
-    noise_levels = 2
+    quantization_level = None
+    # quantization_level = 0
+    noise_levels = None
+    # noise_levels = 2
 
     number_symbols = 5000
     channel = np.zeros((1, 5))
-    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
       # Channel to use for redundancy testing
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))
     channel[0, [0, 1, 2, 3, 4]] = .9, 0, .0, .8, .7
+    # channel = np.zeros((1, 3))
+    # channel[0, [0, 1, 2]] = .9, .8, .7
     # channel = np.zeros((1, 3))
     # channel[0, [0]] = 1
     # channel = np.flip(channel)
@@ -204,7 +206,7 @@ def test_reduced_full():
         for reps in range(10):
 
             del data_gen
-            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
+            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 1000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(quantization_level, noise_levels=noise_levels)
 

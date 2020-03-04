@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(0, 15, 15)
+    SNRs_dB = np.linspace(10, 15, 15)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -29,10 +29,8 @@ def test_full_integration():
     channel = None
     number_symbols = 5000
     channel = np.zeros((1, 5))
-    # channel[0, [0, 1, 2, 3, 4]] = 0, 0, 0.688, 0.460, 0.227
-    # channel = np.flip(channel)
-    channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
-    # channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
+    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))

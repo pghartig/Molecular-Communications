@@ -26,7 +26,7 @@ def get_combinatoric_list(alpabet, item_length, item_list, item):
 def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
-    accomodate the different equalizers which may require that the alignment is setup differently.
+    accommodate the different equalizers which may require that the alignment is setup differently.
     :param detected_symbols:
     :param input_symbols:
     :param channel_length:
@@ -38,19 +38,19 @@ def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     input_symbols = input_symbols.flatten().astype('int32')
     # This is a useful way of checking equalizer performance before alignment is correct
     test1 = np.max(np.convolve(detected_array, input_symbols))
-    test2 = np.max(np.convolve(np.flip(detected_array), input_symbols))
-    check2 = input_symbols[:(input_symbols.size-channel_length)]
-    check1 = detected_array[:check2.size]
-    ser = np.sum(np.not_equal(check2[:check1.size], check1)) / check1.size
-    #temp for causal indexing issue
-    # ser = test2 / check1.size
+    test3 = np.max(np.convolve(np.flip(detected_array), input_symbols))
+    check1 = detected_array[channel_length:]
+    check2 = input_symbols[:check1.size]
+    ser = np.sum(np.not_equal(check2, check1)) / check1.size
+    # correct for indexing problem
+    ser = 1-test3 / input_symbols.size
     return ser
 
 
 def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, pre_pad=0):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
-    accomodate the different equalizers which may require that the alignment is setup differently.
+    accommodate the different equalizers which may require that the alignment is setup differently.
     :param detected_symbols:
     :param input_symbols:
     :param channel_length:
@@ -73,7 +73,7 @@ def symbol_error_rate_mc_data(detected_symbols, input_symbols, channel_length, p
 def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
-    accomodate the different equalizers which may require that the alignment is setup differently.
+    accommodate the different equalizers which may require that the alignment is setup differently.
     :param detected_symbols:
     :param input_symbols:
     :param channel_length:
@@ -90,21 +90,20 @@ def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channe
 def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
-    accomodate the different equalizers which may require that the alignment is setup differently.     :param detected_symbols:
+    accommodate the different equalizers which may require that the alignment is setup differently.     :param detected_symbols:
     :param input_symbols:
     :param channel_length:
     :return:
     """
     detected_array = np.asarray(detected_symbols).astype('int32')
     ratio_test2 = np.sum(detected_array)
-    t = input_symbols.flatten().astype('int32')
-    test1 = np.max(np.convolve(detected_array, t))
-    test2 = np.max(np.convolve(np.flip(detected_array), t))
-    check2 = t[(channel_length-1):]
-    check1 = detected_array[:check2.size].astype('int32')
-    ser = np.sum(np.not_equal(check2, check1)) / check1.size
+    input_symbols = input_symbols.flatten().astype('int32')
+    test1 = np.max(np.convolve(detected_array, input_symbols))
+    test2 = np.max(np.convolve(np.flip(detected_array), input_symbols))
+    input_symbols = input_symbols[:detected_array.size]
+    ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
-    # ser = test2 / check1.size
+    ser = 1-test2 / input_symbols.size
     return ser
 
 
@@ -121,19 +120,21 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     detected_array = np.asarray(detected_symbols).astype('int32')
     estimate_ratio = np.sum(detected_array)
     input_ratio = np.sum(input_symbols)
-    flat_input = input_symbols.flatten().astype('int32')
-    test1 = np.max(np.convolve(detected_array, flat_input))
-    test2 = np.max(np.convolve(np.flip(detected_array), flat_input))
-    ser = np.sum(np.not_equal(flat_input, detected_array[:flat_input.size])) /detected_array.size
+    input_symbols = input_symbols.flatten().astype('int32')
+    test1 = np.max(np.convolve(detected_array, input_symbols))
+    test2 = np.max(np.convolve(np.flip(detected_array), input_symbols))
+    # input_symbols = input_symbols[:detected_array.size]
+    detected_array = detected_array[:input_symbols.size]
+    ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
-    # ser = test2 / detected_array.size
+    ser = 1-test2 / detected_array.size
     return ser
 
 
 def symbol_error_rate_sampled(detected_symbols, input_symbols):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
-    accomodate the different equalizers which may require that the alignment is setup differently.
+    accommodate the different equalizers which may require that the alignment is setup differently.
     :param detected_symbols:
     :param input_symbols:
     :return:
