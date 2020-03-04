@@ -42,7 +42,7 @@ class GaussianChannelMetric(metric):
         costs = []
         for state in states:
             channel_output = self.received[0, index]
-            predicted = np.dot(np.asarray(state), np.flip(self.parameters).T)
+            predicted = np.dot(np.asarray(state), self.parameters.T)
             if self.quantization_level is not None:
                 cost = quantizer(np.linalg.norm((predicted - channel_output)), self.quantization_level)
                 costs.append(cost)

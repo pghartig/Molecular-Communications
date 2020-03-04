@@ -40,7 +40,8 @@ def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     test1 = np.max(np.convolve(detected_array, input_symbols))
     test3 = np.max(np.convolve(np.flip(detected_array), input_symbols))
     check1 = detected_array[channel_length:]
-    check2 = input_symbols[:check1.size]
+    check2 = input_symbols[channel_length:]
+    check2 = check2[:check1.size]
     ser = np.sum(np.not_equal(check2, check1)) / check1.size
     # correct for indexing problem
     ser = 1-test3 / input_symbols.size
@@ -87,7 +88,7 @@ def symbol_error_rate_channel_compensated(detected_symbols, input_symbols,channe
     return np.sum(np.logical_not(np.equal(detected,  input[0, channel_length::]))) / detected.size
 
 
-def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,channel_length):
+def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols, channel_length):
     """
     A function to return the symbol error rate. Note that there a many version of this functionality to
     accommodate the different equalizers which may require that the alignment is setup differently.     :param detected_symbols:
@@ -95,15 +96,17 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols,cha
     :param channel_length:
     :return:
     """
+    channel_length-=1
     detected_array = np.asarray(detected_symbols).astype('int32')
     ratio_test2 = np.sum(detected_array)
     input_symbols = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, input_symbols))
     test2 = np.max(np.convolve(np.flip(detected_array), input_symbols))
+    input_symbols = input_symbols[channel_length:]
     input_symbols = input_symbols[:detected_array.size]
     ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
-    ser = 1-test2 / input_symbols.size
+    # ser = 1-test2 / input_symbols.size
     return ser
 
 
@@ -127,7 +130,7 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     detected_array = detected_array[:input_symbols.size]
     ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
-    ser = 1-test2 / detected_array.size
+    # ser = 1-test2 / detected_array.size
     return ser
 
 
