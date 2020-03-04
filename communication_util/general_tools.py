@@ -295,14 +295,17 @@ def threshold_detector(alphabet, output):
     return detected_symbols
 
 
-def quantizer(input, level):
+def quantizer(input, level, min=None, max=None):
     """
     An easy implementation of quantization in which the decimals are truncated to a selection place.
     :param input:
     :param level: The number of decimal positions to round to.
     :return:
     """
-    return np.around(input, decimals=level)
+    if min is not None:
+        return np.clip(np.around(input, decimals=level), min, max)
+    else:
+        return np.around(input, decimals=level)
 
 
 def base_2_quantizer(input, level, clip_low = None, clip_high = None):

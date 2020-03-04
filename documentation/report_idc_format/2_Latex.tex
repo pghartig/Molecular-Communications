@@ -1,14 +1,14 @@
 \section{Introduction}
 
-The general communication channel is equivalent to a conditional probability distribution function (pdf). The channel pdf $p(\mathbf{x}|\mathbf{y})$ takes into account the (potentially random) channel though which the transmitted information $\mathbf{x}$ passes to reach a receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence is known as maximum a posteriori (MAP) sequence estimation. In general, sub-optimal solutions to this estimation problem do not require perfect knowledge of the pdf $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
+The general communication channel is equivalent to a conditional probability distribution function (pdf). The channel pdf $p(\mathbf{x}|\mathbf{y})$ takes into account the potentially random channel though which the transmitted information $\mathbf{x}$ passes to reach a receiver as the information $\mathbf{y}$ \cite[Ch.~7]{cover2012elements}. Selecting the most probable transmitted information sequence based on the received information sequence is known as maximum a posteriori (MAP) sequence estimation. In general, sub-optimal solutions to this estimation problem do not require perfect knowledge of the pdf $p(\mathbf{x}|\mathbf{y})$ and may be used when the true $p(\mathbf{x}|\mathbf{y})$ is unknown or impractical to obtain.
 
 \par
 Some communication contexts, including wireless, have successfully used "pilot" symbol-streams to estimate the pdf $p(\mathbf{x}|\mathbf{y})$ \cite{van1995channel}. The receiver is informed of a symbol sequence prior to receiving that same sequence sent through the channel. The receiver may then compare the received signal with the known ground truth to estimate the channel $p(\mathbf{x}|\mathbf{y})$.
-The use of pilot sequences typically relies on a pre-selected channel model whose parameters are determined using the pilot sequence. For example, if the channel is assumed to be a noiseless, linear and time-invariant (LTI) system, the pilot sequences may be used to find the exact impulse response of the channel as will be seen in this work. In some cases, however, a precise channel model may not be available. This work investigates the parameterization of a very general channel model for $p(\mathbf{x}|\mathbf{y})$ using a neural network. In previous work, neural network based estimation of the channel has shown to be an effective method for detection with incomplete channel information for linear, time-invariant channels \cite{shlezinger2019viterbinet} \cite{shlezinger2020datadriven}.
+The use of pilot sequences typically relies on a pre-selected channel model whose parameters are determined using the pilot sequence. For example, if the channel is assumed to be a noiseless, linear and time-invariant (LTI) system, the pilot sequences may be used to find the exact impulse response of the channel as will be seen in this work. In some cases, however, a precise channel model may not be available. This work investigates the parameterization of a very general channel model for $p(\mathbf{x}|\mathbf{y})$ using a neural network. In previous work, a neural network-based estimation of the channel has shown to be an effective method for detection with incomplete channel information for linear, time-invariant channels \cite{shlezinger2019viterbinet} \cite{shlezinger2020datadriven}.
  Extending on this, we look to estimate $p(\mathbf{x}|\mathbf{y})$ for channels in the molecular communication domain.
  We also look to exploit any redundancy in the pdf $p(\mathbf{x}|\mathbf{y})$ in order to reduce the complexity of the resulting detection algorithm.
 \par
-Molecular communication channels can be difficult to characterize due to their non-linear and random components that may or may not depend upon the transmitted information. As a result, molecular communication channels are good candidates for testing this estimation technique. For a thorough review and mathematical formulation of molecular communication channels and their applications see \cite{jamali2019channel}. 
+Molecular communication channels can be difficult to characterize due to their non-linear and random components that may or may not depend upon the transmitted information. As a result, molecular communication channels are good candidates for testing this estimation technique. For a thorough review and mathematical formulation of molecular communication channels and their applications, see \cite{jamali2019channel}. 
 
 \par
 
@@ -16,7 +16,7 @@ Molecular communication channels can be difficult to characterize due to their n
 
 A system model is now developed as a consistent communication framework to be used in the remainder.
 \par
-We consider a point to point communication system as in Figure \ref{fig:model} with a transmitter sending a sequence of information $\mathbf{x}$ over a channel. At the receiver, the sequence  $\mathbf{y}$ is detected. 
+We consider a point-to-point communication system as in Figure \ref{fig:model} with a transmitter sending a sequence of information $\mathbf{x}$ over a channel. At the receiver, the sequence  $\mathbf{y}$ is detected. 
 The elements of $\mathbf{x}$ are chosen from a finite symbol alphabet $\mathcal{A}$ such that $x[\text{k}] \in \mathcal{A}$.
 
 \begin{figure}[H]
@@ -27,7 +27,7 @@ The elements of $\mathbf{x}$ are chosen from a finite symbol alphabet $\mathcal{
 \draw [arrow] (transmitter) -- (channel);
 \draw [arrow] (channel) -- (receiver);
 \end{tikzpicture}
-\caption{The point to point communication system.}
+\caption{The point-to-point communication system.}
 \label{fig:model}
 \end{figure}
 
@@ -49,7 +49,6 @@ In the first communication channel $f_{\text{k}}(\mathbf{x}) + n[\text{k}]$ cons
 \begin{equation}\label{lti_channel}
 y[k] = \sum_{\mathrm{\text{l}=0}}^{\mathrm{\text{L}-1}} a[\text{l}]x[\text{k}-\text{l}].
 \end{equation}
-\par 
 We also consider the case in which the received output from an arbitrary communication channel is quantized giving
 \begin{equation}\label{lti_quantized_channel}
 y[\text{k}] = \text{Quant}(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
@@ -65,20 +64,20 @@ y[\text{k}] = \text{Quant}(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
  for 
  \begin{equation*}
   \text{step size} =\text{floor}\left(\frac{|\text{upper saturation level}- \text{lower saturation level}|}{\text{\# Quantization levels}}\right).
- \end{equation*} A quantizer with 20 quantization levels and lower/upper saturation levels -5/+5 respectively is shown in Figure \ref{fig:Quantized Overlay}.
+ \end{equation*} A quantization function with 20 quantization levels and lower/upper saturation levels -5/+5 respectively is shown in Figure \ref{fig:Quantized Overlay}.
  
  \begin{figure}[H]
 \centering
-	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer_overlay}
-			  \caption{Quantizer with 20 quantization levels, lower saturation levels  $= -5$ and upper saturation levels  $= +5$}.
+	\includegraphics[width=10cm,height = 10cm]{system_model/quantizer_good}
+			  \caption{A Quantization function with with 11 levels of quantization, lower saturation level -0.5 and upper saturation level 0.5. }
 	  \label{fig:Quantized Overlay}
 \end{figure}
  
 \section{Background}
-The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven, neural network based estimator is then incorporated into the optimization algorithm. 
-Extending on the neural network based detector, a method to further reduce the algorithm complexity is then considered. Lastly, a linear equalizer is derived to be used as a reference in the simulation results. 
-\subsection{MLSE and the Viterbi Algorithm}
-Rather than considering only the transmitted symbols $\mathbf{x}$  for the MAP problem described above, instead consider a system in which a sequence $\mathbf{y}$ is received from a channel which may take on a set of states $\{s_1, s_2... s_{\text{L}}\} = \mathcal{S}$. With knowledge of the potential states $\{s_1, s_2... s_{\text{L}}\}$ but not the sequence of realized states $[s[1], s[2]... s[\text{N}]]$ corresponding to $[y[1], y[2]... y[\text{N}]]$, the MAP problem is restated as
+The following section first introduces the optimization problem used in the remainder of this work. An efficient implementation for solving the optimization problem is then introduced. With this foundation in place, the data-driven, neural network-based estimator is then incorporated into the optimization algorithm. 
+Extending on the neural-network-based detector, a method to further reduce the algorithm complexity is then considered. Last, a linear equalizer is derived to be used as a reference in the simulation results. 
+\subsection{The Viterbi Algorithm}
+Rather than considering only the transmitted symbols $\mathbf{x}$ for the MAP problem described above, we consider instead a system in which a sequence $\mathbf{y}$ is received from a channel which may take on a set of states $\{s_1, s_2... s_{\text{L}}\} = \mathcal{S}$. With knowledge of the potential states $\{s_1, s_2... s_{\text{L}}\}$ but not the sequence of realized states $[s[1], s[2]... s[\text{N}]]$ corresponding to $[y[1], y[2]... y[\text{N}]]$, the MAP problem is restated as
 
 \begin{equation*}
 \underset{\mathbf{s}\in\mathcal{S}^N}{\text{argmax}} \; p(\mathbf{s}|\mathbf{y}).
@@ -113,7 +112,7 @@ in which individual terms of the sums are statistically independent. The optimiz
 \end{equation*}   
 This is illustrated in the following example. 
    \par
-   Consider the communication system with $\mathcal{A}=\{0, 1\}$ and received symbols 
+   We consider the communication system with $\mathcal{A}=\{0, 1\}$ and received symbols 
    \begin{equation*}
 y[\text{k}] =  a[\text{0}]x[\text{k}] + a[\text{1}]x[\text{k}-1] + n[\text{k}],
 \end{equation*}
@@ -147,7 +146,7 @@ $-\text{log}(p(y[\text{k}+1]|s_{\text{j}}[\text{k+1}])$. The solution to problem
 
 Note that the Viterbi algorithm is \emph{linearly} complex in the length of the sequence $\mathbf{s}$ ($N$ in the algorithm above) but \emph{exponentially} complex in the number of channel states $|\mathcal{S}|$. 
 \par
-The above model allows channels whose state is based upon transmitted symbols to be represented using a trellis, such as the LTI channel. This graph based model can also generalize to represent channels with certain kinds randomness that is \emph{independent} of the transmitted symbols. In this case, the model is constrained to channels whose state satisfies the property
+The above model allows channels whose state is based upon transmitted symbols to be represented using a trellis, such as the LTI channel. This graph-based model can also generalize to represent channels with certain kinds randomness that is \emph{independent} of the transmitted symbols. In this case, the model is constrained to channels whose state satisfies the property
 \begin{equation*}
 p(\mathbf{s}) = p(s[\text{N}]|s[\text{N-1}]) p(s[\text{N-1}]|s[\text{N-2}])... p(s[\text{2}]|s[\text{1}])p(s[\text{1}]),
 \end{equation*}
@@ -159,7 +158,7 @@ p(s[\text{k}]|\left[s[\mathrm{1}]...s[\mathrm{k-1}]\right],\left[s[\mathrm{k+1}]
 
 An example of such a channel is the same LTI system described above, but with a two-state noise floor satisfying the Markov property (TODO simulate and if results then detail model and reference to results)
 \par
-Lastly, this model can also represent the case in which a channel state $s[k]$ does not uniquely identify a symbol $x[k]$ that was transmitted in the corresponding time index. While this case requires additional tools to ultimately arrive at a unique transmit sequence $\mathbf{x}$ it may also reduce the complexity of the corresponding Viterbi algorithm. This case will be considered in more detail later in this work.
+Finally, this model can also represent the case in which a channel state $s[k]$ does not uniquely identify a symbol $x[k]$ that was transmitted in the corresponding time index. While this case requires additional tools to ultimately arrive at a unique transmit sequence $\mathbf{x}$ it may also reduce the complexity of the corresponding Viterbi algorithm. This case will be considered in more detail later in this work.
 \par
 In the remainder of this work, we consider the case in which the  channel state is determined entirely by $\left[x[\mathrm{i-L+1}]...x[\mathrm{i}]\right]$, as was the case for the basic LTI channel (Remove if results above work). 
 
@@ -176,7 +175,7 @@ p(y[\mathrm{k}]|s_{\text{i}}[\text{k}]) =
 \begin{itemize}
 \item $p(s_{\text{i}}[\text{k}]|y[\mathrm{k}])$: 
 For a channel with finite states $\{s_1, s_2,.. s_{\text{L}}\}$, this probability mass function can be estimated using a neural network for classification. Each training data pair includes a single received pilot symbol $y[\text{k}]$ (the network input ) and the probability of being in a state
-$s_{\text{i}}[\text{k}] \sim \left[x[\mathrm{i-L+1}]...x[\mathrm{i}]\right]$ (the network output). The true state is known for pilot symbols. By using using a network architecture with a number of outputs corresponding to the number of channel states, the trained network will output the desired $p(s_{\text{i}}[\text{k}]|y[\text{k}])$ for all $s_{\mathrm{i}} \in \textit{\cal{S}}$. Figure \ref{nn} depicts the neural network for a channel with four states. The shown network has a total of edges (model parameters) to be optimized during training. For a detailed review of classification using neural networks, see \cite[Ch.~5]{Goodfellow-et-al-2016}.
+$s_{\text{i}}[\text{k}] \sim \left[x[\mathrm{i-L+1}]...x[\mathrm{i}]\right]$ (the network output). The true state is known for pilot symbols. By using using a network architecture with a number of outputs corresponding to the number of channel states, the trained network will output the desired $p(s_{\text{i}}[\text{k}]|y[\text{k}])$ for all $s_{\mathrm{i}} \in \textit{\cal{S}}$. Figure \ref{nn} depicts the neural network for a channel with four states. The shown network has a total of 20 weighted edges (model parameters) to be optimized during training. For a detailed review of classification using neural networks, see \cite[Ch.~5]{Goodfellow-et-al-2016}.
 
 	\begin{figure}[H]
 	\centering
@@ -192,14 +191,13 @@ $s_{\text{i}}[\text{k}] \sim \left[x[\mathrm{i-L+1}]...x[\mathrm{i}]\right]$ (th
 		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
 		\outputlayer[count=4, title=States\\, text=\y] \linklayers
 	    \end{neuralnetwork}
-	    	  	  \caption{A fully-connect, feed-forward neural network architecture for classification of received symbols $y[\text{k}]$ into four channel states.}
+	    	  	  \caption{A fully-connected, feed-forward neural network architecture for classification of received symbols $y[\text{k}]$ into four channel states.}
 \label{nn}
 	\end{figure}
 
 \item $p(y[\mathrm{k}]) = \sum_{s_{\mathrm{i}} \in \textit{$\mathcal{S}$}}p(s_{\mathrm{i}},y[\mathrm{i}])$: This term is found by marginalizing the joint probability of channel state $s_{\mathrm{i}}[\mathrm{k}]$ and received signal $y[\mathrm{k}]$ over all channel states $\mathcal{S}$. As $p(y[\mathrm{k}])$ is constant over all states in a given step of the Viterbi algorithm, it may be interpreted as a weighting factor for the cost of received symbol $y[\mathrm{k}]$ relative to other symbols $y[\mathrm{j}], \; j\neq k$. For example, if $y[\mathrm{k}]$ is received under improbable noise and channel state, this term would reduce the overall impact of $y[\mathrm{k}]$ on the final path chosen through the graph. In the case of equiprobable channel states without receiver noise $p(y[\mathrm{k}])$ would be constant and have no impact on the chosen path.
 \par
-This probability distribution function can be estimated using a so-called mixture-model. This requires pre-selecting the number of considered channel states and a parameterized model for receiver noise. The Expectation Maximization algorithm, detailed in \cite{ng2000cs229}, along with a set of channel output to train the model with, can be used to optimize this model. Unlike parameterizing the neural network this algorithm does not require labeled data. 
- (Figure \ref{fig:mm})
+This probability distribution function can be estimated using a so-called mixture model. This requires pre-selecting the number of considered channel states and a parameterized model for receiver noise. The Expectation Maximization algorithm, detailed in \cite{ng2000cs229}, along with a set of channel output to train the model with, can be used to optimize this model. Unlike parameterizing the neural network this algorithm does not require labeled data. An example of a Guassian mixture model calculated for the output of an LTI channel with 16 states (Gaussian sources) is shown in Figure \ref{fig:mm}. 
 %\\
 %
 %    \noindent\rule[16pt]{\textwidth}{0.6pt}
@@ -224,8 +222,8 @@ This probability distribution function can be estimated using a so-called mixtur
 
 \begin{figure}[H]
 \centering
-	\includegraphics[width=\textwidth,height = 10cm]{system_model/mm}
-	  	  \caption{A mixture of complex, Gaussian sources that can be estimate using the Expectation Maximization algorithm}
+	\includegraphics[width=\textwidth,height = 10cm]{system_model/mixture_model}
+	  	  \caption{A mixture of complex, Gaussian sources and the averages of the Gaussian sources predicted using the Expectation Maximization algorithm}
 	  \label{fig:mm}
 \end{figure}
 
@@ -236,7 +234,7 @@ This probability distribution function can be estimated using a so-called mixtur
 Combining these terms and their impact on the original $p(y[\mathrm{k}]|s_{\text{i}}[\text{k}])$, each edge weight used in the Viterbi algorithm essentially gives the probability of simultaneously arriving at a state $s_{\text{i}}[\text{k}]$ conditioned on the previous state $s_{\text{i}}[\text{k-1}]$ and the probability of receiving $y[\mathrm{k}]$ based on the channel and noise. 
 We now consider how a channel might be represented using the minimum number of states.
 
-\subsection{A Reduced State ViterbiNet}
+\subsection{A Reduced-State ViterbiNet}
 While the Viterbi Algorithm complexity scales exponentially in the number of states possible in each step of the algorithm, in some cases this complexity can be reduced without significant loss of detection performance. One well-established method to achieve this is by pre-filtering the incoming signal so as have a minimum-phase system representing the channel (TODO Cite). Such methods, however, are often dependent upon an estimate of the channel, again implying an assumed underlying channel model. In this section, we consider a method for this complexity reduction without pre-filtering the estimated channel.
 
 There are two things to note here, first, this pre-filtering works for LTI channels but may not be possible for channels with non-linearities (such as molecular communication channels). Also note that even this minimum phase representation of the channel still has redundancy that could be reduced using this method. Finally, this pre-filtering assumes some sort of estimate and model of the channel that we are trying to abstract from in this work for generality. 
@@ -244,14 +242,14 @@ There are two things to note here, first, this pre-filtering works for LTI chann
 
 In the following, relevant example a channel is proposed whose states, as seen by the receiver, contain redundancy. One method for reducing the number of states based on this observed redundancy is then considered. 
 
-Consider a received signal from an LTI communication channel
+The received signal from an LTI communication channel
 \begin{equation*}
-y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1)
+y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1),
 \end{equation*}
 
-with  $\mathcal{A}=\{-1, 1\}$ and $n[k]  \sim \mathcal{N}(0,1)$.  
+with  $\mathcal{A}=\{-1, 1\}$, $n[k]  \sim \mathcal{N}(0,1)$ and 
 
-For $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$), the received signal is shown in Figure \ref{fig:redundant_channel}. Desipite having channel memory L $=5$, there are fewer than the potential $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}| =2^5$ clusters of received signals. This is due to the redundancy in the channel.  As one of the channel taps is 0, this will have no impact on the output seen at the receiver and thus 16 of the potential 32 states are removed. Further, as there are two taps of value 0.2 and $\mathcal{A}=\{-1, 1\}$, when $\left[x[k-2],x[k-3]\right] = [-1,1]$ and $\left[x[k-2],x[k-3]\right] = [1,-1]$ these map to the same output as seen by the receiver. 
+channel impulse response $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$),  is shown in Figure \ref{fig:redundant_channel}. Desipite having channel memory L $=5$, there are fewer than the potential $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}| =2^5$ clusters of received signals. This is due to the redundancy in the channel.  As one of the channel taps is 0, this will have no impact on the output seen at the receiver and thus 16 of the potential 32 states are removed. Further, as there are two taps of value 0.2 and $\mathcal{A}=\{-1, 1\}$, when $\left[x[k-2],x[k-3]\right] = [-1,1]$ and $\left[x[k-2],x[k-3]\right] = [1,-1]$ these map to the same output as seen by the receiver. 
 
 %\begin{figure}[H]
 %\centering
@@ -292,7 +290,7 @@ An important implementation consideration for this clustering approach is now di
 Clearly an appropriate number of clusters will influence the performance of the resulting decoder (Have figure showing this).
 
 \subsection{Equalization benchmark}
-The Linear Minimum Mean-Squared Error (LMMSE) equalizer derived below is used provide a linear equalization reference to the non-linearity of the proposed neural network based equalization .
+The Linear Minimum Mean-Squared Error (LMMSE) equalizer derived below is used provide a linear equalization reference to the non-linearity of the proposed neural network-based equalization .
 \par
 Given an estimate of channel memory length L, the convex and continuously differentiable optimization problem 
 
@@ -322,7 +320,7 @@ E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
  using the same training data as the neural network and mixture model. 
  
 \par
-One interesting note to make in comparing this equalizer with the neural network based equalizer is the amount of training data needed. In the case of the noiseless LTI system, a linear estimator for the channel requires only L training examples to form a deterministic system of equations and learn the channel perfectly. In contrast the neural network will generally have many edge weights and would therefore require more training data. The need for a larger training data set comes with the added potential to learn more complicated channels with the neural network than with the LMMSE equalizer.
+One interesting note to make in comparing this equalizer with the neural network-based equalizer is the amount of training data needed. In the case of the noiseless LTI system, a linear estimator for the channel requires only L training examples to form a deterministic system of equations and learn the channel perfectly. In contrast the neural network will generally have many edge weights and would therefore require more training data. The need for a larger training data set comes with the added potential to learn more complicated channels with the neural network than with the LMMSE equalizer.
  
 \par
 In the results below, the theoretical symbol error rate curve for the  memoryless, AWGN channel is also included as a reference.For all of the tests below, an anti-podal BPSK $\mathcal{A}= \{-1, +1\}$ scheme is simulated giving  \cite{proakis1988introduction}
@@ -372,7 +370,7 @@ The neural network used in this simulation was implemented using the PyTorch mac
 \subsection{Simulation Results}
 The following section evaluates the performance of the equalizers described in this work using simulations
 \par
-We first evaluate the detector performance using Linear Time-Invariant channels as defined in equation \eqref{lti_channel}. In order to compare the performance of the reduced state equalizer, we consider cases with channel redundancy (Fig. \ref{fig:LTI performance}) and without channel redundancy (Fig. \ref{fig:LTI performance redundant}). 
+We first evaluate the detector performance using linear, time-tnvariant channels as defined in equation \eqref{lti_channel}. In order to compare the performance of the reduced state equalizer, we consider cases with channel redundancy (Fig. \ref{fig:LTI performance}) and without channel redundancy (Fig. \ref{fig:LTI performance redundant}). 
 with impulse response $a[l] = ...$.
 \begin{figure}[H]
 	\includegraphics[width=\textwidth,height = 10cm]{results/lti_8_reduced}
