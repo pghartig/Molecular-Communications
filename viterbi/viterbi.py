@@ -128,6 +128,7 @@ class ViterbiNode:
         # add symbol to survivor path
         self.survivor_states = survivor_node.survivor_states + [self.state_ind]
         self.survivor_path = survivor_node.survivor_path + [self.state[0]]
+        # self.survivor_path = survivor_node.survivor_path + [self.state[-1]]
         self.survivor_path_cost = incoming_costs[survivor_index]
 
 

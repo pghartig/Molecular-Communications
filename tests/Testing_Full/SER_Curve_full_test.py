@@ -21,7 +21,7 @@ def test_full_integration():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(10, 15, 15)
+    SNRs_dB = np.linspace(20, 20, 2)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -30,7 +30,7 @@ def test_full_integration():
     number_symbols = 5000
     channel = np.zeros((1, 5))
     # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
-    channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
+    channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))
@@ -143,7 +143,8 @@ def test_full_integration():
             """
             Evaluate Neural Net Performance
             """
-            metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
+            # metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
+            metric = NeuralNetworkMixtureModelMetric(net, mm, np.flip(data_gen.channel_output))
             detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
             ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)

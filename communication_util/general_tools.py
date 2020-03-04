@@ -97,12 +97,11 @@ def symbol_error_rate_channel_compensated_NN(detected_symbols, input_symbols, ch
     :return:
     """
     channel_length-=1
-    detected_array = np.asarray(detected_symbols).astype('int32')
+    detected_array = np.flip(np.asarray(detected_symbols)).astype('int32')
     ratio_test2 = np.sum(detected_array)
     input_symbols = input_symbols.flatten().astype('int32')
     test1 = np.max(np.convolve(detected_array, input_symbols))
     test2 = np.max(np.convolve(np.flip(detected_array), input_symbols))
-    input_symbols = input_symbols[channel_length:]
     input_symbols = input_symbols[:detected_array.size]
     ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem

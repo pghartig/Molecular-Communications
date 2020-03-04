@@ -34,8 +34,8 @@ def test_reduced_full():
 
     number_symbols = 5000
     channel = np.zeros((1, 5))
-    channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
-    # channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
+    # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
+    channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
 
       # Channel to use for redundancy testing
     # Method used in ViterbiNet Paper
@@ -229,8 +229,8 @@ def test_reduced_full():
             Evaluate Neural Net Performance
             """
 
-            # metric = NeuralNetworkMixtureModelMetric(net, mm, np.flip(data_gen.channel_output))
-            metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
+            metric = NeuralNetworkMixtureModelMetric(net, mm, np.flip(data_gen.channel_output))
+            # metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output)
 
             detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
