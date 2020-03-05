@@ -32,17 +32,15 @@ def symbol_error_rate(detected_symbols, input_symbols, channel_length):
     :param channel_length:
     :return:
     """
-    channel_length -= 1
-    detected_array = np.flip(np.asarray(detected_symbols))
-    # This is a key step to ensuring the detected symbols are aligned properly
+    channel_length-=1
+    detected_array = np.flip(np.asarray(detected_symbols)).astype('int32')
     input_symbols = input_symbols.flatten().astype('int32')
-    # This is a useful way of checking equalizer performance before alignment is correct
     test1 = np.max(np.convolve(detected_array, input_symbols))
-    test3 = np.max(np.convolve(np.flip(detected_array), input_symbols))
-    check1 = detected_array[channel_length:]
-    check2 = input_symbols[channel_length:]
-    check2 = check2[:check1.size]
-    ser = np.sum(np.not_equal(check2, check1)) / check1.size
+    test2 = np.max(np.convolve(np.flip(detected_array), input_symbols))
+    input_symbols = input_symbols[:detected_array.size]
+    # check = np.not_equal(input_symbols, detected_array)*1
+    # check1 = np.argmax(check)
+    ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
     # ser = 1-test3 / input_symbols.size
     return ser
@@ -130,7 +128,7 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     input_symbols = input_symbols[:detected_array.size]
     ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
-    # ser = 1-test2 / detected_array.size
+    ser = 1-test2 / detected_array.size
     return ser
 
 
