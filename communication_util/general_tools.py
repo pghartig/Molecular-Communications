@@ -130,7 +130,7 @@ def symbol_error_rate_channel_compensated_NN_reduced(detected_symbols, input_sym
     input_symbols = input_symbols[:detected_array.size]
     ser = np.sum(np.not_equal(input_symbols, detected_array)) / input_symbols.size
     # correct for indexing problem
-    ser = 1-test2 / detected_array.size
+    # ser = 1-test2 / detected_array.size
     return ser
 
 

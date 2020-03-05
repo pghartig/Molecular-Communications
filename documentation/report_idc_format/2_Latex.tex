@@ -49,6 +49,7 @@ In the first communication channel considered, each $y[\text{k}]$ is a causal, l
 \begin{equation}\label{lti_channel}
 y[k] = \sum_{\mathrm{\text{l}=0}}^{\mathrm{\text{L}-1}} a[\text{l}]x[\text{k}-\text{l}]+ n[\text{k}].
 \end{equation}
+In order to preserved the intended SNR, we consider the case in which the impulse response vector $\mathbf{a}$ is unit normalized.
 We also consider the case in which the received output from an arbitrary communication channel is quantized giving
 \begin{equation}\label{lti_quantized_channel}
 y[\text{k}] = \text{Quant}(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
@@ -56,7 +57,7 @@ y[\text{k}] = \text{Quant}(f_{\text{k}}(\mathbf{x}) + n[\text{k}])
  with
 \[\text{Quant}(x) = 
 \begin{cases}
-\text{Sign}(x)\text{Floor}(\frac{x}{\text{step size}})& \text{Lower Saturation Level} \leq x \leq \text{Upper Saturation Level}\\
+\text{sign}(x)\text{floor}(\frac{x}{\text{step size}})& \text{Lower Saturation Level} \leq x \leq \text{Upper Saturation Level}\\
 \text{Upper Saturation Level} & x \geq \text{Upper Saturation Level}\\
 \text{Lower Saturation level} & x \leq \text{Lower Saturation Level}
 \end{cases}
@@ -131,7 +132,9 @@ $-\text{log}(p(y[\text{k}+1]|s_{\text{j}}[\text{k+1}])$. The solution to problem
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     {\footnotesize
     \begin{tabbing}
-        {\textbf{ given}} $p(y[\text{k}]|s_{\text{i}}[\text{k}])$, $p(s_{\text{l}}[\text{k+1}]|s_{\text{j}}[\text{k}]) \; \forall  \; \text{k} \in {1..N}$ and $ \forall \; \text{j} \in {1..L}$. \\*[\smallskipamount]
+        {\textbf{given}} $p(y[\text{k}]|s_{\text{i}}[\text{k}])$, $p(s_{\text{i}}[\text{k+1}]|s_{\text{j}}[\text{k}]) \; \forall  \; \text{k} \in {1...\;N}$ and $ \forall \; \text{j} \in {1...\;L}$.\\
+        {\textbf{initialize}} $\text{cost}_{\text{i}}[0]=0, \; \forall \; \text{i} \in {1...\;L}$
+         \\*[\smallskipamount]
         {\textbf{for}  $\text{k} = 1... N $} \\
          \qquad \= {\textbf{for} $\text{i} = 1... L$}\\
         \qquad \qquad \= \textbf{Let} $\text{cost}_{\text{i}}[\text{k}] = \underset{\text{j} \in \{1...L\}} {\text{argmin}}\left( \text{cost}_{\text{j}}[\text{k-1}]
@@ -236,9 +239,9 @@ Combining these terms and their impact on the original $p(y[\mathrm{k}]|s_{\text
 We now consider how a channel might be represented using the minimum number of states.
 
 \subsection{A Reduced-State ViterbiNet}
-While the Viterbi Algorithm complexity scales exponentially in the number of states possible in each step of the algorithm, in some cases this complexity can be reduced without significant loss of detection performance. One well-established method to achieve this is by pre-filtering the incoming signal so as have a minimum-phase system representing the channel (TODO Cite). Such methods, however, are often dependent upon an estimate of the channel, again implying an assumed underlying channel model. In this section, we consider a method for this complexity reduction without pre-filtering the estimated channel.
+While the Viterbi Algorithm complexity scales exponentially with the number of states possible in each step of the algorithm, in some cases this complexity can be reduced without significant loss of detection performance. One well-established method to achieve this is by pre-filtering the incoming signal so as have a minimum-phase system representing the channel (TODO Cite). Such methods are, however, dependent upon an estimate of the channel, which  implies an assumed underlying channel model. In this section, we consider a method for this complexity reduction without pre-filtering the estimated channel.
 
-There are two things to note here, first, this pre-filtering works for LTI channels but may not be possible for channels with non-linearities (such as molecular communication channels). Also note that even this minimum phase representation of the channel still has redundancy that could be reduced using this method. Finally, this pre-filtering assumes some sort of estimate and model of the channel that we are trying to abstract from in this work for generality. 
+%There are two things to note here, first, this pre-filtering works for LTI channels but may not be possible for channels with non-linearities (such as molecular communication channels). Also note that even this minimum phase representation of the channel still has redundancy that could be reduced using this method. Finally, this pre-filtering assumes some sort of estimate and model of the channel that we are trying to abstract from in this work for generality. 
 
 
 In the following, relevant example a channel is proposed whose states, as seen by the receiver, contain redundancy. One method for reducing the number of states based on this observed redundancy is then considered. 
@@ -247,10 +250,8 @@ The received signal from an LTI communication channel
 \begin{equation*}
 y[k] = \sum_{\mathrm{l=1}}^{\mathrm{L}} a[l]x[k-l] + n[k], \; n[k]  \sim \mathcal{N}(0,1),
 \end{equation*}
-
 with  $\mathcal{A}=\{-1, 1\}$, $n[k]  \sim \mathcal{N}(0,1)$ and 
-
-channel impulse response $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$),  is shown in Figure \ref{fig:redundant_channel}. Desipite having channel memory L $=5$, there are fewer than the potential $|\mathcal{A}_{\mathrm{i-L+1}}^{\mathrm{i}}| =2^5$ clusters of received signals. This is due to the redundancy in the channel.  As one of the channel taps is 0, this will have no impact on the output seen at the receiver and thus 16 of the potential 32 states are removed. Further, as there are two taps of value 0.2 and $\mathcal{A}=\{-1, 1\}$, when $\left[x[k-2],x[k-3]\right] = [-1,1]$ and $\left[x[k-2],x[k-3]\right] = [1,-1]$ these map to the same output as seen by the receiver. 
+channel impulse response $\mathbf{a} = [a[1]...a[5]]=[1, 0, .2, .2, .4]$ ($\|\mathbf{a}\|^2_2 = 1$),  is shown in Figure \ref{fig:redundant_channel}. Desipite having channel memory L $=5$, there are fewer than the potential $|\mathcal{A}_{\mathrm{i-4}}^{\mathrm{i}}| =2^5$ clusters of received signals. This is due to the redundancy in the channel.  As one of the channel taps is 0, this will have no impact on the output seen at the receiver and thus 16 of the potential 32 states are removed. There are also two taps with value 0.2. When $\left[x[k-2],x[k-3]\right] = [-1,1]$ and $\left[x[k-2],x[k-3]\right] = [1,-1]$ these map to the same output as seen by the receiver. 
 
 %\begin{figure}[H]
 %\centering
@@ -269,29 +270,24 @@ k-Means Clustering Algorithm: A method for unsupervised classification
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     {\footnotesize
     \begin{tabbing}
-    {\textbf {given}} initial location $L_c, \forall \;c  \in \{1..K\}$ of K centroids.\\
-        {\textbf{for} Number of Iterations}.\\
-         \qquad \= {\textbf {for training data point} $x_{\mathrm{i}}, \;\mathrm{i}  \in \{1..N\}$}\\
-        \qquad \qquad \= 1.\ Label $x_i$ with the index c of the closest centroid using $\|x_{\mathrm{i}}- \text{L}_c\|^2_2$. \\
-        \qquad \= {\textbf {for centroid} $L_c, \forall \;c  \in \{1..K\}$}\\
-                \qquad \qquad \= 1.\ Move $L_{\mathrm{c}}$ to the average location of all training points with label .c\\
-
-
-%        \> 2.\ {\bf break if} $f(z) \leq \hat{f}_{\lambda}(z, x^{k})$. \\
-%        \> 3.\ Update $\lambda := \beta \lambda$. \\*[\smallskipamount]
-        {\textbf{return}} Centroid locations.
+        {\textbf {given}} a set of N training points $x[{\mathrm{i}}], \;\mathrm{i} = [1...\;N]$.\\
+    {\textbf {select}} random, initial locations $L_c$, for $c = [1...\; \text{K}]$ for K centroids.\\
+        {\textbf{for} a chosen number of iterations}:\\
+         \qquad \= {\textbf {for} training data point $x[{\mathrm{i}}], \;\mathrm{i} = [1..N]$}:\\
+        \qquad \qquad \= 1.\ Label $x_i$ with the index c of the closest centroid using $\|x[{\mathrm{i}}]- \text{L}_c\|^2_2$. \\
+        \qquad \= {\textbf {for centroid} $L_c$, for $c = [1...\; \text{K}]$}:\\
+                \qquad \qquad \= 1.\ Move $L_{\mathrm{c}}$ to the average location of all training points with label c.\\*[\smallskipamount]
+        {\textbf{return}} Centroid locations, $L_c$, for $c = [1...\; \text{K}]$.
     \end{tabbing}}
     \noindent\rule[10pt]{\textwidth}{0.4pt}
     
-
+Taking a pilot sequence training set, a mapping of the original states into the new $k<|\mathcal{S}|$ states is performed by finding which of the $k$ new states (clusters) includes the most trainings examples from the known, original state $s_{\text{i}}$ for i = $[1...\; L]$. The Viterbi algorithm can then be performed to find the MAP state sequence $\mathbf{s}$. 
+An important implementation consideration for this clustering approach is now discussed. 
 \par
-An important implementation consideration for this clustering approach is now discussed. If the channel has memory $\text{L}>1$, at least some of the channels states represent different channel inputs as described previously. If states with contradicting transmission memory are clustered during the state reduction, the choice for the transmitted symbol is unclear. To accommodate this scenario, a majority rule decision is made, based on the final state path chosen by the Viterbi algorithm. During the clustering, the fraction of training samples from the original states labeled in each reduced state are recorded to give the likelihood of each symbol in the state memory. After finding the lowest cost path through the trellis, the probability of a symbol for each time index is found and the most likely is chosen. Note that this operation is \emph{not} exponentially complex in the memory length of the channel.
+If the channel has memory $\text{L}>1$, at least some of the channels states represent different channel inputs. If states with contradicting transmission memory are clustered together, the choice for the transmitted symbol is unclear. To accommodate this scenario, a majority rule decision is made, based on the final state path chosen by the Viterbi algorithm. During the clustering procedure, the fraction of training samples from each original state placed into each reduced state is recorded to give the likelihood of each symbol in the state memory for each of the reduced states. After finding the MAP state sequence $\mathbf{s}$, the probability of each symbol in $\mathcal{A}$ is found for each time index. The most likely symbol is chosen in order to find a transmitted sequence estimate $\mathbf{x}$. Note that this operation is not exponentially complex in the memory length of the channel.
 
-\par 
-Clearly an appropriate number of clusters will influence the performance of the resulting decoder (Have figure showing this).
-
-\subsection{Equalization benchmark}
-The Linear Minimum Mean-Squared Error (LMMSE) equalizer derived below is used provide a linear equalization reference to the non-linearity of the proposed neural network-based equalization .
+\subsection{Equalization Benchmark}
+The Linear Minimum Mean-Squared Error (LMMSE) equalizer derived in the following is used to provide a linear equalization reference to the proposed neural network-based equalization which is non-linear.
 \par
 Given an estimate of channel memory length L, the convex and continuously differentiable optimization problem 
 
@@ -321,7 +317,7 @@ E[\mathbf{r}_{yx}]= \frac{1}{\mathrm{N}}\sum_{\mathrm{i=1}}^{\mathrm{N}}
  using the same training data as the neural network and mixture model. 
  
 \par
-One interesting note to make in comparing this equalizer with the neural network-based equalizer is the amount of training data needed. In the case of the noiseless LTI system, a linear estimator for the channel requires only L training examples to form a deterministic system of equations and learn the channel perfectly. In contrast the neural network will generally have many edge weights and would therefore require more training data. The need for a larger training data set comes with the added potential to learn more complicated channels with the neural network than with the LMMSE equalizer.
+One interesting note to make in comparing this equalizer with the neural network-based equalizer is the amount of training data needed. In the case of the noiseless LTI system, a linear estimator for the channel requires only L training examples to form a deterministic system of equations and learn the channel perfectly. In contrast the neural network will generally have many edge weights and would therefore require more training data. The need for a larger training data set, however, comes with the potential to learn more complicated channels with the neural network than with the LMMSE equalizer.
  
 \par
 In the results below, the theoretical symbol error rate curve for the  memoryless, AWGN channel is also included as a reference.For all of the tests below, an anti-podal BPSK $\mathcal{A}= \{-1, +1\}$ scheme is simulated giving  \cite{proakis1988introduction}
@@ -403,8 +399,8 @@ Last, we evaluate the LTI channels with quantization and the additional channel 
 
 
 \section{Conclusion}
-In this work, a framework is developed in order to define the class of channels to which the channel estimation techniques from the work in\cite{shlezinger2019viterbinet} can be applied. The methods used in \cite{shlezinger2019viterbinet} are then extended in order to learn channels with addition types of randomness as well as offer potential complexity reductions in the resulting Viterbi Algorithm. 
- In the simulation work, the results of \cite{shlezinger2019viterbinet} are extended to a non-linear channel. The proposed methods for complexity reduction are also simulated.
+In this work, a framework is developed in order to define the class of channels to which the channel estimation techniques shown in the work from \cite{shlezinger2019viterbinet} can be applied. The methods used in \cite{shlezinger2019viterbinet} are then extended in order to learn channels with addition types of randomness as well as offer potential complexity reductions in the resulting Viterbi Algorithm. 
+ In the simulation work, the results of \cite{shlezinger2019viterbinet} are extended to that the neural network-based equalizer is capable of channel estimation for  non-linear channels.
  \par 
- In future work, this general framework should be explored in related detection algorithms. Further simulation should also be performed for evaluating the detection performance over channels with additional random behavior as mentioned in section (reference). 
+ In future work, this general framework should be explored in related detection algorithms such as those used in \cite{shlezinger2020datadriven}. Further simulation should also be performed for evaluating the detection performance over channels with other non-linearities and random behavior. 
 

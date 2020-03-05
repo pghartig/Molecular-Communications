@@ -22,25 +22,25 @@ def test_reduced_full():
     viterbi_net_reduced_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(15, 15, 1)
+    SNRs_dB = np.linspace(15, 15, 10)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
     quantization_level = None
-    quantization_level = 0
+    # quantization_level = 0
     noise_levels = None
     # noise_levels = 2
 
     number_symbols = 5000
     channel = np.zeros((1, 5))
     # channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
-    channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
+    # channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
       # Channel to use for redundancy testing
     # Method used in ViterbiNet Paper
     # channel[0, :] = np.random.randn(channel.size)
     # channel = np.zeros((1, 5))
-    # channel[0, [0, 1, 2, 3, 4]] = .9, 0, .0, .8, .7
+    channel[0, [0, 1, 2, 3, 4]] = .9, 0, .0, .8, .7
     # channel = np.zeros((1, 3))
     # channel[0, [0, 1, 2]] = .9, .8, .7
     # channel = np.zeros((1, 3))
@@ -60,7 +60,7 @@ def test_reduced_full():
         """
         Setup Reduced ViterbiNet training data. 
         """
-        reduced_state = 32
+        reduced_state = 8
         x_reduced, y_reduced, states_reduced, states_original, totals = data_gen.get_labeled_data_reduced_state(reduced_state)
         y_reduced = np.argmax(y_reduced, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
         x_reduced = torch.Tensor(x_reduced)
@@ -203,10 +203,10 @@ def test_reduced_full():
         ser_classic = []
         ser_lmmse = []
 
-        for reps in range(2):
+        for reps in range(10):
 
             del data_gen
-            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 100), SNR=SNR, plot=True, channel=channel)
+            data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(quantization_level, noise_levels=noise_levels)
 
@@ -274,14 +274,14 @@ def test_reduced_full():
     figure.savefig(time_path, format="png")
 
 
-    plt.figure(2)
-    plt.plot(test_cost_over_epoch_reduced, label='Test Error R')
-    plt.plot(train_cost_over_epoch_reduced, label='Train Error R')
-    plt.plot(test_cost_over_epoch, label='Test Error')
-    plt.plot(train_cost_over_epoch, label='Train Error')
-    plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
-    plt.xlabel("Epoch")
-    plt.ylabel("Error")
-    plt.legend(loc='upper right')
-    path = f"Output/Neural_Network{time.time()}_Convergence.png"
-    plt.savefig(path, format="png")
+    # plt.figure(2)
+    # plt.plot(test_cost_over_epoch_reduced, label='Test Error R')
+    # plt.plot(train_cost_over_epoch_reduced, label='Train Error R')
+    # plt.plot(test_cost_over_epoch, label='Test Error')
+    # plt.plot(train_cost_over_epoch, label='Train Error')
+    # plt.title(str(data_gen.get_info_for_plot()), fontdict={'fontsize': 10})
+    # plt.xlabel("Epoch")
+    # plt.ylabel("Error")
+    # plt.legend(loc='upper right')
+    # path = f"Output/Neural_Network{time.time()}_Convergence.png"
+    # plt.savefig(path, format="png")

@@ -22,7 +22,7 @@ def test_reduced_full():
     viterbi_net_reduced_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(0, 15, 15)
+    SNRs_dB = np.linspace(15, 15, 15)
     SNRs = np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
