@@ -40,4 +40,4 @@ The end goal of this example will be to implement a basic  channel coding scheme
 
 5. We now find the detected information sequence using the rules of the channel coding scheme.
 
-6.  Finally, we will analyze the system performance for the bit error rate (BER) over a desired range of SNR. 
+6.  Finally, we will analyze the system performance for the bit error rate (BER) over a desired range of SNR.
