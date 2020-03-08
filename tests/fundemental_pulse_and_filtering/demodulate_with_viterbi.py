@@ -62,7 +62,7 @@ def test_pulse_with_viterbi():
     item = []
     get_combinatoric_list(data_gen, channel_length, states, item)
 
-    metric = gaussian_channel_metric_working(channel, data_gen.demodulated_symbols)
+    metric = GaussianChannelMetric(channel, data_gen.demodulated_symbols)
     detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.demodulated_symbols, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
     ser_sampled_symbols = symbol_error_rate(detected, data_gen.symbol_stream_matrix)
@@ -71,7 +71,7 @@ def test_pulse_with_viterbi():
     Viterbi Performance with demodulated symbols from sampled transmission
     """
 
-    metric = gaussian_channel_metric_working(channel, data_gen.channel_output)
+    metric = GaussianChannelMetric(channel, data_gen.channel_output)
     detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                         metric.metric)
     ser_symbols = symbol_error_rate(detected, data_gen.symbol_stream_matrix)

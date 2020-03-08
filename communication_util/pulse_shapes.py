@@ -1,4 +1,5 @@
 """
+THIS WHOLE MODULE IS IN WORK!
 the purpose of this module is to provide a variety of pulse shapes onto which a desired symbol stream can be modulated.
 All of the pulse shape functions should return the evaluted function at the sample point.
 """

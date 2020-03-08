@@ -8,8 +8,8 @@ The goal of this framework is to provide a consistent communication system struc
 
 
 ## Structure
-The framework is centered around the a class (docs/data_gen.md) used for configuring basic communication system parameters including:
+The framework is centered around a class (docs/data_gen.md) used for configuring basic communication system parameters including:
 1.  Number or receivers/transmitters
 2.  Symbol constellation and pulse shape
-3.  Communication channel
+3.  The communication channel(s)
 4.  Filtering and sampling at receiver

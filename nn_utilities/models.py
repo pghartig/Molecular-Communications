@@ -2,11 +2,18 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-class viterbiNet(nn.Module):
+"""
+The various Neural Networks used in this work. 
+"""
 
+
+class ViterbiNet(nn.Module):
+    """
+    The neural network used in the ViterbiNet paper
+    """
     def __init__(self, D_in, H1, H2, D_out):
         # initialize inheretence
-        super(viterbiNet, self).__init__()
+        super(ViterbiNet, self).__init__()
 
         # initialize weight layers of the network
         self.name = "viterbiNet"
@@ -18,15 +25,18 @@ class viterbiNet(nn.Module):
         x = torch.tanh(self.fc1(x))
         x = F.relu(self.fc2(x))
         # x = self.fc3(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
+        # x = self.fc3(x)
         x = F.log_softmax(self.fc3(x))
-        # x = F.softmax(self.fc3(x))
         return x
 
-class viterbiNet_dropout(nn.Module):
 
+class ViterbiNetDropout(nn.Module):
+    """
+    The neural network used in the ViterbiNet paper with dropout during training
+    """
     def __init__(self, D_in, H1, H2, D_out, dropout_probability):
         # initialize inheretence
-        super(viterbiNet_dropout, self).__init__()
+        super(ViterbiNetDropout, self).__init__()
 
         # initialize weight layers of the network
         self.drop_out = nn.Dropout(dropout_probability)
@@ -39,16 +49,20 @@ class viterbiNet_dropout(nn.Module):
         x = torch.tanh(self.fc1(x))
         x = self.drop_out(x)
         x = F.relu(self.fc2(x))
+        x = self.drop_out(x)
+        # x = self.fc3(x)
         # x = self.fc3(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
         x = F.log_softmax(self.fc3(x))
-        # x = F.softmax(self.fc3(x))
         return x
 
-class deeper_viterbiNet(nn.Module):
 
+class ViterbiNetDeeper(nn.Module):
+    """
+    The neural network used in the ViterbiNet paper with additional layers
+    """
     def __init__(self, D_in, H1, H2, H3, D_out, dropout_probability):
         # initialize inheretence
-        super(deeper_viterbiNet, self).__init__()
+        super(ViterbiNetDeeper, self).__init__()
         self.name = "deeper_viterbiNet"
 
         # initialize weight layers of the network
@@ -60,11 +74,14 @@ class deeper_viterbiNet(nn.Module):
 
     def forward(self, x):
         x = F.tanh(self.fc1(x))
+        x = self.drop_out(x)
         x = F.relu(self.fc2(x))
+        x = self.drop_out(x)
         x = F.relu(self.fc3(x))
-        # x = self.fc4(x)  # Note that the cross entropy function in PyTorch automatically takes softmax
-        # x = F.log_softmax(self.fc4(x))
-        x = F.softmax(self.fc4(x))
+        x = self.drop_out(x)
+        # x = self.fc4(x)
+        # Note that the cross entropy function in PyTorch automatically takes softmax
+        x = F.log_softmax(self.fc4(x))
 
 
         return x

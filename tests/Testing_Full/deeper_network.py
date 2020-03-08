@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.data_gen import *
@@ -68,7 +68,7 @@ def test_architecture():
 
         # net = models.viterbiNet(D_in, H1, H2, D_out)
         dropout_probability = .3
-        net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out, dropout_probability)
+        net = models.ViterbiNetDeeper(D_in, H1, H2, H3, D_out, dropout_probability)
 
         # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
         # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
@@ -124,7 +124,7 @@ def test_architecture():
         """
         Evaluate Neural Net Performance
         """
-        metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
+        metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
         ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
@@ -134,7 +134,7 @@ def test_architecture():
         Compare to Classical Viterbi with full CSI
         """
         # channel= np.round(channel*10)
-        metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
+        metric = GaussianChannelMetric(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
         detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
         ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)
@@ -147,7 +147,7 @@ def test_architecture():
         """
         Analyze SER performance
         """
-        linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+        linear_mmse_performance.append(LinearMMSE(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix, channel.size))
         viterbi_net_performance.append(ser_nn)
         classic_performance.append(ser_classic)
 

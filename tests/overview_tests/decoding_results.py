@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 import pickle
 from communication_util.basic_detectors import *
@@ -57,7 +57,7 @@ def test_decoding_results():
         m = data_gen.alphabet.size
         channel_length = data_gen.CIR_matrix.shape[1]
         N, D_in, H1, H2, D_out = number_symbols, 1, 100, 50, np.power(m, channel_length)
-        net = models.viterbiNet(D_in, H1, H2, D_out)
+        net = models.ViterbiNet(D_in, H1, H2, D_out)
         optimizer = optim.Adam(net.parameters(), lr=1e-2)
 
         """
@@ -112,7 +112,7 @@ def test_decoding_results():
         data_gen.send_through_channel()
 
         #   !! Make sure channel output gets flipped here!!
-        metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)  # This is a function to be used in the viterbi
+        metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)  # This is a function to be used in the viterbi
         detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
         ser_nn = symbol_error_rate_channel_compensated(detected_nn, data_gen.symbol_stream_matrix, channel_length)
@@ -122,7 +122,7 @@ def test_decoding_results():
         Compare to Classical Viterbi with full CSI
         """
 
-        metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
+        metric = GaussianChannelMetric(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
         detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                             metric.metric)
         ser_classic = symbol_error_rate_channel_compensated(detected_classic, data_gen.symbol_stream_matrix, channel_length)

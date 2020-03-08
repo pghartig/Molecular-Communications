@@ -67,7 +67,7 @@ def test_dynamic_pulse():
     metric = data_gen.metric_cost_sampled
     detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.demodulated_symbols, channel_length,
                                         metric)
-    metric = gaussian_channel_metric_working(channel, data_gen.demodulated_symbols)
+    metric = GaussianChannelMetric(channel, data_gen.demodulated_symbols)
     detected = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.demodulated_symbols, channel_length,
                                         metric.metric)
     ser_sampled_symbols = symbol_error_rate(detected, data_gen.symbol_stream_matrix)

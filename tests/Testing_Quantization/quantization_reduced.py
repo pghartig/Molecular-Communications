@@ -3,7 +3,7 @@ This test generates the symbol error rate curves over various SNR for comparing 
 """
 
 import torch.nn as nn
-from mixture_model.em_algorithm import mixture_model
+from mixture_model.em_algorithm import MixtureModel
 from mixture_model.em_algorithm import em_gausian
 from communication_util.Equalization.supervise_equalization import *
 import pickle
@@ -20,7 +20,7 @@ def test_quantization_reduced():
     viterbi_net_performance_full = []
     classic_performance_full = []
     linear_mmse_performance_full = []
-    SNRs_dB = np.linspace(-5, 10, 4)
+    SNRs_dB = np.linspace(8, 10, 2)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
@@ -37,11 +37,7 @@ def test_quantization_reduced():
             """
             number_symbols = 2000
             channel = np.zeros((1, 5))
-            channel[0, [0, 1, 2, 3, 4]] = 1, .1, .01, .1, .04
-            # channel = np.zeros((1, 3))
-            # channel[0, [0, 1, 2 ]] = 1, .1, .2
-            # channel = np.zeros((1, 1))
-            # channel[0, [0]] = 1
+            channel[0, [0, 1, 2, 3, 4]] = 0.227, 0.460, 0.688, 0.460, 0.227
             data_gen = training_data_generator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(level)
@@ -52,7 +48,7 @@ def test_quantization_reduced():
             device = torch.device("cpu")
             reduced_state = 32
             num_inputs_for_nn = 1
-            x, y = data_gen.get_labeled_data_reduced_state(reduced_state, quantization_level =level )
+            x, y = data_gen.get_labeled_data_reduced_state(reduced_state, quantization_level=level)
             y = np.argmax(y, axis=1)  # Fix for how the pytorch Cross Entropy expects class labels to be shown
             x = torch.Tensor(x)
             y = torch.Tensor(y)
@@ -74,7 +70,7 @@ def test_quantization_reduced():
 
             # net = models.viterbiNet(D_in, H1, H2, D_out)
             dropout_probability = .3
-            net = models.viterbiNet_dropout(D_in, H1, H2, D_out, dropout_probability)
+            net = models.ViterbiNetDropout(D_in, H1, H2, D_out, dropout_probability)
 
             # N, D_in, H1, H2, H3, D_out = number_symbols, num_inputs_for_nn, 20, 10, 10, np.power(m, channel_length)
             # net = models.deeper_viterbiNet(D_in, H1, H2, H3, D_out)
@@ -115,6 +111,7 @@ def test_quantization_reduced():
             """
             mixture_model_training_data = data_gen.channel_output.flatten()[0:train_size]
             num_sources = pow(data_gen.alphabet.size, data_gen.CIR_matrix.shape[1])
+            num_sources = reduced_state
             mm = em_gausian(num_sources, mixture_model_training_data, 10, save=True, model=True)
             mm = mm.get_probability
 
@@ -124,23 +121,23 @@ def test_quantization_reduced():
             Create new set of test data. 
             """
             del data_gen
-            data_gen = training_data_generator(symbol_stream_shape=(1, 2000), SNR=SNR, plot=True, channel=channel)
+            data_gen = training_data_generator(symbol_stream_shape=(1, 5000), SNR=SNR, plot=True, channel=channel)
             data_gen.random_symbol_stream()
             data_gen.send_through_channel(level)
 
             # data_gen.add_channel_uncertainty()
 
-            metric = nn_mm_metric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
+            metric = NeuralNetworkMixtureModelMetric(net, mm, data_gen.channel_output, input_length=num_inputs_for_nn)
             detected_nn = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
-            ser_nn = symbol_error_rate_channel_compensated_NN(detected_nn, data_gen.symbol_stream_matrix, channel_length)
+            ser_nn = symbol_error_rate_channel_compensated_NN_reduced(detected_nn, data_gen.symbol_stream_matrix, channel_length)
 
 
             """
             Compare to Classical Viterbi with full CSI
             """
             # channel= np.round(channel*10)
-            metric = gaussian_channel_metric_working(channel, data_gen.channel_output)  # This is a function to be used in the viterbi
+            metric = GaussianChannelMetricQuantized(channel, data_gen.channel_output, level)  # This is a function to be used in the viterbi
             detected_classic = viterbi_setup_with_nodes(data_gen.alphabet, data_gen.channel_output, data_gen.CIR_matrix.shape[1],
                                                 metric.metric)
             ser_classic = symbol_error_rate(detected_classic, data_gen.symbol_stream_matrix, channel_length)
@@ -150,7 +147,7 @@ def test_quantization_reduced():
             """
             viterbi_net_performance.append(ser_nn)
             classic_performance.append(ser_classic)
-            linear_mmse_performance.append(linear_mmse(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix,channel.size))
+            linear_mmse_performance.append(LinearMMSE(data_gen.symbol_stream_matrix, data_gen.channel_output, data_gen.symbol_stream_matrix, channel.size))
 
 
         viterbi_net_performance_full.append(viterbi_net_performance)

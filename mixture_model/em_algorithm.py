@@ -2,10 +2,15 @@ import numpy as np
 import pickle
 import os
 
-def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, model=False,both=False):
+
+def em_gausian(num_gaussians, data, iterations, test_data=None, save=False, model=False,both=False):
     """
-    implementation of EM for gaussian model
-    :param num_gaussians:
+    IMPORTANT: This algorithm is very expensive to compute if too much training data is given.
+    IMPORTANT: This algorithm assumes a directory in the working path called Output into which the
+    pickled model is placed.
+    Implementation of the Expectation Maximization algorithm for gaussian mixture model.
+    Note that it might be desired to eventually implement this such that the number of sources is flexible to the data.
+    :param num_gaussians: The number of sources to estimate
     :param data:
     :param iterations:
     :return:
@@ -15,24 +20,20 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
     num_observations = data.shape[0]
     initialization_sample = data[0:num_gaussians]
     mu = initialization_sample
-    #decide how to initialize
     sigma_square = np.ones((num_gaussians, 1))*0.1
-
-
-    # current probability of each component (initialize as equiprobable)
     alpha = np.ones((num_gaussians, 1)) * (1 / num_gaussians)
     # For each data point attribute a probability of originating from each gaussian component of the mixture.
     weights = np.ones((num_observations, num_gaussians)) * (1 / num_gaussians)
 
-    # Collect the probability of the training data set after each iteration and the difference between subsequent
-    # iterations to ensure it is monotonically increasing
+    """
+    Collect the probability of the training data set after each iteration and the difference between subsequent
+    iterations to ensure it is monotonically increasing
+    """
 
     likelihood_vector = []
     test_likelihood_vector = []
 
     for iteration in range(iterations):
-
-
         """
         Expectation step
         """
@@ -46,7 +47,6 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
             test = np.log(np.sum(probabilities*alpha))
             itr_total_sequence_probability.append(test)
 
-
         if test_data is not None:
             test_obs = test_data.shape[0]
             test_set_probability = []
@@ -58,7 +58,6 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
 
         # after each iteration, this value should become less negative and approach zero.
         likelihood_vector.append(np.sum(itr_total_sequence_probability)/num_observations)
-
 
         """
         Maximization step
@@ -74,28 +73,28 @@ def em_gausian(num_gaussians, data, iterations, test_data= None, save= False, mo
             sigma_square[i] = total_square_difference / np.sum(data_weight)
 
     if save is True:
-        # path = "/Users/peterhartig/Documents/Projects/moco_project/molecular-communications-project/Output/mm.pickle"
         path = "Output/mm.pickle"
         pickle_out = open(path, "wb")
         pickle.dump([mu, sigma_square, alpha], pickle_out)
         pickle_out.close()
 
-    if model==True:
-        return mixture_model(mu, sigma_square, alpha)
-    if both==True:
-        return mixture_model(mu, sigma_square, alpha), mu, sigma_square, alpha, likelihood_vector, test_likelihood_vector
+    if model:
+        return MixtureModel(mu, sigma_square, alpha)
+    if both:
+        return MixtureModel(mu, sigma_square, alpha), mu, sigma_square, alpha, likelihood_vector, \
+               test_likelihood_vector
     else:
         return mu, sigma_square, alpha, likelihood_vector, test_set_probability
 
+
 def probability_from_gaussian_sources(data_point, mu, sigma_square):
     """
-    return (as a vector) the probability of data point originating from all parameterized distrubutions
     :param data_point:
     :param mu:
     :param sigma_square:
-    :return:
+    :return: The probabilities (as a vector) of data point originating from each parameterized distributions
     """
-    if not isinstance(mu,np.ndarray):
+    if not isinstance(mu, np.ndarray):
         return np.divide(
             np.exp(np.divide(-np.power((data_point - mu), 2), (2 * sigma_square))),
             np.sqrt(2 * np.pi * sigma_square))
@@ -107,15 +106,22 @@ def probability_from_gaussian_sources(data_point, mu, sigma_square):
                 np.sqrt(2 * np.pi * sigma_square[ind])))
         return np.asarray(probabilities)
 
-def receive_probability(symbol,mu,sigma_square):
-    return np.prod(probability_from_gaussian_sources(symbol,mu,sigma_square))
 
-class mixture_model():
+def receive_probability(symbol, mu, sigma_square):
+    return np.prod(probability_from_gaussian_sources(symbol, mu, sigma_square))
+
+
+class MixtureModel:
+    """
+    Can be usd with a general mixture model to get the probability of realizations of the random process.
+    Here it is implemented as a Gaussian mixture model.
+    """
     def __init__(self, mu, sigma_square, alpha):
         self.mu = mu
         self.sigma_square = sigma_square
         self.alpha = alpha
-    def get_probability(self,symbol):
+
+    def get_probability(self, symbol):
         return np.sum(np.dot(self.alpha, probability_from_gaussian_sources(symbol, self.mu, self.sigma_square).T))
 
 
