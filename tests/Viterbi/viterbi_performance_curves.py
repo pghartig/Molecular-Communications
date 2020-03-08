@@ -21,16 +21,18 @@ def test_viterbi():
     viterbi_net_performance = []
     linear_mmse_performance = []
     classic_performance = []
-    SNRs_dB = np.linspace(50, 50, 10)
+    SNRs_dB = np.linspace(33, 33, 10)
     # SNRs_dB = np.linspace(6, 10,3)
     SNRs =  np.power(10, SNRs_dB/10)
     seed_generator = 0
     data_gen = None
     channel = None
-    number_symbols = 1000
+    number_symbols = 5000
     channel = np.zeros((1, 5))
     # Method used in comparison on MATLAB
-    channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
+    # channel[0, [0, 1, 2, 3, 4]] = 0.9, 0.7, 0.3, 0.5, 0.1
+    channel[0, [0, 1, 2, 3, 4]] = 1, 0, .2, .2, .4
+
     # channel = np.zeros((1, 2))
     # channel[0, [0]] = 1
     # Method used in ViterbiNet Paper
@@ -45,7 +47,7 @@ def test_viterbi():
         """
         data_gen = CommunicationDataGenerator(symbol_stream_shape=(1, number_symbols), SNR=SNR, plot=True, channel=channel)
         data_gen.random_symbol_stream()
-        data_gen.send_through_channel()
+        data_gen.send_through_channel(plot=True)
         channel_length = data_gen.CIR_matrix.shape[1]
 
 
