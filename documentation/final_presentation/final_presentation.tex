@@ -1,6 +1,7 @@
 \documentclass[10pt,tgadventor, onlymath]{beamer}
 
 \usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork}
+\usetikzlibrary{positioning}
 
 \input defs.tex
 \graphicspath{ {./figures/} }
@@ -37,10 +38,13 @@
 { 
 	\begin{frame}<beamer> 
 		\frametitle{Outline} 
-		\tableofcontents[currentsection,currentsubsection] 
+		\tableofcontents
 	\end{frame} 
 } 
 
+
+\tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black]
+\tikzstyle{arrow} = [thick,->,>=stealth]
 
 \tikzstyle{state}=[shape=circle,draw=blue!30,fill=blue!10]
 \tikzstyle{observation}=[shape=rectangle,draw=orange!30,fill=orange!10]
@@ -61,7 +65,7 @@
 
 %% begin presentation
 
-\title{\large \bfseries Neural Network Metrics for Viterbi Decoding in Molecular Communication Channels}
+\title{\large \bfseries Estimation of Channel Distribution Functions using a Neural Network}
 
 \author{Peter Hartig\\[3ex]
 }
@@ -75,7 +79,68 @@
 \titlepage
 }
 
-\section{Background}
+\section{The channel state perspective}
+
+\begin{frame}
+\frametitle{The Channel State}
+The true state of the channel, $s[k]$, is hidden. we attempt to estimate this state based the sampled signal $y[k]$.
+\begin{itemize}
+\item 
+	Observations are made of some channel in a point-to-point communication system.
+\item 
+	For each observation, this channel takes on a state $s[k]$. 
+\item 
+	The true state $s[k]$ is hidden by the addition of noise to an observation $y[k]$.
+\end{itemize}
+\end{frame}
+\begin{frame}
+
+\frametitle{Sampling Channel State}
+Over many observations, a sequence of observations $\mathbf{y}$ are made on the corresponding set of channel state $\mathbf{s}$
+
+\begin{figure}[H]
+\begin{center}
+\begin{tikzpicture}[node distance=1cm]
+\node (transmitter) [process] {Transmitter: $\mathbf{x}$};
+\node (channel) [process, right = of transmitter] {Channel};
+\node (receiver) [process, right = of channel] {Receiver: $\mathbf{y}$};
+\draw [arrow] (transmitter) -- (channel);
+\draw [arrow] (channel) -- (receiver);
+\end{tikzpicture}
+\end{center}
+\end{figure}
+\pause
+For a channel represented by an LTI system, the state is determined by the transmitted information $\mathbf{x}$.
+\end{frame}
+
+\begin{frame}
+\frametitle{Estimating the True Channel State}
+We attempt to estimate the true sequence of channel states , $\mathbf{s}$, is hidden from us but we attempt to estimate this state based the sampled signal $y[k]$.
+\pause
+\end{frame}
+\section{The optimization framework}
+
+\begin{frame}
+\frametitle{MAP Sequence Detection}
+Include decomposition and example for LTI channel. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Utilizing the General Definition of State}
+Include decomposition and example for LTI channel. 
+\end{frame}
+
+\begin{frame}
+\frametitle{Something about reduced state}
+Include decomposition and example for LTI channel. 
+\end{frame}
+
+\begin{frame}
+\frametitle{MAP Sequence Detection}
+Include decomposition and example for LTI channel. 
+\end{frame}
+
+
 
 \begin{frame}<0>
 \frametitle{Viterbi Setup}
@@ -113,62 +178,6 @@ Maximum Likelihood sequence decoding can be formalized as
 		\underset{\mathbf{x}}{\mathrm{minimize}} &\sum_{\mathrm{i=1}}^{\mathrm{N}} -log(Pr(y_{\mathrm{i}}|\mathbf{x})) 
 	\end{array}
 	\end{equation}
-	\bigskip
-	\\
-	\begin{center}
-\begin{tikzpicture}[]
-% 1st column
-\node               at (-1.5,5) {$s_1=00$};
-\node               at (-1.5,4) {$s_2=01$};
-\node               at (-1.5,3) {$s_3=10$};
-\node               at (-1.5,2) {$s_4=11$};
-\node[mainstate] (s1_1) at (0,5) {$s_1$};
-\node[state] (s2_1) at (0,4) {$s_2$};
-\node[state] (s3_1) at (0,3) {$s_3$};
-\node[state] (s4_1) at (0,2) {$s_4$};
-%\node at (0,1) {Node1};
-% 2nd column
-\node[mainstate] (s1_2) at (2,5) {$s_1$}
-    edge[mainedge] (s1_1);
-\node[mainstate] (s2_2) at (2,4) {$s_2$}
-     edge[lightedge] (s1_1);
-
-\node[state] (s3_2) at (2,3) {$s_3$};
-
-\node[state] (s4_2) at (2,2) {$s_4$};
-
-%\node at (2,1) {Node2};
-% 3rd column
-%\node               at (4,6) {$t=2$};
-\node[mainstate] (s1_3) at (4,5) {$s_1$}
-    edge[mainedge]  (s1_2);
-
-\node[mainstate] (s2_3) at (4,4) {$s_2$}
-    edge[lightedge] (s1_2);
-
-\node[mainstate] (s3_3) at (4,3) {$s_3$}
-    edge[mainedge] (s2_2);    
-\node[mainstate] (s4_3) at (4,2) {$s_4$}
-    edge[lightedge] (s2_2);
-%\node at (4,1) {Node3};
-% 4th column
-%\node               at (6,6) {$t=3$};
-\node[mainstate] (s1_4) at (6,5) {$s_1$}
-    edge[mainedge]  (s1_3)
-    edge[mainedge]  (s3_3);
-\node[mainstate] (s2_4) at (6,4) {$s_2$}
-    edge[lightedge] (s1_3)
-    edge[lightedge] (s3_3);
-\node[mainstate] (s3_4) at (6,3) {$s_3$}
-    edge[mainedge] (s2_3)
-    edge[mainedge] (s4_3);
-\node[mainstate] (s4_4) at (6,2) {$s_4$}
-    edge[lightedge] (s2_3)
-    edge[lightedge] (s4_3);
-%\node at (6,1) {Node4};
-
-\end{tikzpicture}
-	\end{center}
 
 \end{frame}
 
