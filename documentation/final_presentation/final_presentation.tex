@@ -38,7 +38,7 @@
 { 
 	\begin{frame}<beamer> 
 		\frametitle{Outline} 
-		\tableofcontents
+		\tableofcontents[currentsection, currentsubsection]
 	\end{frame} 
 } 
 
@@ -79,16 +79,19 @@
 \titlepage
 }
 
+\frame{
+\tableofcontents
+}
+
 \section{The channel state perspective}
 
 \begin{frame}
 \frametitle{The Channel State}
-The true state of the channel, $s[k]$, is hidden. we attempt to estimate this state based the sampled signal $y[k]$.
 \begin{itemize}
 \item 
 	Observations are made of some channel in a point-to-point communication system.
 \item 
-	For each observation, this channel takes on a state $s[k]$. 
+	For each observation, this channel takes on a state $s[k]\in \cal{S}$. 
 \item 
 	The true state $s[k]$ is hidden by the addition of noise to an observation $y[k]$.
 \end{itemize}
@@ -96,13 +99,12 @@ The true state of the channel, $s[k]$, is hidden. we attempt to estimate this st
 \begin{frame}
 
 \frametitle{Sampling Channel State}
-Over many observations, a sequence of observations $\mathbf{y}$ are made on the corresponding set of channel state $\mathbf{s}$
-
+Over many observations, the sequence $\mathbf{y}$ corresponds to a sequence of channel states $\mathbf{s}\in\textit{\cal{S}}^N$
 \begin{figure}[H]
 \begin{center}
 \begin{tikzpicture}[node distance=1cm]
 \node (transmitter) [process] {Transmitter: $\mathbf{x}$};
-\node (channel) [process, right = of transmitter] {Channel};
+\node (channel) [process, right = of transmitter] {Channel: $\mathbf{s}$};
 \node (receiver) [process, right = of channel] {Receiver: $\mathbf{y}$};
 \draw [arrow] (transmitter) -- (channel);
 \draw [arrow] (channel) -- (receiver);
@@ -110,85 +112,94 @@ Over many observations, a sequence of observations $\mathbf{y}$ are made on the 
 \end{center}
 \end{figure}
 \pause
-For a channel represented by an LTI system, the state is determined by the transmitted information $\mathbf{x}$.
+For a channel represented by an LTI system, the state is determined entirely by the transmitted information $\mathbf{x}$.
 \end{frame}
 
 \begin{frame}
 \frametitle{Estimating the True Channel State}
-We attempt to estimate the true sequence of channel states , $\mathbf{s}$, is hidden from us but we attempt to estimate this state based the sampled signal $y[k]$.
-\pause
+\begin{block}{Goal:}
+We attempt to estimate the true, hidden, sequence of channel states, $\mathbf{s}$, based the sequence of samples $\mathbf{y}$.
+\end{block}
+
+\begin{block}{Note}
+We assume that we known how many states the channel has such that $\textit{\cal{S}}$
+\end{block}
+
 \end{frame}
 \section{The optimization framework}
 
 \begin{frame}
 \frametitle{MAP Sequence Detection}
-Include decomposition and example for LTI channel. 
-\end{frame}
-
-\begin{frame}
-\frametitle{Utilizing the General Definition of State}
-Include decomposition and example for LTI channel. 
-\end{frame}
-
-\begin{frame}
-\frametitle{Something about reduced state}
-Include decomposition and example for LTI channel. 
-\end{frame}
-
-\begin{frame}
-\frametitle{MAP Sequence Detection}
-Include decomposition and example for LTI channel. 
-\end{frame}
-
-
-
-\begin{frame}<0>
-\frametitle{Viterbi Setup}
-	Probability of transmitted symbol sequence given the received signal
-	\begin{equation}
-		Pr(\mathbf{\mathrm{transmit \;signal}\;= x}|\mathbf{\mathrm{received \;signal}\; = y})
-	\end{equation}
-	For channels without inter-symbol interference
-	\begin{equation}
-		\prod_{\mathrm{i=1}}^{\mathrm{n}}pr(x_{\mathrm{i}}|y_{\mathrm{i}}) 
-	\end{equation}
-	Using Baye's rule
-	\begin{equation}
-		Pr(x|y) = \frac{Pr(y|x) Pr(x)}{Pr(y)}
-	\end{equation}
-	With equiprobable transmit symbols
-	\begin{equation}
-		Pr(y|x) = Pr(x|y) Pr(y)
-	\end{equation}
+\begin{equation*}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}} \; p(\mathbf{s}|\mathbf{y}).
+\end{equation*} 
+\pause
+Using Bayes' theorem
+\begin{equation*}
+p(\mathbf{s}|\mathbf{y}) = 
+\frac
+{p(\mathbf{y}|\mathbf{s})p(\mathbf{s})}
+{p(\mathbf{y})}
+\end{equation*} 
+Noting that $p(\mathbf{y})$ can be ignored 
+\pause
+\begin{equation}\label{opt_problem}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}}\; p(\mathbf{y}|\mathbf{s})p(\mathbf{s})
+\end{equation}
 
 \end{frame}
 
 \begin{frame}
-\frametitle{Viterbi Setup}
-Maximum Likelihood sequence decoding can be formalized as 
-	
-	\begin{equation}
-	\begin{array}{ll}
-		\underset{\mathbf{x}}{\mathrm{maximize}} 	&	Pr(\mathbf{y}|\mathbf{x})
-		
-		\\
-		\underset{\mathbf{x}}{\mathrm{maximize}} &\prod_{\mathrm{i=1}}^{\mathrm{N}}Pr(y_{\mathrm{i}}|\mathbf{x})
-		\\ 
-		\\
-		\underset{\mathbf{x}}{\mathrm{minimize}} &\sum_{\mathrm{i=1}}^{\mathrm{N}} -log(Pr(y_{\mathrm{i}}|\mathbf{x})) 
-	\end{array}
-	\end{equation}
+\frametitle{Example with LTI channel}
+\begin{equation*}\label{opt_problem}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}}\; p(\mathbf{y}|\mathbf{s})p(\mathbf{s})
+\end{equation*}
+Assuming 
+\begin{equation*}
+p(\mathbf{y}|\mathbf{s}) = \prod_{k=0}^{N-1} p(y[k]|\mathbf{s})
+\end{equation*}
+and 
+\begin{equation*}
+p(y[k]|\mathbf{s}) = p(y[k]|s[k])
+\end{equation*}
+this simplifies to 
+\begin{equation*}\label{opt_problem}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}}\; \prod_{k=0}^{N-1} p(y[k]|s[k])p(\mathbf{s}).
+\end{equation*}
+\end{frame}
 
+\begin{frame}
+\frametitle{Example with LTI channel - Continued}
+For the LTI channel
+\begin{gather*}
+p(\mathbf{s}) \\=\\
+ p(s[N]| s[N-1]... \; s[0]) p(s[N-1]| s[N-2]... \; s[0])... \; p(s[1]| s[0])p(s[0])
+\end{gather*}
+describes the consistency of transmitted symbols implied by the state sequence.
+\\
+The channel states of the LTI channel satisfy the Markov property 
+\begin{gather*}
+ p(s[N]| s[N-1]... \; s[0]) =  p(s[N]| s[N-1]]).
+\end{gather*}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Example with LTI channel - Continued}
+The optimization problem is now 
+\begin{equation*}\label{opt_problem}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{minimize}}\; \sum_{k=0}^{N-1} -log(p(y[k]|s[k])p(s[k]|s[k-1])).
+\end{equation*}
+The individual terms in this sum can be rewritten 
+\begin{equation*}
+p(y[k]|s[k])p(s[k]|s[k-1]) = \frac{p(s[k]|y[k])p(y[k])}{p(s[k])}p(s[k]|s[k-1]).
+\end{equation*}
+For the LTI channel $p(s[k]|s[k-1])$ is 0 if states contradict and otherwise constant.
 \end{frame}
 
 
 \begin{frame}
-\frametitle{Viterbi Setup Continued}
-
-Each state change is decided by the metric $ Pr(y_{\mathrm{i}}|\mathbf{x})$. In a linear channel with length $l$ impulse response , this metric becomes 
-$ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$.
-	
-	\bigskip
+\frametitle{Viterbi Algorithm}
 
 	\begin{center}
 \begin{tikzpicture}[]
@@ -248,65 +259,42 @@ $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$.
 
 \end{frame}
 
-\begin{frame}
-	\frametitle{Incorporating Neural Net into Viterbi Decoding}
-	\begin{block}{Problem 1}
-	Viterbi algorithm requires the distribution $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}
-	^{\mathrm{i}})$.
-	\begin{itemize}
-			\item \begin{block}{Solution}
-Have a neural network learn $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$.
-		\end{block}
-\end{itemize}		
-	\end{block}
-
-
-		\begin{block}{Problem 2}
-Generating training data $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$ requires knowledge of the channel and its (current) parameters.
-\begin{itemize}
-\item 
-		\begin{block}{Solution}
-		Decompose $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})$ into 
-		\begin{gather}
-		Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}}) = \frac{Pr(\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}}|y_{\mathrm{i}})Pr(y_{\mathrm{i}})}{Pr(\mathbf{x}_{\mathrm{i-l}}^{\mathrm{i}})}
-		\end{gather}
-		\end{block}
-\end{itemize}
-		\end{block}.
-
-
-\end{frame}
-
-
-\begin{frame}[fragile]
-	\frametitle{Metrics for $Pr(x_{\mathrm{i-l}}^{\mathrm{i}}|y_{\mathrm{i}})$}
-	\begin{figure}
-		\begin{neuralnetwork}[height=4, nodespacing=10mm, layerspacing=15mm]
-		\newcommand{\x}[2]{$x_#2$}
-		\newcommand{\y}[2]{$\hat{y}_#2$}
-		\newcommand{\hfirst}[2]{\small $h^{(1)}_#2$}
-		\newcommand{\hsecond}[2]{\small $h^{(2)}_#2$}
-		\newcommand{\hthird}[2]{\small $h^{(3)}_#2$}
-		\newcommand{\hfourth}[2]{\small $h^{(4)}_#2$}
-		\inputlayer[count=1, bias=false, title=Received\\, text=\x]
-		\hiddenlayer[count=2, bias=false, title=\\, text=\hthird] \linklayers
-		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
-		\outputlayer[count=4, title=States\\, text=\x] \linklayers
-	    \end{neuralnetwork}
-	\end{figure}
-	%We can take the output of an intermediate layer after training as use it as the input features for a
-	%classification neural network.
-\end{frame}
-
+\section{Incorporating a Neural Network}
 
 \begin{frame}
-	\frametitle{Metrics for $Pr(y_{\mathrm{i}})$}
-	Gaussian Mixture Model using  Expectation-Maximization algorithm
-		\includegraphics[width=\textwidth,height=7cm]{em_figure}
+	\frametitle{Decomposing Terms in the Viterbi Algorithm}
+
+
 \end{frame}
+
+\begin{frame}
+	\frametitle{Neural Network Component}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{Mixture Model Component}
+
+\end{frame}
+
+\begin{frame}
+	\frametitle{State Only Components}
+
+\end{frame}
+
+
+
 
 \section{Extension of ViterbiNet: Reduced}
+\begin{frame}
+	\frametitle{State Redundancy}
 
+\end{frame}
+
+\begin{frame}
+	\frametitle{Exploiting State Redundancy}
+Don't go into details about how this is solved.
+\end{frame}
 
 
 \section{Simulation Results}
@@ -335,12 +323,13 @@ Generating training data $ Pr(y_{\mathrm{i}}|\mathbf{x}_{\mathrm{i-l}}^{\mathrm{
 \end{frame}
 
 
-\section{Molecular Communication Application}
 \section{Conclusion}
 
 
 \begin{frame}
 \frametitle{Next Steps}
+Discuss how this can be applied to other factor graph related algorithms. 
+Testing on more complicated channels
 \begin{itemize}
 \item Improve decoding performance with neural net.
 \item Apply to a sampled molecular communications channel.
