@@ -1,6 +1,8 @@
 \documentclass[10pt,tgadventor, onlymath]{beamer}
 
 \usepackage{graphicx,amsmath,amssymb,tikz,psfrag,neuralnetwork}
+\usepackage{xcolor}
+
 \usetikzlibrary{positioning}
 
 \input defs.tex
@@ -122,7 +124,7 @@ We attempt to estimate the true, hidden, sequence of channel states, $\mathbf{s}
 \end{block}
 
 \begin{block}{Note}
-We assume that we known how many states the channel has such that $\textit{\cal{S}}$
+We assume that we known how many states the channel $|\textit{\cal{S}}|$
 \end{block}
 
 \end{frame}
@@ -154,14 +156,17 @@ Noting that $p(\mathbf{y})$ can be ignored
 \begin{equation*}\label{opt_problem}
 \underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}}\; p(\mathbf{y}|\mathbf{s})p(\mathbf{s})
 \end{equation*}
+\pause
 Assuming 
 \begin{equation*}
 p(\mathbf{y}|\mathbf{s}) = \prod_{k=0}^{N-1} p(y[k]|\mathbf{s})
 \end{equation*}
+\pause
 and 
 \begin{equation*}
 p(y[k]|\mathbf{s}) = p(y[k]|s[k])
 \end{equation*}
+\pause
 this simplifies to 
 \begin{equation*}\label{opt_problem}
 \underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}}\; \prod_{k=0}^{N-1} p(y[k]|s[k])p(\mathbf{s}).
@@ -176,7 +181,6 @@ p(\mathbf{s}) \\=\\
  p(s[N]| s[N-1]... \; s[0]) p(s[N-1]| s[N-2]... \; s[0])... \; p(s[1]| s[0])p(s[0])
 \end{gather*}
 describes the consistency of transmitted symbols implied by the state sequence.
-\\
 The channel states of the LTI channel satisfy the Markov property 
 \begin{gather*}
  p(s[N]| s[N-1]... \; s[0]) =  p(s[N]| s[N-1]]).
@@ -186,21 +190,24 @@ The channel states of the LTI channel satisfy the Markov property
 
 \begin{frame}
 \frametitle{Example with LTI channel - Continued}
-The optimization problem is now 
+With these assumptions,
+\begin{equation*}\label{opt_problem}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}}\; \prod_{k=0}^{N-1} p(y[k]|s[k])p(\mathbf{s})
+\end{equation*}
+ is equivalent to  
 \begin{equation*}\label{opt_problem}
 \underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{minimize}}\; \sum_{k=0}^{N-1} -log(p(y[k]|s[k])p(s[k]|s[k-1])).
 \end{equation*}
-The individual terms in this sum can be rewritten 
-\begin{equation*}
-p(y[k]|s[k])p(s[k]|s[k-1]) = \frac{p(s[k]|y[k])p(y[k])}{p(s[k])}p(s[k]|s[k-1]).
-\end{equation*}
-For the LTI channel $p(s[k]|s[k-1])$ is 0 if states contradict and otherwise constant.
+For the LTI channel $p(s[k]|s[k-1])$ is 0 if states contradict transmission sequence, otherwise this term is constant.
 \end{frame}
 
 
 \begin{frame}
 \frametitle{Viterbi Algorithm}
-
+\begin{equation*}\label{opt_problem}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{minimize}}\; \sum_{k=0}^{N-1} -log(p(y[k]|s[k])p(s[k]|s[k-1])).
+\end{equation*}
+    \noindent\rule[10pt]{\textwidth}{0.4pt}
 	\begin{center}
 \begin{tikzpicture}[]
 % 1st column
@@ -262,8 +269,22 @@ For the LTI channel $p(s[k]|s[k-1])$ is 0 if states contradict and otherwise con
 \section{Incorporating a Neural Network}
 
 \begin{frame}
-	\frametitle{Decomposing Terms in the Viterbi Algorithm}
+\frametitle{Decomposing Terms in the Viterbi Algorithm}
+The individual terms in
+\begin{equation*}\label{opt_problem}
+\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{minimize}}\; \sum_{k=0}^{N-1} -log(p(y[k]|s[k])p(s[k]|s[k-1])).
+\end{equation*}
+can be rewritten 
+\begin{equation*}
+p(y[k]|s[k])p(s[k]|s[k-1]) = \frac{p(s[k]|y[k])p(y[k])}{p(s[k])}p(s[k]|s[k-1]).
+\end{equation*}
+\end{frame}
 
+\begin{frame}
+	\frametitle{Decomposing Terms in the Viterbi Algorithm}
+\begin{equation*}
+\frac{\textcolor{red}{p(s[k]|y[k])}p(y[k])}{p(s[k])}
+\end{equation*}
 
 \end{frame}
 
