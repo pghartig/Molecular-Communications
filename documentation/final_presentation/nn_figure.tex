@@ -1,0 +1,15 @@
+	\centering
+		\begin{neuralnetwork}[height=3, nodespacing=15mm, layerspacing=26mm]
+		\newcommand{\x}[2]{$y[\text{k}]$}
+		\newcommand{\y}[2]{$p(s_{#2}[\text{k}]|y[\text{k}])$}
+		\newcommand{\hfirst}[2]{ $h^{(1)}_#2$}
+		\newcommand{\hsecond}[2]{ $h^{(2)}_#2$}
+		\newcommand{\hthird}[2]{$h^{(3)}_#2$}
+		\newcommand{\hfourth}[2]{$h^{(4)}_#2$}
+		\inputlayer[count=1, bias=false, title=\\, text=\x]
+		\hiddenlayer[count=2, bias=false, title=\\, text=\hthird] \linklayers
+		\hiddenlayer[count=3, bias=false, title=\\, text=\hfourth] \linklayers
+		\outputlayer[count=4, title=\\, text=\y] \linklayers
+	    \end{neuralnetwork}
+
+\label{nn}

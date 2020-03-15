@@ -6,7 +6,7 @@
 \usetikzlibrary{positioning}
 
 \input defs.tex
-\graphicspath{ {./figures/} }
+\graphicspath{ {./graphics/} }
 
 %% formatting
 
@@ -152,7 +152,7 @@ Noting that $p(\mathbf{y})$ can be ignored
 \end{frame}
 
 \begin{frame}
-\frametitle{Example with LTI channel}
+\frametitle{MAP Sequence Detection}
 \begin{equation*}\label{opt_problem}
 \underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}}\; p(\mathbf{y}|\mathbf{s})p(\mathbf{s})
 \end{equation*}
@@ -174,7 +174,7 @@ this simplifies to
 \end{frame}
 
 \begin{frame}
-\frametitle{Example with LTI channel - Continued}
+\frametitle{MAP Sequence Detection}
 For the LTI channel
 \begin{gather*}
 p(\mathbf{s}) \\=\\
@@ -285,79 +285,115 @@ p(y[k]|s[k])p(s[k]|s[k-1]) = \frac{p(s[k]|y[k])p(y[k])}{p(s[k])}p(s[k]|s[k-1]).
 \begin{equation*}
 \frac{\textcolor{red}{p(s[k]|y[k])}p(y[k])}{p(s[k])}
 \end{equation*}
+\begin{figure}[H]
+	\input{nn_figure}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Decomposing Terms in the Viterbi Algorithm }
+\begin{equation*}
+\frac{p(s[k]|y[k])\textcolor{red}{p(y[k])}}{p(s[k])}
+\end{equation*}
+\\
+\begin{equation*}
+p(y[k]) = \sum_{s_i \in \mathcal{S}} p(y[k],s_i)
+\end{equation*}
+\centering
+	\includegraphics[width=8cm, height=5.5cm ]{system_model/mixture_model}
 
 \end{frame}
 
 \begin{frame}
-	\frametitle{Neural Network Component}
-
+	\frametitle{Decomposing Terms in the Viterbi Algorithm}
+\begin{equation*}
+\frac{p(s[k]|y[k])p(y[k])}{\textcolor{red}{p(s[k])}}
+\end{equation*}
 \end{frame}
-
-\begin{frame}
-	\frametitle{Mixture Model Component}
-
-\end{frame}
-
-\begin{frame}
-	\frametitle{State Only Components}
-
-\end{frame}
-
 
 
 
 \section{Extension of ViterbiNet: Reduced}
 \begin{frame}
 	\frametitle{State Redundancy}
+Include picture of channel taps
+\centering
+		\includegraphics[width=8cm, height=5.5cm ]{system_model/channel_output}
 
 \end{frame}
 
 \begin{frame}
 	\frametitle{Exploiting State Redundancy}
-Don't go into details about how this is solved.
+\begin{enumerate}
+\item Cluster some set of observed channel output into desired number of states
+\pause
+\item For states with ambiguous channel input, use majority decision
+\pause
+\item *Choosing too few states will degrade performance
+\end{enumerate}
 \end{frame}
 
 
 \section{Simulation Results}
+\begin{frame}
+\frametitle{Simulation System}
+\begin{itemize}
+\item BPSK with AWGN at receiver with SNR given by 
+\begin{equation*}
+\text{SNR} = \frac{E\{|x[k]|^2\}}{E\{|n[k]|^2\}}
+\end{equation*}
+\end{itemize}
+\end{frame}
 
 \begin{frame}
-\frametitle{Detection Performance}
+\frametitle{Detection Performance: LTI Channel}
 \begin{columns}
 \begin{column}{0.5\linewidth}
-	Without ISI
-
-	\includegraphics[width=\textwidth]{no_isi}
+\centering
+CIR = $[0.9, 0.7, 0.3, 0.5, 0.1]$
+	\includegraphics[width=\textwidth]{results/lti_32_reduced_asymmetric}
 \end{column}
 \begin{column}{0.5\linewidth}
-	With ISI
-
-	\includegraphics[width=\textwidth]{without_mm}
-
+\centering
+CIR = $[.9, 0, .0, .4, .7]$
+	\includegraphics[width=\textwidth]{results/lti_8_reduced}
 \end{column}
 \end{columns}
+*Reduced states uses 8 states in both figures above
+\end{frame}
+\begin{frame}
+\frametitle{Detection Performance: Quantizer}
+	\includegraphics[width=\textwidth, height = 6cm]{system_model/quantizer_good}
+Easy implementation by rounding down to chosen decimal place (one in the following) after adding noise. 
 \end{frame}
 
 \begin{frame}
-\frametitle{Detection Performance}
-	Reduced Training data (100 vs. 1000 symbols)
-	\includegraphics[width=\textwidth,height = 7cm]{low_training_data}
-\end{frame}
+\frametitle{Detection Performance: LTI Channel with Quantization}
+\begin{columns}
+\begin{column}{0.5\linewidth}
+\centering
+CIR = $[0.9, 0.7, 0.3, 0.5, 0.1]$
+	\includegraphics[width=\textwidth]{results/lti_32_reduced_asymmetric_quantized}
+\end{column}
+\begin{column}{0.5\linewidth}
+\centering
+CIR = $[.9, 0, .0, .4, .7]$
+	\includegraphics[width=\textwidth]{results/lti_8_reduced_quantized}
+\end{column}
+\end{columns}
 
+*Reduced states uses 8 states in both figures above
+\\
+*Note that the "Classic" Viterbi is no longer using ideal metric here
+\end{frame}
 
 \section{Conclusion}
 
-
 \begin{frame}
-\frametitle{Next Steps}
-Discuss how this can be applied to other factor graph related algorithms. 
-Testing on more complicated channels
+\frametitle{Other Notes}
 \begin{itemize}
-\item Improve decoding performance with neural net.
-\item Apply to a sampled molecular communications channel.
-\begin{itemize}
-\item Estimate matched filter
-\end{itemize}
-\item Generate training data for molecular communications channel and test "transfer learning" to real data.
+\item Can be applied to other algorithms (BCJR).
+\item Generate training data for molecular communications channel and test on real data.
 \end{itemize}
 \end{frame}
 
@@ -368,11 +404,5 @@ Testing on more complicated channels
 	\bigskip
     \centering \Large
   \emph{Questions or Comments?}
-
 \end{frame}
-
-
-
-
-
 \end{document}
