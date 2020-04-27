@@ -124,7 +124,7 @@ We attempt to estimate the true, hidden, sequence of channel states, $\mathbf{s}
 \end{block}
 
 \begin{block}{Note}
-We assume that we known how many states the channel $|\textit{\cal{S}}|$
+Assume we known the number of channel states $|\textit{\cal{S}}|$
 \end{block}
 
 \end{frame}
@@ -133,7 +133,7 @@ We assume that we known how many states the channel $|\textit{\cal{S}}|$
 \begin{frame}
 \frametitle{MAP Sequence Detection}
 \begin{equation*}
-\underset{\mathbf{s}\in\textit{\cal{S}}^N}{\text{maximize}} \; p(\mathbf{s}|\mathbf{y}).
+\underset{\mathbf{s}\in\textcolor{red}{\textit{\cal{S}}^N}}{\text{maximize}} \; p(\mathbf{s}|\mathbf{y}).
 \end{equation*} 
 \pause
 Using Bayes' theorem
@@ -300,8 +300,7 @@ p(y[k]|s[k])p(s[k]|s[k-1]) = \frac{p(s[k]|y[k])p(y[k])}{p(s[k])}p(s[k]|s[k-1]).
 p(y[k]) = \sum_{s_i \in \mathcal{S}} p(y[k],s_i)
 \end{equation*}
 \centering
-	\includegraphics[width=8cm, height=5.5cm ]{system_model/mixture_model}
-
+	\includegraphics[width=8cm, height=5.5cm ]{system_model/mm}
 \end{frame}
 
 \begin{frame}
@@ -316,9 +315,22 @@ p(y[k]) = \sum_{s_i \in \mathcal{S}} p(y[k],s_i)
 \section{Extension of ViterbiNet: Reduced}
 \begin{frame}
 	\frametitle{State Redundancy}
-Include picture of channel taps
+\begin{columns}
+\begin{column}{0.5\linewidth}
 \centering
-		\includegraphics[width=8cm, height=5.5cm ]{system_model/channel_output}
+\begin{figure}
+	\includegraphics[width=\textwidth]{system_model/channel_output_2}
+	\caption{AWGN channel output for CIR = $[1, .7, 0.4, 0.1]$ with SNR = $15$ dB}
+\end{figure}
+\end{column}
+\begin{column}{0.5\linewidth}
+\centering
+\begin{figure}
+	\includegraphics[width=\textwidth]{system_model/channel_output_1}
+	\caption{AWGN channel output for CIR =  $[1, 1, 0.15, 0.1]$ with SNR = $15$ dB}
+\end{figure}
+\end{column}
+\end{columns}
 
 \end{frame}
 
@@ -342,6 +354,8 @@ Include picture of channel taps
 \begin{equation*}
 \text{SNR} = \frac{E\{|x[k]|^2\}}{E\{|n[k]|^2\}}
 \end{equation*}
+\item 
+Impulse response is normalized. 
 \end{itemize}
 \end{frame}
 
@@ -363,8 +377,11 @@ CIR = $[.9, 0, .0, .4, .7]$
 \end{frame}
 \begin{frame}
 \frametitle{Detection Performance: Quantizer}
-	\includegraphics[width=\textwidth, height = 6cm]{system_model/quantizer_good}
-Easy implementation by rounding down to chosen decimal place (one in the following) after adding noise. 
+\begin{figure}
+\includegraphics[width= 8cm, height = 5cm]{system_model/quantizer_overlay_new}
+	\caption{Quantizer input/output for AWGN channel with CIR = $[ 0.9, 0.7, 0.3, 0.5, 0.1]$ (32 states) with SNR = $10$ dB}
+\end{figure}
+Implementated by rounding down to chosen number of decimal places \emph{after} adding noise at receiver. 
 \end{frame}
 
 \begin{frame}

@@ -119,6 +119,8 @@ class CommunicationDataGenerator:
         """
         if channel is not None:
             self.CIR_matrix = np.zeros((channel.shape))
+            if channel.dtype == 'complex128':
+                self.CIR_matrix = 1j*np.zeros((channel.shape))
             self.channel_shape = channel.shape
             for ind in range(channel.shape[0]):
                 # self.CIR_matrix[ind, :] = channel
@@ -336,6 +338,10 @@ class CommunicationDataGenerator:
 
         #   Add AWGN with pre-selected noise power
         self.noise_parameter[1] = np.sqrt(np.var(self.alphabet) * (1 / (self.SNR*2)))
+        if self.channel_output.dtype == 'complex128':
+            self.channel_output += self.noise_parameter[0] + self.noise_parameter[1] * np.random.standard_normal(
+                self.channel_output.shape)+1j*self.noise_parameter[1] * np.random.standard_normal(
+                self.channel_output.shape)
         self.channel_output += self.noise_parameter[0] + self.noise_parameter[1]*np.random.standard_normal(self.channel_output.shape)
         if plot==True:
             noised = fig_main.add_subplot(1, 1, 1)
@@ -369,8 +375,6 @@ class CommunicationDataGenerator:
             quantized = fig_main.add_subplot(1, 3, 2)
             quantized.set_title("Quantized")
             quantized.scatter(self.channel_output, self.channel_output)
-
-
 
     def transmit_modulated_signal2(self):
         """
